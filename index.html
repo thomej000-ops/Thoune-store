@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thoune Store</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🌊</div>
+      <strong>Thoune Store</strong>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="cartBtn" aria-label="Carrinho">🛒</button>
+      <button class="icon-btn" id="menuBtn" aria-label="Menu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <span class="pill">🌊 THOUNE STORE</span>
+      <h1>Itens para Flee the Facility</h1>
+      <p>Escolha seus itens, monte seu pedido e envie pelo chat do TikTok.</p>
+      <div class="features">
+        <span>🛡️ Compra segura</span>
+        <span>📦 Estoque atualizado</span>
+        <span>💬 Atendimento pelo TikTok</span>
+      </div>
+    </section>
+
+    <section class="catalog">
+      <div class="section-title">
+        <div>
+          <h2>🛍️ Catálogo</h2>
+          <p>Pesquise e adicione os itens que deseja.</p>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="search">
+          <span>⌕</span>
+          <input id="search" type="search" placeholder="Buscar item pelo nome...">
+        </div>
+        <select id="category">
+          <option value="all">Todas as categorias</option>
+        </select>
+      </div>
+
+      <div id="products" class="product-grid"></div>
+    </section>
+
+    <section id="cartSection" class="cart-section">
+      <div class="section-title">
+        <div>
+          <h2>🛒 Seu pedido</h2>
+          <p>Revise os itens e copie o pedido para enviar no TikTok.</p>
+        </div>
+        <strong id="cartCount">0 itens</strong>
+      </div>
+
+      <div id="cart" class="cart-box">
+        <div class="empty">
+          <div class="empty-icon">🛒</div>
+          <h3>Seu carrinho está vazio</h3>
+          <p>Explore o catálogo e adicione os itens que deseja.</p>
+          <button class="primary" onclick="document.querySelector('.catalog').scrollIntoView({behavior:'smooth'})">Explorar itens</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand">
+      <div class="logo">🌊</div>
+      <div>
+        <h2>Thoune Store</h2>
+        <p>Uma lojinha feita para facilitar seus pedidos.</p>
+      </div>
+    </div>
+    <div class="footer-links">
+      <span>› Itens</span>
+      <span>› Como comprar</span>
+      <span>› Carrinho</span>
+      <span>› FAQ</span>
+    </div>
+    <div class="payment">
+      <h3>Forma de pagamento</h3>
+      <span class="pix">▦ PIX</span>
+      <small>O pagamento é combinado pelo atendimento após a confirmação do pedido.</small>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
