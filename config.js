@@ -8,5 +8,5 @@
 // Em um repositório público, somente chaves destinadas ao frontend podem aparecer aqui,
 // sempre acompanhadas de RLS corretamente configurado no Supabase.
 
-export const SUPABASE_URL = "";
-export const SUPABASE_ANON_KEY = "";
+export const SUPABASE_URL = "https://pkktnavscnhusqwetexb.supabase.co";
+export const SUPABASE_ANON_KEY = "sb_publishable_828AQlvKrmBT7hwX8q3nQw_ZXROUtFF";
