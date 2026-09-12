@@ -20,7 +20,7 @@ async function loadProducts() {
 
   if (error) {
     console.error("Erro ao carregar produtos:", error);
-    toast("Não foi possível carregar o catálogo.");
+    alert("ERRO SUPABASE: " + error.message);
     return;
   }
 products = data || [];
