@@ -241,7 +241,64 @@
       </div>
     </div>
   </aside>
+  <section class="checkout-section section hidden" id="checkout-section">
+    <div class="checkout-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FINALIZAR PEDIDO</p>
+          <h2>Confira sua compra</h2>
+          <p>Revise seus itens e confirme os dados para continuar.</p>
+        </div>
+      </div>
 
+      <div class="checkout-content">
+
+        <div class="checkout-items">
+          <h3>📦 Itens do pedido</h3>
+          <div id="checkout-items"></div>
+        </div>
+
+        <div class="checkout-data">
+          <h3>👤 Dados da entrega</h3>
+
+          <label>
+            🎵 Usuário do TikTok
+            <input id="checkout-tiktok" type="text" readonly>
+          </label>
+
+          <label>
+            🎮 Usuário do Roblox
+            <input
+              id="checkout-roblox"
+              type="text"
+              placeholder="Seu usuário do Roblox"
+              autocomplete="off"
+            >
+          </label>
+
+          <small>
+            O usuário do Roblox acima será usado somente neste pedido.
+          </small>
+        </div>
+
+        <div class="checkout-total">
+          <span>Total do pedido</span>
+          <strong id="checkout-total">R$ 0,00</strong>
+        </div>
+
+        <div class="checkout-actions">
+          <button class="secondary-button" id="checkout-back">
+            ← Voltar ao carrinho
+          </button>
+
+          <button class="primary-button" id="confirm-order-button">
+            Confirmar pedido
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
   <footer class="site-footer">
     <div><strong>Thoune Store</strong><p>Mais que uma loja, uma comunidade.</p></div>
     <a href="https://www.tiktok.com/@thounestoreofc" target="_blank" rel="noopener">@thounestoreofc ↗</a>
