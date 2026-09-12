@@ -24,6 +24,7 @@ async function loadProducts() {
     return;
   }
 products = data || [];
+toast("Produtos carregados: " + products.length);
 refresh();
 }
 loadProducts();
