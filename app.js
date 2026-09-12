@@ -7,6 +7,100 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
+const authEmail = document.querySelector("#auth-email");
+const authPassword = document.querySelector("#auth-password");
+const loginButton = document.querySelector("#login-button");
+const signupButton = document.querySelector("#signup-button");
+const logoutButton = document.querySelector("#logout-button");
+const accountMessage = document.querySelector("#account-message");
+
+async function updateAccountUI() {
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  if (session?.user) {
+    accountMessage.textContent = "Você está conectado à sua conta.";
+    loginButton.classList.add("hidden");
+    signupButton.classList.add("hidden");
+    logoutButton.classList.remove("hidden");
+    authEmail.value = session.user.email || "";
+    authEmail.disabled = true;
+    authPassword.classList.add("hidden");
+  } else {
+    accountMessage.textContent =
+      "Entre ou crie sua conta para acompanhar seus pedidos.";
+    loginButton.classList.remove("hidden");
+    signupButton.classList.remove("hidden");
+    logoutButton.classList.add("hidden");
+    authEmail.disabled = false;
+    authPassword.classList.remove("hidden");
+  }
+}
+
+loginButton.addEventListener("click", async () => {
+  const email = authEmail.value.trim();
+  const password = authPassword.value;
+
+  if (!email || !password) {
+    toast("Preencha seu e-mail e sua senha.");
+    return;
+  }
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    toast("Não foi possível entrar: " + error.message);
+    return;
+  }
+
+  toast("Login realizado com sucesso!");
+  await updateAccountUI();
+});
+
+signupButton.addEventListener("click", async () => {
+  const email = authEmail.value.trim();
+  const password = authPassword.value;
+
+  if (!email || !password) {
+    toast("Preencha seu e-mail e sua senha.");
+    return;
+  }
+
+  const { error } = await supabaseClient.auth.signUp({
+    email,
+    password
+  });
+
+  if (error) {
+    toast("Não foi possível criar a conta: " + error.message);
+    return;
+  }
+
+  toast("Conta criada com sucesso!");
+  await updateAccountUI();
+});
+
+logoutButton.addEventListener("click", async () => {
+  const { error } = await supabaseClient.auth.signOut();
+
+  if (error) {
+    toast("Não foi possível sair da conta.");
+    return;
+  }
+
+  toast("Você saiu da conta.");
+  await updateAccountUI();
+});
+
+supabaseClient.auth.onAuthStateChange(() => {
+  updateAccountUI();
+});
+
+updateAccountUI();
 let products = [];
 let selectedCategory = "Todas";
 let search = "";
