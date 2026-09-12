@@ -24,7 +24,6 @@ async function updateAccountUI() {
   if (session?.user) {
     accountDetails.classList.remove("hidden");
 accountEmail.textContent = session.user.email || "";
-    console.log("CONTA LOGADA:", session.user.email);
     accountMessage.textContent = "Você está conectado à sua conta.";
     loginButton.classList.add("hidden");
     signupButton.classList.add("hidden");
