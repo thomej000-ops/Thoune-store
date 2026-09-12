@@ -1,3 +1,5 @@
+const SUPABASE_URL = "https://nkvcxsqfspnzdjkuoxcm.supabase.co/rest/v1/";
+const SUPABASE_KEY = "sb_publishable_aB021D5zkyp7OyUrUcmenQ_h4DIACcj";
 const products = [
   {id:1,name:"Strawberry Moo Plushie",category:"Exclusiva",price:200,stock:1,img:"assets/thoune-brand.jpg",featured:1},
   {id:2,name:"Frosted",category:"Rara",price:19.99,stock:4,img:"assets/thoune-brand.jpg",featured:2},
