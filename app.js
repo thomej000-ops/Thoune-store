@@ -230,12 +230,74 @@ document.querySelector("#copy-order-button").addEventListener("click",async()=>{
   }
 });
 
-document.querySelector("#checkout-button").addEventListener("click",()=>{
-  const cart=loadCart();
-  if(!cart.length){toast("Adicione uma marreta ao carrinho primeiro.");return}
-  toast("O fluxo de compra será conectado ao Supabase nesta etapa.");
-});
+document.querySelector("#checkout-button").addEventListener("click", async ()=>{
+  const cart = loadCart();
 
+  if(!cart.length){
+    toast("Adicione uma marreta ao carrinho primeiro.");
+    return;
+  }
+
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  if(!session?.user){
+    toast("Entre na sua conta antes de realizar a compra.");
+    document.querySelector("#conta")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+    return;
+  }
+
+  await loadProfile(session.user.id);
+
+  checkoutItems.innerHTML = "";
+
+  for(const item of cart){
+    const row = document.createElement("div");
+    row.className = "checkout-item";
+
+    const image = document.createElement("img");
+    image.src = item.image || "";
+    image.alt = item.name;
+
+    const info = document.createElement("div");
+
+    const name = document.createElement("strong");
+    name.textContent = item.name;
+
+    const details = document.createElement("span");
+    details.textContent =
+      `${item.qty} × ${money(item.price)} = ${money(item.price * item.qty)}`;
+
+    info.appendChild(name);
+    info.appendChild(details);
+
+    row.appendChild(image);
+    row.appendChild(info);
+
+    checkoutItems.appendChild(row);
+  }
+
+  checkoutTiktok.value = tiktokUsername.value || "";
+  checkoutRoblox.value = robloxUsername.value || "";
+  checkoutTotal.textContent = money(cartTotal(cart));
+
+  checkoutSection.classList.remove("hidden");
+
+  closeCart();
+
+  checkoutSection.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+});
+checkoutBack.addEventListener("click", ()=>{
+  checkoutSection.classList.add("hidden");
+  openCart();
+});
 // Atualiza o catálogo sem fingir que o backend já está conectado.
 refresh();
 updateCartBadge(loadCart());
