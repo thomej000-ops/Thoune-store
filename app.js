@@ -23,10 +23,11 @@ async function loadProducts() {
     toast("Não foi possível carregar o catálogo.");
     return;
   }
-
-  products = data || [];
-  loadProducts();
+products = data || [];
+refresh();
 }
+loadProducts();
+
 const menuToggle = document.querySelector("#menu-toggle");
 const mobileNav = document.querySelector("#mobile-nav");
 menuToggle.addEventListener("click",()=>mobileNav.classList.toggle("open"));
