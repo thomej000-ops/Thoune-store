@@ -48,6 +48,7 @@ async function updateAccountUI() {
 accountEmail.textContent = session.user.email || "";
     profileFields.classList.remove("hidden");
 await loadProfile(session.user.id);
+    profileFields.style.display = "block";
     accountMessage.textContent = "Você está conectado à sua conta.";
     loginButton.classList.add("hidden");
     signupButton.classList.add("hidden");
