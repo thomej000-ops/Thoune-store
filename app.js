@@ -16,6 +16,28 @@ const accountMessage = document.querySelector("#account-message");
 const accountDetails = document.querySelector("#account-details");
 const accountEmail = document.querySelector("#account-email");
 const ordersMessage = document.querySelector("#orders-message");
+const profileFields = document.querySelector("#profile-fields");
+const tiktokUsername = document.querySelector("#tiktok-username");
+const robloxUsername = document.querySelector("#roblox-username");
+const saveProfileButton = document.querySelector("#save-profile-button");
+const profileMessage = document.querySelector("#profile-message");
+async function loadProfile(userId) {
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select("tiktok_username, roblox_username")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Erro ao carregar perfil:", error);
+    return;
+  }
+
+  if (data) {
+    tiktokUsername.value = data.tiktok_username || "";
+    robloxUsername.value = data.roblox_username || "";
+  }
+}
 async function updateAccountUI() {
   const {
     data: { session }
@@ -24,6 +46,8 @@ async function updateAccountUI() {
   if (session?.user) {
     accountDetails.classList.remove("hidden");
 accountEmail.textContent = session.user.email || "";
+    profileFields.classList.remove("hidden");
+await loadProfile(session.user.id);
     accountMessage.textContent = "Você está conectado à sua conta.";
     loginButton.classList.add("hidden");
     signupButton.classList.add("hidden");
@@ -32,6 +56,7 @@ accountEmail.textContent = session.user.email || "";
     authEmail.disabled = true;
     authPassword.classList.add("hidden");
   } else {
+    profileFields.classList.add("hidden");
     accountDetails.classList.add("hidden");
 accountEmail.textContent = "";
 ordersMessage.textContent = "Você ainda não possui pedidos.";
@@ -108,6 +133,36 @@ supabaseClient.auth.onAuthStateChange(() => {
 });
 
 updateAccountUI();
+saveProfileButton.addEventListener("click", async () => {
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  if (!session?.user) {
+    toast("Entre na sua conta primeiro.");
+    return;
+  }
+
+  const tiktok = tiktokUsername.value.trim();
+  const roblox = robloxUsername.value.trim();
+
+  const { error } = await supabaseClient
+    .from("profiles")
+    .update({
+      tiktok_username: tiktok || null,
+      roblox_username: roblox || null
+    })
+    .eq("id", session.user.id);
+
+  if (error) {
+    console.error("Erro ao salvar perfil:", error);
+    toast("Não foi possível salvar suas informações.");
+    return;
+  }
+
+  profileMessage.textContent = "Informações salvas com sucesso! ✅";
+  toast("Perfil atualizado!");
+});
 let products = [];
 let selectedCategory = "Todas";
 let search = "";
