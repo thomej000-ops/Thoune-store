@@ -1,7 +1,12 @@
 import {demoProducts} from "./demo-products.js";
 import {loadCart, orderText} from "./cart.js";
 import {renderProducts, renderCart, updateCartBadge, toast} from "./ui.js";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
 let products = [...demoProducts];
 let selectedCategory = "Todas";
 let search = "";
