@@ -3,174 +3,178 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#071d24">
+  <meta name="description" content="Thoune Store — marretas para Flee the Facility.">
   <title>Thoune Store — Flee the Facility</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="ambient ambient-a"></div>
-  <div class="ambient ambient-b"></div>
+  <div id="toast-region" class="toast-region" aria-live="polite"></div>
 
-  <header class="topbar">
-    <a class="brand" href="#inicio" aria-label="Thoune Store">
-      <img src="assets/thoune-brand.jpg" alt="Imagem da Thoune Store">
-      <span><strong>Thoune</strong><small>STORE</small></span>
+  <header class="site-header" id="top">
+    <a class="brand" href="#inicio" aria-label="Thoune Store - início">
+      <span class="brand-mark"><img src="snoopy-banner.jpg" alt="Snoopy da identidade da Thoune Store"></span>
+      <span class="brand-text">
+        <strong>Thoune Store</strong>
+        <small>Flee the Facility</small>
+      </span>
     </a>
 
-    <nav class="desktop-nav">
-      <a class="active" href="#inicio">Início</a>
-      <a href="#catalogo">Catálogo</a>
+    <nav class="desktop-nav" aria-label="Navegação principal">
+      <a href="#catalogo">Itens</a>
       <a href="#como-comprar">Como comprar</a>
-      <a href="#suporte">Suporte</a>
+      <a href="#faq">FAQ</a>
     </nav>
 
-    <div class="top-actions">
-      <label class="global-search">
-        <span>⌕</span>
-        <input id="globalSearch" type="search" placeholder="Buscar marretas..." aria-label="Buscar marretas">
-      </label>
-      <button class="icon-btn" id="openCart" aria-label="Abrir carrinho">🛒<b id="cartBadge">0</b></button>
-      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Abrir menu">☰</button>
+    <div class="header-actions">
+      <a class="icon-button account-button" href="#conta" aria-label="Minha conta">♙</a>
+      <button class="icon-button cart-button" id="open-cart" aria-label="Abrir carrinho">
+        🛒 <span class="cart-count" id="cart-count">0</span>
+      </button>
+      <button class="menu-button" id="menu-toggle" aria-label="Abrir menu">☰</button>
     </div>
+
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Menu mobile">
+      <a href="#catalogo">Itens</a>
+      <a href="#como-comprar">Como comprar</a>
+      <a href="#faq">FAQ</a>
+      <a href="#conta">Minha conta</a>
+    </nav>
   </header>
 
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#inicio">Início</a>
-    <a href="#catalogo">Catálogo</a>
-    <a href="#como-comprar">Como comprar</a>
-    <a href="#suporte">Suporte</a>
-    <button id="mobileCart">🛒 Abrir carrinho</button>
-  </div>
-
-  <main id="inicio">
-    <section class="hero">
-      <div class="hero-copy">
-        <span class="eyebrow">THOUNE STORE • FLEE THE FACILITY</span>
-        <h1>Seu próximo item<br><em>começa aqui.</em></h1>
-        <p>Marretas para Flee the Facility, organizadas por raridade e prontas para você escolher.</p>
-        <div class="hero-status"><i></i> Atendimento online <span>•</span> Pix disponível</div>
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div class="online-pill"><span></span> Atendimento online</div>
+        <p class="eyebrow">THOUNE STORE · FLEE THE FACILITY</p>
+        <h1>Encontre a marreta<br><em>que combina com você.</em></h1>
+        <p class="hero-subtitle">Marretas para Flee the Facility organizadas por raridades e prontas para você escolher.</p>
       </div>
-      <div class="hero-art">
-        <img src="assets/thoune-brand.jpg" alt="Imagem de marca da Thoune Store">
-        <div class="hero-note">Aqui tem<br><strong>o que você procura.</strong></div>
+    </section>
+
+    <section class="benefits section">
+      <article><span>🔒</span><div><strong>Compra segura</strong><p>Seu pedido é acompanhado do início ao fim.</p></div></article>
+      <article><span>📋</span><div><strong>Pedido acompanhado</strong><p>Você sabe em que etapa sua compra está.</p></div></article>
+      <article><span>📦</span><div><strong>Entrega garantida</strong><p>Após a confirmação, você recebe as instruções.</p></div></article>
+      <article><span>💬</span><div><strong>Atendimento especial</strong><p>Suporte direto pelo TikTok da loja.</p></div></article>
+      <article><span>💳</span><div><strong>Pix</strong><p>Pagamento rápido e combinado no atendimento.</p></div></article>
+    </section>
+
+    <section class="catalog-section section" id="catalogo">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">CATÁLOGO</p>
+          <h2>Marretas disponíveis</h2>
+          <p>Encontre sua próxima marreta sem complicação.</p>
+        </div>
+        <div class="catalog-count" id="catalog-count">0 itens</div>
       </div>
-      <div class="hero-wave"></div>
-    </section>
 
-    <section class="benefits" aria-label="Benefícios">
-      <article><span>🛡️</span><div><strong>Compra segura</strong><small>Seu pedido é acompanhado</small></div></article>
-      <article><span>◆</span><div><strong>Pagamento via Pix</strong><small>Rápido e prático</small></div></article>
-      <article><span>📦</span><div><strong>Entrega garantida</strong><small>Após a confirmação</small></div></article>
-      <article><span>◌</span><div><strong>Atendimento especial</strong><small>Suporte pelo TikTok</small></div></article>
-    </section>
-
-    <section class="shop-layout" id="catalogo">
-      <aside class="filters">
-        <div class="filter-title">CATÁLOGO</div>
-        <button class="filter-cat active" data-category="Todas">▦ <span>Todas</span></button>
-        <button class="filter-cat" data-category="Lendária">✦ <span>Lendárias</span></button>
-        <button class="filter-cat" data-category="Épica">◆ <span>Épicas</span></button>
-        <button class="filter-cat" data-category="Rara">◇ <span>Raras</span></button>
-        <button class="filter-cat" data-category="Comum">○ <span>Comuns</span></button>
-        <button class="filter-cat" data-category="Exclusiva">♛ <span>Exclusivas</span></button>
-        <div class="filter-sep"></div>
-        <small>Use a busca ou uma raridade para encontrar sua marreta.</small>
-      </aside>
-
-      <section class="catalog-content">
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">EXPLORE</span>
-            <h2>Marretas disponíveis</h2>
-            <p id="resultCount">6 itens encontrados</p>
-          </div>
-          <select id="sortSelect" aria-label="Ordenar">
-            <option value="featured">Mais populares</option>
-            <option value="priceAsc">Menor preço</option>
-            <option value="priceDesc">Maior preço</option>
-            <option value="name">Nome</option>
-          </select>
-        </div>
-
-        <div class="catalog-toolbar">
-          <label class="catalog-search">⌕ <input id="catalogSearch" type="search" placeholder="Pesquisar marreta pelo nome..."></label>
-          <button id="clearFilters">Limpar filtros</button>
-        </div>
-
-        <div class="product-grid" id="productGrid"></div>
-
-        <div class="empty-state hidden" id="emptyState">
-          <div>⌕</div>
-          <h3>Não encontramos essa marreta.</h3>
-          <p>Tente outro nome ou selecione outra raridade.</p>
-        </div>
-      </section>
-    </section>
-
-    <section class="help-banner" id="suporte">
-      <img src="assets/thoune-brand.jpg" alt="">
-      <div>
-        <span class="eyebrow">PRECISA DE AJUDA?</span>
-        <h2>Não encontrou o que procura?</h2>
-        <p>Fale com o suporte da Thoune Store pelo TikTok.</p>
+      <div class="catalog-tools">
+        <label class="search-box">
+          <span>⌕</span>
+          <input id="search-input" type="search" placeholder="Pesquisar marreta pelo nome" autocomplete="off">
+        </label>
+        <select id="sort-select" aria-label="Ordenar produtos">
+          <option value="popular">Mais populares</option>
+          <option value="low">Menor preço</option>
+          <option value="high">Maior preço</option>
+        </select>
       </div>
-      <a class="secondary-btn" href="#" onclick="return openSupport()">Falar com o suporte ↗</a>
+
+      <div class="category-row" id="category-row" aria-label="Categorias">
+        <button class="category active" data-category="Todas">Todas</button>
+        <button class="category" data-category="Lendária">Lendária</button>
+        <button class="category" data-category="Épica">Épica</button>
+        <button class="category" data-category="Rara">Rara</button>
+        <button class="category" data-category="Comum">Comum</button>
+        <button class="category" data-category="Exclusiva">Exclusiva</button>
+      </div>
+
+      <div class="product-grid" id="product-grid"></div>
+      <div class="empty-state hidden" id="empty-state">
+        <span>🌊</span>
+        <h3>Nenhuma marreta encontrada</h3>
+        <p>Tente outro nome ou categoria.</p>
+      </div>
     </section>
 
-    <section class="how" id="como-comprar">
-      <div>
-        <span class="eyebrow">COMO FUNCIONA</span>
-        <h2>Comprar sem complicação.</h2>
+    <section class="how-section section" id="como-comprar">
+      <div class="section-heading centered">
+        <p class="eyebrow">COMO FUNCIONA</p>
+        <h2>Como comprar sem complicação?</h2>
       </div>
       <div class="steps">
-        <article><b>01</b><h3>Escolha</h3><p>Encontre suas marretas e adicione ao carrinho.</p></article>
-        <article><b>02</b><h3>Confira</h3><p>Revise quantidades e veja o total do pedido.</p></article>
-        <article><b>03</b><h3>Realize a compra</h3><p>Quando a loja estiver online, o site mostra o Pix.</p></article>
-        <article><b>04</b><h3>Receba</h3><p>Após a confirmação, informe seu usuário Roblox e siga as instruções.</p></article>
+        <article><b>01</b><span>👤</span><h3>Faça seu login</h3><p>Entre na sua conta da Thoune Store.</p></article>
+        <article><b>02</b><span>🛍️</span><h3>Escolha</h3><p>Encontre suas marretas e adicione ao carrinho.</p></article>
+        <article><b>03</b><span>🧾</span><h3>Confira</h3><p>Revise quantidades e veja o total do pedido.</p></article>
+        <article><b>04</b><span>💳</span><h3>Realize a compra</h3><p>Com a loja online, o site mostra o Pix.</p></article>
+        <article><b>05</b><span>📦</span><h3>Receba</h3><p>Após a confirmação, siga as instruções de entrega.</p></article>
+      </div>
+    </section>
+
+    <section class="reviews-section section">
+      <div class="section-heading">
+        <div><p class="eyebrow">COMUNIDADE</p><h2>Quem compra, conta.</h2></div>
+      </div>
+      <div class="review-placeholder">
+        <span>⭐</span>
+        <p>As avaliações aprovadas pelos administradores aparecerão aqui.</p>
+      </div>
+    </section>
+
+    <section class="support-section section">
+      <div class="support-card">
+        <div><p class="eyebrow">SUPORTE</p><h2>Precisa de ajuda?</h2><p>Não encontrou o que procura? Fale com nosso suporte na Thoune Store pelo TikTok.</p></div>
+        <a class="primary-button" href="https://www.tiktok.com/@thounestoreofc" target="_blank" rel="noopener">Falar no TikTok ↗</a>
+      </div>
+    </section>
+
+    <section class="faq-section section" id="faq">
+      <div class="section-heading centered">
+        <p class="eyebrow">DÚVIDAS</p>
+        <h2>Perguntas frequentes</h2>
+      </div>
+      <div class="faq-list">
+        <details><summary>Como faço um pedido?</summary><p>Escolha as marretas, ajuste as quantidades no carrinho e use “Realizar compra” quando a loja estiver online.</p></details>
+        <details><summary>Como funciona o pagamento?</summary><p>O pagamento é feito via Pix e as informações são apresentadas durante o fluxo de compra quando o atendimento estiver online.</p></details>
+        <details><summary>O estoque é reservado quando adiciono ao carrinho?</summary><p>Não. Montar o carrinho não reduz o estoque. A baixa acontece somente após a confirmação do pagamento pelo administrador.</p></details>
+        <details><summary>Posso acompanhar meu pedido?</summary><p>Sim. A versão completa terá uma área de conta para acompanhar o status do pedido.</p></details>
+      </div>
+    </section>
+
+    <section class="account-preview section" id="conta">
+      <div class="account-card">
+        <span class="account-icon">♙</span>
+        <div><p class="eyebrow">MINHA CONTA</p><h2>Seu espaço na Thoune Store</h2><p>O login persistente e o histórico de pedidos serão conectados ao Supabase na próxima etapa.</p></div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="footer-brand">
-      <img src="assets/thoune-brand.jpg" alt="">
-      <div><strong>Thoune</strong><small>STORE</small></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Carrinho">
+    <div class="drawer-backdrop" id="close-cart"></div>
+    <div class="drawer-panel">
+      <div class="drawer-header"><div><p class="eyebrow">SEU PEDIDO</p><h2>Carrinho</h2></div><button class="close-button" id="close-cart-button">×</button></div>
+      <div class="cart-items" id="cart-items"></div>
+      <div class="cart-empty" id="cart-empty"><span>🛒</span><p>Seu carrinho está vazio.</p><small>Escolha uma marreta para começar.</small></div>
+      <div class="drawer-footer">
+        <div class="total-line"><span>Total</span><strong id="cart-total">R$ 0,00</strong></div>
+        <button class="primary-button full" id="checkout-button">Realizar compra</button>
+        <button class="secondary-button full" id="copy-order-button">📋 Copiar pedido</button>
+        <small class="checkout-note">O pagamento é realizado via Pix quando o atendimento estiver online.</small>
+      </div>
     </div>
-    <p>Mais que uma loja, uma comunidade.</p>
-    <a href="#" onclick="return openSupport()">TikTok ↗</a>
-    <small>© 2026 Thoune Store. Todos os direitos reservados.</small>
+  </aside>
+
+  <footer class="site-footer">
+    <div><strong>Thoune Store</strong><p>Mais que uma loja, uma comunidade.</p></div>
+    <a href="https://www.tiktok.com/@thounestoreofc" target="_blank" rel="noopener">@thounestoreofc ↗</a>
+    <small>© 2026 Thoune Store · Todos os direitos reservados.</small>
   </footer>
 
-  <div class="cart-drawer" id="cartDrawer" aria-hidden="true">
-    <div class="cart-panel">
-      <div class="cart-head">
-        <div><span class="eyebrow">SEU PEDIDO</span><h2>Seu carrinho</h2></div>
-        <button class="close-btn" id="closeCart">×</button>
-      </div>
-      <div class="cart-items" id="cartItems"></div>
-      <div class="cart-empty" id="cartEmpty">
-        <div>🛒</div><h3>Seu carrinho está vazio</h3><p>Explore as marretas e adicione o que quiser comprar.</p>
-      </div>
-      <div class="cart-foot">
-        <div><span>Total do pedido</span><strong id="cartTotal">R$ 0,00</strong></div>
-        <button class="primary-btn" id="buyBtn">Realizar compra <span>→</span></button>
-        <button class="copy-btn" id="copyOrder">📋 Copiar pedido</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal" id="offlineModal" aria-hidden="true">
-    <div class="modal-card">
-      <button class="close-btn" data-close-modal>×</button>
-      <span class="modal-icon">⏸</span>
-      <span class="eyebrow">ATENDIMENTO</span>
-      <h2>Loja offline no momento</h2>
-      <p>Você pode continuar navegando e montando o carrinho, mas a loja não pode receber pagamentos agora.</p>
-      <button class="primary-btn" data-close-modal>Entendi</button>
-    </div>
-  </div>
-
-  <div class="toast" id="toast"></div>
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>

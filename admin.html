@@ -1,45 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Painel — Thoune Store</title><link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Thoune Store — ADM</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{min-height:100vh;background:#f4fafb}.admin{max-width:900px;margin:auto;padding:70px 20px}.admin-card{background:#fff;border:1px solid #dcecef;border-radius:24px;padding:30px;box-shadow:0 15px 50px rgba(8,44,58,.08)}.warning{background:#fff7e8;border:1px solid #f1d49d;border-radius:15px;padding:14px;font-size:13px;line-height:1.5}.back{display:inline-block;margin-bottom:18px;color:#17677a;font-weight:800}
+  </style>
 </head>
 <body>
-<header class="topbar"><div class="brand"><div class="logo">🌊</div><strong>Painel Thoune Store</strong></div><a class="icon-btn" href="index.html" style="display:grid;place-items:center;text-decoration:none">🏠</a></header>
-<main>
-<section class="hero"><span class="pill">⚙️ ADMINISTRAÇÃO</span><h1>Gerenciar estoque</h1><p>Protótipo local: cadastre, edite e remova produtos. A conexão com Supabase será adicionada na próxima etapa.</p></section>
-<section class="cart-box">
-<h2>➕ Adicionar produto</h2>
-<div class="filters" style="margin-top:18px;display:grid;grid-template-columns:repeat(2,1fr)">
-<input id="name" placeholder="Nome do produto" style="padding:16px;border-radius:16px;border:1px solid #30363e;background:#191d22;color:white">
-<input id="price" type="number" step="0.01" placeholder="Preço (ex.: 9.00)" style="padding:16px;border-radius:16px;border:1px solid #30363e;background:#191d22;color:white">
-<input id="category" placeholder="Categoria" style="padding:16px;border-radius:16px;border:1px solid #30363e;background:#191d22;color:white">
-<input id="stock" type="number" min="0" placeholder="Quantidade em estoque" style="padding:16px;border-radius:16px;border:1px solid #30363e;background:#191d22;color:white">
-<input id="image" placeholder="URL da imagem (opcional)" style="padding:16px;border-radius:16px;border:1px solid #30363e;background:#191d22;color:white;grid-column:1/-1">
-</div>
-<button class="primary" onclick="addProduct()">Salvar produto</button>
-</section>
-<section>
-<div class="section-title"><h2>📦 Produtos cadastrados</h2></div>
-<div id="adminProducts" class="product-grid"></div>
-</section>
-</main>
-<script>
-let products=JSON.parse(localStorage.getItem("thoune_products")||"null")||[];
-const money=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
-function save(){localStorage.setItem("thoune_products",JSON.stringify(products))}
-function addProduct(){
- const name=document.querySelector("#name").value.trim(),price=Number(document.querySelector("#price").value),category=document.querySelector("#category").value.trim()||"Outros",stock=Math.max(0,Number(document.querySelector("#stock").value)||0),image=document.querySelector("#image").value.trim();
- if(!name||!Number.isFinite(price)){alert("Preencha nome e preço.");return}
- products.push({id:Date.now().toString(),name,price,category,stock,image});save();clear();render();
-}
-function clear(){["name","price","category","stock","image"].forEach(id=>document.querySelector("#"+id).value="")}
-function render(){
- document.querySelector("#adminProducts").innerHTML=products.map(p=>`<article class="card"><div class="product-image">${p.image?`<img src="${esc(p.image)}">`:`<div class="placeholder">📦</div>`}</div><h3>${esc(p.name)}</h3><div class="price">${money(p.price)}</div><div class="stock">Estoque: <b>${p.stock}</b></div><button class="add" onclick="adjust('${p.id}')">✏️ Ajustar estoque</button><button class="add" style="margin-top:8px;background:#242a31;color:white" onclick="removeP('${p.id}')">🗑️ Excluir</button></article>`).join("");
-}
-function adjust(id){const p=products.find(x=>x.id===id);const n=prompt(`Novo estoque para ${p.name}:`,p.stock);if(n!==null&&Number(n)>=0){p.stock=Number(n);save();render()}}
-function removeP(id){if(confirm("Excluir este produto?")){products=products.filter(p=>p.id!==id);save();render()}}
-render();
-</script>
-</body></html>
+  <main class="admin">
+    <a class="back" href="index.html">← Voltar para a loja</a>
+    <div class="admin-card">
+      <p class="eyebrow">ÁREA ADMINISTRATIVA</p>
+      <h1>Thoune Store ADM</h1>
+      <p>Esta página é apenas a estrutura inicial da área administrativa.</p>
+      <div class="warning">
+        <strong>Importante:</strong> não considerar esta página protegida ainda. A proteção real será feita com Supabase Auth + RLS antes de liberar funções administrativas.
+      </div>
+      <p>Próxima integração: login do administrador, produtos, estoque, pedidos, confirmação de pagamento, status online/offline, avaliações e configurações.</p>
+    </div>
+  </main>
+</body>
+</html>
