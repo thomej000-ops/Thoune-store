@@ -13,13 +13,17 @@ const loginButton = document.querySelector("#login-button");
 const signupButton = document.querySelector("#signup-button");
 const logoutButton = document.querySelector("#logout-button");
 const accountMessage = document.querySelector("#account-message");
-
+const accountDetails = document.querySelector("#account-details");
+const accountEmail = document.querySelector("#account-email");
+const ordersMessage = document.querySelector("#orders-message");
 async function updateAccountUI() {
   const {
     data: { session }
   } = await supabaseClient.auth.getSession();
 
   if (session?.user) {
+    accountDetails.classList.remove("hidden");
+accountEmail.textContent = session.user.email || "";
     accountMessage.textContent = "Você está conectado à sua conta.";
     loginButton.classList.add("hidden");
     signupButton.classList.add("hidden");
@@ -28,6 +32,9 @@ async function updateAccountUI() {
     authEmail.disabled = true;
     authPassword.classList.add("hidden");
   } else {
+    accountDetails.classList.add("hidden");
+accountEmail.textContent = "";
+ordersMessage.textContent = "Você ainda não possui pedidos.";
     accountMessage.textContent =
       "Entre ou crie sua conta para acompanhar seus pedidos.";
     loginButton.classList.remove("hidden");
