@@ -7,11 +7,26 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
-let products = [...demoProducts];
+let products = [];
 let selectedCategory = "Todas";
 let search = "";
 let sort = "popular";
+async function loadProducts() {
+  const { data, error } = await supabaseClient
+    .from("products")
+    .select("*")
+    .eq("active", true)
+    .order("sort_order", { ascending: true });
 
+  if (error) {
+    console.error("Erro ao carregar produtos:", error);
+    toast("Não foi possível carregar o catálogo.");
+    return;
+  }
+
+  products = data || [];
+  loadProducts();
+}
 const menuToggle = document.querySelector("#menu-toggle");
 const mobileNav = document.querySelector("#mobile-nav");
 menuToggle.addEventListener("click",()=>mobileNav.classList.toggle("open"));
@@ -29,7 +44,7 @@ document.querySelector("#search-input").addEventListener("input",e=>{search=e.ta
 document.querySelector("#sort-select").addEventListener("change",e=>{sort=e.target.value;refresh()});
 
 function filtered(){
-  let result = products.filter(p=>p.active && (selectedCategory==="Todas" || p.rarity===selectedCategory) && p.name.toLowerCase().includes(search));
+  let result = products.filter(p=>p.active && (selectedCategory==="Todas" || p.category===selectedCategory) && p.name.toLowerCase().includes(search));
   if(sort==="low") result.sort((a,b)=>a.price-b.price);
   if(sort==="high") result.sort((a,b)=>b.price-a.price);
   if(sort==="popular") result.sort((a,b)=>(b.popularity||0)-(a.popularity||0));
