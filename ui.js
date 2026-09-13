@@ -25,7 +25,7 @@ export function renderProducts(products){
         <button class="favorite" aria-label="Favoritar ${escapeHtml(p.name)}" data-fav="${p.id}">♡</button>
       </div>
       <div class="product-info">
-        <span class="rarity">${escapeHtml(p.rarity)}</span>
+         <span class="rarity">${escapeHtml(p.category)}</span>
         <h3 class="product-name" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</h3>
         <div class="product-bottom">
           <div><div class="price">${money(p.price)}</div><div class="stock">${p.stock > 0 ? `${p.stock} disponíveis` : "Sem estoque"}</div></div>
