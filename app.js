@@ -1359,5 +1359,176 @@ function renderAdminProducts(list) {
     return;
   }
 
-  list.forEach(product => {
-    const row = document.createElement("div");
+     row.className = "admin-product";
+
+    const image = document.createElement("img");
+    image.src = product.image || "";
+    image.alt = product.name;
+
+    const info = document.createElement("div");
+    info.className = "admin-product-info";
+
+    const name = document.createElement("strong");
+    name.textContent = product.name;
+
+    const details = document.createElement("small");
+    details.textContent =
+      `${product.category} · R$ ${Number(product.price).toFixed(2).replace(".", ",")} · Estoque: ${product.stock}`;
+
+    info.appendChild(name);
+    info.appendChild(details);
+
+    const actions = document.createElement("div");
+    actions.className = "admin-product-actions";
+
+    const editButton = document.createElement("button");
+    editButton.type = "button";
+    editButton.textContent = "✏️ Editar";
+
+    editButton.addEventListener("click", () => {
+      editAdminProduct(product);
+    });
+
+    const toggleButton = document.createElement("button");
+    toggleButton.type = "button";
+    toggleButton.textContent =
+      product.active ? "🔴 Desativar" : "🟢 Ativar";
+
+    toggleButton.addEventListener("click", () => {
+      toggleProduct(product);
+    });
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "admin-danger";
+    deleteButton.textContent = "🗑️ Excluir";
+
+    deleteButton.addEventListener("click", () => {
+      deleteProduct(product);
+    });
+
+    actions.appendChild(editButton);
+    actions.appendChild(toggleButton);
+    actions.appendChild(deleteButton);
+
+    row.appendChild(image);
+    row.appendChild(info);
+    row.appendChild(actions);
+
+    container.appendChild(row);
+  });
+}
+
+/* =========================================================
+   CONFIGURAÇÕES DA LOJA
+========================================================= */
+
+async function loadStoreSettings() {
+  const button = document.querySelector("#admin-online-button");
+
+  if (!button || !currentIsAdmin) return;
+
+  const { data, error } = await supabaseClient
+    .from("store_settings")
+    .select("online")
+    .eq("id", 1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Erro ao carregar configurações:", error);
+    button.textContent = "Erro ao carregar";
+    return;
+  }
+
+  const online = data?.online ?? false;
+
+  updateOnlineButton(online);
+}
+
+/* =========================================================
+   BOTÃO ONLINE / OFFLINE
+========================================================= */
+
+function updateOnlineButton(online) {
+  const button = document.querySelector("#admin-online-button");
+
+  if (!button) return;
+
+  button.classList.toggle("online", online);
+
+  button.textContent = online
+    ? "🟢 Atendimento online"
+    : "⚫ Atendimento offline";
+
+  const status = document.querySelector(".online-pill");
+
+  if (status) {
+    status.innerHTML = online
+      ? "<span></span> Atendimento online"
+      : "<span></span> Atendimento offline";
+  }
+}
+
+async function toggleStoreOnline() {
+  if (!currentIsAdmin) {
+    toast("Acesso negado.");
+    return;
+  }
+
+  const button = document.querySelector("#admin-online-button");
+
+  if (!button) return;
+
+  button.disabled = true;
+
+  const { data: currentSettings, error: readError } =
+    await supabaseClient
+      .from("store_settings")
+      .select("online")
+      .eq("id", 1)
+      .maybeSingle();
+
+  if (readError) {
+    console.error("Erro ao ler atendimento:", readError);
+    toast("Não foi possível carregar o atendimento.");
+    button.disabled = false;
+    return;
+  }
+
+  const newStatus = !(currentSettings?.online ?? false);
+
+  const { error } = await supabaseClient
+    .from("store_settings")
+    .update({
+      online: newStatus
+    })
+    .eq("id", 1);
+
+  if (error) {
+    console.error("Erro ao atualizar atendimento:", error);
+    toast("Não foi possível alterar o atendimento.");
+    button.disabled = false;
+    return;
+  }
+
+  updateOnlineButton(newStatus);
+
+  toast(
+    newStatus
+      ? "Atendimento aberto! 🟢"
+      : "Atendimento fechado. ⚫"
+  );
+
+  button.disabled = false;
+}
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+async function init() {
+  await loadProducts();
+  await updateAccountUI();
+}
+
+init();
