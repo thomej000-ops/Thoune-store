@@ -212,6 +212,12 @@ function filtered(){
 function refresh(){renderProducts(filtered())}
 
 const drawer = document.querySelector("#cart-drawer");
+const checkoutSection = document.querySelector("#checkout-section");
+const checkoutItems = document.querySelector("#checkout-items");
+const checkoutTiktok = document.querySelector("#checkout-tiktok");
+const checkoutRoblox = document.querySelector("#checkout-roblox");
+const checkoutTotal = document.querySelector("#checkout-total");
+const checkoutBack = document.querySelector("#checkout-back");
 function openCart(){drawer.classList.add("open");renderCart(loadCart())}
 function closeCart(){drawer.classList.remove("open")}
 document.querySelector("#open-cart").addEventListener("click",openCart);
