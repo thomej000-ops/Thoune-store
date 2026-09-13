@@ -1,5 +1,5 @@
 import {demoProducts} from "./demo-products.js";
-import {loadCart, orderText, clearCart} from "./cart.js";
+import {loadCart, orderText, clearCart, cartTotal, money} from "./cart.js";
 import {renderProducts, renderCart, updateCartBadge, toast} from "./ui.js";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 
