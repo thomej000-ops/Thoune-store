@@ -1342,9 +1342,8 @@ async function deleteProduct(product) {
 ========================================================= */
 
 function renderAdminProducts(list) {
-  const container = document.querySelector(
-    "#admin-products"
-  );
+function renderAdminProducts(list) {
+  const container = document.querySelector("#admin-products");
 
   if (!container) return;
 
@@ -1359,21 +1358,25 @@ function renderAdminProducts(list) {
     return;
   }
 
-     row.className = "admin-product";
+  list.forEach(product => {
+    const row = document.createElement("div");
+    row.className = "admin-product";
 
     const image = document.createElement("img");
     image.src = product.image || "";
-    image.alt = product.name;
+    image.alt = product.name || "Marreta";
 
     const info = document.createElement("div");
     info.className = "admin-product-info";
 
     const name = document.createElement("strong");
-    name.textContent = product.name;
+    name.textContent = product.name || "Sem nome";
 
     const details = document.createElement("small");
     details.textContent =
-      `${product.category} · R$ ${Number(product.price).toFixed(2).replace(".", ",")} · Estoque: ${product.stock}`;
+      `${product.category} · R$ ${Number(product.price)
+        .toFixed(2)
+        .replace(".", ",")} · Estoque: ${product.stock}`;
 
     info.appendChild(name);
     info.appendChild(details);
