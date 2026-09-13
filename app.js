@@ -298,6 +298,62 @@ checkoutBack.addEventListener("click", ()=>{
   checkoutSection.classList.add("hidden");
   openCart();
 });
+const confirmOrderButton = document.querySelector("#confirm-order-button");
+
+confirmOrderButton.addEventListener("click", async () => {
+  const cart = loadCart();
+
+  if (!cart.length) {
+    toast("Seu carrinho está vazio.");
+    return;
+  }
+
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
+
+  if (!session?.user) {
+    toast("Entre na sua conta antes de confirmar o pedido.");
+    return;
+  }
+
+  confirmOrderButton.disabled = true;
+  confirmOrderButton.textContent = "Criando pedido...";
+
+  try {
+    const items = cart.map(item => ({
+      product_id: item.id,
+      quantity: item.qty
+    }));
+
+    const { data, error } = await supabaseClient.rpc("create_order", {
+      p_items: items
+    });
+
+    if (error) {
+      console.error("Erro ao criar pedido:", error);
+      toast("Não foi possível criar o pedido: " + error.message);
+      return;
+    }
+
+    console.log("Pedido criado:", data);
+
+    clearCart();
+    updateCartBadge(loadCart());
+
+    toast("Pedido criado com sucesso! ✅");
+
+    checkoutSection.classList.add("hidden");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+  } finally {
+    confirmOrderButton.disabled = false;
+    confirmOrderButton.textContent = "Confirmar pedido";
+  }
+});
 // Atualiza o catálogo sem fingir que o backend já está conectado.
 refresh();
 updateCartBadge(loadCart());
