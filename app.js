@@ -99,7 +99,19 @@ async function updateAccountUI() {
 
     const profile = await loadProfile(session.user.id);
 
-    currentIsAdmin = profile?.role === "admin";
+console.log("PERFIL CARREGADO:", profile);
+console.log("USUÁRIO LOGADO:", session.user.email);
+
+if (!profile) {
+  toast("Não foi possível carregar seu perfil.");
+  currentIsAdmin = false;
+} else if (profile.role === "admin") {
+  currentIsAdmin = true;
+  toast("Administrador reconhecido! 🔐");
+} else {
+  currentIsAdmin = false;
+  toast("Perfil reconhecido como: " + profile.role);
+}
 
     accountMessage.textContent =
       currentIsAdmin
