@@ -1527,8 +1527,18 @@ async function toggleStoreOnline() {
 ========================================================= */
 
 async function init() {
-  await loadProducts();
-  await updateAccountUI();
+  try {
+    await loadProducts();
+  } catch (error) {
+    console.error("ERRO AO CARREGAR PRODUTOS:", error);
+  }
+
+  try {
+    await updateAccountUI();
+  } catch (error) {
+    console.error("ERRO AO CARREGAR CONTA:", error);
+    toast("Erro ao carregar sua conta.");
+  }
 }
 
 init();
