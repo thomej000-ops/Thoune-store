@@ -3,24 +3,276 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+
   <title>Thoune Store — ADM</title>
+
   <link rel="stylesheet" href="styles.css">
+
   <style>
-    body{min-height:100vh;background:#f4fafb}.admin{max-width:900px;margin:auto;padding:70px 20px}.admin-card{background:#fff;border:1px solid #dcecef;border-radius:24px;padding:30px;box-shadow:0 15px 50px rgba(8,44,58,.08)}.warning{background:#fff7e8;border:1px solid #f1d49d;border-radius:15px;padding:14px;font-size:13px;line-height:1.5}.back{display:inline-block;margin-bottom:18px;color:#17677a;font-weight:800}
+    body {
+      min-height: 100vh;
+      background: #f4fafb;
+    }
+
+    .admin {
+      max-width: 1000px;
+      margin: auto;
+      padding: 50px 20px;
+    }
+
+    .admin-card {
+      background: #fff;
+      border: 1px solid #dcecef;
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 15px 50px rgba(8,44,58,.08);
+    }
+
+    .admin-header {
+      margin-bottom: 25px;
+    }
+
+    .admin-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eaf8ef;
+      color: #18733b;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 25px;
+    }
+
+    .admin-option {
+      border: 1px solid #dcecef;
+      border-radius: 18px;
+      padding: 20px;
+      background: #fbfeff;
+    }
+
+    .admin-option strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .admin-option p {
+      margin: 0;
+      font-size: 14px;
+      color: #5d747b;
+    }
+
+    .logout-admin {
+      margin-top: 25px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .access-message {
+      text-align: center;
+      padding: 30px 10px;
+    }
+
+    @media (max-width: 700px) {
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
+
 <body>
+
   <main class="admin">
+
     <a class="back" href="index.html">← Voltar para a loja</a>
-    <div class="admin-card">
-      <p class="eyebrow">ÁREA ADMINISTRATIVA</p>
-      <h1>Thoune Store ADM</h1>
-      <p>Esta página é apenas a estrutura inicial da área administrativa.</p>
-      <div class="warning">
-        <strong>Importante:</strong> não considerar esta página protegida ainda. A proteção real será feita com Supabase Auth + RLS antes de liberar funções administrativas.
+
+    <!-- CARREGANDO -->
+    <section class="admin-card" id="loading-screen">
+      <p class="eyebrow">THOUNE STORE</p>
+      <h1>Verificando acesso...</h1>
+      <p>Aguarde enquanto verificamos sua conta.</p>
+    </section>
+
+    <!-- ACESSO NEGADO -->
+    <section class="admin-card hidden" id="access-denied">
+      <div class="access-message">
+        <div style="font-size:48px">🔒</div>
+
+        <p class="eyebrow">ACESSO RESTRITO</p>
+
+        <h1>Acesso negado</h1>
+
+        <p>
+          Esta área é exclusiva para administradores da Thoune Store.
+        </p>
+
+        <a class="primary-button" href="index.html">
+          Voltar para a loja
+        </a>
       </div>
-      <p>Próxima integração: login do administrador, produtos, estoque, pedidos, confirmação de pagamento, status online/offline, avaliações e configurações.</p>
-    </div>
+    </section>
+
+    <!-- PAINEL ADMIN -->
+    <section class="admin-card hidden" id="admin-panel">
+
+      <div class="admin-header">
+
+        <div class="admin-status">
+          🟢 Administrador autenticado
+        </div>
+
+        <p class="eyebrow" style="margin-top:20px">
+          ÁREA ADMINISTRATIVA
+        </p>
+
+        <h1>Thoune Store ADM</h1>
+
+        <p>
+          Gerencie produtos, pedidos, estoque e configurações da loja.
+        </p>
+
+      </div>
+
+      <div class="admin-grid">
+
+        <div class="admin-option">
+          <strong>📦 Produtos</strong>
+          <p>Adicionar, editar, remover produtos e controlar estoque.</p>
+        </div>
+
+        <div class="admin-option">
+          <strong>🧾 Pedidos</strong>
+          <p>Visualizar pedidos e acompanhar o status das compras.</p>
+        </div>
+
+        <div class="admin-option">
+          <strong>💳 Pagamentos</strong>
+          <p>Conferir pagamentos e confirmar pedidos.</p>
+        </div>
+
+        <div class="admin-option">
+          <strong>🟢 Atendimento</strong>
+          <p>Controlar o status online ou offline da loja.</p>
+        </div>
+
+      </div>
+
+      <button
+        class="secondary-button logout-admin"
+        id="admin-logout"
+      >
+        Sair da conta
+      </button>
+
+    </section>
+
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script type="module">
+
+    import {
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    } from "./config.js";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    const loadingScreen =
+      document.querySelector("#loading-screen");
+
+    const accessDenied =
+      document.querySelector("#access-denied");
+
+    const adminPanel =
+      document.querySelector("#admin-panel");
+
+    const logoutButton =
+      document.querySelector("#admin-logout");
+
+
+    async function checkAdminAccess() {
+
+      const {
+        data: { session }
+      } = await supabaseClient.auth.getSession();
+
+
+      if (!session?.user) {
+
+        loadingScreen.classList.add("hidden");
+        accessDenied.classList.remove("hidden");
+
+        return;
+      }
+
+
+      const {
+        data: profile,
+        error
+      } = await supabaseClient
+
+        .from("profiles")
+
+        .select("role")
+
+        .eq("id", session.user.id)
+
+        .maybeSingle();
+
+
+      if (
+        error ||
+        !profile ||
+        profile.role !== "admin"
+      ) {
+
+        console.error(
+          "Acesso administrativo negado:",
+          error
+        );
+
+        loadingScreen.classList.add("hidden");
+        accessDenied.classList.remove("hidden");
+
+        return;
+      }
+
+
+      loadingScreen.classList.add("hidden");
+      adminPanel.classList.remove("hidden");
+    }
+
+
+    logoutButton.addEventListener(
+      "click",
+      async () => {
+
+        await supabaseClient.auth.signOut();
+
+        window.location.href = "index.html";
+
+      }
+    );
+
+
+    checkAdminAccess();
+
+  </script>
+
 </body>
 </html>
