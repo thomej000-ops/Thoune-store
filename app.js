@@ -308,6 +308,7 @@ checkoutSection.classList.add("hidden");
 openCart();
 });
 let currentOrderId = null;
+
 const verifyPaymentButton = document.querySelector("#verify-payment-button");
 const confirmOrderButton = document.querySelector("#confirm-order-button");
 
@@ -328,7 +329,11 @@ confirmOrderButton.addEventListener("click", async () => {
     return;
   }
 
-  const pixName = document.getElementById("checkout-pix-name").value.trim();
+  const pixName = document
+    .getElementById("checkout-pix-name")
+    .value
+    .trim();
+
   const robloxName = checkoutRoblox.value.trim();
 
   if (!robloxName) {
@@ -372,7 +377,6 @@ confirmOrderButton.addEventListener("click", async () => {
     toast("Pedido criado com sucesso! ✅");
 
     confirmOrderButton.classList.add("hidden");
-
     verifyPaymentButton.classList.remove("hidden");
 
   } finally {
@@ -380,6 +384,7 @@ confirmOrderButton.addEventListener("click", async () => {
     confirmOrderButton.textContent = "Confirmar pedido";
   }
 });
+
 verifyPaymentButton.addEventListener("click", async () => {
   if (!currentOrderId) {
     toast("Nenhum pedido aguardando verificação.");
@@ -417,6 +422,5 @@ verifyPaymentButton.addEventListener("click", async () => {
   }
 });
 
-// Atualiza o catálogo sem fingir que o backend já está conectado.
 refresh();
 updateCartBadge(loadCart());
