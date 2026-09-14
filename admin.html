@@ -289,6 +289,44 @@
       font-weight: 700;
     }
 
+    .payment-card {
+      border: 1px solid #dcecef;
+      border-radius: 20px;
+      padding: 20px;
+      background: #fff;
+    }
+
+    .payment-card h3 {
+      margin-top: 0;
+    }
+
+    .payment-items {
+      margin-top: 15px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #f7fbfc;
+    }
+
+    .payment-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #e1eef0;
+    }
+
+    .payment-item:last-child {
+      border-bottom: 0;
+    }
+
+    .payment-status {
+      display: inline-flex;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #fff4dc;
+      color: #99600b;
+      font-size: 13px;
+      font-weight: 800;
+      margin-top: 12px;
+    }
+
     @media (max-width: 700px) {
       .admin {
         padding: 25px 14px;
@@ -371,6 +409,7 @@
     <!-- PAINEL ADMIN -->
     <section class="admin-card hidden" id="admin-panel">
 
+      <!-- DASHBOARD -->
       <div id="dashboard-section">
 
         <div class="admin-header">
@@ -458,6 +497,7 @@
 
             <div class="form-field full">
               <label for="product-name">Nome da marreta</label>
+
               <input
                 id="product-name"
                 type="text"
@@ -466,7 +506,10 @@
             </div>
 
             <div class="form-field">
-              <label for="product-category">Raridade</label>
+
+              <label for="product-category">
+                Raridade
+              </label>
 
               <select id="product-category">
                 <option value="Lendária">Lendária</option>
@@ -475,10 +518,14 @@
                 <option value="Comum">Comum</option>
                 <option value="Exclusiva">Exclusiva</option>
               </select>
+
             </div>
 
             <div class="form-field">
-              <label for="product-price">Preço (R$)</label>
+
+              <label for="product-price">
+                Preço (R$)
+              </label>
 
               <input
                 id="product-price"
@@ -487,10 +534,14 @@
                 step="0.01"
                 placeholder="0,00"
               >
+
             </div>
 
             <div class="form-field">
-              <label for="product-stock">Estoque</label>
+
+              <label for="product-stock">
+                Estoque
+              </label>
 
               <input
                 id="product-stock"
@@ -499,10 +550,14 @@
                 step="1"
                 placeholder="0"
               >
+
             </div>
 
             <div class="form-field">
-              <label for="product-order">Ordem no catálogo</label>
+
+              <label for="product-order">
+                Ordem no catálogo
+              </label>
 
               <input
                 id="product-order"
@@ -511,28 +566,38 @@
                 step="1"
                 placeholder="0"
               >
+
             </div>
 
             <div class="form-field full">
-              <label for="product-image">URL da imagem</label>
+
+              <label for="product-image">
+                URL da imagem
+              </label>
 
               <input
                 id="product-image"
                 type="url"
                 placeholder="https://..."
               >
+
             </div>
 
             <div class="form-field full">
-              <label for="product-description">Descrição</label>
+
+              <label for="product-description">
+                Descrição
+              </label>
 
               <textarea
                 id="product-description"
                 placeholder="Descrição opcional da marreta..."
               ></textarea>
+
             </div>
 
             <div class="checkbox-field">
+
               <input
                 id="product-active"
                 type="checkbox"
@@ -542,6 +607,7 @@
               <label for="product-active">
                 Produto ativo no catálogo
               </label>
+
             </div>
 
           </div>
@@ -564,7 +630,10 @@
 
           </div>
 
-          <p class="message" id="product-form-message"></p>
+          <p
+            class="message"
+            id="product-form-message"
+          ></p>
 
         </div>
 
@@ -572,14 +641,26 @@
         <div>
 
           <div class="section-header">
+
             <div>
-              <h3>Marretas cadastradas</h3>
-              <p id="products-count">Carregando...</p>
+
+              <h3>
+                Marretas cadastradas
+              </h3>
+
+              <p id="products-count">
+                Carregando...
+              </p>
+
             </div>
 
-            <button class="small-button" id="refresh-products-button">
+            <button
+              class="small-button"
+              id="refresh-products-button"
+            >
               🔄 Atualizar
             </button>
+
           </div>
 
           <div
@@ -587,7 +668,7 @@
             id="products-list"
           ></div>
 
-                </div>
+        </div>
 
       </div>
 
@@ -595,25 +676,153 @@
       <div id="orders-section" class="hidden">
 
         <div class="section-header">
+
           <div>
+
+            <button
+              class="back-admin"
+              id="back-orders-dashboard"
+            >
+              ← Voltar ao painel
+            </button>
+
+            <p
+              class="eyebrow"
+              style="margin-top:18px"
+            >
+              VENDAS
+            </p>
+
             <h2>📦 Pedidos</h2>
-            <p>Gerencie os pedidos realizados pelos clientes.</p>
+
+            <p>
+              Gerencie os pedidos realizados pelos clientes.
+            </p>
+
           </div>
 
-          <button class="small-button" id="refresh-orders-button">
+          <button
+            class="small-button"
+            id="refresh-orders-button"
+          >
             🔄 Atualizar
           </button>
+
         </div>
 
-        <div id="orders-message" class="message"></div>
+        <div
+          id="orders-message"
+          class="message"
+        ></div>
 
-        <div id="orders-list" class="products-list">
+        <div
+          id="orders-list"
+          class="products-list"
+        >
           <p>Carregando pedidos...</p>
         </div>
 
       </div>
 
+      <!-- PAGAMENTOS -->
+      <div id="payments-section" class="hidden">
+
+        <div class="section-header">
+
+          <div>
+
+            <button
+              class="back-admin"
+              id="back-payments-dashboard"
+            >
+              ← Voltar ao painel
+            </button>
+
+            <p
+              class="eyebrow"
+              style="margin-top:18px"
+            >
+              FINANCEIRO
+            </p>
+
+            <h2>💳 Pagamentos</h2>
+
+            <p>
+              Confira os pagamentos informados pelos clientes.
+            </p>
+
+          </div>
+
+          <button
+            class="small-button"
+            id="refresh-payments-button"
+          >
+            🔄 Atualizar
+          </button>
+
+        </div>
+
+        <div
+          id="payments-list"
+          class="products-list"
+        >
+          <p>Carregando pagamentos...</p>
+        </div>
+
+      </div>
+
+      <!-- ATENDIMENTO -->
+      <div id="service-section" class="hidden">
+
+        <div class="section-header">
+
+          <div>
+
+            <button
+              class="back-admin"
+              id="back-service-dashboard"
+            >
+              ← Voltar ao painel
+            </button>
+
+            <p
+              class="eyebrow"
+              style="margin-top:18px"
+            >
+              LOJA
+            </p>
+
+            <h2>🟢 Atendimento</h2>
+
+            <p>
+              Controle o status de atendimento da Thoune Store.
+            </p>
+
+          </div>
+
+        </div>
+
+        <div class="admin-card">
+
+          <h3>Status atual</h3>
+
+          <p id="service-status-text">
+            Carregando...
+          </p>
+
+          <button
+            class="primary-button"
+            id="toggle-service-button"
+          >
+            Alterar status
+          </button>
+
+        </div>
+
+      </div>
+
     </section>
+
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -626,10 +835,11 @@
     } from "./config.js";
 
 
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
 
 
     /* ELEMENTOS PRINCIPAIS */
@@ -647,7 +857,7 @@
       document.querySelector("#admin-logout");
 
 
-    /* ELEMENTOS DO DASHBOARD */
+    /* SEÇÕES */
 
     const dashboardSection =
       document.querySelector("#dashboard-section");
@@ -655,14 +865,32 @@
     const productsSection =
       document.querySelector("#products-section");
 
+    const ordersSection =
+      document.querySelector("#orders-section");
+
+    const paymentsSection =
+      document.querySelector("#payments-section");
+
+    const serviceSection =
+      document.querySelector("#service-section");
+
+
+    /* BOTÕES DASHBOARD */
+
     const productsOption =
       document.querySelector("#products-option");
 
-    const backDashboard =
-      document.querySelector("#back-dashboard");
+    const ordersOption =
+      document.querySelector("#orders-option");
+
+    const paymentsOption =
+      document.querySelector("#payments-option");
+
+    const serviceOption =
+      document.querySelector("#service-option");
 
 
-    /* ELEMENTOS DO PRODUTO */
+    /* FORM PRODUTO */
 
     const productForm =
       document.querySelector("#product-form");
@@ -725,12 +953,14 @@
 
       const {
         data: { session }
-      } = await supabaseClient.auth.getSession();
+      } =
+        await supabaseClient.auth.getSession();
 
 
       if (!session?.user) {
 
         loadingScreen.classList.add("hidden");
+
         accessDenied.classList.remove("hidden");
 
         return false;
@@ -740,11 +970,12 @@
       const {
         data: profile,
         error
-      } = await supabaseClient
-        .from("profiles")
-        .select("role")
-        .eq("id", session.user.id)
-        .maybeSingle();
+      } =
+        await supabaseClient
+          .from("profiles")
+          .select("role")
+          .eq("id", session.user.id)
+          .maybeSingle();
 
 
       if (
@@ -759,6 +990,7 @@
         );
 
         loadingScreen.classList.add("hidden");
+
         accessDenied.classList.remove("hidden");
 
         return false;
@@ -766,56 +998,128 @@
 
 
       loadingScreen.classList.add("hidden");
+
       adminPanel.classList.remove("hidden");
 
       return true;
     }
 
 
-    /* DASHBOARD */
+    /* NAVEGAÇÃO */
 
-    productsOption.addEventListener("click", () => {
+    function hideAllSections() {
 
       dashboardSection.classList.add("hidden");
-      productsSection.classList.remove("hidden");
-
-      loadProducts();
-
-    });
-
-
-    backDashboard.addEventListener("click", () => {
-
       productsSection.classList.add("hidden");
+      ordersSection.classList.add("hidden");
+      paymentsSection.classList.add("hidden");
+      serviceSection.classList.add("hidden");
+
+    }
+
+
+    function showDashboard() {
+
+      hideAllSections();
+
       dashboardSection.classList.remove("hidden");
 
       closeProductForm();
 
-    });
+    }
+
+
+    /* PRODUTOS */
+
+    productsOption.addEventListener(
+      "click",
+      () => {
+
+        hideAllSections();
+
+        productsSection.classList.remove(
+          "hidden"
+        );
+
+        loadProducts();
+
+      }
+    );
+
+
+    document
+      .querySelector("#back-dashboard")
+      .addEventListener(
+        "click",
+        showDashboard
+      );
+
+
+    document
+      .querySelector("#back-orders-dashboard")
+      .addEventListener(
+        "click",
+        showDashboard
+      );
+
+
+    document
+      .querySelector("#back-payments-dashboard")
+      .addEventListener(
+        "click",
+        showDashboard
+      );
+
+
+    document
+      .querySelector("#back-service-dashboard")
+      .addEventListener(
+        "click",
+        showDashboard
+      );
 
 
     /* FORMULÁRIO */
 
     function openProductForm(product = null) {
 
-      productForm.classList.remove("hidden");
+      productForm.classList.remove(
+        "hidden"
+      );
 
       productFormMessage.textContent = "";
+
 
       if (product) {
 
         editingProductId = product.id;
 
-        formTitle.textContent = "Editar marreta";
+        formTitle.textContent =
+          "Editar marreta";
 
-        productName.value = product.name || "";
-        productCategory.value = product.category || "Comum";
-        productPrice.value = product.price ?? "";
-        productStock.value = product.stock ?? 0;
-        productOrder.value = product.sort_order ?? 0;
-        productImage.value = product.image || "";
-        productDescription.value = product.description || "";
-        productActive.checked = product.active !== false;
+        productName.value =
+          product.name || "";
+
+        productCategory.value =
+          product.category || "Comum";
+
+        productPrice.value =
+          product.price ?? "";
+
+        productStock.value =
+          product.stock ?? 0;
+
+        productOrder.value =
+          product.sort_order ?? 0;
+
+        productImage.value =
+          product.image || "";
+
+        productDescription.value =
+          product.description || "";
+
+        productActive.checked =
+          product.active !== false;
 
         saveProductButton.textContent =
           "Salvar alterações";
@@ -824,47 +1128,70 @@
 
         editingProductId = null;
 
-        formTitle.textContent = "Adicionar marreta";
+        formTitle.textContent =
+          "Adicionar marreta";
 
         productName.value = "";
-        productCategory.value = "Comum";
+
+        productCategory.value =
+          "Comum";
+
         productPrice.value = "";
+
         productStock.value = 0;
+
         productOrder.value = 0;
+
         productImage.value = "";
+
         productDescription.value = "";
+
         productActive.checked = true;
 
         saveProductButton.textContent =
           "Salvar marreta";
+
       }
+
 
       productForm.scrollIntoView({
         behavior: "smooth",
         block: "start"
       });
+
     }
 
 
     function closeProductForm() {
 
-      productForm.classList.add("hidden");
+      productForm.classList.add(
+        "hidden"
+      );
 
       editingProductId = null;
 
       productFormMessage.textContent = "";
 
       productName.value = "";
-      productCategory.value = "Comum";
+
+      productCategory.value =
+        "Comum";
+
       productPrice.value = "";
+
       productStock.value = 0;
+
       productOrder.value = 0;
+
       productImage.value = "";
+
       productDescription.value = "";
+
       productActive.checked = true;
 
       saveProductButton.textContent =
         "Salvar marreta";
+
     }
 
 
@@ -887,18 +1214,22 @@
       productsList.innerHTML =
         "<p>Carregando produtos...</p>";
 
+
       const {
         data,
         error
-      } = await supabaseClient
-        .from("products")
-        .select("*")
-        .order("sort_order", {
-          ascending: true
-        })
-        .order("name", {
-          ascending: true
-        });
+      } =
+        await supabaseClient
+          .from("products")
+          .select("*")
+          .order(
+            "sort_order",
+            { ascending: true }
+          )
+          .order(
+            "name",
+            { ascending: true }
+          );
 
 
       if (error) {
@@ -910,7 +1241,8 @@
 
         productsList.innerHTML =
           `<p class="message">
-            Não foi possível carregar os produtos: ${escapeHtml(error.message)}
+            Não foi possível carregar os produtos:
+            ${escapeHtml(error.message)}
           </p>`;
 
         productsCount.textContent =
@@ -921,6 +1253,7 @@
 
 
       const products = data || [];
+
 
       productsCount.textContent =
         `${products.length} produto(s) cadastrado(s).`;
@@ -964,7 +1297,10 @@
           product.name || "Marreta";
 
         image.onerror = () => {
-          image.style.opacity = "0.35";
+
+          image.style.opacity =
+            "0.35";
+
         };
 
 
@@ -993,7 +1329,8 @@
           document.createElement("span");
 
         rarity.textContent =
-          product.category || "Sem raridade";
+          product.category ||
+          "Sem raridade";
 
 
         const price =
@@ -1060,7 +1397,8 @@
 
         editButton.addEventListener(
           "click",
-          () => openProductForm(product)
+          () =>
+            openProductForm(product)
         );
 
 
@@ -1077,7 +1415,8 @@
 
         toggleButton.addEventListener(
           "click",
-          () => toggleProduct(product)
+          () =>
+            toggleProduct(product)
         );
 
 
@@ -1092,13 +1431,22 @@
 
         deleteButton.addEventListener(
           "click",
-          () => deleteProduct(product)
+          () =>
+            deleteProduct(product)
         );
 
 
-        actions.appendChild(editButton);
-        actions.appendChild(toggleButton);
-        actions.appendChild(deleteButton);
+        actions.appendChild(
+          editButton
+        );
+
+        actions.appendChild(
+          toggleButton
+        );
+
+        actions.appendChild(
+          deleteButton
+        );
 
 
         item.appendChild(image);
@@ -1189,27 +1537,44 @@
         }
 
 
-        saveProductButton.disabled = true;
+        saveProductButton.disabled =
+          true;
+
+        const wasEditing =
+          Boolean(editingProductId);
 
         saveProductButton.textContent =
-          editingProductId
+          wasEditing
             ? "Salvando..."
             : "Adicionando...";
 
-        productFormMessage.textContent = "";
+        productFormMessage.textContent =
+          "";
 
 
         try {
 
           const productData = {
+
             name,
-            description: description || null,
+
+            description:
+              description || null,
+
             price,
+
             category,
-            image: image || null,
+
+            image:
+              image || null,
+
             stock,
-            sort_order: sortOrder,
+
+            sort_order:
+              sortOrder,
+
             active
+
           };
 
 
@@ -1222,14 +1587,19 @@
               await supabaseClient
                 .from("products")
                 .update(productData)
-                .eq("id", editingProductId);
+                .eq(
+                  "id",
+                  editingProductId
+                );
 
           } else {
 
             result =
               await supabaseClient
                 .from("products")
-                .insert(productData);
+                .insert(
+                  productData
+                );
 
           }
 
@@ -1249,24 +1619,20 @@
           }
 
 
-          productFormMessage.textContent =
-            editingProductId
-              ? "Marreta atualizada com sucesso! ✅"
-              : "Marreta adicionada com sucesso! ✅";
-
-
           closeProductForm();
 
           await loadProducts();
 
         } finally {
 
-          saveProductButton.disabled = false;
+          saveProductButton.disabled =
+            false;
 
           saveProductButton.textContent =
-            editingProductId
+            wasEditing
               ? "Salvar alterações"
               : "Salvar marreta";
+
         }
 
       }
@@ -1294,12 +1660,17 @@
 
       const {
         error
-      } = await supabaseClient
-        .from("products")
-        .update({
-          active: !product.active
-        })
-        .eq("id", product.id);
+      } =
+        await supabaseClient
+          .from("products")
+          .update({
+            active:
+              !product.active
+          })
+          .eq(
+            "id",
+            product.id
+          );
 
 
       if (error) {
@@ -1338,10 +1709,14 @@
 
       const {
         error
-      } = await supabaseClient
-        .from("products")
-        .delete()
-        .eq("id", product.id);
+      } =
+        await supabaseClient
+          .from("products")
+          .delete()
+          .eq(
+            "id",
+            product.id
+          );
 
 
       if (error) {
@@ -1371,206 +1746,923 @@
     );
 
 
-    /* ESCAPAR TEXTO DE ERRO */
+    /* PEDIDOS */
+
+    async function loadOrders() {
+
+      const ordersList =
+        document.querySelector(
+          "#orders-list"
+        );
+
+
+      ordersList.innerHTML =
+        "<p>Carregando pedidos...</p>";
+
+
+      const {
+        data: orders,
+        error
+      } =
+        await supabaseClient
+          .from("orders")
+          .select("*")
+          .order(
+            "created_at",
+            { ascending: false }
+          );
+
+
+      if (error) {
+
+        console.error(
+          "Erro ao carregar pedidos:",
+          error
+        );
+
+        ordersList.innerHTML =
+          "<p>Erro ao carregar pedidos.</p>";
+
+        return;
+      }
+
+
+      if (
+        !orders ||
+        orders.length === 0
+      ) {
+
+        ordersList.innerHTML =
+          "<p>Nenhum pedido encontrado.</p>";
+
+        return;
+      }
+
+
+      ordersList.innerHTML = "";
+
+
+      for (const order of orders) {
+
+        const {
+          data: items,
+          error: itemsError
+        } =
+          await supabaseClient
+            .from("order_items")
+            .select("*")
+            .eq(
+              "order_id",
+              order.id
+            );
+
+
+        if (itemsError) {
+
+          console.error(
+            "Erro ao carregar itens:",
+            itemsError
+          );
+
+          continue;
+        }
+
+
+        const orderCard =
+          document.createElement(
+            "div"
+          );
+
+        orderCard.className =
+          "admin-card";
+
+
+        const itemsContainer =
+          document.createElement(
+            "div"
+          );
+
+        itemsContainer.style.marginTop =
+          "14px";
+
+        const itemsTitle =
+          document.createElement(
+            "strong"
+          );
+
+        itemsTitle.textContent =
+          "Itens:";
+
+        itemsContainer.appendChild(
+          itemsTitle
+        );
+
+
+        (items || []).forEach(
+          item => {
+
+            const row =
+              document.createElement(
+                "div"
+              );
+
+            row.style.padding =
+              "8px 0";
+
+            row.style.borderBottom =
+              "1px solid #e1eef0";
+
+            row.textContent =
+              `${item.product_name} × ${item.quantity} — R$ ${Number(item.product_price).toFixed(2).replace(".", ",")}`;
+
+            itemsContainer.appendChild(
+              row
+            );
+
+          }
+        );
+
+
+        const title =
+          document.createElement(
+            "h3"
+          );
+
+        title.textContent =
+          `📦 Pedido #${order.id.slice(0, 8)}`;
+
+
+        const date =
+          document.createElement(
+            "p"
+          );
+
+        date.innerHTML =
+          `<strong>Data:</strong> ${new Date(order.created_at).toLocaleString("pt-BR")}`;
+
+
+        const customer =
+          document.createElement(
+            "p"
+          );
+
+        customer.innerHTML =
+          `<strong>Cliente:</strong> ${escapeHtml(order.customer_id)}`;
+
+
+        const delivery =
+          document.createElement(
+            "p"
+          );
+
+        delivery.innerHTML =
+          `<strong>Usuário para entrega:</strong> ${escapeHtml(order.delivery_username || "Não informado")}`;
+
+
+        const pixName =
+          document.createElement(
+            "p"
+          );
+
+        pixName.innerHTML =
+          `<strong>Nome do remetente Pix:</strong> ${escapeHtml(order.pix_name || "Não informado")}`;
+
+
+        const status =
+          document.createElement(
+            "p"
+          );
+
+        status.innerHTML =
+          `<strong>Status:</strong> ${escapeHtml(order.status)}`;
+
+
+        const total =
+          document.createElement(
+            "p"
+          );
+
+        total.style.marginTop =
+          "14px";
+
+        total.innerHTML =
+          `<strong>Total: R$ ${Number(order.total).toFixed(2).replace(".", ",")}</strong>`;
+
+
+        const actions =
+          document.createElement(
+            "div"
+          );
+
+        actions.style.display =
+          "flex";
+
+        actions.style.gap =
+          "10px";
+
+        actions.style.flexWrap =
+          "wrap";
+
+        actions.style.marginTop =
+          "15px";
+
+
+        if (
+          order.status ===
+          "payment_confirmed"
+        ) {
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+          button.className =
+            "primary-button";
+
+          button.textContent =
+            "📦 Enviar para entrega";
+
+          button.addEventListener(
+            "click",
+            () =>
+              updateOrderStatus(
+                order.id,
+                "awaiting_delivery"
+              )
+          );
+
+          actions.appendChild(
+            button
+          );
+
+        }
+
+
+        if (
+          order.status ===
+          "awaiting_delivery"
+        ) {
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+          button.className =
+            "primary-button";
+
+          button.textContent =
+            "✅ Marcar como entregue";
+
+          button.addEventListener(
+            "click",
+            () =>
+              updateOrderStatus(
+                order.id,
+                "delivered"
+              )
+          );
+
+          actions.appendChild(
+            button
+          );
+
+        }
+
+
+        orderCard.appendChild(title);
+        orderCard.appendChild(date);
+        orderCard.appendChild(customer);
+        orderCard.appendChild(delivery);
+        orderCard.appendChild(pixName);
+        orderCard.appendChild(status);
+        orderCard.appendChild(itemsContainer);
+        orderCard.appendChild(total);
+        orderCard.appendChild(actions);
+
+
+        ordersList.appendChild(
+          orderCard
+        );
+
+      }
+
+    }
+
+
+    async function updateOrderStatus(
+      orderId,
+      newStatus
+    ) {
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("orders")
+          .update({
+            status:
+              newStatus,
+
+            updated_at:
+              new Date().toISOString()
+          })
+          .eq(
+            "id",
+            orderId
+          );
+
+
+      if (error) {
+
+        console.error(
+          "Erro ao atualizar pedido:",
+          error
+        );
+
+        alert(
+          "Não foi possível atualizar o pedido: " +
+          error.message
+        );
+
+        return;
+      }
+
+
+      alert(
+        "Pedido atualizado com sucesso! ✅"
+      );
+
+
+      await loadOrders();
+
+    }
+
+
+    ordersOption.addEventListener(
+      "click",
+      () => {
+
+        hideAllSections();
+
+        ordersSection.classList.remove(
+          "hidden"
+        );
+
+        loadOrders();
+
+      }
+    );
+
+
+    document
+      .querySelector(
+        "#refresh-orders-button"
+      )
+      .addEventListener(
+        "click",
+        loadOrders
+      );
+
+
+    /* PAGAMENTOS */
+
+    async function loadPayments() {
+
+      const paymentsList =
+        document.querySelector(
+          "#payments-list"
+        );
+
+
+      paymentsList.innerHTML =
+        "<p>Carregando pagamentos...</p>";
+
+
+      const {
+        data: payments,
+        error
+      } =
+        await supabaseClient
+          .from("payments")
+          .select("*")
+          .order(
+            "created_at",
+            { ascending: false }
+          );
+
+
+      if (error) {
+
+        console.error(
+          "Erro ao carregar pagamentos:",
+          error
+        );
+
+        paymentsList.innerHTML = `
+          <div class="empty-products">
+            <div style="font-size:40px">⚠️</div>
+            <p>Não foi possível carregar os pagamentos.</p>
+            <p>${escapeHtml(error.message)}</p>
+          </div>
+        `;
+
+        return;
+      }
+
+
+      const pendingPayments =
+        (payments || [])
+          .filter(
+            payment =>
+              payment.status ===
+              "pending"
+          );
+
+
+      if (
+        !pendingPayments.length
+      ) {
+
+        paymentsList.innerHTML = `
+          <div class="empty-products">
+            <div style="font-size:40px">💳</div>
+            <p>Nenhum pagamento aguardando confirmação.</p>
+          </div>
+        `;
+
+        return;
+      }
+
+
+      paymentsList.innerHTML = "";
+
+
+      for (
+        const payment
+        of pendingPayments
+      ) {
+
+        const {
+          data: order,
+          error: orderError
+        } =
+          await supabaseClient
+            .from("orders")
+            .select("*")
+            .eq(
+              "id",
+              payment.order_id
+            )
+            .maybeSingle();
+
+
+        if (
+          orderError ||
+          !order
+        ) {
+
+          console.error(
+            "Erro ao carregar pedido do pagamento:",
+            orderError
+          );
+
+          continue;
+        }
+
+
+        const {
+          data: items
+        } =
+          await supabaseClient
+            .from("order_items")
+            .select("*")
+            .eq(
+              "order_id",
+              order.id
+            );
+
+
+        const card =
+          document.createElement(
+            "div"
+          );
+
+        card.className =
+          "payment-card";
+
+
+        const title =
+          document.createElement(
+            "h3"
+          );
+
+        title.textContent =
+          `💳 Pedido #${order.id.slice(0, 8)}`;
+
+
+        const date =
+          document.createElement(
+            "p"
+          );
+
+        date.innerHTML =
+          `<strong>Data:</strong> ${new Date(order.created_at).toLocaleString("pt-BR")}`;
+
+
+        const pixName =
+          document.createElement(
+            "p"
+          );
+
+        pixName.innerHTML =
+          `<strong>Nome do remetente Pix:</strong> ${escapeHtml(order.pix_name || "Não informado")}`;
+
+
+        const delivery =
+          document.createElement(
+            "p"
+          );
+
+        delivery.innerHTML =
+          `<strong>Usuário para entrega:</strong> ${escapeHtml(order.delivery_username || "Não informado")}`;
+
+
+        const total =
+          document.createElement(
+            "p"
+          );
+
+        total.innerHTML =
+          `<strong>Total:</strong> R$ ${Number(order.total).toFixed(2).replace(".", ",")}`;
+
+
+        const itemsBox =
+          document.createElement(
+            "div"
+          );
+
+        itemsBox.className =
+          "payment-items";
+
+
+        const itemsTitle =
+          document.createElement(
+            "strong"
+          );
+
+        itemsTitle.textContent =
+          "Itens do pedido";
+
+        itemsBox.appendChild(
+          itemsTitle
+        );
+
+
+        (items || []).forEach(
+          item => {
+
+            const itemRow =
+              document.createElement(
+                "div"
+              );
+
+            itemRow.className =
+              "payment-item";
+
+            itemRow.textContent =
+              `${item.product_name} × ${item.quantity}`;
+
+            itemsBox.appendChild(
+              itemRow
+            );
+
+          }
+        );
+
+
+        const status =
+          document.createElement(
+            "div"
+          );
+
+        status.className =
+          "payment-status";
+
+        status.textContent =
+          "⏳ Aguardando confirmação";
+
+
+        const confirmButton =
+          document.createElement(
+            "button"
+          );
+
+        confirmButton.className =
+          "primary-button";
+
+        confirmButton.style.marginTop =
+          "15px";
+
+        confirmButton.textContent =
+          "✅ Confirmar pagamento";
+
+
+        confirmButton.addEventListener(
+          "click",
+          () =>
+            confirmPayment(
+              order.id
+            )
+        );
+
+
+        card.appendChild(title);
+        card.appendChild(date);
+        card.appendChild(pixName);
+        card.appendChild(delivery);
+        card.appendChild(total);
+        card.appendChild(itemsBox);
+        card.appendChild(status);
+        card.appendChild(confirmButton);
+
+
+        paymentsList.appendChild(
+          card
+        );
+
+      }
+
+    }
+
+
+    async function confirmPayment(
+      orderId
+    ) {
+
+      const confirmed =
+        confirm(
+          "Você confirmou que o pagamento deste pedido realmente caiu no Pix?"
+        );
+
+
+      if (!confirmed) return;
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.rpc(
+          "confirm_payment",
+          {
+            p_order_id:
+              orderId
+          }
+        );
+
+
+      if (error) {
+
+        console.error(
+          "Erro ao confirmar pagamento:",
+          error
+        );
+
+        alert(
+          "Não foi possível confirmar o pagamento:\n" +
+          error.message
+        );
+
+        return;
+      }
+
+
+      if (
+        !data?.success
+      ) {
+
+        alert(
+          "Não foi possível confirmar o pagamento."
+        );
+
+        return;
+      }
+
+
+      alert(
+        "Pagamento confirmado com sucesso! ✅\n\nO estoque foi atualizado."
+      );
+
+
+      await loadPayments();
+
+    }
+
+
+    paymentsOption.addEventListener(
+      "click",
+      () => {
+
+        hideAllSections();
+
+        paymentsSection.classList.remove(
+          "hidden"
+        );
+
+        loadPayments();
+
+      }
+    );
+
+
+    document
+      .querySelector(
+        "#refresh-payments-button"
+      )
+      .addEventListener(
+        "click",
+        loadPayments
+      );
+
+
+    /* ATENDIMENTO */
+
+    let serviceOnline = false;
+
+
+    async function loadServiceStatus() {
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("store_settings")
+          .select("online")
+          .eq("id", 1)
+          .maybeSingle();
+
+
+      if (error) {
+
+        console.error(
+          "Erro ao carregar atendimento:",
+          error
+        );
+
+        return;
+      }
+
+
+      serviceOnline =
+        Boolean(
+          data?.online
+        );
+
+
+      updateServiceUI();
+
+    }
+
+
+    function updateServiceUI() {
+
+      const text =
+        document.querySelector(
+          "#service-status-text"
+        );
+
+      const button =
+        document.querySelector(
+          "#toggle-service-button"
+        );
+
+
+      if (serviceOnline) {
+
+        text.textContent =
+          "🟢 Atendimento online";
+
+        button.textContent =
+          "🔴 Colocar offline";
+
+      } else {
+
+        text.textContent =
+          "⚪ Atendimento offline";
+
+        button.textContent =
+          "🟢 Colocar online";
+
+      }
+
+    }
+
+
+    async function toggleService() {
+
+      const newStatus =
+        !serviceOnline;
+
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("store_settings")
+          .update({
+            online:
+              newStatus,
+
+            updated_at:
+              new Date().toISOString()
+          })
+          .eq(
+            "id",
+            1
+          );
+
+
+      if (error) {
+
+        console.error(
+          "Erro ao alterar atendimento:",
+          error
+        );
+
+        alert(
+          "Não foi possível alterar o atendimento: " +
+          error.message
+        );
+
+        return;
+      }
+
+
+      serviceOnline =
+        newStatus;
+
+
+      updateServiceUI();
+
+    }
+
+
+    serviceOption.addEventListener(
+      "click",
+      async () => {
+
+        hideAllSections();
+
+        serviceSection.classList.remove(
+          "hidden"
+        );
+
+        await loadServiceStatus();
+
+      }
+    );
+
+
+    document
+      .querySelector(
+        "#toggle-service-button"
+      )
+      .addEventListener(
+        "click",
+        toggleService
+      );
+
+
+    /* ESCAPAR HTML */
 
     function escapeHtml(value) {
 
       return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-    }
-
-
-    /* OUTROS BOTÕES — POR ENQUANTO */
-
-    async function loadOrders() {
-
-  const ordersList = document.querySelector("#orders-list");
-
-  ordersList.innerHTML = "<p>Carregando pedidos...</p>";
-
-  const { data: orders, error } = await supabaseClient
-    .from("orders")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error("Erro ao carregar pedidos:", error);
-    ordersList.innerHTML = "<p>Erro ao carregar pedidos.</p>";
-    return;
-  }
-
-  if (!orders || orders.length === 0) {
-    ordersList.innerHTML = "<p>Nenhum pedido encontrado.</p>";
-    return;
-  }
-
-  ordersList.innerHTML = "";
-
-  for (const order of orders) {
-
-    const { data: items, error: itemsError } = await supabaseClient
-      .from("order_items")
-      .select("*")
-      .eq("order_id", order.id);
-
-    if (itemsError) {
-      console.error("Erro ao carregar itens:", itemsError);
-      continue;
-    }
-
-    const itemsHtml = (items || []).map(item => `
-      <div style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.08);">
-        <strong>${escapeHtml(item.product_name)}</strong>
-        <span> × ${item.quantity}</span>
-        <span> — R$ ${Number(item.product_price).toFixed(2).replace(".", ",")}</span>
-      </div>
-    `).join("");
-
-    const orderCard = document.createElement("div");
-
-    orderCard.className = "admin-card";
-
-    orderCard.innerHTML = `
-      <h3>📦 Pedido #${order.id.slice(0, 8)}</h3>
-
-      <p><strong>Data:</strong>
-        ${new Date(order.created_at).toLocaleString("pt-BR")}
-      </p>
-
-      <p><strong>Cliente:</strong>
-        ${escapeHtml(order.customer_id)}
-      </p>
-
-      <p><strong>Usuário para entrega:</strong>
-        ${escapeHtml(order.delivery_username || "Não informado")}
-      </p>
-
-      <p><strong>Nome do remetente Pix:</strong>
-        ${escapeHtml(order.pix_name || "Não informado")}
-      </p>
-
-      <p><strong>Status:</strong>
-        ${escapeHtml(order.status)}
-      </p>
-
-      <div style="margin-top: 14px;">
-        <strong>Itens:</strong>
-        ${itemsHtml}
-      </div>
-
-      <p style="margin-top: 14px;">
-        <strong>Total: R$ ${Number(order.total).toFixed(2).replace(".", ",")}</strong>
-      </p>
-
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:15px;">
-
-        ${
-          order.status === "payment_confirmed"
-            ? `
-              <button
-                class="primary-button"
-                onclick="updateOrderStatus('${order.id}', 'awaiting_delivery')"
-              >
-                📦 Enviar para entrega
-              </button>
-            `
-            : ""
-        }
-
-        ${
-          order.status === "awaiting_delivery"
-            ? `
-              <button
-                class="primary-button"
-                onclick="updateOrderStatus('${order.id}', 'delivered')"
-              >
-                ✅ Marcar como entregue
-              </button>
-            `
-            : ""
-        }
-
-      </div>
-    `;
-
-    ordersList.appendChild(orderCard);
-  }
-}
-
-
-async function updateOrderStatus(orderId, newStatus) {
-
-  const { error } = await supabaseClient
-    .from("orders")
-    .update({
-      status: newStatus,
-      updated_at: new Date().toISOString()
-    })
-    .eq("id", orderId);
-
-  if (error) {
-    console.error("Erro ao atualizar pedido:", error);
-    alert("Não foi possível atualizar o pedido.");
-    return;
-  }
-
-  alert("Pedido atualizado com sucesso! ✅");
-
-  loadOrders();
-}
-
-
-document
-  .querySelector("#orders-option")
-  .addEventListener("click", () => {
-
-    document
-      .querySelector("#dashboard-section")
-      .classList.add("hidden");
-
-    document
-      .querySelector("#products-section")
-      .classList.add("hidden");
-
-    document
-      .querySelector("#orders-section")
-      .classList.remove("hidden");
-
-    loadOrders();
-  });
-
-
-document
-  .querySelector("#refresh-orders-button")
-  .addEventListener("click", () => {
-    loadOrders();
-  });
-
-    document
-      .querySelector("#payments-option")
-      .addEventListener("click", () => {
-
-        alert(
-          "💳 A área de pagamentos será adicionada no próximo passo."
+        .replaceAll(
+          "&",
+          "&amp;"
+        )
+        .replaceAll(
+          "<",
+          "&lt;"
+        )
+        .replaceAll(
+          ">",
+          "&gt;"
+        )
+        .replaceAll(
+          '"',
+          "&quot;"
+        )
+        .replaceAll(
+          "'",
+          "&#039;"
         );
 
-      });
-
-
-    document
-      .querySelector("#service-option")
-      .addEventListener("click", () => {
-
-        alert(
-          "🟢 A área de atendimento será adicionada no próximo passo."
-        );
-
-      });
+    }
 
 
     /* LOGOUT */
@@ -1595,4 +2687,4 @@ document
   </script>
 
 </body>
-</html>
+            </html>
