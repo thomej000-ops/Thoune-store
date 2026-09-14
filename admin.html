@@ -15,9 +15,9 @@
     }
 
     .admin {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: auto;
-      padding: 50px 20px;
+      padding: 40px 20px;
     }
 
     .admin-card {
@@ -52,10 +52,22 @@
     }
 
     .admin-option {
+      width: 100%;
       border: 1px solid #dcecef;
       border-radius: 18px;
       padding: 20px;
       background: #fbfeff;
+      text-align: left;
+      cursor: pointer;
+      transition: .2s;
+      color: inherit;
+      font: inherit;
+    }
+
+    .admin-option:hover {
+      transform: translateY(-2px);
+      border-color: #8bbbc6;
+      box-shadow: 0 8px 25px rgba(8,44,58,.08);
     }
 
     .admin-option strong {
@@ -82,9 +94,243 @@
       padding: 30px 10px;
     }
 
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .section-header h2 {
+      margin: 0;
+    }
+
+    .back-admin {
+      border: 0;
+      background: transparent;
+      color: #315d68;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      padding: 0;
+    }
+
+    .product-form {
+      background: #f8fcfd;
+      border: 1px solid #dcecef;
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 25px;
+    }
+
+    .product-form h3 {
+      margin-top: 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .form-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-field label {
+      font-size: 13px;
+      font-weight: 800;
+      color: #315d68;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #cfe1e5;
+      border-radius: 12px;
+      padding: 12px;
+      background: #fff;
+      font: inherit;
+      color: #173943;
+      outline: none;
+    }
+
+    .form-field textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: #75aeba;
+    }
+
+    .checkbox-field {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding-top: 28px;
+    }
+
+    .checkbox-field input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .products-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .product-admin-item {
+      display: grid;
+      grid-template-columns: 70px 1fr auto;
+      align-items: center;
+      gap: 15px;
+      border: 1px solid #dcecef;
+      border-radius: 18px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .product-admin-image {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 14px;
+      background: #eef7f8;
+    }
+
+    .product-admin-info strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .product-admin-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: #60777d;
+    }
+
+    .product-admin-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .small-button {
+      border: 1px solid #cfe1e5;
+      border-radius: 10px;
+      background: #fff;
+      padding: 9px 12px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+    }
+
+    .small-button:hover {
+      background: #f1f8f9;
+    }
+
+    .small-button.danger {
+      color: #a12d2d;
+      border-color: #efcaca;
+    }
+
+    .stock-ok {
+      color: #18733b;
+      font-weight: 800;
+    }
+
+    .stock-empty {
+      color: #b33131;
+      font-weight: 800;
+    }
+
+    .status-active {
+      color: #18733b;
+      font-weight: 800;
+    }
+
+    .status-inactive {
+      color: #a05b16;
+      font-weight: 800;
+    }
+
+    .empty-products {
+      text-align: center;
+      padding: 35px 10px;
+      color: #60777d;
+    }
+
+    .message {
+      margin: 12px 0 0;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
     @media (max-width: 700px) {
+      .admin {
+        padding: 25px 14px;
+      }
+
+      .admin-card {
+        padding: 20px;
+      }
+
       .admin-grid {
         grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-field.full {
+        grid-column: auto;
+      }
+
+      .checkbox-field {
+        padding-top: 0;
+      }
+
+      .section-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .product-admin-item {
+        grid-template-columns: 55px 1fr;
+      }
+
+      .product-admin-image {
+        width: 55px;
+        height: 55px;
+      }
+
+      .product-admin-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
       }
     }
   </style>
@@ -125,54 +371,225 @@
     <!-- PAINEL ADMIN -->
     <section class="admin-card hidden" id="admin-panel">
 
-      <div class="admin-header">
+      <div id="dashboard-section">
 
-        <div class="admin-status">
-          🟢 Administrador autenticado
+        <div class="admin-header">
+
+          <div class="admin-status">
+            🟢 Administrador autenticado
+          </div>
+
+          <p class="eyebrow" style="margin-top:20px">
+            ÁREA ADMINISTRATIVA
+          </p>
+
+          <h1>Thoune Store ADM</h1>
+
+          <p>
+            Gerencie produtos, pedidos, estoque e configurações da loja.
+          </p>
+
         </div>
 
-        <p class="eyebrow" style="margin-top:20px">
-          ÁREA ADMINISTRATIVA
-        </p>
+        <div class="admin-grid">
 
-        <h1>Thoune Store ADM</h1>
+          <button class="admin-option" id="products-option">
+            <strong>📦 Produtos</strong>
+            <p>Adicionar, editar, remover produtos e controlar estoque.</p>
+          </button>
 
-        <p>
-          Gerencie produtos, pedidos, estoque e configurações da loja.
-        </p>
+          <button class="admin-option" id="orders-option">
+            <strong>🧾 Pedidos</strong>
+            <p>Visualizar pedidos e acompanhar o status das compras.</p>
+          </button>
+
+          <button class="admin-option" id="payments-option">
+            <strong>💳 Pagamentos</strong>
+            <p>Conferir pagamentos e confirmar pedidos.</p>
+          </button>
+
+          <button class="admin-option" id="service-option">
+            <strong>🟢 Atendimento</strong>
+            <p>Controlar o status online ou offline da loja.</p>
+          </button>
+
+        </div>
+
+        <button
+          class="secondary-button logout-admin"
+          id="admin-logout"
+        >
+          Sair da conta
+        </button>
 
       </div>
 
-      <div class="admin-grid">
+      <!-- PRODUTOS -->
+      <div id="products-section" class="hidden">
 
-        <div class="admin-option">
-          <strong>📦 Produtos</strong>
-          <p>Adicionar, editar, remover produtos e controlar estoque.</p>
+        <div class="section-header">
+          <div>
+            <button class="back-admin" id="back-dashboard">
+              ← Voltar ao painel
+            </button>
+
+            <p class="eyebrow" style="margin-top:18px">
+              CATÁLOGO
+            </p>
+
+            <h2>📦 Produtos</h2>
+
+            <p>
+              Gerencie as marretas disponíveis na loja.
+            </p>
+          </div>
+
+          <button class="primary-button" id="new-product-button">
+            ➕ Nova marreta
+          </button>
         </div>
 
-        <div class="admin-option">
-          <strong>🧾 Pedidos</strong>
-          <p>Visualizar pedidos e acompanhar o status das compras.</p>
+        <!-- FORMULÁRIO -->
+        <div class="product-form hidden" id="product-form">
+
+          <h3 id="form-title">Adicionar marreta</h3>
+
+          <div class="form-grid">
+
+            <div class="form-field full">
+              <label for="product-name">Nome da marreta</label>
+              <input
+                id="product-name"
+                type="text"
+                placeholder="Ex.: Party Balloons"
+              >
+            </div>
+
+            <div class="form-field">
+              <label for="product-category">Raridade</label>
+
+              <select id="product-category">
+                <option value="Lendária">Lendária</option>
+                <option value="Épica">Épica</option>
+                <option value="Rara">Rara</option>
+                <option value="Comum">Comum</option>
+                <option value="Exclusiva">Exclusiva</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="product-price">Preço (R$)</label>
+
+              <input
+                id="product-price"
+                type="number"
+                min="0"
+                step="0.01"
+                placeholder="0,00"
+              >
+            </div>
+
+            <div class="form-field">
+              <label for="product-stock">Estoque</label>
+
+              <input
+                id="product-stock"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="0"
+              >
+            </div>
+
+            <div class="form-field">
+              <label for="product-order">Ordem no catálogo</label>
+
+              <input
+                id="product-order"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="0"
+              >
+            </div>
+
+            <div class="form-field full">
+              <label for="product-image">URL da imagem</label>
+
+              <input
+                id="product-image"
+                type="url"
+                placeholder="https://..."
+              >
+            </div>
+
+            <div class="form-field full">
+              <label for="product-description">Descrição</label>
+
+              <textarea
+                id="product-description"
+                placeholder="Descrição opcional da marreta..."
+              ></textarea>
+            </div>
+
+            <div class="checkbox-field">
+              <input
+                id="product-active"
+                type="checkbox"
+                checked
+              >
+
+              <label for="product-active">
+                Produto ativo no catálogo
+              </label>
+            </div>
+
+          </div>
+
+          <div class="form-actions">
+
+            <button
+              class="primary-button"
+              id="save-product-button"
+            >
+              Salvar marreta
+            </button>
+
+            <button
+              class="secondary-button"
+              id="cancel-product-button"
+            >
+              Cancelar
+            </button>
+
+          </div>
+
+          <p class="message" id="product-form-message"></p>
+
         </div>
 
-        <div class="admin-option">
-          <strong>💳 Pagamentos</strong>
-          <p>Conferir pagamentos e confirmar pedidos.</p>
-        </div>
+        <!-- LISTA -->
+        <div>
 
-        <div class="admin-option">
-          <strong>🟢 Atendimento</strong>
-          <p>Controlar o status online ou offline da loja.</p>
+          <div class="section-header">
+            <div>
+              <h3>Marretas cadastradas</h3>
+              <p id="products-count">Carregando...</p>
+            </div>
+
+            <button class="small-button" id="refresh-products-button">
+              🔄 Atualizar
+            </button>
+          </div>
+
+          <div
+            class="products-list"
+            id="products-list"
+          ></div>
+
         </div>
 
       </div>
-
-      <button
-        class="secondary-button logout-admin"
-        id="admin-logout"
-      >
-        Sair da conta
-      </button>
 
     </section>
 
@@ -187,10 +604,14 @@
       SUPABASE_ANON_KEY
     } from "./config.js";
 
+
     const supabaseClient = window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_ANON_KEY
     );
+
+
+    /* ELEMENTOS PRINCIPAIS */
 
     const loadingScreen =
       document.querySelector("#loading-screen");
@@ -205,6 +626,80 @@
       document.querySelector("#admin-logout");
 
 
+    /* ELEMENTOS DO DASHBOARD */
+
+    const dashboardSection =
+      document.querySelector("#dashboard-section");
+
+    const productsSection =
+      document.querySelector("#products-section");
+
+    const productsOption =
+      document.querySelector("#products-option");
+
+    const backDashboard =
+      document.querySelector("#back-dashboard");
+
+
+    /* ELEMENTOS DO PRODUTO */
+
+    const productForm =
+      document.querySelector("#product-form");
+
+    const formTitle =
+      document.querySelector("#form-title");
+
+    const productName =
+      document.querySelector("#product-name");
+
+    const productCategory =
+      document.querySelector("#product-category");
+
+    const productPrice =
+      document.querySelector("#product-price");
+
+    const productStock =
+      document.querySelector("#product-stock");
+
+    const productOrder =
+      document.querySelector("#product-order");
+
+    const productImage =
+      document.querySelector("#product-image");
+
+    const productDescription =
+      document.querySelector("#product-description");
+
+    const productActive =
+      document.querySelector("#product-active");
+
+    const saveProductButton =
+      document.querySelector("#save-product-button");
+
+    const cancelProductButton =
+      document.querySelector("#cancel-product-button");
+
+    const newProductButton =
+      document.querySelector("#new-product-button");
+
+    const productsList =
+      document.querySelector("#products-list");
+
+    const productsCount =
+      document.querySelector("#products-count");
+
+    const refreshProductsButton =
+      document.querySelector("#refresh-products-button");
+
+    const productFormMessage =
+      document.querySelector("#product-form-message");
+
+
+    let editingProductId = null;
+
+
+    /* ACESSO ADMIN */
+
     async function checkAdminAccess() {
 
       const {
@@ -217,7 +712,7 @@
         loadingScreen.classList.add("hidden");
         accessDenied.classList.remove("hidden");
 
-        return;
+        return false;
       }
 
 
@@ -225,13 +720,9 @@
         data: profile,
         error
       } = await supabaseClient
-
         .from("profiles")
-
         .select("role")
-
         .eq("id", session.user.id)
-
         .maybeSingle();
 
 
@@ -249,14 +740,666 @@
         loadingScreen.classList.add("hidden");
         accessDenied.classList.remove("hidden");
 
-        return;
+        return false;
       }
 
 
       loadingScreen.classList.add("hidden");
       adminPanel.classList.remove("hidden");
+
+      return true;
     }
 
+
+    /* DASHBOARD */
+
+    productsOption.addEventListener("click", () => {
+
+      dashboardSection.classList.add("hidden");
+      productsSection.classList.remove("hidden");
+
+      loadProducts();
+
+    });
+
+
+    backDashboard.addEventListener("click", () => {
+
+      productsSection.classList.add("hidden");
+      dashboardSection.classList.remove("hidden");
+
+      closeProductForm();
+
+    });
+
+
+    /* FORMULÁRIO */
+
+    function openProductForm(product = null) {
+
+      productForm.classList.remove("hidden");
+
+      productFormMessage.textContent = "";
+
+      if (product) {
+
+        editingProductId = product.id;
+
+        formTitle.textContent = "Editar marreta";
+
+        productName.value = product.name || "";
+        productCategory.value = product.category || "Comum";
+        productPrice.value = product.price ?? "";
+        productStock.value = product.stock ?? 0;
+        productOrder.value = product.sort_order ?? 0;
+        productImage.value = product.image || "";
+        productDescription.value = product.description || "";
+        productActive.checked = product.active !== false;
+
+        saveProductButton.textContent =
+          "Salvar alterações";
+
+      } else {
+
+        editingProductId = null;
+
+        formTitle.textContent = "Adicionar marreta";
+
+        productName.value = "";
+        productCategory.value = "Comum";
+        productPrice.value = "";
+        productStock.value = 0;
+        productOrder.value = 0;
+        productImage.value = "";
+        productDescription.value = "";
+        productActive.checked = true;
+
+        saveProductButton.textContent =
+          "Salvar marreta";
+      }
+
+      productForm.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+
+    function closeProductForm() {
+
+      productForm.classList.add("hidden");
+
+      editingProductId = null;
+
+      productFormMessage.textContent = "";
+
+      productName.value = "";
+      productCategory.value = "Comum";
+      productPrice.value = "";
+      productStock.value = 0;
+      productOrder.value = 0;
+      productImage.value = "";
+      productDescription.value = "";
+      productActive.checked = true;
+
+      saveProductButton.textContent =
+        "Salvar marreta";
+    }
+
+
+    newProductButton.addEventListener(
+      "click",
+      () => openProductForm()
+    );
+
+
+    cancelProductButton.addEventListener(
+      "click",
+      closeProductForm
+    );
+
+
+    /* CARREGAR PRODUTOS */
+
+    async function loadProducts() {
+
+      productsList.innerHTML =
+        "<p>Carregando produtos...</p>";
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("products")
+        .select("*")
+        .order("sort_order", {
+          ascending: true
+        })
+        .order("name", {
+          ascending: true
+        });
+
+
+      if (error) {
+
+        console.error(
+          "Erro ao carregar produtos:",
+          error
+        );
+
+        productsList.innerHTML =
+          `<p class="message">
+            Não foi possível carregar os produtos: ${escapeHtml(error.message)}
+          </p>`;
+
+        productsCount.textContent =
+          "Erro ao carregar.";
+
+        return;
+      }
+
+
+      const products = data || [];
+
+      productsCount.textContent =
+        `${products.length} produto(s) cadastrado(s).`;
+
+
+      if (!products.length) {
+
+        productsList.innerHTML = `
+          <div class="empty-products">
+            <div style="font-size:40px">📦</div>
+            <p>Nenhuma marreta cadastrada ainda.</p>
+          </div>
+        `;
+
+        return;
+      }
+
+
+      productsList.innerHTML = "";
+
+
+      products.forEach(product => {
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "product-admin-item";
+
+
+        const image =
+          document.createElement("img");
+
+        image.className =
+          "product-admin-image";
+
+        image.src =
+          product.image || "";
+
+        image.alt =
+          product.name || "Marreta";
+
+        image.onerror = () => {
+          image.style.opacity = "0.35";
+        };
+
+
+        const info =
+          document.createElement("div");
+
+        info.className =
+          "product-admin-info";
+
+
+        const name =
+          document.createElement("strong");
+
+        name.textContent =
+          product.name || "Sem nome";
+
+
+        const meta =
+          document.createElement("div");
+
+        meta.className =
+          "product-admin-meta";
+
+
+        const rarity =
+          document.createElement("span");
+
+        rarity.textContent =
+          product.category || "Sem raridade";
+
+
+        const price =
+          document.createElement("span");
+
+        price.textContent =
+          "R$ " +
+          Number(product.price || 0)
+            .toFixed(2)
+            .replace(".", ",");
+
+
+        const stock =
+          document.createElement("span");
+
+        stock.textContent =
+          `Estoque: ${product.stock ?? 0}`;
+
+        stock.className =
+          product.stock > 0
+            ? "stock-ok"
+            : "stock-empty";
+
+
+        const status =
+          document.createElement("span");
+
+        status.textContent =
+          product.active
+            ? "● Ativo"
+            : "● Inativo";
+
+        status.className =
+          product.active
+            ? "status-active"
+            : "status-inactive";
+
+
+        meta.appendChild(rarity);
+        meta.appendChild(price);
+        meta.appendChild(stock);
+        meta.appendChild(status);
+
+
+        info.appendChild(name);
+        info.appendChild(meta);
+
+
+        const actions =
+          document.createElement("div");
+
+        actions.className =
+          "product-admin-actions";
+
+
+        const editButton =
+          document.createElement("button");
+
+        editButton.className =
+          "small-button";
+
+        editButton.textContent =
+          "✏️ Editar";
+
+        editButton.addEventListener(
+          "click",
+          () => openProductForm(product)
+        );
+
+
+        const toggleButton =
+          document.createElement("button");
+
+        toggleButton.className =
+          "small-button";
+
+        toggleButton.textContent =
+          product.active
+            ? "👁️ Desativar"
+            : "👁️ Ativar";
+
+        toggleButton.addEventListener(
+          "click",
+          () => toggleProduct(product)
+        );
+
+
+        const deleteButton =
+          document.createElement("button");
+
+        deleteButton.className =
+          "small-button danger";
+
+        deleteButton.textContent =
+          "🗑️ Excluir";
+
+        deleteButton.addEventListener(
+          "click",
+          () => deleteProduct(product)
+        );
+
+
+        actions.appendChild(editButton);
+        actions.appendChild(toggleButton);
+        actions.appendChild(deleteButton);
+
+
+        item.appendChild(image);
+        item.appendChild(info);
+        item.appendChild(actions);
+
+
+        productsList.appendChild(item);
+
+      });
+
+    }
+
+
+    /* SALVAR PRODUTO */
+
+    saveProductButton.addEventListener(
+      "click",
+      async () => {
+
+        const name =
+          productName.value.trim();
+
+        const category =
+          productCategory.value;
+
+        const price =
+          Number(productPrice.value);
+
+        const stock =
+          Number(productStock.value);
+
+        const sortOrder =
+          Number(productOrder.value);
+
+        const image =
+          productImage.value.trim();
+
+        const description =
+          productDescription.value.trim();
+
+        const active =
+          productActive.checked;
+
+
+        if (!name) {
+
+          productFormMessage.textContent =
+            "Informe o nome da marreta.";
+
+          return;
+        }
+
+
+        if (
+          !Number.isFinite(price) ||
+          price < 0
+        ) {
+
+          productFormMessage.textContent =
+            "Informe um preço válido.";
+
+          return;
+        }
+
+
+        if (
+          !Number.isInteger(stock) ||
+          stock < 0
+        ) {
+
+          productFormMessage.textContent =
+            "Informe um estoque válido.";
+
+          return;
+        }
+
+
+        if (
+          !Number.isInteger(sortOrder) ||
+          sortOrder < 0
+        ) {
+
+          productFormMessage.textContent =
+            "Informe uma ordem válida.";
+
+          return;
+        }
+
+
+        saveProductButton.disabled = true;
+
+        saveProductButton.textContent =
+          editingProductId
+            ? "Salvando..."
+            : "Adicionando...";
+
+        productFormMessage.textContent = "";
+
+
+        try {
+
+          const productData = {
+            name,
+            description: description || null,
+            price,
+            category,
+            image: image || null,
+            stock,
+            sort_order: sortOrder,
+            active
+          };
+
+
+          let result;
+
+
+          if (editingProductId) {
+
+            result =
+              await supabaseClient
+                .from("products")
+                .update(productData)
+                .eq("id", editingProductId);
+
+          } else {
+
+            result =
+              await supabaseClient
+                .from("products")
+                .insert(productData);
+
+          }
+
+
+          if (result.error) {
+
+            console.error(
+              "Erro ao salvar produto:",
+              result.error
+            );
+
+            productFormMessage.textContent =
+              "Erro: " +
+              result.error.message;
+
+            return;
+          }
+
+
+          productFormMessage.textContent =
+            editingProductId
+              ? "Marreta atualizada com sucesso! ✅"
+              : "Marreta adicionada com sucesso! ✅";
+
+
+          closeProductForm();
+
+          await loadProducts();
+
+        } finally {
+
+          saveProductButton.disabled = false;
+
+          saveProductButton.textContent =
+            editingProductId
+              ? "Salvar alterações"
+              : "Salvar marreta";
+        }
+
+      }
+    );
+
+
+    /* ATIVAR / DESATIVAR */
+
+    async function toggleProduct(product) {
+
+      const action =
+        product.active
+          ? "desativar"
+          : "ativar";
+
+
+      const confirmed =
+        confirm(
+          `Deseja ${action} "${product.name}"?`
+        );
+
+
+      if (!confirmed) return;
+
+
+      const {
+        error
+      } = await supabaseClient
+        .from("products")
+        .update({
+          active: !product.active
+        })
+        .eq("id", product.id);
+
+
+      if (error) {
+
+        console.error(
+          "Erro ao alterar status:",
+          error
+        );
+
+        alert(
+          "Não foi possível alterar o status: " +
+          error.message
+        );
+
+        return;
+      }
+
+
+      await loadProducts();
+
+    }
+
+
+    /* EXCLUIR */
+
+    async function deleteProduct(product) {
+
+      const confirmed =
+        confirm(
+          `Tem certeza que deseja excluir "${product.name}"?\n\nEssa ação não pode ser desfeita.`
+        );
+
+
+      if (!confirmed) return;
+
+
+      const {
+        error
+      } = await supabaseClient
+        .from("products")
+        .delete()
+        .eq("id", product.id);
+
+
+      if (error) {
+
+        console.error(
+          "Erro ao excluir produto:",
+          error
+        );
+
+        alert(
+          "Não foi possível excluir: " +
+          error.message
+        );
+
+        return;
+      }
+
+
+      await loadProducts();
+
+    }
+
+
+    refreshProductsButton.addEventListener(
+      "click",
+      loadProducts
+    );
+
+
+    /* ESCAPAR TEXTO DE ERRO */
+
+    function escapeHtml(value) {
+
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+    /* OUTROS BOTÕES — POR ENQUANTO */
+
+    document
+      .querySelector("#orders-option")
+      .addEventListener("click", () => {
+
+        alert(
+          "🧾 A área de pedidos será adicionada no próximo passo."
+        );
+
+      });
+
+
+    document
+      .querySelector("#payments-option")
+      .addEventListener("click", () => {
+
+        alert(
+          "💳 A área de pagamentos será adicionada no próximo passo."
+        );
+
+      });
+
+
+    document
+      .querySelector("#service-option")
+      .addEventListener("click", () => {
+
+        alert(
+          "🟢 A área de atendimento será adicionada no próximo passo."
+        );
+
+      });
+
+
+    /* LOGOUT */
 
     logoutButton.addEventListener(
       "click",
@@ -264,11 +1407,14 @@
 
         await supabaseClient.auth.signOut();
 
-        window.location.href = "index.html";
+        window.location.href =
+          "index.html";
 
       }
     );
 
+
+    /* INICIAR */
 
     checkAdminAccess();
 
