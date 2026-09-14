@@ -49,7 +49,7 @@ accountDetails.classList.remove("hidden");
 accountEmail.textContent = session.user.email || "";
 profileFields.classList.remove("hidden");
 await loadProfile(session.user.id);
-await loadOrders(session.user.id);
+profileFields.style.display = "block";
 profileFields.style.display = "block";
 accountMessage.textContent = "Você está conectado à sua conta.";
 loginButton.classList.add("hidden");
