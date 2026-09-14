@@ -307,33 +307,115 @@ checkoutBack.addEventListener("click", ()=>{
 checkoutSection.classList.add("hidden");
 openCart();
 });
+let currentOrderId = null;
+const verifyPaymentButton = document.querySelector("#verify-payment-button");
 const confirmOrderButton = document.querySelector("#confirm-order-button");
 
 confirmOrderButton.addEventListener("click", async () => {
-const cart = loadCart();
+  const cart = loadCart();
 
-if (!cart.length) {
-toast("Seu carrinho está vazio.");
-return;
-}
+  if (!cart.length) {
+    toast("Seu carrinho está vazio.");
+    return;
+  }
 
-const {
-data: { session }
-} = await supabaseClient.auth.getSession();
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
 
-if (!session?.user) {
-toast("Entre na sua conta antes de confirmar o pedido.");
-return;
-}
+  if (!session?.user) {
+    toast("Entre na sua conta antes de confirmar o pedido.");
+    return;
+  }
 
-confirmOrderButton.disabled = true;
-confirmOrderButton.textContent = "Criando pedido...";
+  const pixName = document.getElementById("checkout-pix-name").value.trim();
+  const robloxName = checkoutRoblox.value.trim();
 
-try {
-const items = cart.map(item => ({
-product_id: item.id,
-quantity: item.qty
-}));
+  if (!robloxName) {
+    toast("Informe seu usuário do Roblox.");
+    return;
+  }
+
+  if (!pixName) {
+    toast("Informe o nome do remetente do Pix.");
+    return;
+  }
+
+  confirmOrderButton.disabled = true;
+  confirmOrderButton.textContent = "Criando pedido...";
+
+  try {
+    const items = cart.map(item => ({
+      product_id: item.id,
+      quantity: item.qty
+    }));
+
+    const { data, error } = await supabaseClient.rpc("create_order", {
+      p_items: items,
+      p_pix_name: pixName,
+      p_delivery_username: robloxName
+    });
+
+    if (error) {
+      console.error("Erro ao criar pedido:", error);
+      toast("Não foi possível criar o pedido: " + error.message);
+      return;
+    }
+
+    console.log("Pedido criado:", data);
+
+    currentOrderId = data.order_id;
+
+    clearCart();
+    updateCartBadge(loadCart());
+
+    toast("Pedido criado com sucesso! ✅");
+
+    confirmOrderButton.classList.add("hidden");
+
+    verifyPaymentButton.classList.remove("hidden");
+
+  } finally {
+    confirmOrderButton.disabled = false;
+    confirmOrderButton.textContent = "Confirmar pedido";
+  }
+});
+verifyPaymentButton.addEventListener("click", async () => {
+  if (!currentOrderId) {
+    toast("Nenhum pedido aguardando verificação.");
+    return;
+  }
+
+  verifyPaymentButton.disabled = true;
+  verifyPaymentButton.textContent = "Enviando...";
+
+  try {
+    const { data, error } = await supabaseClient.rpc(
+      "request_payment_verification",
+      {
+        p_order_id: currentOrderId
+      }
+    );
+
+    if (error) {
+      console.error("Erro ao solicitar verificação:", error);
+      toast("Não foi possível enviar a verificação: " + error.message);
+      return;
+    }
+
+    console.log("Verificação solicitada:", data);
+
+    verifyPaymentButton.classList.add("hidden");
+
+    toast("Pagamento informado! Aguardando verificação. ✅");
+
+    currentOrderId = null;
+
+  } finally {
+    verifyPaymentButton.disabled = false;
+    verifyPaymentButton.textContent = "🔎 Verificar pagamento";
+  }
+});
 const pixName = document.getElementById("checkout-pix-name").value.trim();
 const robloxName = checkoutRoblox.value.trim();
 
