@@ -333,9 +333,13 @@ product_id: item.id,
 quantity: item.qty
 }));
 const pixName = document.getElementById("checkout-pix-name").value.trim();
-const { data, error } = await supabaseClient.rpc("create_order", {  
-  p_items: items  
-});  
+const robloxName = checkoutRoblox.value.trim();
+
+const { data, error } = await supabaseClient.rpc("create_order", {
+  p_items: items,
+  p_pix_name: pixName,
+  p_delivery_username: robloxName
+});
 
 if (error) {  
   console.error("Erro ao criar pedido:", error);  
