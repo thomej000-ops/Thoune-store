@@ -37,38 +37,7 @@ if (data) {
 tiktokUsername.value = data.tiktok_username || "";
 robloxUsername.value = data.roblox_username || "";
 }
-  
-async function loadOrders(userId) {
-  const { data, error } = await supabaseClient
-    .from("orders")
-    .select("id, status, total, pix_name, delivery_username, created_at")
-    .eq("customer_id", userId)
-    .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Erro ao carregar pedidos:", error);
-    ordersMessage.textContent = "Não foi possível carregar seus pedidos.";
-    return;
-  }
-
-  if (!data || data.length === 0) {
-  toast("TESTE: nenhum pedido encontrado.");
-  ordersMessage.textContent = "Você ainda não possui pedidos.";
-  return;
-    
-}
-
-toast("TESTE: " + data.length + " pedido(s) encontrado(s)!");
-  }
-
-  ordersMessage.innerHTML = data.map(order => `
-    <div class="order-card">
-      <strong>📦 Pedido #${order.id.slice(0, 8)}</strong>
-      <p>💰 Total: ${money(order.total)}</p>
-      <p>📌 Status: ${order.status}</p>
-      <p>📅 ${new Date(order.created_at).toLocaleString("pt-BR")}</p>
-    </div>
-  `).join("");
 }
 async function updateAccountUI() {
 const {
