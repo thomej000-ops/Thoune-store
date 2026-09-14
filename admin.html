@@ -1387,15 +1387,22 @@
     /* OUTROS BOTÕES — POR ENQUANTO */
 
     document
-      .querySelector("#orders-option")
-      .addEventListener("click", () => {
+  .querySelector("#orders-option")
+  .addEventListener("click", () => {
 
-        alert(
-          "🧾 A área de pedidos será adicionada no próximo passo."
-        );
+    document
+      .querySelector("#dashboard-section")
+      .classList.add("hidden");
 
-      });
+    document
+      .querySelector("#products-section")
+      .classList.add("hidden");
 
+    document
+      .querySelector("#orders-section")
+      .classList.remove("hidden");
+
+  });
 
     document
       .querySelector("#payments-option")
