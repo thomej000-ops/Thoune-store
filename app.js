@@ -52,8 +52,13 @@ async function loadOrders(userId) {
   }
 
   if (!data || data.length === 0) {
-    ordersMessage.textContent = "Você ainda não possui pedidos.";
-    return;
+  toast("TESTE: nenhum pedido encontrado.");
+  ordersMessage.textContent = "Você ainda não possui pedidos.";
+  return;
+    
+}
+
+toast("TESTE: " + data.length + " pedido(s) encontrado(s)!");
   }
 
   ordersMessage.innerHTML = data.map(order => `
