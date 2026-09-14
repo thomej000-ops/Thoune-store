@@ -416,39 +416,7 @@ verifyPaymentButton.addEventListener("click", async () => {
     verifyPaymentButton.textContent = "🔎 Verificar pagamento";
   }
 });
-const pixName = document.getElementById("checkout-pix-name").value.trim();
-const robloxName = checkoutRoblox.value.trim();
 
-const { data, error } = await supabaseClient.rpc("create_order", {
-  p_items: items,
-  p_pix_name: pixName,
-  p_delivery_username: robloxName
-});
-
-if (error) {  
-  console.error("Erro ao criar pedido:", error);  
-  toast("Não foi possível criar o pedido: " + error.message);  
-  return;  
-}  
-
-console.log("Pedido criado:", data);  
-
-clearCart();  
-updateCartBadge(loadCart());  
-
-toast("Pedido criado com sucesso! ✅");  
-
-checkoutSection.classList.add("hidden");  
-window.scrollTo({  
-  top: 0,  
-  behavior: "smooth"  
-});
-
-} finally {
-confirmOrderButton.disabled = false;
-confirmOrderButton.textContent = "Confirmar pedido";
-}
-});
 // Atualiza o catálogo sem fingir que o backend já está conectado.
 refresh();
 updateCartBadge(loadCart());
