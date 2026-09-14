@@ -37,7 +37,7 @@ if (data) {
 tiktokUsername.value = data.tiktok_username || "";
 robloxUsername.value = data.roblox_username || "";
 }
-}
+  
 async function loadOrders(userId) {
   const { data, error } = await supabaseClient
     .from("orders")
