@@ -1386,7 +1386,145 @@
 
     /* OUTROS BOTÕES — POR ENQUANTO */
 
-    document
+    async function loadOrders() {
+
+  const ordersList = document.querySelector("#orders-list");
+
+  ordersList.innerHTML = "<p>Carregando pedidos...</p>";
+
+  const { data: orders, error } = await supabaseClient
+    .from("orders")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Erro ao carregar pedidos:", error);
+    ordersList.innerHTML = "<p>Erro ao carregar pedidos.</p>";
+    return;
+  }
+
+  if (!orders || orders.length === 0) {
+    ordersList.innerHTML = "<p>Nenhum pedido encontrado.</p>";
+    return;
+  }
+
+  ordersList.innerHTML = "";
+
+  for (const order of orders) {
+
+    const { data: items, error: itemsError } = await supabaseClient
+      .from("order_items")
+      .select("*")
+      .eq("order_id", order.id);
+
+    if (itemsError) {
+      console.error("Erro ao carregar itens:", itemsError);
+      continue;
+    }
+
+    const itemsHtml = (items || []).map(item => `
+      <div style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.08);">
+        <strong>${escapeHtml(item.product_name)}</strong>
+        <span> × ${item.quantity}</span>
+        <span> — R$ ${Number(item.product_price).toFixed(2).replace(".", ",")}</span>
+      </div>
+    `).join("");
+
+    const orderCard = document.createElement("div");
+
+    orderCard.className = "admin-card";
+
+    orderCard.innerHTML = `
+      <h3>📦 Pedido #${order.id.slice(0, 8)}</h3>
+
+      <p><strong>Data:</strong>
+        ${new Date(order.created_at).toLocaleString("pt-BR")}
+      </p>
+
+      <p><strong>Cliente:</strong>
+        ${escapeHtml(order.customer_id)}
+      </p>
+
+      <p><strong>Usuário para entrega:</strong>
+        ${escapeHtml(order.delivery_username || "Não informado")}
+      </p>
+
+      <p><strong>Nome do remetente Pix:</strong>
+        ${escapeHtml(order.pix_name || "Não informado")}
+      </p>
+
+      <p><strong>Status:</strong>
+        ${escapeHtml(order.status)}
+      </p>
+
+      <div style="margin-top: 14px;">
+        <strong>Itens:</strong>
+        ${itemsHtml}
+      </div>
+
+      <p style="margin-top: 14px;">
+        <strong>Total: R$ ${Number(order.total).toFixed(2).replace(".", ",")}</strong>
+      </p>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:15px;">
+
+        ${
+          order.status === "payment_confirmed"
+            ? `
+              <button
+                class="primary-button"
+                onclick="updateOrderStatus('${order.id}', 'awaiting_delivery')"
+              >
+                📦 Enviar para entrega
+              </button>
+            `
+            : ""
+        }
+
+        ${
+          order.status === "awaiting_delivery"
+            ? `
+              <button
+                class="primary-button"
+                onclick="updateOrderStatus('${order.id}', 'delivered')"
+              >
+                ✅ Marcar como entregue
+              </button>
+            `
+            : ""
+        }
+
+      </div>
+    `;
+
+    ordersList.appendChild(orderCard);
+  }
+}
+
+
+async function updateOrderStatus(orderId, newStatus) {
+
+  const { error } = await supabaseClient
+    .from("orders")
+    .update({
+      status: newStatus,
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", orderId);
+
+  if (error) {
+    console.error("Erro ao atualizar pedido:", error);
+    alert("Não foi possível atualizar o pedido.");
+    return;
+  }
+
+  alert("Pedido atualizado com sucesso! ✅");
+
+  loadOrders();
+}
+
+
+document
   .querySelector("#orders-option")
   .addEventListener("click", () => {
 
@@ -1402,6 +1540,14 @@
       .querySelector("#orders-section")
       .classList.remove("hidden");
 
+    loadOrders();
+  });
+
+
+document
+  .querySelector("#refresh-orders-button")
+  .addEventListener("click", () => {
+    loadOrders();
   });
 
     document
