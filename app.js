@@ -75,6 +75,7 @@ accountDetails.classList.remove("hidden");
 accountEmail.textContent = session.user.email || "";
 profileFields.classList.remove("hidden");
 await loadProfile(session.user.id);
+console.log("TESTE: carregando pedidos...");
 await loadOrders(session.user.id);
 profileFields.style.display = "block";
 accountMessage.textContent = "Você está conectado à sua conta.";
