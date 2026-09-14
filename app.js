@@ -96,6 +96,7 @@ async function loadDeliverySettings() {
 
   if (error) {
     console.error("Erro ao carregar configuração do bot:", error);
+
     return {
       bot_username: "",
       join_open: false
@@ -193,11 +194,188 @@ async function requestPaymentVerification(orderId, button) {
     toast("Pagamento informado! Aguardando verificação. ✅");
 
     await loadCustomerOrders();
+
   } finally {
     button.disabled = false;
     button.textContent = "🔎 Verificar pagamento";
   }
 }
+
+// ===============================
+// AVALIAÇÕES
+// ===============================
+
+async function checkExistingReview(orderId) {
+  const { data, error } = await supabaseClient
+    .from("reviews")
+    .select("id, status, rating, text")
+    .eq("order_id", orderId)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Erro ao verificar avaliação:", error);
+    return null;
+  }
+
+  return data;
+}
+
+function createReviewForm(order) {
+  const box = document.createElement("div");
+  box.className = "review-form";
+
+  const title = document.createElement("h4");
+  title.textContent = "⭐ Avalie seu pedido";
+
+  const description = document.createElement("p");
+  description.textContent =
+    "Sua avaliação ajuda outros clientes e a Thoune Store.";
+
+  const stars = document.createElement("div");
+  stars.className = "review-stars";
+
+  let selectedRating = 0;
+
+  for (let i = 1; i <= 5; i++) {
+    const star = document.createElement("button");
+
+    star.type = "button";
+    star.className = "review-star";
+    star.textContent = "☆";
+    star.setAttribute(
+      "aria-label",
+      `${i} estrela${i > 1 ? "s" : ""}`
+    );
+
+    star.addEventListener("click", () => {
+      selectedRating = i;
+
+      stars.querySelectorAll(".review-star").forEach(
+        (button, index) => {
+          button.textContent = index < i ? "★" : "☆";
+          button.classList.toggle(
+            "selected",
+            index < i
+          );
+        }
+      );
+    });
+
+    stars.appendChild(star);
+  }
+
+  const textarea = document.createElement("textarea");
+
+  textarea.className = "review-text";
+  textarea.placeholder =
+    "Conte como foi sua experiência...";
+  textarea.maxLength = 500;
+  textarea.rows = 4;
+
+  const button = document.createElement("button");
+
+  button.type = "button";
+  button.className = "primary-button full";
+  button.textContent = "⭐ Enviar avaliação";
+
+  const message = document.createElement("p");
+  message.className = "message";
+
+  button.addEventListener("click", async () => {
+    if (!selectedRating) {
+      toast("Escolha uma nota de 1 a 5 estrelas.");
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Enviando...";
+
+    try {
+      const { data, error } = await supabaseClient.rpc(
+        "create_review",
+        {
+          p_order_id: order.id,
+          p_rating: selectedRating,
+          p_text: textarea.value.trim()
+        }
+      );
+
+      if (error) {
+        console.error(
+          "Erro ao enviar avaliação:",
+          error
+        );
+
+        toast(
+          "Não foi possível enviar sua avaliação."
+        );
+
+        return;
+      }
+
+      message.textContent =
+        "Avaliação enviada! Ela ficará aguardando aprovação da loja. ✅";
+
+      message.classList.add("success");
+
+      button.classList.add("hidden");
+
+      textarea.disabled = true;
+
+      stars
+        .querySelectorAll(".review-star")
+        .forEach(star => {
+          star.disabled = true;
+        });
+
+      toast("Avaliação enviada com sucesso! ⭐");
+
+    } finally {
+      button.disabled = false;
+
+      if (!button.classList.contains("hidden")) {
+        button.textContent =
+          "⭐ Enviar avaliação";
+      }
+    }
+  });
+
+  box.appendChild(title);
+  box.appendChild(description);
+  box.appendChild(stars);
+  box.appendChild(textarea);
+  box.appendChild(button);
+  box.appendChild(message);
+
+  return box;
+}
+
+function createReviewStatus(review) {
+  const box = document.createElement("div");
+  box.className = "order-info-box";
+
+  if (review.status === "pending") {
+    box.textContent =
+      "⭐ Sua avaliação foi enviada e está aguardando aprovação da loja.";
+
+  } else if (review.status === "approved") {
+    box.textContent =
+      "⭐ Sua avaliação foi aprovada e está publicada na comunidade!";
+
+  } else if (review.status === "rejected") {
+    box.textContent =
+      "Sua avaliação não foi aprovada.";
+  } else {
+    box.textContent =
+      "Sua avaliação está sendo analisada pela loja.";
+  }
+
+  return box;
+}
+
+// ===============================
+// CARREGAR PEDIDOS
+// ===============================
 
 async function loadCustomerOrders() {
   const {
@@ -212,17 +390,28 @@ async function loadCustomerOrders() {
     .from("orders")
     .select("id, status, total, created_at")
     .eq("customer_id", session.user.id)
-    .order("created_at", { ascending: false });
+    .order("created_at", {
+      ascending: false
+    });
 
   if (error) {
-    console.error("Erro ao carregar pedidos:", error);
-    ordersMessage.textContent = "Não foi possível carregar seus pedidos.";
+    console.error(
+      "Erro ao carregar pedidos:",
+      error
+    );
+
+    ordersMessage.textContent =
+      "Não foi possível carregar seus pedidos.";
+
     return;
   }
 
   if (!orders || !orders.length) {
-    ordersMessage.textContent = "Você ainda não possui pedidos.";
+    ordersMessage.textContent =
+      "Você ainda não possui pedidos.";
+
     ordersMessage.classList.remove("hidden");
+
     return;
   }
 
@@ -238,35 +427,53 @@ async function loadCustomerOrders() {
     header.className = "customer-order-header";
 
     const title = document.createElement("strong");
-    title.textContent = `Pedido #${getOrderNumber(order.id)}`;
+    title.textContent =
+      `Pedido #${getOrderNumber(order.id)}`;
 
     const status = document.createElement("span");
-    status.className = `order-status ${statusClass(order.status)}`;
-    status.textContent = statusLabel(order.status);
+
+    status.className =
+      `order-status ${statusClass(order.status)}`;
+
+    status.textContent =
+      statusLabel(order.status);
 
     header.appendChild(title);
     header.appendChild(status);
 
     const date = document.createElement("small");
-    date.textContent = new Date(order.created_at).toLocaleString("pt-BR");
 
-    const { data: items, error: itemsError } = await supabaseClient
-      .from("order_items")
-      .select("product_name, quantity, product_price")
-      .eq("order_id", order.id);
+    date.textContent =
+      new Date(order.created_at)
+        .toLocaleString("pt-BR");
+
+    const { data: items, error: itemsError } =
+      await supabaseClient
+        .from("order_items")
+        .select(
+          "product_name, quantity, product_price"
+        )
+        .eq("order_id", order.id);
 
     if (itemsError) {
-      console.error("Erro ao carregar itens:", itemsError);
+      console.error(
+        "Erro ao carregar itens:",
+        itemsError
+      );
     }
 
     const itemList = document.createElement("div");
-    itemList.className = "customer-order-items";
+    itemList.className =
+      "customer-order-items";
 
     for (const item of items || []) {
       const itemRow = document.createElement("div");
 
-      const itemName = document.createElement("span");
-      itemName.textContent = `${item.product_name} × ${item.quantity}`;
+      const itemName =
+        document.createElement("span");
+
+      itemName.textContent =
+        `${item.product_name} × ${item.quantity}`;
 
       itemRow.appendChild(itemName);
       itemList.appendChild(itemRow);
@@ -281,23 +488,37 @@ async function loadCustomerOrders() {
     // ===============================
 
     if (order.status === "awaiting_payment") {
-      const paymentBox = document.createElement("div");
-      paymentBox.className = "order-action-box";
+      const paymentBox =
+        document.createElement("div");
 
-      const text = document.createElement("p");
+      paymentBox.className =
+        "order-action-box";
+
+      const text =
+        document.createElement("p");
+
       text.textContent =
         "Realize o Pix mostrado no checkout e depois informe que o pagamento foi realizado.";
 
-      const button = document.createElement("button");
-      button.className = "secondary-button full";
-      button.textContent = "🔎 Verificar pagamento";
+      const button =
+        document.createElement("button");
+
+      button.className =
+        "secondary-button full";
+
+      button.textContent =
+        "🔎 Verificar pagamento";
 
       button.addEventListener("click", () => {
-        requestPaymentVerification(order.id, button);
+        requestPaymentVerification(
+          order.id,
+          button
+        );
       });
 
       paymentBox.appendChild(text);
       paymentBox.appendChild(button);
+
       card.appendChild(paymentBox);
     }
 
@@ -305,11 +526,19 @@ async function loadCustomerOrders() {
     // AGUARDANDO VERIFICAÇÃO
     // ===============================
 
-    if (order.status === "awaiting_verification") {
-      const info = document.createElement("div");
-      info.className = "order-info-box";
+    if (
+      order.status ===
+      "awaiting_verification"
+    ) {
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "order-info-box";
+
       info.textContent =
         "⏳ Seu pagamento foi informado e está aguardando a confirmação da loja.";
+
       card.appendChild(info);
     }
 
@@ -317,11 +546,19 @@ async function loadCustomerOrders() {
     // PAGAMENTO CONFIRMADO
     // ===============================
 
-    if (order.status === "payment_confirmed") {
-      const info = document.createElement("div");
-      info.className = "order-info-box";
+    if (
+      order.status ===
+      "payment_confirmed"
+    ) {
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "order-info-box";
+
       info.textContent =
         "✅ Pagamento confirmado! Sua entrega está sendo preparada.";
+
       card.appendChild(info);
     }
 
@@ -329,33 +566,63 @@ async function loadCustomerOrders() {
     // ENTREGA
     // ===============================
 
-    if (order.status === "awaiting_delivery") {
-      const deliveryBox = document.createElement("div");
-      deliveryBox.className = "delivery-instructions";
+    if (
+      order.status ===
+      "awaiting_delivery"
+    ) {
+      const deliveryBox =
+        document.createElement("div");
 
-      const title = document.createElement("h4");
-      title.textContent = "📦 Seu pedido está pronto para entrega!";
+      deliveryBox.className =
+        "delivery-instructions";
 
-      const message = document.createElement("pre");
-      message.className = "delivery-message";
-      message.textContent = createDeliveryMessage(
-        order,
-        items || [],
-        settings
-      );
+      const title =
+        document.createElement("h4");
 
-      const copyButton = document.createElement("button");
-      copyButton.className = "secondary-button full";
-      copyButton.textContent = "📋 Copiar instruções";
+      title.textContent =
+        "📦 Seu pedido está pronto para entrega!";
 
-      copyButton.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(message.textContent);
-          toast("Instruções copiadas! ✅");
-        } catch {
-          toast("Não foi possível copiar automaticamente.");
+      const message =
+        document.createElement("pre");
+
+      message.className =
+        "delivery-message";
+
+      message.textContent =
+        createDeliveryMessage(
+          order,
+          items || [],
+          settings
+        );
+
+      const copyButton =
+        document.createElement("button");
+
+      copyButton.className =
+        "secondary-button full";
+
+      copyButton.textContent =
+        "📋 Copiar instruções";
+
+      copyButton.addEventListener(
+        "click",
+        async () => {
+          try {
+            await navigator.clipboard.writeText(
+              message.textContent
+            );
+
+            toast(
+              "Instruções copiadas! ✅"
+            );
+
+          } catch {
+            toast(
+              "Não foi possível copiar automaticamente."
+            );
+          }
         }
-      });
+      );
 
       deliveryBox.appendChild(title);
       deliveryBox.appendChild(message);
@@ -365,14 +632,33 @@ async function loadCustomerOrders() {
     }
 
     // ===============================
-    // ENTREGUE
+    // ENTREGUE + AVALIAÇÃO
     // ===============================
 
     if (order.status === "delivered") {
-      const info = document.createElement("div");
-      info.className = "order-success-box";
-      info.textContent = "✅ Pedido entregue com sucesso!";
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "order-success-box";
+
+      info.textContent =
+        "✅ Pedido entregue com sucesso!";
+
       card.appendChild(info);
+
+      const review =
+        await checkExistingReview(order.id);
+
+      if (review) {
+        card.appendChild(
+          createReviewStatus(review)
+        );
+      } else {
+        card.appendChild(
+          createReviewForm(order)
+        );
+      }
     }
 
     ordersList.appendChild(card);
@@ -390,30 +676,41 @@ async function updateAccountUI() {
 
   if (session?.user) {
     accountDetails.classList.remove("hidden");
-    accountEmail.textContent = session.user.email || "";
+
+    accountEmail.textContent =
+      session.user.email || "";
 
     profileFields.classList.remove("hidden");
+
     profileFields.style.display = "block";
 
     accountMessage.textContent =
       "Você está conectado à sua conta.";
 
     loginButton.classList.add("hidden");
+
     signupButton.classList.add("hidden");
+
     logoutButton.classList.remove("hidden");
 
-    authEmail.value = session.user.email || "";
+    authEmail.value =
+      session.user.email || "";
+
     authEmail.disabled = true;
+
     authPassword.classList.add("hidden");
 
     await loadProfile(session.user.id);
+
     await loadCustomerOrders();
 
   } else {
     profileFields.classList.add("hidden");
+
     accountDetails.classList.add("hidden");
 
     accountEmail.textContent = "";
+
     ordersMessage.textContent =
       "Você ainda não possui pedidos.";
 
@@ -421,10 +718,13 @@ async function updateAccountUI() {
       "Entre ou crie sua conta para acompanhar seus pedidos.";
 
     loginButton.classList.remove("hidden");
+
     signupButton.classList.remove("hidden");
+
     logoutButton.classList.add("hidden");
 
     authEmail.disabled = false;
+
     authPassword.classList.remove("hidden");
   }
 }
@@ -433,137 +733,222 @@ async function updateAccountUI() {
 // LOGIN
 // ===============================
 
-loginButton.addEventListener("click", async () => {
-  const email = authEmail.value.trim();
-  const password = authPassword.value;
+loginButton.addEventListener(
+  "click",
+  async () => {
+    const email =
+      authEmail.value.trim();
 
-  if (!email || !password) {
-    toast("Preencha seu e-mail e sua senha.");
-    return;
+    const password =
+      authPassword.value;
+
+    if (!email || !password) {
+      toast(
+        "Preencha seu e-mail e sua senha."
+      );
+
+      return;
+    }
+
+    const { error } =
+      await supabaseClient.auth
+        .signInWithPassword({
+          email,
+          password
+        });
+
+    if (error) {
+      toast(
+        "Não foi possível entrar: " +
+        error.message
+      );
+
+      return;
+    }
+
+    toast(
+      "Login realizado com sucesso! ✅"
+    );
+
+    await updateAccountUI();
   }
-
-  const { error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if (error) {
-    toast("Não foi possível entrar: " + error.message);
-    return;
-  }
-
-  toast("Login realizado com sucesso! ✅");
-  await updateAccountUI();
-});
+);
 
 // ===============================
 // CADASTRO
 // ===============================
 
-signupButton.addEventListener("click", async () => {
-  const email = authEmail.value.trim();
-  const password = authPassword.value;
+signupButton.addEventListener(
+  "click",
+  async () => {
+    const email =
+      authEmail.value.trim();
 
-  if (!email || !password) {
-    toast("Preencha seu e-mail e sua senha.");
-    return;
+    const password =
+      authPassword.value;
+
+    if (!email || !password) {
+      toast(
+        "Preencha seu e-mail e sua senha."
+      );
+
+      return;
+    }
+
+    if (password.length < 6) {
+      toast(
+        "A senha precisa ter pelo menos 6 caracteres."
+      );
+
+      return;
+    }
+
+    const { error } =
+      await supabaseClient.auth.signUp({
+        email,
+        password
+      });
+
+    if (error) {
+      toast(
+        "Não foi possível criar a conta: " +
+        error.message
+      );
+
+      return;
+    }
+
+    toast(
+      "Conta criada com sucesso! ✅"
+    );
+
+    await updateAccountUI();
   }
-
-  if (password.length < 6) {
-    toast("A senha precisa ter pelo menos 6 caracteres.");
-    return;
-  }
-
-  const { error } = await supabaseClient.auth.signUp({
-    email,
-    password
-  });
-
-  if (error) {
-    toast("Não foi possível criar a conta: " + error.message);
-    return;
-  }
-
-  toast("Conta criada com sucesso! ✅");
-  await updateAccountUI();
-});
+);
 
 // ===============================
 // LOGOUT
 // ===============================
 
-logoutButton.addEventListener("click", async () => {
-  const { error } = await supabaseClient.auth.signOut();
+logoutButton.addEventListener(
+  "click",
+  async () => {
+    const { error } =
+      await supabaseClient.auth.signOut();
 
-  if (error) {
-    toast("Não foi possível sair da conta.");
-    return;
+    if (error) {
+      toast(
+        "Não foi possível sair da conta."
+      );
+
+      return;
+    }
+
+    toast("Você saiu da conta.");
+
+    await updateAccountUI();
   }
+);
 
-  toast("Você saiu da conta.");
-  await updateAccountUI();
-});
-
-supabaseClient.auth.onAuthStateChange(() => {
-  updateAccountUI();
-});
+supabaseClient.auth.onAuthStateChange(
+  () => {
+    updateAccountUI();
+  }
+);
 
 // ===============================
 // SALVAR PERFIL
 // ===============================
 
-saveProfileButton.addEventListener("click", async () => {
-  const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
+saveProfileButton.addEventListener(
+  "click",
+  async () => {
+    const {
+      data: { session }
+    } = await supabaseClient.auth.getSession();
 
-  if (!session?.user) {
-    toast("Entre na sua conta primeiro.");
-    return;
+    if (!session?.user) {
+      toast(
+        "Entre na sua conta primeiro."
+      );
+
+      return;
+    }
+
+    const tiktok =
+      tiktokUsername.value.trim();
+
+    const roblox =
+      robloxUsername.value.trim();
+
+    const { error } =
+      await supabaseClient
+        .from("profiles")
+        .update({
+          tiktok_username:
+            tiktok || null,
+
+          roblox_username:
+            roblox || null
+        })
+        .eq(
+          "id",
+          session.user.id
+        );
+
+    if (error) {
+      console.error(
+        "Erro ao salvar perfil:",
+        error
+      );
+
+      toast(
+        "Não foi possível salvar suas informações."
+      );
+
+      return;
+    }
+
+    profileMessage.textContent =
+      "Informações salvas com sucesso! ✅";
+
+    toast("Perfil atualizado!");
   }
-
-  const tiktok = tiktokUsername.value.trim();
-  const roblox = robloxUsername.value.trim();
-
-  const { error } = await supabaseClient
-    .from("profiles")
-    .update({
-      tiktok_username: tiktok || null,
-      roblox_username: roblox || null
-    })
-    .eq("id", session.user.id);
-
-  if (error) {
-    console.error("Erro ao salvar perfil:", error);
-    toast("Não foi possível salvar suas informações.");
-    return;
-  }
-
-  profileMessage.textContent =
-    "Informações salvas com sucesso! ✅";
-
-  toast("Perfil atualizado!");
-});
+);
 
 // ===============================
 // PRODUTOS
 // ===============================
 
 let products = [];
+
 let selectedCategory = "Todas";
+
 let search = "";
+
 let sort = "popular";
 
 async function loadProducts() {
-  const { data, error } = await supabaseClient
-    .from("products")
-    .select("*")
-    .eq("active", true)
-    .order("sort_order", { ascending: true });
+  const { data, error } =
+    await supabaseClient
+      .from("products")
+      .select("*")
+      .eq("active", true)
+      .order("sort_order", {
+        ascending: true
+      });
 
   if (error) {
-    console.error("Erro ao carregar produtos:", error);
-    alert("ERRO SUPABASE: " + error.message);
+    console.error(
+      "Erro ao carregar produtos:",
+      error
+    );
+
+    alert(
+      "ERRO SUPABASE: " +
+      error.message
+    );
+
     return;
   }
 
@@ -574,71 +959,128 @@ async function loadProducts() {
 
 loadProducts();
 
-const menuToggle = document.querySelector("#menu-toggle");
-const mobileNav = document.querySelector("#mobile-nav");
+const menuToggle =
+  document.querySelector("#menu-toggle");
 
-menuToggle.addEventListener("click", () => {
-  mobileNav.classList.toggle("open");
-});
+const mobileNav =
+  document.querySelector("#mobile-nav");
 
-mobileNav.querySelectorAll("a").forEach(a => {
-  a.addEventListener("click", () => {
-    mobileNav.classList.remove("open");
+menuToggle.addEventListener(
+  "click",
+  () => {
+    mobileNav.classList.toggle(
+      "open"
+    );
+  }
+);
+
+mobileNav
+  .querySelectorAll("a")
+  .forEach(a => {
+    a.addEventListener(
+      "click",
+      () => {
+        mobileNav.classList.remove(
+          "open"
+        );
+      }
+    );
   });
-});
 
-document.querySelectorAll(".category").forEach(button => {
-  button.addEventListener("click", () => {
-    document
-      .querySelectorAll(".category")
-      .forEach(b => b.classList.remove("active"));
+document
+  .querySelectorAll(".category")
+  .forEach(button => {
+    button.addEventListener(
+      "click",
+      () => {
+        document
+          .querySelectorAll(
+            ".category"
+          )
+          .forEach(b =>
+            b.classList.remove(
+              "active"
+            )
+          );
 
-    button.classList.add("active");
+        button.classList.add(
+          "active"
+        );
 
-    selectedCategory = button.dataset.category;
+        selectedCategory =
+          button.dataset.category;
 
-    refresh();
+        refresh();
+      }
+    );
   });
-});
 
 document
   .querySelector("#search-input")
-  .addEventListener("input", e => {
-    search = e.target.value.trim().toLowerCase();
-    refresh();
-  });
+  .addEventListener(
+    "input",
+    e => {
+      search =
+        e.target.value
+          .trim()
+          .toLowerCase();
+
+      refresh();
+    }
+  );
 
 document
   .querySelector("#sort-select")
-  .addEventListener("change", e => {
-    sort = e.target.value;
-    refresh();
-  });
+  .addEventListener(
+    "change",
+    e => {
+      sort =
+        e.target.value;
+
+      refresh();
+    }
+  );
 
 function filtered() {
-  let result = products.filter(product => {
-    const categoryMatch =
-      selectedCategory === "Todas" ||
-      product.category === selectedCategory;
+  let result =
+    products.filter(product => {
+      const categoryMatch =
+        selectedCategory ===
+          "Todas" ||
+        product.category ===
+          selectedCategory;
 
-    const searchMatch =
-      product.name.toLowerCase().includes(search);
+      const searchMatch =
+        product.name
+          .toLowerCase()
+          .includes(search);
 
-    return product.active && categoryMatch && searchMatch;
-  });
+      return (
+        product.active &&
+        categoryMatch &&
+        searchMatch
+      );
+    });
 
   if (sort === "low") {
-    result.sort((a, b) => a.price - b.price);
+    result.sort(
+      (a, b) =>
+        a.price - b.price
+    );
   }
 
   if (sort === "high") {
-    result.sort((a, b) => b.price - a.price);
+    result.sort(
+      (a, b) =>
+        b.price - a.price
+    );
   }
 
-  // Não usa mais uma coluna popularity inexistente.
   if (sort === "popular") {
     result.sort(
-      (a, b) => (a.sort_order || 0) - (b.sort_order || 0)
+      (a, b) =>
+        (a.sort_order || 0) -
+        (b.sort_order || 0)
     );
   }
 
@@ -646,308 +1088,530 @@ function filtered() {
 }
 
 function refresh() {
-  renderProducts(filtered());
+  renderProducts(
+    filtered()
+  );
 }
 
 // ===============================
 // CARRINHO
 // ===============================
 
-const drawer = document.querySelector("#cart-drawer");
-const checkoutSection = document.querySelector("#checkout-section");
-const checkoutItems = document.querySelector("#checkout-items");
-const checkoutTiktok = document.querySelector("#checkout-tiktok");
-const checkoutRoblox = document.querySelector("#checkout-roblox");
-const checkoutTotal = document.querySelector("#checkout-total");
-const checkoutBack = document.querySelector("#checkout-back");
+const drawer =
+  document.querySelector(
+    "#cart-drawer"
+  );
+
+const checkoutSection =
+  document.querySelector(
+    "#checkout-section"
+  );
+
+const checkoutItems =
+  document.querySelector(
+    "#checkout-items"
+  );
+
+const checkoutTiktok =
+  document.querySelector(
+    "#checkout-tiktok"
+  );
+
+const checkoutRoblox =
+  document.querySelector(
+    "#checkout-roblox"
+  );
+
+const checkoutTotal =
+  document.querySelector(
+    "#checkout-total"
+  );
+
+const checkoutBack =
+  document.querySelector(
+    "#checkout-back"
+  );
 
 function openCart() {
-  drawer.classList.add("open");
-  renderCart(loadCart());
+  drawer.classList.add(
+    "open"
+  );
+
+  renderCart(
+    loadCart()
+  );
 }
 
 function closeCart() {
-  drawer.classList.remove("open");
+  drawer.classList.remove(
+    "open"
+  );
 }
 
 document
   .querySelector("#open-cart")
-  .addEventListener("click", openCart);
+  .addEventListener(
+    "click",
+    openCart
+  );
 
 document
   .querySelector("#close-cart")
-  .addEventListener("click", closeCart);
+  .addEventListener(
+    "click",
+    closeCart
+  );
 
 document
   .querySelector("#close-cart-button")
-  .addEventListener("click", closeCart);
+  .addEventListener(
+    "click",
+    closeCart
+  );
 
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") closeCart();
-});
+document.addEventListener(
+  "keydown",
+  e => {
+    if (e.key === "Escape") {
+      closeCart();
+    }
+  }
+);
 
 // ===============================
 // COPIAR PEDIDO
 // ===============================
 
 document
-  .querySelector("#copy-order-button")
-  .addEventListener("click", async () => {
-    const cart = loadCart();
+  .querySelector(
+    "#copy-order-button"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+      const cart =
+        loadCart();
 
-    if (!cart.length) {
-      toast("Seu carrinho está vazio.");
-      return;
-    }
+      if (!cart.length) {
+        toast(
+          "Seu carrinho está vazio."
+        );
 
-    try {
-      await navigator.clipboard.writeText(orderText(cart));
-      toast("Pedido copiado! ✅");
-    } catch {
-      toast("Não foi possível copiar automaticamente.");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(
+          orderText(cart)
+        );
+
+        toast(
+          "Pedido copiado! ✅"
+        );
+
+      } catch {
+        toast(
+          "Não foi possível copiar automaticamente."
+        );
+      }
     }
-  });
+  );
 
 // ===============================
 // CHECKOUT
 // ===============================
 
 document
-  .querySelector("#checkout-button")
-  .addEventListener("click", async () => {
-    const cart = loadCart();
+  .querySelector(
+    "#checkout-button"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+      const cart =
+        loadCart();
 
-    if (!cart.length) {
-      toast("Adicione uma marreta ao carrinho primeiro.");
-      return;
+      if (!cart.length) {
+        toast(
+          "Adicione uma marreta ao carrinho primeiro."
+        );
+
+        return;
+      }
+
+      const {
+        data: { session }
+      } =
+        await supabaseClient
+          .auth
+          .getSession();
+
+      if (!session?.user) {
+        toast(
+          "Entre na sua conta antes de realizar a compra."
+        );
+
+        document
+          .querySelector("#conta")
+          ?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+
+        return;
+      }
+
+      await loadProfile(
+        session.user.id
+      );
+
+      checkoutItems.innerHTML =
+        "";
+
+      for (const item of cart) {
+        const row =
+          document.createElement(
+            "div"
+          );
+
+        row.className =
+          "checkout-item";
+
+        const image =
+          document.createElement(
+            "img"
+          );
+
+        image.src =
+          item.image || "";
+
+        image.alt =
+          item.name;
+
+        const info =
+          document.createElement(
+            "div"
+          );
+
+        const name =
+          document.createElement(
+            "strong"
+          );
+
+        name.textContent =
+          item.name;
+
+        const details =
+          document.createElement(
+            "span"
+          );
+
+        details.textContent =
+          `${item.qty} × ${money(
+            item.price
+          )} = ${money(
+            item.price *
+            item.qty
+          )}`;
+
+        info.appendChild(
+          name
+        );
+
+        info.appendChild(
+          details
+        );
+
+        row.appendChild(
+          image
+        );
+
+        row.appendChild(
+          info
+        );
+
+        checkoutItems.appendChild(
+          row
+        );
+      }
+
+      checkoutTiktok.value =
+        tiktokUsername.value ||
+        "";
+
+      checkoutRoblox.value =
+        robloxUsername.value ||
+        "";
+
+      checkoutTotal.textContent =
+        money(
+          cartTotal(cart)
+        );
+
+      checkoutSection.classList.remove(
+        "hidden"
+      );
+
+      closeCart();
+
+      checkoutSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
     }
+  );
 
-    const {
-      data: { session }
-    } = await supabaseClient.auth.getSession();
+checkoutBack.addEventListener(
+  "click",
+  () => {
+    checkoutSection.classList.add(
+      "hidden"
+    );
 
-    if (!session?.user) {
-      toast("Entre na sua conta antes de realizar a compra.");
-
-      document
-        .querySelector("#conta")
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-
-      return;
-    }
-
-    await loadProfile(session.user.id);
-
-    checkoutItems.innerHTML = "";
-
-    for (const item of cart) {
-      const row = document.createElement("div");
-      row.className = "checkout-item";
-
-      const image = document.createElement("img");
-      image.src = item.image || "";
-      image.alt = item.name;
-
-      const info = document.createElement("div");
-
-      const name = document.createElement("strong");
-      name.textContent = item.name;
-
-      const details = document.createElement("span");
-
-      details.textContent =
-        `${item.qty} × ${money(item.price)} = ${money(
-          item.price * item.qty
-        )}`;
-
-      info.appendChild(name);
-      info.appendChild(details);
-
-      row.appendChild(image);
-      row.appendChild(info);
-
-      checkoutItems.appendChild(row);
-    }
-
-    checkoutTiktok.value = tiktokUsername.value || "";
-    checkoutRoblox.value = robloxUsername.value || "";
-
-    checkoutTotal.textContent = money(cartTotal(cart));
-
-    checkoutSection.classList.remove("hidden");
-
-    closeCart();
-
-    checkoutSection.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-  });
-
-checkoutBack.addEventListener("click", () => {
-  checkoutSection.classList.add("hidden");
-  openCart();
-});
+    openCart();
+  }
+);
 
 // ===============================
 // CRIAR PEDIDO
 // ===============================
 
 let currentOrderId =
-  localStorage.getItem("thoune_current_order") || null;
+  localStorage.getItem(
+    "thoune_current_order"
+  ) || null;
 
-const verifyPaymentButton = document.querySelector(
-  "#verify-payment-button"
-);
+const verifyPaymentButton =
+  document.querySelector(
+    "#verify-payment-button"
+  );
 
-const confirmOrderButton = document.querySelector(
-  "#confirm-order-button"
-);
+const confirmOrderButton =
+  document.querySelector(
+    "#confirm-order-button"
+  );
 
-confirmOrderButton.addEventListener("click", async () => {
-  const cart = loadCart();
+confirmOrderButton.addEventListener(
+  "click",
+  async () => {
+    const cart =
+      loadCart();
 
-  if (!cart.length) {
-    toast("Seu carrinho está vazio.");
-    return;
-  }
-
-  const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
-
-  if (!session?.user) {
-    toast("Entre na sua conta antes de confirmar o pedido.");
-    return;
-  }
-
-  const pixName = document
-    .getElementById("checkout-pix-name")
-    .value
-    .trim();
-
-  const robloxName = checkoutRoblox.value.trim();
-
-  if (!robloxName) {
-    toast("Informe seu usuário do Roblox.");
-    return;
-  }
-
-  if (!pixName) {
-    toast("Informe o nome do remetente do Pix.");
-    return;
-  }
-
-  confirmOrderButton.disabled = true;
-  confirmOrderButton.textContent = "Criando pedido...";
-
-  try {
-    const items = cart.map(item => ({
-      product_id: item.id,
-      quantity: item.qty
-    }));
-
-    const { data, error } = await supabaseClient.rpc(
-      "create_order",
-      {
-        p_items: items,
-        p_pix_name: pixName,
-        p_delivery_username: robloxName
-      }
-    );
-
-    if (error) {
-      console.error("Erro ao criar pedido:", error);
+    if (!cart.length) {
       toast(
-        "Não foi possível criar o pedido: " +
-          error.message
+        "Seu carrinho está vazio."
       );
+
       return;
     }
 
-    currentOrderId = data.order_id;
+    const {
+      data: { session }
+    } =
+      await supabaseClient.auth
+        .getSession();
 
-    localStorage.setItem(
-      "thoune_current_order",
-      currentOrderId
-    );
+    if (!session?.user) {
+      toast(
+        "Entre na sua conta antes de confirmar o pedido."
+      );
 
-    clearCart();
-    updateCartBadge(loadCart());
+      return;
+    }
 
-    toast("Pedido criado com sucesso! ✅");
+    const pixName =
+      document
+        .getElementById(
+          "checkout-pix-name"
+        )
+        .value
+        .trim();
 
-    confirmOrderButton.classList.add("hidden");
-    verifyPaymentButton.classList.remove("hidden");
+    const robloxName =
+      checkoutRoblox.value.trim();
 
-    await loadCustomerOrders();
+    if (!robloxName) {
+      toast(
+        "Informe seu usuário do Roblox."
+      );
 
-  } finally {
-    confirmOrderButton.disabled = false;
-    confirmOrderButton.textContent = "Confirmar pedido";
+      return;
+    }
+
+    if (!pixName) {
+      toast(
+        "Informe o nome do remetente do Pix."
+      );
+
+      return;
+    }
+
+    confirmOrderButton.disabled =
+      true;
+
+    confirmOrderButton.textContent =
+      "Criando pedido...";
+
+    try {
+      const items =
+        cart.map(item => ({
+          product_id:
+            item.id,
+
+          quantity:
+            item.qty
+        }));
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.rpc(
+          "create_order",
+          {
+            p_items:
+              items,
+
+            p_pix_name:
+              pixName,
+
+            p_delivery_username:
+              robloxName
+          }
+        );
+
+      if (error) {
+        console.error(
+          "Erro ao criar pedido:",
+          error
+        );
+
+        toast(
+          "Não foi possível criar o pedido: " +
+          error.message
+        );
+
+        return;
+      }
+
+      currentOrderId =
+        data.order_id;
+
+      localStorage.setItem(
+        "thoune_current_order",
+        currentOrderId
+      );
+
+      clearCart();
+
+      updateCartBadge(
+        loadCart()
+      );
+
+      toast(
+        "Pedido criado com sucesso! ✅"
+      );
+
+      confirmOrderButton.classList.add(
+        "hidden"
+      );
+
+      verifyPaymentButton.classList.remove(
+        "hidden"
+      );
+
+      await loadCustomerOrders();
+
+    } finally {
+      confirmOrderButton.disabled =
+        false;
+
+      confirmOrderButton.textContent =
+        "Confirmar pedido";
+    }
   }
-});
+);
 
 // ===============================
 // VERIFICAR PAGAMENTO
 // ===============================
 
-verifyPaymentButton.addEventListener("click", async () => {
-  if (!currentOrderId) {
-    toast("Nenhum pedido aguardando verificação.");
-    return;
-  }
-
-  verifyPaymentButton.disabled = true;
-  verifyPaymentButton.textContent = "Enviando...";
-
-  try {
-    const { error } = await supabaseClient.rpc(
-      "request_payment_verification",
-      {
-        p_order_id: currentOrderId
-      }
-    );
-
-    if (error) {
-      console.error(
-        "Erro ao solicitar verificação:",
-        error
-      );
-
+verifyPaymentButton.addEventListener(
+  "click",
+  async () => {
+    if (!currentOrderId) {
       toast(
-        "Não foi possível enviar a verificação: " +
-          error.message
+        "Nenhum pedido aguardando verificação."
       );
 
       return;
     }
 
-    verifyPaymentButton.classList.add("hidden");
+    verifyPaymentButton.disabled =
+      true;
 
-    localStorage.removeItem("thoune_current_order");
-    currentOrderId = null;
-
-    toast(
-      "Pagamento informado! Aguardando verificação. ✅"
-    );
-
-    await loadCustomerOrders();
-
-  } finally {
-    verifyPaymentButton.disabled = false;
     verifyPaymentButton.textContent =
-      "🔎 Verificar pagamento";
+      "Enviando...";
+
+    try {
+      const { error } =
+        await supabaseClient.rpc(
+          "request_payment_verification",
+          {
+            p_order_id:
+              currentOrderId
+          }
+        );
+
+      if (error) {
+        console.error(
+          "Erro ao solicitar verificação:",
+          error
+        );
+
+        toast(
+          "Não foi possível enviar a verificação: " +
+          error.message
+        );
+
+        return;
+      }
+
+      verifyPaymentButton.classList.add(
+        "hidden"
+      );
+
+      localStorage.removeItem(
+        "thoune_current_order"
+      );
+
+      currentOrderId =
+        null;
+
+      toast(
+        "Pagamento informado! Aguardando verificação. ✅"
+      );
+
+      await loadCustomerOrders();
+
+    } finally {
+      verifyPaymentButton.disabled =
+        false;
+
+      verifyPaymentButton.textContent =
+        "🔎 Verificar pagamento";
+    }
   }
-});
+);
 
 // ===============================
 // INICIALIZAÇÃO
 // ===============================
 
 refresh();
-updateCartBadge(loadCart());
+
+updateCartBadge(
+  loadCart()
+);
+
 updateAccountUI();
