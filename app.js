@@ -332,7 +332,7 @@ const items = cart.map(item => ({
 product_id: item.id,
 quantity: item.qty
 }));
-
+const pixName = document.getElementById("checkout-pix-name").value.trim();
 const { data, error } = await supabaseClient.rpc("create_order", {  
   p_items: items  
 });  
