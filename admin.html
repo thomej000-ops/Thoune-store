@@ -1,14 +1,9 @@
 <!doctype html>
+
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-
-  <title>Thoune Store — ADM</title>
-
-  <link rel="stylesheet" href="styles.css">
-
-  <style>
+  <meta name="viewport" content="width=device-width,initial-scale=1">  <title>Thoune Store — ADM</title>  <link rel="stylesheet" href="styles.css">  <style>
     body {
       min-height: 100vh;
       background: #f4fafb;
@@ -455,540 +450,541 @@
         justify-content: flex-start;
       }
     }
-  </style>
-</head>
+  </style></head><body><main class="admin"><a class="back" href="index.html">← Voltar para a loja</a>
 
-<body>
-
-<main class="admin">
-
-  <a class="back" href="index.html">← Voltar para a loja</a>
-
-  <!-- CARREGANDO -->
-  <section class="admin-card" id="loading-screen">
+  <!-- CARREGANDO -->  <section class="admin-card" id="loading-screen">
     <p class="eyebrow">THOUNE STORE</p>
     <h1>Verificando acesso...</h1>
     <p>Aguarde enquanto verificamos sua conta.</p>
-  </section>
-
-  <!-- ACESSO NEGADO -->
-  <section class="admin-card hidden" id="access-denied">
+  </section>  <!-- ACESSO NEGADO -->  <section class="admin-card hidden" id="access-denied">
     <div class="access-message">
-      <div style="font-size:48px">🔒</div>
+      <div style="font-size:48px">🔒</div>  <p class="eyebrow">ACESSO RESTRITO</p>
 
-      <p class="eyebrow">ACESSO RESTRITO</p>
+  <h1>Acesso negado</h1>
 
-      <h1>Acesso negado</h1>
+  <p>
+    Esta área é exclusiva para administradores da Thoune Store.
+  </p>
 
-      <p>
-        Esta área é exclusiva para administradores da Thoune Store.
+  <a class="primary-button" href="index.html">
+    Voltar para a loja
+  </a>
+</div>
+
+  </section>  <!-- PAINEL -->  <section class="admin-card hidden" id="admin-panel"><!-- DASHBOARD -->
+<div id="dashboard-section">
+
+  <div class="admin-header">
+
+    <div class="admin-status">
+      🟢 Administrador autenticado
+    </div>
+
+    <p class="eyebrow" style="margin-top:20px">
+      ÁREA ADMINISTRATIVA
+    </p>
+
+    <h1>Thoune Store ADM</h1>
+
+    <p>
+      Gerencie produtos, pedidos, pagamentos, atendimento,
+      promoção, entrega e avaliações.
+    </p>
+
+  </div>
+
+  <div class="admin-grid">
+
+    <button class="admin-option" id="products-option">
+      <strong>📦 Produtos</strong>
+      <p>Adicionar, editar, remover produtos e controlar estoque.</p>
+    </button>
+
+    <button class="admin-option" id="orders-option">
+      <strong>🧾 Pedidos</strong>
+      <p>Visualizar pedidos e acompanhar as entregas.</p>
+    </button>
+
+    <button class="admin-option" id="payments-option">
+      <strong>💳 Pagamentos</strong>
+      <p>Conferir pagamentos e confirmar pedidos.</p>
+    </button>
+
+    <button class="admin-option" id="service-option">
+      <strong>🟢 Atendimento</strong>
+      <p>Controlar o status online ou offline da loja.</p>
+    </button>
+
+    <button class="admin-option" id="promotion-option">
+      <strong>🏷️ Promoção</strong>
+      <p>Definir e ativar o desconto global da loja.</p>
+    </button>
+
+    <button class="admin-option" id="delivery-option">
+      <strong>🤖 Entrega</strong>
+      <p>Configurar bot, Join Aberto e informações de entrega.</p>
+    </button>
+
+    <button class="admin-option" id="reviews-option">
+      <strong>⭐ Avaliações</strong>
+      <p>Moderar avaliações enviadas pelos clientes.</p>
+    </button>
+
+  </div>
+
+  <button
+    class="secondary-button logout-admin"
+    id="admin-logout"
+  >
+    Sair da conta
+  </button>
+
+</div>
+
+<!-- PRODUTOS -->
+<div id="products-section" class="hidden">
+
+  <div class="section-header">
+    <div>
+      <button class="back-admin" id="back-products-dashboard">
+        ← Voltar ao painel
+      </button>
+
+      <p class="eyebrow" style="margin-top:18px">
+        CATÁLOGO
       </p>
 
-      <a class="primary-button" href="index.html">
-        Voltar para a loja
-      </a>
+      <h2>📦 Produtos</h2>
+
+      <p>
+        Gerencie as marretas disponíveis na loja.
+      </p>
     </div>
-  </section>
 
-  <!-- PAINEL -->
-  <section class="admin-card hidden" id="admin-panel">
+    <button class="primary-button" id="new-product-button">
+      ➕ Nova marreta
+    </button>
+  </div>
 
-    <!-- DASHBOARD -->
-    <div id="dashboard-section">
+  <div class="product-form hidden" id="product-form">
 
-      <div class="admin-header">
+    <h3 id="form-title">Adicionar marreta</h3>
 
-        <div class="admin-status">
-          🟢 Administrador autenticado
-        </div>
+    <div class="form-grid">
 
-        <p class="eyebrow" style="margin-top:20px">
-          ÁREA ADMINISTRATIVA
-        </p>
-
-        <h1>Thoune Store ADM</h1>
-
-        <p>
-          Gerencie produtos, pedidos, pagamentos, atendimento,
-          promoção, entrega e avaliações.
-        </p>
-
+      <div class="form-field full">
+        <label for="product-name">Nome da marreta</label>
+        <input id="product-name" type="text" placeholder="Ex.: Party Balloons">
       </div>
 
-      <div class="admin-grid">
+      <div class="form-field">
+        <label for="product-category">Raridade</label>
 
-        <button class="admin-option" id="products-option">
-          <strong>📦 Produtos</strong>
-          <p>Adicionar, editar, remover produtos e controlar estoque.</p>
-        </button>
-
-        <button class="admin-option" id="orders-option">
-          <strong>🧾 Pedidos</strong>
-          <p>Visualizar pedidos e acompanhar as entregas.</p>
-        </button>
-
-        <button class="admin-option" id="payments-option">
-          <strong>💳 Pagamentos</strong>
-          <p>Conferir pagamentos e confirmar pedidos.</p>
-        </button>
-
-        <button class="admin-option" id="service-option">
-          <strong>🟢 Atendimento</strong>
-          <p>Controlar o status online ou offline da loja.</p>
-        </button>
-
-        <button class="admin-option" id="promotion-option">
-          <strong>🏷️ Promoção</strong>
-          <p>Definir e ativar o desconto global da loja.</p>
-        </button>
-
-        <button class="admin-option" id="delivery-option">
-          <strong>🤖 Entrega</strong>
-          <p>Configurar bot, Join Aberto e informações de entrega.</p>
-        </button>
-
-        <button class="admin-option" id="reviews-option">
-          <strong>⭐ Avaliações</strong>
-          <p>Moderar avaliações enviadas pelos clientes.</p>
-        </button>
-
+        <select id="product-category">
+          <option value="Lendária">Lendária</option>
+          <option value="Épica">Épica</option>
+          <option value="Rara">Rara</option>
+          <option value="Comum">Comum</option>
+          <option value="Exclusiva">Exclusiva</option>
+        </select>
       </div>
 
-      <button
-        class="secondary-button logout-admin"
-        id="admin-logout"
-      >
-        Sair da conta
+      <div class="form-field">
+        <label for="product-price">Preço (R$)</label>
+        <input id="product-price" type="number" min="0" step="0.01">
+      </div>
+
+      <div class="form-field">
+        <label for="product-stock">Estoque</label>
+        <input id="product-stock" type="number" min="0" step="1">
+      </div>
+
+      <div class="form-field">
+        <label for="product-order">Ordem no catálogo</label>
+        <input id="product-order" type="number" min="0" step="1">
+      </div>
+
+      <div class="form-field full">
+        <label for="product-image">URL da imagem</label>
+        <input id="product-image" type="url" placeholder="https://...">
+      </div>
+
+      <div class="form-field full">
+        <label for="product-description">Descrição</label>
+        <textarea id="product-description"></textarea>
+      </div>
+
+      <div class="checkbox-field">
+        <input id="product-active" type="checkbox" checked>
+        <label for="product-active">Produto ativo no catálogo</label>
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+
+      <button class="primary-button" id="save-product-button">
+        Salvar marreta
+      </button>
+
+      <button class="secondary-button" id="cancel-product-button">
+        Cancelar
       </button>
 
     </div>
 
-    <!-- PRODUTOS -->
-    <div id="products-section" class="hidden">
+    <p class="message" id="product-form-message"></p>
 
-      <div class="section-header">
-        <div>
-          <button class="back-admin" id="back-products-dashboard">
-            ← Voltar ao painel
-          </button>
+  </div>
 
-          <p class="eyebrow" style="margin-top:18px">
-            CATÁLOGO
-          </p>
+  <div class="section-header">
 
-          <h2>📦 Produtos</h2>
-
-          <p>
-            Gerencie as marretas disponíveis na loja.
-          </p>
-        </div>
-
-        <button class="primary-button" id="new-product-button">
-          ➕ Nova marreta
-        </button>
-      </div>
-
-      <div class="product-form hidden" id="product-form">
-
-        <h3 id="form-title">Adicionar marreta</h3>
-
-        <div class="form-grid">
-
-          <div class="form-field full">
-            <label for="product-name">Nome da marreta</label>
-            <input id="product-name" type="text" placeholder="Ex.: Party Balloons">
-          </div>
-
-          <div class="form-field">
-            <label for="product-category">Raridade</label>
-
-            <select id="product-category">
-              <option value="Lendária">Lendária</option>
-              <option value="Épica">Épica</option>
-              <option value="Rara">Rara</option>
-              <option value="Comum">Comum</option>
-              <option value="Exclusiva">Exclusiva</option>
-            </select>
-          </div>
-
-          <div class="form-field">
-            <label for="product-price">Preço (R$)</label>
-            <input id="product-price" type="number" min="0" step="0.01">
-          </div>
-
-          <div class="form-field">
-            <label for="product-stock">Estoque</label>
-            <input id="product-stock" type="number" min="0" step="1">
-          </div>
-
-          <div class="form-field">
-            <label for="product-order">Ordem no catálogo</label>
-            <input id="product-order" type="number" min="0" step="1">
-          </div>
-
-          <div class="form-field full">
-            <label for="product-image">URL da imagem</label>
-            <input id="product-image" type="url" placeholder="https://...">
-          </div>
-
-          <div class="form-field full">
-            <label for="product-description">Descrição</label>
-            <textarea id="product-description"></textarea>
-          </div>
-
-          <div class="checkbox-field">
-            <input id="product-active" type="checkbox" checked>
-            <label for="product-active">Produto ativo no catálogo</label>
-          </div>
-
-        </div>
-
-        <div class="form-actions">
-
-          <button class="primary-button" id="save-product-button">
-            Salvar marreta
-          </button>
-
-          <button class="secondary-button" id="cancel-product-button">
-            Cancelar
-          </button>
-
-        </div>
-
-        <p class="message" id="product-form-message"></p>
-
-      </div>
-
-      <div class="section-header">
-
-        <div>
-          <h3>Marretas cadastradas</h3>
-          <p id="products-count">Carregando...</p>
-        </div>
-
-        <button class="small-button" id="refresh-products-button">
-          🔄 Atualizar
-        </button>
-
-      </div>
-
-      <div class="products-list" id="products-list"></div>
-
+    <div>
+      <h3>Marretas cadastradas</h3>
+      <p id="products-count">Carregando...</p>
     </div>
 
-    <!-- PEDIDOS -->
-    <div id="orders-section" class="hidden">
+    <button class="small-button" id="refresh-products-button">
+      🔄 Atualizar
+    </button>
 
-      <div class="section-header">
+  </div>
 
-        <div>
-          <button class="back-admin" id="back-orders-dashboard">
-            ← Voltar ao painel
-          </button>
+  <div class="products-list" id="products-list"></div>
 
-          <p class="eyebrow" style="margin-top:18px">
-            VENDAS
-          </p>
+</div>
 
-          <h2>🧾 Pedidos</h2>
+<!-- PEDIDOS -->
+<div id="orders-section" class="hidden">
 
-          <p>
-            Acompanhe os pedidos e o processo de entrega.
-          </p>
-        </div>
+  <div class="section-header">
 
-        <button class="small-button" id="refresh-orders-button">
-          🔄 Atualizar
-        </button>
+    <div>
+      <button class="back-admin" id="back-orders-dashboard">
+        ← Voltar ao painel
+      </button>
 
-      </div>
+      <p class="eyebrow" style="margin-top:18px">
+        VENDAS
+      </p>
 
-      <div id="orders-message" class="message"></div>
+      <h2>🧾 Pedidos</h2>
 
-      <div id="orders-list" class="products-list">
-        <p>Carregando pedidos...</p>
-      </div>
-
+      <p>
+        Acompanhe os pedidos e o processo de entrega.
+      </p>
     </div>
 
-    <!-- PAGAMENTOS -->
-    <div id="payments-section" class="hidden">
+    <button class="small-button" id="refresh-orders-button">
+      🔄 Atualizar
+    </button>
 
-      <div class="section-header">
+  </div>
 
-        <div>
-          <button class="back-admin" id="back-payments-dashboard">
-            ← Voltar ao painel
-          </button>
+  <div id="orders-message" class="message"></div>
 
-          <p class="eyebrow" style="margin-top:18px">
-            FINANCEIRO
-          </p>
+  <div id="orders-list" class="products-list">
+    <p>Carregando pedidos...</p>
+  </div>
 
-          <h2>💳 Pagamentos</h2>
+</div>
 
-          <p>
-            Confirme manualmente os pagamentos recebidos.
-          </p>
-        </div>
+<!-- PAGAMENTOS -->
+<div id="payments-section" class="hidden">
 
-        <button class="small-button" id="refresh-payments-button">
-          🔄 Atualizar
-        </button>
+  <div class="section-header">
 
-      </div>
+    <div>
+      <button class="back-admin" id="back-payments-dashboard">
+        ← Voltar ao painel
+      </button>
 
-      <div id="payments-list" class="products-list">
-        <p>Carregando pagamentos...</p>
-      </div>
+      <p class="eyebrow" style="margin-top:18px">
+        FINANCEIRO
+      </p>
 
+      <h2>💳 Pagamentos</h2>
+
+      <p>
+        Confirme manualmente os pagamentos recebidos.
+      </p>
     </div>
 
-    <!-- ATENDIMENTO -->
-    <div id="service-section" class="hidden">
+    <button class="small-button" id="refresh-payments-button">
+      🔄 Atualizar
+    </button>
 
-      <div class="section-header">
+  </div>
 
-        <div>
-          <button class="back-admin" id="back-service-dashboard">
-            ← Voltar ao painel
-          </button>
+  <div id="payments-list" class="products-list">
+    <p>Carregando pagamentos...</p>
+  </div>
 
-          <p class="eyebrow" style="margin-top:18px">
-            LOJA
-          </p>
+</div>
 
-          <h2>🟢 Atendimento</h2>
+<!-- ATENDIMENTO -->
+<div id="service-section" class="hidden">
 
-          <p>
-            Controle o status de atendimento da Thoune Store.
-          </p>
-        </div>
+  <div class="section-header">
 
-      </div>
+    <div>
+      <button class="back-admin" id="back-service-dashboard">
+        ← Voltar ao painel
+      </button>
 
-      <div class="settings-box">
+      <p class="eyebrow" style="margin-top:18px">
+        LOJA
+      </p>
 
-        <h3>Status atual</h3>
+      <h2>🟢 Atendimento</h2>
 
-        <div class="settings-status">
-
-          <div>
-            <strong id="service-status-text">
-              Carregando...
-            </strong>
-
-            <p class="setting-description">
-              Esse status é exibido no site para os clientes.
-            </p>
-          </div>
-
-          <button
-            class="primary-button"
-            id="toggle-service-button"
-          >
-            Alterar status
-          </button>
-
-        </div>
-
-      </div>
-
+      <p>
+        Controle o status de atendimento da Thoune Store.
+      </p>
     </div>
 
-    <!-- PROMOÇÃO -->
-    <div id="promotion-section" class="hidden">
+  </div>
 
-      <div class="section-header">
+  <div class="settings-box">
 
-        <div>
-          <button class="back-admin" id="back-promotion-dashboard">
-            ← Voltar ao painel
-          </button>
+    <h3>Status atual</h3>
 
-          <p class="eyebrow" style="margin-top:18px">
-            PROMOÇÃO
-          </p>
+    <div class="settings-status">
 
-          <h2>🏷️ Desconto global</h2>
-
-          <p>
-            O desconto é calculado pelo banco de dados no momento da compra.
-          </p>
-        </div>
-
-      </div>
-
-      <div class="settings-box">
-
-        <h3>Configuração da promoção</h3>
-
-        <div class="form-grid">
-
-          <div class="form-field">
-
-            <label for="discount-percent">
-              Desconto (%)
-            </label>
-
-            <input
-              id="discount-percent"
-              type="number"
-              min="0"
-              max="100"
-              step="0.01"
-              placeholder="10"
-            >
-
-            <div
-              class="discount-preview"
-              id="discount-preview"
-            ></div>
-
-          </div>
-
-          <div class="checkbox-field">
-
-            <input
-              id="discount-active"
-              type="checkbox"
-            >
-
-            <label for="discount-active">
-              Promoção ativa
-            </label>
-
-          </div>
-
-        </div>
-
-        <div class="form-actions">
-
-          <button
-            class="primary-button"
-            id="save-discount-button"
-          >
-            Salvar promoção
-          </button>
-
-        </div>
-
-        <p class="message" id="discount-message"></p>
-
-      </div>
-
-    </div>
-
-    <!-- ENTREGA -->
-    <div id="delivery-section" class="hidden">
-
-      <div class="section-header">
-
-        <div>
-          <button class="back-admin" id="back-delivery-dashboard">
-            ← Voltar ao painel
-          </button>
-
-          <p class="eyebrow" style="margin-top:18px">
-            ENTREGA
-          </p>
-
-          <h2>🤖 Configurações de entrega</h2>
-
-          <p>
-            Configure as informações utilizadas durante a entrega.
-          </p>
-        </div>
-
-      </div>
-
-      <div class="settings-box">
-
-        <h3>Bot de entrega</h3>
-
-        <div class="form-field">
-
-          <label for="delivery-bot-username">
-            Usuário do bot
-          </label>
-
-          <input
-            id="delivery-bot-username"
-            type="text"
-            placeholder="Nome do usuário do bot"
-          >
-
-        </div>
-
-        <div class="checkbox-field">
-          <input id="join-open" type="checkbox">
-          <label for="join-open">
-            Join Aberto
-          </label>
-        </div>
+      <div>
+        <strong id="service-status-text">
+          Carregando...
+        </strong>
 
         <p class="setting-description">
-          O site apenas exibe essa informação. Ele não controla
-          diretamente servidores ou sessões do Roblox.
+          Esse status é exibido no site para os clientes.
         </p>
+      </div>
 
-        <div class="form-actions">
+      <button
+        class="primary-button"
+        id="toggle-service-button"
+      >
+        Alterar status
+      </button>
 
-          <button
-            class="primary-button"
-            id="save-delivery-button"
-          >
-            Salvar configurações
-          </button>
+    </div>
 
-        </div>
+  </div>
 
-        <p class="message" id="delivery-message"></p>
+</div>
+
+<!-- PROMOÇÃO -->
+<div id="promotion-section" class="hidden">
+
+  <div class="section-header">
+
+    <div>
+      <button class="back-admin" id="back-promotion-dashboard">
+        ← Voltar ao painel
+      </button>
+
+      <p class="eyebrow" style="margin-top:18px">
+        PROMOÇÃO
+      </p>
+
+      <h2>🏷️ Desconto global</h2>
+
+      <p>
+        O desconto é calculado pelo banco de dados no momento da compra.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="settings-box">
+
+    <h3>Configuração da promoção</h3>
+
+    <div class="form-grid">
+
+      <div class="form-field">
+
+        <label for="discount-percent">
+          Desconto (%)
+        </label>
+
+        <input
+          id="discount-percent"
+          type="number"
+          min="0"
+          max="100"
+          step="0.01"
+          placeholder="10"
+        >
+
+        <div
+          class="discount-preview"
+          id="discount-preview"
+        ></div>
+
+      </div>
+
+      <div class="checkbox-field">
+
+        <input
+          id="discount-active"
+          type="checkbox"
+        >
+
+        <label for="discount-active">
+          Promoção ativa
+        </label>
 
       </div>
 
     </div>
 
-    <!-- AVALIAÇÕES -->
-    <div id="reviews-section" class="hidden">
+    <div class="form-actions">
 
-      <div class="section-header">
-
-        <div>
-          <button class="back-admin" id="back-reviews-dashboard">
-            ← Voltar ao painel
-          </button>
-
-          <p class="eyebrow" style="margin-top:18px">
-            COMUNIDADE
-          </p>
-
-          <h2>⭐ Avaliações</h2>
-
-          <p>
-            Aprove ou rejeite avaliações enviadas pelos clientes.
-          </p>
-        </div>
-
-        <button class="small-button" id="refresh-reviews-button">
-          🔄 Atualizar
-        </button>
-
-      </div>
-
-      <div id="reviews-list" class="products-list">
-        <p>Carregando avaliações...</p>
-      </div>
+      <button
+        class="primary-button"
+        id="save-discount-button"
+      >
+        Salvar promoção
+      </button>
 
     </div>
 
-  </section>
+    <p class="message" id="discount-message"></p>
 
-</main>
+  </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</div>
 
-<script type="module">
+<!-- ENTREGA -->
+<div id="delivery-section" class="hidden">
+
+  <div class="section-header">
+
+    <div>
+      <button class="back-admin" id="back-delivery-dashboard">
+        ← Voltar ao painel
+      </button>
+
+      <p class="eyebrow" style="margin-top:18px">
+        ENTREGA
+      </p>
+
+      <h2>🤖 Configurações de entrega</h2>
+
+      <p>
+        Configure as informações utilizadas durante a entrega.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="settings-box">
+
+    <h3>Pagamento via Pix</h3>
+
+    <div class="form-field" style="margin-top:18px;">
+
+      <label for="pix-key">
+        Chave Pix
+      </label>
+
+      <input
+        id="pix-key"
+        type="text"
+        placeholder="Sua chave Pix"
+      >
+
+      <p class="setting-description">
+        Esta é a chave Pix exibida aos clientes no checkout.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="settings-box">
+
+    <h3>Bot de entrega</h3>
+
+    <div class="form-field">
+
+      <label for="delivery-bot-username">
+        Usuário do bot
+      </label>
+
+      <input
+        id="delivery-bot-username"
+        type="text"
+        placeholder="Nome do usuário do bot"
+      >
+
+    </div>
+
+    <div class="checkbox-field">
+      <input id="join-open" type="checkbox">
+      <label for="join-open">
+        Join Aberto
+      </label>
+    </div>
+
+    <p class="setting-description">
+      O site apenas exibe essa informação. Ele não controla
+      diretamente servidores ou sessões do Roblox.
+    </p>
+
+    <div class="form-actions">
+
+      <button
+        class="primary-button"
+        id="save-delivery-button"
+      >
+        Salvar configurações
+      </button>
+
+    </div>
+
+    <p class="message" id="delivery-message"></p>
+
+  </div>
+
+</div>
+
+<!-- AVALIAÇÕES -->
+<div id="reviews-section" class="hidden">
+
+  <div class="section-header">
+
+    <div>
+      <button class="back-admin" id="back-reviews-dashboard">
+        ← Voltar ao painel
+      </button>
+
+      <p class="eyebrow" style="margin-top:18px">
+        COMUNIDADE
+      </p>
+
+      <h2>⭐ Avaliações</h2>
+
+      <p>
+        Aprove ou rejeite avaliações enviadas pelos clientes.
+      </p>
+    </div>
+
+    <button class="small-button" id="refresh-reviews-button">
+      🔄 Atualizar
+    </button>
+
+  </div>
+
+  <div id="reviews-list" class="products-list">
+    <p>Carregando avaliações...</p>
+  </div>
+
+</div>
+
+  </section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script type="module">
 
 import {
   SUPABASE_URL,
@@ -2733,6 +2729,9 @@ document
    ENTREGA
 ========================================================= */
 
+const pixKey =
+  document.querySelector("#pix-key");
+
 const deliveryBotUsername =
   document.querySelector(
     "#delivery-bot-username"
@@ -2761,7 +2760,7 @@ async function loadDeliverySettings(){
     await supabaseClient
       .from("store_settings")
       .select(
-        "delivery_bot_username, join_open"
+        "pix_key, delivery_bot_username, join_open"
       )
       .eq("id",1)
       .maybeSingle();
@@ -2780,6 +2779,9 @@ async function loadDeliverySettings(){
   }
 
 
+  pixKey.value =
+    data?.pix_key || "";
+
   deliveryBotUsername.value =
     data?.delivery_bot_username || "";
 
@@ -2795,6 +2797,9 @@ document
     "click",
     async ()=>{
 
+      const pix =
+        pixKey.value.trim();
+
       const username =
         deliveryBotUsername.value.trim();
 
@@ -2805,6 +2810,9 @@ document
         await supabaseClient
           .from("store_settings")
           .update({
+
+            pix_key:
+              pix || null,
 
             delivery_bot_username:
               username || null,
@@ -3147,7 +3155,5 @@ logoutButton.addEventListener(
 
 checkAdminAccess();
 
-</script>
-
-</body>
+</script></body>
   </html>
