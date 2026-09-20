@@ -51,6 +51,7 @@ const profileMessage = document.querySelector("#profile-message");
 
 let storeSettings = {
   online: false,
+  pix_key: "",
   delivery_bot_username: "",
   join_open: false,
   discount_percent: 0,
@@ -61,7 +62,7 @@ async function loadPublicStoreSettings() {
   const { data, error } = await supabaseClient
     .from("public_store_settings")
     .select(
-      "online, delivery_bot_username, join_open, discount_percent, discount_active"
+      "online, pix_key, delivery_bot_username, join_open, discount_percent, discount_active"
     )
     .eq("id", 1)
     .maybeSingle();
@@ -77,11 +78,19 @@ async function loadPublicStoreSettings() {
 
   storeSettings = {
     online: Boolean(data?.online),
+
+    pix_key:
+      data?.pix_key || "",
+
     delivery_bot_username:
       data?.delivery_bot_username || "",
-    join_open: Boolean(data?.join_open),
+
+    join_open:
+      Boolean(data?.join_open),
+
     discount_percent:
       Number(data?.discount_percent) || 0,
+
     discount_active:
       Boolean(data?.discount_active)
   };
@@ -1585,6 +1594,11 @@ const checkoutRoblox =
     "#checkout-roblox"
   );
 
+const checkoutPixKey =
+  document.querySelector(
+    "#checkout-pix-key"
+  );
+
 const checkoutTotal =
   document.querySelector(
     "#checkout-total"
@@ -1742,8 +1756,8 @@ document
       /*
        * Atualiza as configurações antes
        * de montar o checkout para refletir
-       * uma promoção que possa ter sido
-       * alterada pelo ADM.
+       * uma promoção ou chave Pix que possa
+       * ter sido alterada pelo ADM.
        */
       await loadPublicStoreSettings();
 
@@ -1859,6 +1873,16 @@ document
         checkoutRoblox.value =
           robloxUsername.value ||
           "";
+      }
+
+      /*
+       * A chave Pix vem da view pública
+       * e pode ser alterada pelo ADM.
+       */
+      if (checkoutPixKey) {
+        checkoutPixKey.textContent =
+          storeSettings.pix_key ||
+          "Chave Pix não configurada.";
       }
 
       if (checkoutTotal) {
