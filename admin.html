@@ -3,7 +3,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">  <title>Thoune Store — ADM</title>  <link rel="stylesheet" href="styles.css">  <style>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>Thoune Store — ADM</title>
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
     body {
       min-height: 100vh;
       background: #f4fafb;
@@ -450,541 +456,898 @@
         justify-content: flex-start;
       }
     }
-  </style></head><body><main class="admin"><a class="back" href="index.html">← Voltar para a loja</a>
+  </style>
+</head>
 
-  <!-- CARREGANDO -->  <section class="admin-card" id="loading-screen">
-    <p class="eyebrow">THOUNE STORE</p>
-    <h1>Verificando acesso...</h1>
-    <p>Aguarde enquanto verificamos sua conta.</p>
-  </section>  <!-- ACESSO NEGADO -->  <section class="admin-card hidden" id="access-denied">
-    <div class="access-message">
-      <div style="font-size:48px">🔒</div>  <p class="eyebrow">ACESSO RESTRITO</p>
+<body>
 
-  <h1>Acesso negado</h1>
+<main class="admin">
 
-  <p>
-    Esta área é exclusiva para administradores da Thoune Store.
-  </p>
-
-  <a class="primary-button" href="index.html">
-    Voltar para a loja
+  <a class="back" href="index.html">
+    ← Voltar para a loja
   </a>
-</div>
 
-  </section>  <!-- PAINEL -->  <section class="admin-card hidden" id="admin-panel"><!-- DASHBOARD -->
-<div id="dashboard-section">
+  <!-- CARREGANDO -->
+  <section class="admin-card" id="loading-screen">
 
-  <div class="admin-header">
-
-    <div class="admin-status">
-      🟢 Administrador autenticado
-    </div>
-
-    <p class="eyebrow" style="margin-top:20px">
-      ÁREA ADMINISTRATIVA
+    <p class="eyebrow">
+      THOUNE STORE
     </p>
 
-    <h1>Thoune Store ADM</h1>
+    <h1>
+      Verificando acesso...
+    </h1>
 
     <p>
-      Gerencie produtos, pedidos, pagamentos, atendimento,
-      promoção, entrega e avaliações.
+      Aguarde enquanto verificamos sua conta.
     </p>
 
-  </div>
+  </section>
 
-  <div class="admin-grid">
 
-    <button class="admin-option" id="products-option">
-      <strong>📦 Produtos</strong>
-      <p>Adicionar, editar, remover produtos e controlar estoque.</p>
-    </button>
+  <!-- ACESSO NEGADO -->
+  <section class="admin-card hidden" id="access-denied">
 
-    <button class="admin-option" id="orders-option">
-      <strong>🧾 Pedidos</strong>
-      <p>Visualizar pedidos e acompanhar as entregas.</p>
-    </button>
+    <div class="access-message">
 
-    <button class="admin-option" id="payments-option">
-      <strong>💳 Pagamentos</strong>
-      <p>Conferir pagamentos e confirmar pedidos.</p>
-    </button>
+      <div style="font-size:48px">
+        🔒
+      </div>
 
-    <button class="admin-option" id="service-option">
-      <strong>🟢 Atendimento</strong>
-      <p>Controlar o status online ou offline da loja.</p>
-    </button>
-
-    <button class="admin-option" id="promotion-option">
-      <strong>🏷️ Promoção</strong>
-      <p>Definir e ativar o desconto global da loja.</p>
-    </button>
-
-    <button class="admin-option" id="delivery-option">
-      <strong>🤖 Entrega</strong>
-      <p>Configurar bot, Join Aberto e informações de entrega.</p>
-    </button>
-
-    <button class="admin-option" id="reviews-option">
-      <strong>⭐ Avaliações</strong>
-      <p>Moderar avaliações enviadas pelos clientes.</p>
-    </button>
-
-  </div>
-
-  <button
-    class="secondary-button logout-admin"
-    id="admin-logout"
-  >
-    Sair da conta
-  </button>
-
-</div>
-
-<!-- PRODUTOS -->
-<div id="products-section" class="hidden">
-
-  <div class="section-header">
-    <div>
-      <button class="back-admin" id="back-products-dashboard">
-        ← Voltar ao painel
-      </button>
-
-      <p class="eyebrow" style="margin-top:18px">
-        CATÁLOGO
+      <p class="eyebrow">
+        ACESSO RESTRITO
       </p>
 
-      <h2>📦 Produtos</h2>
+      <h1>
+        Acesso negado
+      </h1>
 
       <p>
-        Gerencie as marretas disponíveis na loja.
+        Esta área é exclusiva para administradores da Thoune Store.
       </p>
-    </div>
 
-    <button class="primary-button" id="new-product-button">
-      ➕ Nova marreta
-    </button>
-  </div>
-
-  <div class="product-form hidden" id="product-form">
-
-    <h3 id="form-title">Adicionar marreta</h3>
-
-    <div class="form-grid">
-
-      <div class="form-field full">
-        <label for="product-name">Nome da marreta</label>
-        <input id="product-name" type="text" placeholder="Ex.: Party Balloons">
-      </div>
-
-      <div class="form-field">
-        <label for="product-category">Raridade</label>
-
-        <select id="product-category">
-          <option value="Lendária">Lendária</option>
-          <option value="Épica">Épica</option>
-          <option value="Rara">Rara</option>
-          <option value="Comum">Comum</option>
-          <option value="Exclusiva">Exclusiva</option>
-        </select>
-      </div>
-
-      <div class="form-field">
-        <label for="product-price">Preço (R$)</label>
-        <input id="product-price" type="number" min="0" step="0.01">
-      </div>
-
-      <div class="form-field">
-        <label for="product-stock">Estoque</label>
-        <input id="product-stock" type="number" min="0" step="1">
-      </div>
-
-      <div class="form-field">
-        <label for="product-order">Ordem no catálogo</label>
-        <input id="product-order" type="number" min="0" step="1">
-      </div>
-
-      <div class="form-field full">
-        <label for="product-image">URL da imagem</label>
-        <input id="product-image" type="url" placeholder="https://...">
-      </div>
-
-      <div class="form-field full">
-        <label for="product-description">Descrição</label>
-        <textarea id="product-description"></textarea>
-      </div>
-
-      <div class="checkbox-field">
-        <input id="product-active" type="checkbox" checked>
-        <label for="product-active">Produto ativo no catálogo</label>
-      </div>
+      <a class="primary-button" href="index.html">
+        Voltar para a loja
+      </a>
 
     </div>
 
-    <div class="form-actions">
+  </section>
 
-      <button class="primary-button" id="save-product-button">
-        Salvar marreta
+
+  <!-- PAINEL -->
+  <section class="admin-card hidden" id="admin-panel">
+
+
+    <!-- DASHBOARD -->
+    <div id="dashboard-section">
+
+      <div class="admin-header">
+
+        <div class="admin-status">
+          🟢 Administrador autenticado
+        </div>
+
+        <p class="eyebrow" style="margin-top:20px">
+          ÁREA ADMINISTRATIVA
+        </p>
+
+        <h1>
+          Thoune Store ADM
+        </h1>
+
+        <p>
+          Gerencie produtos, pedidos, pagamentos, atendimento,
+          promoção, entrega e avaliações.
+        </p>
+
+      </div>
+
+
+      <div class="admin-grid">
+
+        <button class="admin-option" id="products-option">
+          <strong>📦 Produtos</strong>
+          <p>
+            Adicionar, editar, remover produtos e controlar estoque.
+          </p>
+        </button>
+
+
+        <button class="admin-option" id="orders-option">
+          <strong>🧾 Pedidos</strong>
+          <p>
+            Visualizar pedidos e acompanhar as entregas.
+          </p>
+        </button>
+
+
+        <button class="admin-option" id="payments-option">
+          <strong>💳 Pagamentos</strong>
+          <p>
+            Conferir pagamentos e confirmar pedidos.
+          </p>
+        </button>
+
+
+        <button class="admin-option" id="service-option">
+          <strong>🟢 Atendimento</strong>
+          <p>
+            Controlar o status online ou offline da loja.
+          </p>
+        </button>
+
+
+        <button class="admin-option" id="promotion-option">
+          <strong>🏷️ Promoção</strong>
+          <p>
+            Definir e ativar o desconto global da loja.
+          </p>
+        </button>
+
+
+        <button class="admin-option" id="delivery-option">
+          <strong>🤖 Entrega</strong>
+          <p>
+            Configurar bot, Join Aberto e informações de entrega.
+          </p>
+        </button>
+
+
+        <button class="admin-option" id="reviews-option">
+          <strong>⭐ Avaliações</strong>
+          <p>
+            Moderar avaliações enviadas pelos clientes.
+          </p>
+        </button>
+
+      </div>
+
+
+      <button
+        class="secondary-button logout-admin"
+        id="admin-logout"
+      >
+        Sair da conta
       </button>
 
-      <button class="secondary-button" id="cancel-product-button">
-        Cancelar
-      </button>
+    </div>
+
+
+    <!-- PRODUTOS -->
+    <div id="products-section" class="hidden">
+
+      <div class="section-header">
+
+        <div>
+
+          <button
+            class="back-admin"
+            id="back-products-dashboard"
+          >
+            ← Voltar ao painel
+          </button>
+
+          <p
+            class="eyebrow"
+            style="margin-top:18px"
+          >
+            CATÁLOGO
+          </p>
+
+          <h2>
+            📦 Produtos
+          </h2>
+
+          <p>
+            Gerencie as marretas disponíveis na loja.
+          </p>
+
+        </div>
+
+
+        <button
+          class="primary-button"
+          id="new-product-button"
+        >
+          ➕ Nova marreta
+        </button>
+
+      </div>
+
+
+      <div
+        class="product-form hidden"
+        id="product-form"
+      >
+
+        <h3 id="form-title">
+          Adicionar marreta
+        </h3>
+
+
+        <div class="form-grid">
+
+          <div class="form-field full">
+
+            <label for="product-name">
+              Nome da marreta
+            </label>
+
+            <input
+              id="product-name"
+              type="text"
+              placeholder="Ex.: Party Balloons"
+            >
+
+          </div>
+
+
+          <div class="form-field">
+
+            <label for="product-category">
+              Raridade
+            </label>
+
+            <select id="product-category">
+
+              <option value="Lendária">
+                Lendária
+              </option>
+
+              <option value="Épica">
+                Épica
+              </option>
+
+              <option value="Rara">
+                Rara
+              </option>
+
+              <option value="Comum">
+                Comum
+              </option>
+
+              <option value="Exclusiva">
+                Exclusiva
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-field">
+
+            <label for="product-price">
+              Preço (R$)
+            </label>
+
+            <input
+              id="product-price"
+              type="number"
+              min="0"
+              step="0.01"
+            >
+
+          </div>
+
+
+          <div class="form-field">
+
+            <label for="product-stock">
+              Estoque
+            </label>
+
+            <input
+              id="product-stock"
+              type="number"
+              min="0"
+              step="1"
+            >
+
+          </div>
+
+
+          <div class="form-field">
+
+            <label for="product-order">
+              Ordem no catálogo
+            </label>
+
+            <input
+              id="product-order"
+              type="number"
+              min="0"
+              step="1"
+            >
+
+          </div>
+
+
+          <div class="form-field full">
+
+            <label for="product-image">
+              URL da imagem
+            </label>
+
+            <input
+              id="product-image"
+              type="url"
+              placeholder="https://..."
+            >
+
+          </div>
+
+
+          <div class="form-field full">
+
+            <label for="product-description">
+              Descrição
+            </label>
+
+            <textarea id="product-description"></textarea>
+
+          </div>
+
+
+          <div class="checkbox-field">
+
+            <input
+              id="product-active"
+              type="checkbox"
+              checked
+            >
+
+            <label for="product-active">
+              Produto ativo no catálogo
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+          <button
+            class="primary-button"
+            id="save-product-button"
+          >
+            Salvar marreta
+          </button>
+
+
+          <button
+            class="secondary-button"
+            id="cancel-product-button"
+          >
+            Cancelar
+          </button>
+
+        </div>
+
+
+        <p
+          class="message"
+          id="product-form-message"
+        ></p>
+
+      </div>
+
+
+      <div class="section-header">
+
+        <div>
+
+          <h3>
+            Marretas cadastradas
+          </h3>
+
+          <p id="products-count">
+            Carregando...
+          </p>
+
+        </div>
+
+
+        <button
+          class="small-button"
+          id="refresh-products-button"
+        >
+          🔄 Atualizar
+        </button>
+
+      </div>
+
+
+      <div
+        class="products-list"
+        id="products-list"
+      ></div>
 
     </div>
 
-    <p class="message" id="product-form-message"></p>
 
-  </div>
+    <!-- PEDIDOS -->
+    <div id="orders-section" class="hidden">
 
-  <div class="section-header">
+      <div class="section-header">
 
-    <div>
-      <h3>Marretas cadastradas</h3>
-      <p id="products-count">Carregando...</p>
-    </div>
+        <div>
 
-    <button class="small-button" id="refresh-products-button">
-      🔄 Atualizar
-    </button>
+          <button
+            class="back-admin"
+            id="back-orders-dashboard"
+          >
+            ← Voltar ao painel
+          </button>
 
-  </div>
+          <p
+            class="eyebrow"
+            style="margin-top:18px"
+          >
+            VENDAS
+          </p>
 
-  <div class="products-list" id="products-list"></div>
+          <h2>
+            🧾 Pedidos
+          </h2>
 
-</div>
+          <p>
+            Acompanhe os pedidos e o processo de entrega.
+          </p>
 
-<!-- PEDIDOS -->
-<div id="orders-section" class="hidden">
+        </div>
 
-  <div class="section-header">
 
-    <div>
-      <button class="back-admin" id="back-orders-dashboard">
-        ← Voltar ao painel
-      </button>
+        <button
+          class="small-button"
+          id="refresh-orders-button"
+        >
+          🔄 Atualizar
+        </button>
 
-      <p class="eyebrow" style="margin-top:18px">
-        VENDAS
-      </p>
+      </div>
 
-      <h2>🧾 Pedidos</h2>
 
-      <p>
-        Acompanhe os pedidos e o processo de entrega.
-      </p>
-    </div>
+      <div
+        id="orders-message"
+        class="message"
+      ></div>
 
-    <button class="small-button" id="refresh-orders-button">
-      🔄 Atualizar
-    </button>
 
-  </div>
-
-  <div id="orders-message" class="message"></div>
-
-  <div id="orders-list" class="products-list">
-    <p>Carregando pedidos...</p>
-  </div>
-
-</div>
-
-<!-- PAGAMENTOS -->
-<div id="payments-section" class="hidden">
-
-  <div class="section-header">
-
-    <div>
-      <button class="back-admin" id="back-payments-dashboard">
-        ← Voltar ao painel
-      </button>
-
-      <p class="eyebrow" style="margin-top:18px">
-        FINANCEIRO
-      </p>
-
-      <h2>💳 Pagamentos</h2>
-
-      <p>
-        Confirme manualmente os pagamentos recebidos.
-      </p>
-    </div>
-
-    <button class="small-button" id="refresh-payments-button">
-      🔄 Atualizar
-    </button>
-
-  </div>
-
-  <div id="payments-list" class="products-list">
-    <p>Carregando pagamentos...</p>
-  </div>
-
-</div>
-
-<!-- ATENDIMENTO -->
-<div id="service-section" class="hidden">
-
-  <div class="section-header">
-
-    <div>
-      <button class="back-admin" id="back-service-dashboard">
-        ← Voltar ao painel
-      </button>
-
-      <p class="eyebrow" style="margin-top:18px">
-        LOJA
-      </p>
-
-      <h2>🟢 Atendimento</h2>
-
-      <p>
-        Controle o status de atendimento da Thoune Store.
-      </p>
-    </div>
-
-  </div>
-
-  <div class="settings-box">
-
-    <h3>Status atual</h3>
-
-    <div class="settings-status">
-
-      <div>
-        <strong id="service-status-text">
-          Carregando...
-        </strong>
-
-        <p class="setting-description">
-          Esse status é exibido no site para os clientes.
+      <div
+        id="orders-list"
+        class="products-list"
+      >
+        <p>
+          Carregando pedidos...
         </p>
       </div>
 
-      <button
-        class="primary-button"
-        id="toggle-service-button"
-      >
-        Alterar status
-      </button>
-
     </div>
 
-  </div>
 
-</div>
+    <!-- PAGAMENTOS -->
+    <div id="payments-section" class="hidden">
 
-<!-- PROMOÇÃO -->
-<div id="promotion-section" class="hidden">
+      <div class="section-header">
 
-  <div class="section-header">
+        <div>
 
-    <div>
-      <button class="back-admin" id="back-promotion-dashboard">
-        ← Voltar ao painel
-      </button>
+          <button
+            class="back-admin"
+            id="back-payments-dashboard"
+          >
+            ← Voltar ao painel
+          </button>
 
-      <p class="eyebrow" style="margin-top:18px">
-        PROMOÇÃO
-      </p>
+          <p
+            class="eyebrow"
+            style="margin-top:18px"
+          >
+            FINANCEIRO
+          </p>
 
-      <h2>🏷️ Desconto global</h2>
+          <h2>
+            💳 Pagamentos
+          </h2>
 
-      <p>
-        O desconto é calculado pelo banco de dados no momento da compra.
-      </p>
-    </div>
+          <p>
+            Confirme manualmente os pagamentos recebidos.
+          </p>
 
-  </div>
+        </div>
 
-  <div class="settings-box">
 
-    <h3>Configuração da promoção</h3>
-
-    <div class="form-grid">
-
-      <div class="form-field">
-
-        <label for="discount-percent">
-          Desconto (%)
-        </label>
-
-        <input
-          id="discount-percent"
-          type="number"
-          min="0"
-          max="100"
-          step="0.01"
-          placeholder="10"
+        <button
+          class="small-button"
+          id="refresh-payments-button"
         >
+          🔄 Atualizar
+        </button>
+
+      </div>
+
+
+      <div
+        id="payments-list"
+        class="products-list"
+      >
+        <p>
+          Carregando pagamentos...
+        </p>
+      </div>
+
+    </div>
+
+
+    <!-- ATENDIMENTO -->
+    <div id="service-section" class="hidden">
+
+      <div class="section-header">
+
+        <div>
+
+          <button
+            class="back-admin"
+            id="back-service-dashboard"
+          >
+            ← Voltar ao painel
+          </button>
+
+          <p
+            class="eyebrow"
+            style="margin-top:18px"
+          >
+            LOJA
+          </p>
+
+          <h2>
+            🟢 Atendimento
+          </h2>
+
+          <p>
+            Controle o status de atendimento da Thoune Store.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="settings-box">
+
+        <h3>
+          Status atual
+        </h3>
+
+
+        <div class="settings-status">
+
+          <div>
+
+            <strong id="service-status-text">
+              Carregando...
+            </strong>
+
+            <p class="setting-description">
+              Esse status é exibido no site para os clientes.
+            </p>
+
+          </div>
+
+
+          <button
+            class="primary-button"
+            id="toggle-service-button"
+          >
+            Alterar status
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PROMOÇÃO -->
+    <div id="promotion-section" class="hidden">
+
+      <div class="section-header">
+
+        <div>
+
+          <button
+            class="back-admin"
+            id="back-promotion-dashboard"
+          >
+            ← Voltar ao painel
+          </button>
+
+          <p
+            class="eyebrow"
+            style="margin-top:18px"
+          >
+            PROMOÇÃO
+          </p>
+
+          <h2>
+            🏷️ Desconto global
+          </h2>
+
+          <p>
+            O desconto é calculado pelo banco de dados no momento da compra.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="settings-box">
+
+        <h3>
+          Configuração da promoção
+        </h3>
+
+
+        <div class="form-grid">
+
+          <div class="form-field">
+
+            <label for="discount-percent">
+              Desconto (%)
+            </label>
+
+            <input
+              id="discount-percent"
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+              placeholder="10"
+            >
+
+
+            <div
+              class="discount-preview"
+              id="discount-preview"
+            ></div>
+
+          </div>
+
+
+          <div class="checkbox-field">
+
+            <input
+              id="discount-active"
+              type="checkbox"
+            >
+
+            <label for="discount-active">
+              Promoção ativa
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-actions">
+
+          <button
+            class="primary-button"
+            id="save-discount-button"
+          >
+            Salvar promoção
+          </button>
+
+        </div>
+
+
+        <p
+          class="message"
+          id="discount-message"
+        ></p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ENTREGA -->
+    <div id="delivery-section" class="hidden">
+
+      <div class="section-header">
+
+        <div>
+
+          <button
+            class="back-admin"
+            id="back-delivery-dashboard"
+          >
+            ← Voltar ao painel
+          </button>
+
+          <p
+            class="eyebrow"
+            style="margin-top:18px"
+          >
+            ENTREGA
+          </p>
+
+          <h2>
+            🤖 Configurações de entrega
+          </h2>
+
+          <p>
+            Configure as informações utilizadas durante a entrega.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="settings-box">
+
+        <h3>
+          Pagamento via Pix
+        </h3>
+
 
         <div
-          class="discount-preview"
-          id="discount-preview"
-        ></div>
-
-      </div>
-
-      <div class="checkbox-field">
-
-        <input
-          id="discount-active"
-          type="checkbox"
+          class="form-field"
+          style="margin-top:18px;"
         >
 
-        <label for="discount-active">
-          Promoção ativa
-        </label>
+          <label for="pix-key">
+            Chave Pix
+          </label>
+
+          <input
+            id="pix-key"
+            type="text"
+            placeholder="Sua chave Pix"
+          >
+
+          <p class="setting-description">
+            Esta é a chave Pix exibida aos clientes no checkout.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="settings-box">
+
+        <h3>
+          Bot de entrega
+        </h3>
+
+
+        <div class="form-field">
+
+          <label for="delivery-bot-username">
+            Usuário do bot
+          </label>
+
+          <input
+            id="delivery-bot-username"
+            type="text"
+            placeholder="Nome do usuário do bot"
+          >
+
+        </div>
+
+
+        <div class="checkbox-field">
+
+          <input
+            id="join-open"
+            type="checkbox"
+          >
+
+          <label for="join-open">
+            Join Aberto
+          </label>
+
+        </div>
+
+
+        <p class="setting-description">
+          O site apenas exibe essa informação. Ele não controla
+          diretamente servidores ou sessões do Roblox.
+        </p>
+
+
+        <div class="form-actions">
+
+          <button
+            class="primary-button"
+            id="save-delivery-button"
+          >
+            Salvar configurações
+          </button>
+
+        </div>
+
+
+        <p
+          class="message"
+          id="delivery-message"
+        ></p>
 
       </div>
 
     </div>
 
-    <div class="form-actions">
 
-      <button
-        class="primary-button"
-        id="save-discount-button"
+    <!-- AVALIAÇÕES -->
+    <div id="reviews-section" class="hidden">
+
+      <div class="section-header">
+
+        <div>
+
+          <button
+            class="back-admin"
+            id="back-reviews-dashboard"
+          >
+            ← Voltar ao painel
+          </button>
+
+          <p
+            class="eyebrow"
+            style="margin-top:18px"
+          >
+            COMUNIDADE
+          </p>
+
+          <h2>
+            ⭐ Avaliações
+          </h2>
+
+          <p>
+            Aprove ou rejeite avaliações enviadas pelos clientes.
+          </p>
+
+        </div>
+
+
+        <button
+          class="small-button"
+          id="refresh-reviews-button"
+        >
+          🔄 Atualizar
+        </button>
+
+      </div>
+
+
+      <div
+        id="reviews-list"
+        class="products-list"
       >
-        Salvar promoção
-      </button>
+        <p>
+          Carregando avaliações...
+        </p>
+      </div>
 
     </div>
 
-    <p class="message" id="discount-message"></p>
+  </section>
 
-  </div>
+</main>
 
-</div>
 
-<!-- ENTREGA -->
-<div id="delivery-section" class="hidden">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <div class="section-header">
 
-    <div>
-      <button class="back-admin" id="back-delivery-dashboard">
-        ← Voltar ao painel
-      </button>
-
-      <p class="eyebrow" style="margin-top:18px">
-        ENTREGA
-      </p>
-
-      <h2>🤖 Configurações de entrega</h2>
-
-      <p>
-        Configure as informações utilizadas durante a entrega.
-      </p>
-    </div>
-
-  </div>
-
-  <div class="settings-box">
-
-    <h3>Pagamento via Pix</h3>
-
-    <div class="form-field" style="margin-top:18px;">
-
-      <label for="pix-key">
-        Chave Pix
-      </label>
-
-      <input
-        id="pix-key"
-        type="text"
-        placeholder="Sua chave Pix"
-      >
-
-      <p class="setting-description">
-        Esta é a chave Pix exibida aos clientes no checkout.
-      </p>
-
-    </div>
-
-  </div>
-
-  <div class="settings-box">
-
-    <h3>Bot de entrega</h3>
-
-    <div class="form-field">
-
-      <label for="delivery-bot-username">
-        Usuário do bot
-      </label>
-
-      <input
-        id="delivery-bot-username"
-        type="text"
-        placeholder="Nome do usuário do bot"
-      >
-
-    </div>
-
-    <div class="checkbox-field">
-      <input id="join-open" type="checkbox">
-      <label for="join-open">
-        Join Aberto
-      </label>
-    </div>
-
-    <p class="setting-description">
-      O site apenas exibe essa informação. Ele não controla
-      diretamente servidores ou sessões do Roblox.
-    </p>
-
-    <div class="form-actions">
-
-      <button
-        class="primary-button"
-        id="save-delivery-button"
-      >
-        Salvar configurações
-      </button>
-
-    </div>
-
-    <p class="message" id="delivery-message"></p>
-
-  </div>
-
-</div>
-
-<!-- AVALIAÇÕES -->
-<div id="reviews-section" class="hidden">
-
-  <div class="section-header">
-
-    <div>
-      <button class="back-admin" id="back-reviews-dashboard">
-        ← Voltar ao painel
-      </button>
-
-      <p class="eyebrow" style="margin-top:18px">
-        COMUNIDADE
-      </p>
-
-      <h2>⭐ Avaliações</h2>
-
-      <p>
-        Aprove ou rejeite avaliações enviadas pelos clientes.
-      </p>
-    </div>
-
-    <button class="small-button" id="refresh-reviews-button">
-      🔄 Atualizar
-    </button>
-
-  </div>
-
-  <div id="reviews-list" class="products-list">
-    <p>Carregando avaliações...</p>
-  </div>
-
-</div>
-
-  </section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script type="module">
+<script type="module">
 
 import {
   SUPABASE_URL,
@@ -1017,14 +1380,29 @@ const logoutButton =
 
 
 const sections = {
-  dashboard: document.querySelector("#dashboard-section"),
-  products: document.querySelector("#products-section"),
-  orders: document.querySelector("#orders-section"),
-  payments: document.querySelector("#payments-section"),
-  service: document.querySelector("#service-section"),
-  promotion: document.querySelector("#promotion-section"),
-  delivery: document.querySelector("#delivery-section"),
-  reviews: document.querySelector("#reviews-section")
+  dashboard:
+    document.querySelector("#dashboard-section"),
+
+  products:
+    document.querySelector("#products-section"),
+
+  orders:
+    document.querySelector("#orders-section"),
+
+  payments:
+    document.querySelector("#payments-section"),
+
+  service:
+    document.querySelector("#service-section"),
+
+  promotion:
+    document.querySelector("#promotion-section"),
+
+  delivery:
+    document.querySelector("#delivery-section"),
+
+  reviews:
+    document.querySelector("#reviews-section")
 };
 
 
@@ -1043,6 +1421,7 @@ async function checkAdminAccess(){
   if(!session?.user){
 
     loadingScreen.classList.add("hidden");
+
     accessDenied.classList.remove("hidden");
 
     return false;
@@ -1056,7 +1435,10 @@ async function checkAdminAccess(){
     await supabaseClient
       .from("profiles")
       .select("role")
-      .eq("id", session.user.id)
+      .eq(
+        "id",
+        session.user.id
+      )
       .maybeSingle();
 
 
@@ -1072,6 +1454,7 @@ async function checkAdminAccess(){
     );
 
     loadingScreen.classList.add("hidden");
+
     accessDenied.classList.remove("hidden");
 
     return false;
@@ -1079,6 +1462,7 @@ async function checkAdminAccess(){
 
 
   loadingScreen.classList.add("hidden");
+
   adminPanel.classList.remove("hidden");
 
   return true;
@@ -1121,79 +1505,100 @@ function showSection(name){
 
 document
   .querySelector("#products-option")
-  .addEventListener("click", async ()=>{
+  .addEventListener(
+    "click",
+    async ()=>{
 
-    showSection("products");
+      showSection("products");
 
-    await loadProducts();
+      await loadProducts();
 
-  });
+    }
+  );
 
 
 document
   .querySelector("#orders-option")
-  .addEventListener("click", async ()=>{
+  .addEventListener(
+    "click",
+    async ()=>{
 
-    showSection("orders");
+      showSection("orders");
 
-    await loadOrders();
+      await loadOrders();
 
-  });
+    }
+  );
 
 
 document
   .querySelector("#payments-option")
-  .addEventListener("click", async ()=>{
+  .addEventListener(
+    "click",
+    async ()=>{
 
-    showSection("payments");
+      showSection("payments");
 
-    await loadPayments();
+      await loadPayments();
 
-  });
+    }
+  );
 
 
 document
   .querySelector("#service-option")
-  .addEventListener("click", async ()=>{
+  .addEventListener(
+    "click",
+    async ()=>{
 
-    showSection("service");
+      showSection("service");
 
-    await loadServiceStatus();
+      await loadServiceStatus();
 
-  });
+    }
+  );
 
 
 document
   .querySelector("#promotion-option")
-  .addEventListener("click", async ()=>{
+  .addEventListener(
+    "click",
+    async ()=>{
 
-    showSection("promotion");
+      showSection("promotion");
 
-    await loadPromotion();
+      await loadPromotion();
 
-  });
+    }
+  );
 
 
 document
   .querySelector("#delivery-option")
-  .addEventListener("click", async ()=>{
+  .addEventListener(
+    "click",
+    async ()=>{
 
-    showSection("delivery");
+      showSection("delivery");
 
-    await loadDeliverySettings();
+      await loadDeliverySettings();
 
-  });
+    }
+  );
 
 
 document
   .querySelector("#reviews-option")
-  .addEventListener("click", async ()=>{
+  .addEventListener(
+    "click",
+    async ()=>{
 
-    showSection("reviews");
+      showSection("reviews");
 
-    await loadReviews();
+      await loadReviews();
 
-  });
+    }
+  );
 
 
 [
@@ -1208,7 +1613,10 @@ document
 
   document
     .querySelector(selector)
-    .addEventListener("click", showDashboard);
+    .addEventListener(
+      "click",
+      showDashboard
+    );
 
 });
 
@@ -1281,11 +1689,14 @@ function openProductForm(product=null){
 
   if(product){
 
-    editingProductId = product.id;
+    editingProductId =
+      product.id;
 
-    formTitle.textContent = "Editar marreta";
+    formTitle.textContent =
+      "Editar marreta";
 
-    productName.value = product.name || "";
+    productName.value =
+      product.name || "";
 
     productCategory.value =
       product.category || "Comum";
@@ -1333,7 +1744,8 @@ function openProductForm(product=null){
 
     productDescription.value = "";
 
-    productActive.checked = true;
+    productActive.checked =
+      true;
 
     saveProductButton.textContent =
       "Salvar marreta";
@@ -1359,7 +1771,8 @@ function closeProductForm(){
 
   productName.value = "";
 
-  productCategory.value = "Comum";
+  productCategory.value =
+    "Comum";
 
   productPrice.value = "";
 
@@ -1371,7 +1784,8 @@ function closeProductForm(){
 
   productDescription.value = "";
 
-  productActive.checked = true;
+  productActive.checked =
+    true;
 
   saveProductButton.textContent =
     "Salvar marreta";
@@ -1431,7 +1845,8 @@ async function loadProducts(){
   }
 
 
-  const products = data || [];
+  const products =
+    data || [];
 
 
   productsCount.textContent =
@@ -1547,6 +1962,7 @@ async function loadProducts(){
       stock,
       status
     );
+
 
     info.append(
       name,
@@ -1697,7 +2113,8 @@ saveProductButton.addEventListener(
     }
 
 
-    saveProductButton.disabled = true;
+    saveProductButton.disabled =
+      true;
 
     const editing =
       Boolean(editingProductId);
@@ -1753,7 +2170,9 @@ saveProductButton.addEventListener(
         result =
           await supabaseClient
             .from("products")
-            .insert(productData);
+            .insert(
+              productData
+            );
 
       }
 
@@ -1774,7 +2193,8 @@ saveProductButton.addEventListener(
 
     }finally{
 
-      saveProductButton.disabled = false;
+      saveProductButton.disabled =
+        false;
 
       saveProductButton.textContent =
         editing
@@ -1808,7 +2228,8 @@ async function toggleProduct(product){
     await supabaseClient
       .from("products")
       .update({
-        active: !product.active
+        active:
+          !product.active
       })
       .eq(
         "id",
@@ -1882,10 +2303,14 @@ refreshProductsButton.addEventListener(
 async function loadOrders(){
 
   const list =
-    document.querySelector("#orders-list");
+    document.querySelector(
+      "#orders-list"
+    );
 
   const message =
-    document.querySelector("#orders-message");
+    document.querySelector(
+      "#orders-message"
+    );
 
 
   list.innerHTML =
@@ -1974,6 +2399,7 @@ async function loadOrders(){
     status.innerHTML =
       `<strong>Status:</strong> `;
 
+
     const statusBadge =
       document.createElement("span");
 
@@ -1981,9 +2407,14 @@ async function loadOrders(){
       "status-badge";
 
     statusBadge.textContent =
-      formatOrderStatus(order.status);
+      formatOrderStatus(
+        order.status
+      );
 
-    status.appendChild(statusBadge);
+
+    status.appendChild(
+      statusBadge
+    );
 
 
     const customer =
@@ -2001,13 +2432,21 @@ async function loadOrders(){
 
     privateInfo.innerHTML = `
       <strong>🔒 Dados privados da entrega</strong>
+
       <div style="margin-top:8px">
         <strong>Roblox:</strong>
-        ${escapeHtml(order.delivery_username || "Não informado")}
+        ${escapeHtml(
+          order.delivery_username ||
+          "Não informado"
+        )}
       </div>
+
       <div style="margin-top:5px">
         <strong>Pix:</strong>
-        ${escapeHtml(order.pix_name || "Não informado")}
+        ${escapeHtml(
+          order.pix_name ||
+          "Não informado"
+        )}
       </div>
     `;
 
@@ -2025,7 +2464,10 @@ async function loadOrders(){
     itemsTitle.textContent =
       "Itens do pedido";
 
-    itemsBox.appendChild(itemsTitle);
+
+    itemsBox.appendChild(
+      itemsTitle
+    );
 
 
     (items || []).forEach(item => {
@@ -2079,9 +2521,13 @@ async function loadOrders(){
         "✅ Marcar como entregue";
 
       delivered.onclick =
-        ()=>markDelivered(order.id);
+        ()=>markDelivered(
+          order.id
+        );
 
-      actions.appendChild(delivered);
+      actions.appendChild(
+        delivered
+      );
 
     }
 
@@ -2141,7 +2587,9 @@ async function markDelivered(orderId){
     await supabaseClient
       .from("orders")
       .update({
-        status: "delivered",
+        status:
+          "delivered",
+
         updated_at:
           new Date().toISOString()
       })
@@ -2172,7 +2620,9 @@ async function markDelivered(orderId){
 
 
 document
-  .querySelector("#refresh-orders-button")
+  .querySelector(
+    "#refresh-orders-button"
+  )
   .addEventListener(
     "click",
     loadOrders
@@ -2186,7 +2636,10 @@ document
 async function loadPayments(){
 
   const list =
-    document.querySelector("#payments-list");
+    document.querySelector(
+      "#payments-list"
+    );
+
 
   list.innerHTML =
     "<p>Carregando pagamentos...</p>";
@@ -2219,9 +2672,15 @@ async function loadPayments(){
   const pending = [];
 
 
-  for(const payment of payments || []){
+  for(
+    const payment of payments || []
+  ){
 
-    if(payment.status !== "pending"){
+    if(
+      payment.status !==
+      "pending"
+    ){
+
       continue;
     }
 
@@ -2279,8 +2738,15 @@ async function loadPayments(){
 
     list.innerHTML =
       `<div class="empty-products">
-        <div style="font-size:40px">💳</div>
-        <p>Nenhum pagamento aguardando confirmação.</p>
+
+        <div style="font-size:40px">
+          💳
+        </div>
+
+        <p>
+          Nenhum pagamento aguardando confirmação.
+        </p>
+
       </div>`;
 
     return;
@@ -2290,7 +2756,9 @@ async function loadPayments(){
   list.innerHTML = "";
 
 
-  for(const entry of pending){
+  for(
+    const entry of pending
+  ){
 
     const order =
       entry.order;
@@ -2391,6 +2859,163 @@ async function loadPayments(){
       "order-items";
 
 
+    const itemsTitle =
+      document.createElement("strong");
+
+    itemsTitle.textContent =
+      "Itens do pedido";
+
+
+    itemsBox.appendChild(
+      itemsTitle
+    );
+
+
+    for(
+      const item of items || []
+    ){
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "order-item";
+
+      row.textContent =
+        `${item.product_name} × ${item.quantity} — ${money(
+          Number(item.product_price) *
+          Number(item.quantity)
+        )}`;
+
+      itemsBox.appendChild(
+        row
+      );
+
+    }
+
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "primary-button";
+
+    button.style.marginTop =
+      "15px";
+
+    button.textContent =
+      "✅ Confirmar pagamento";
+
+
+    button.onclick =
+      async ()=>{
+
+        if(
+          !confirm(
+            "Você confirmou que o pagamento realmente caiu no Pix?"
+          )
+        ){
+
+          return;
+        }
+
+
+        button.disabled =
+          true;
+
+        button.textContent =
+          "Confirmando...";
+
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient
+            .rpc(
+              "confirm_payment",
+              {
+                p_order_id:
+                  order.id
+              }
+            );
+
+
+        if(error){
+
+          button.disabled =
+            false;
+
+          button.textContent =
+            "✅ Confirmar pagamento";
+
+          alert(
+            "Não foi possível confirmar o pagamento:\n" +
+            error.message
+          );
+
+          return;
+        }
+
+
+        if(!data?.success){
+
+          button.disabled =
+            false;
+
+          button.textContent =
+            "✅ Confirmar pagamento";
+
+          alert(
+            data?.message ||
+            "O pagamento não pôde ser confirmado."
+          );
+
+          return;
+        }
+
+
+        alert(
+          "Pagamento confirmado com sucesso! ✅\n\n" +
+          "O estoque foi atualizado atomicamente."
+        );
+
+
+        await loadPayments();
+
+      };
+
+
+    card.append(
+      title,
+      date,
+      status,
+      privateInfo,
+      total,
+      itemsBox,
+      button
+    );
+
+
+    list.appendChild(
+      card
+    );
+
+  }
+
+}
+
+
+document
+  .querySelector(
+    "#refresh-payments-button"
+  )
+  .addEventListener(
+    "click",
+    loadPayments
+  );
+
+
 /* =========================================================
    ATENDIMENTO
 ========================================================= */
@@ -2407,7 +3032,10 @@ async function loadServiceStatus(){
     await supabaseClient
       .from("store_settings")
       .select("online")
-      .eq("id",1)
+      .eq(
+        "id",
+        1
+      )
       .maybeSingle();
 
 
@@ -2477,11 +3105,18 @@ async function toggleService(){
     await supabaseClient
       .from("store_settings")
       .update({
-        online: newStatus,
+
+        online:
+          newStatus,
+
         updated_at:
           new Date().toISOString()
+
       })
-      .eq("id",1);
+      .eq(
+        "id",
+        1
+      );
 
 
   if(error){
@@ -2505,7 +3140,9 @@ async function toggleService(){
 
 
 document
-  .querySelector("#toggle-service-button")
+  .querySelector(
+    "#toggle-service-button"
+  )
   .addEventListener(
     "click",
     toggleService
@@ -2517,22 +3154,32 @@ document
 ========================================================= */
 
 const discountPercent =
-  document.querySelector("#discount-percent");
+  document.querySelector(
+    "#discount-percent"
+  );
 
 const discountActive =
-  document.querySelector("#discount-active");
+  document.querySelector(
+    "#discount-active"
+  );
 
 const discountPreview =
-  document.querySelector("#discount-preview");
+  document.querySelector(
+    "#discount-preview"
+  );
 
 const discountMessage =
-  document.querySelector("#discount-message");
+  document.querySelector(
+    "#discount-message"
+  );
 
 
 function updateDiscountPreview(){
 
   const value =
-    Number(discountPercent.value);
+    Number(
+      discountPercent.value
+    );
 
 
   if(
@@ -2564,6 +3211,7 @@ async function loadPromotion(){
   discountMessage.textContent =
     "";
 
+
   const {
     data,
     error
@@ -2573,7 +3221,10 @@ async function loadPromotion(){
       .select(
         "discount_percent, discount_active"
       )
-      .eq("id",1)
+      .eq(
+        "id",
+        1
+      )
       .maybeSingle();
 
 
@@ -2594,7 +3245,9 @@ async function loadPromotion(){
     data?.discount_percent ?? 0;
 
   discountActive.checked =
-    Boolean(data?.discount_active);
+    Boolean(
+      data?.discount_active
+    );
 
 
   updateDiscountPreview();
@@ -2603,13 +3256,17 @@ async function loadPromotion(){
 
 
 document
-  .querySelector("#save-discount-button")
+  .querySelector(
+    "#save-discount-button"
+  )
   .addEventListener(
     "click",
     async ()=>{
 
       const percent =
-        Number(discountPercent.value);
+        Number(
+          discountPercent.value
+        );
 
       const active =
         discountActive.checked;
@@ -2648,7 +3305,10 @@ document
               new Date().toISOString()
 
           })
-          .eq("id",1);
+          .eq(
+            "id",
+            1
+          );
 
 
       if(error){
@@ -2670,6 +3330,7 @@ document
       discountMessage.className =
         "message success-message";
 
+
       updateDiscountPreview();
 
     }
@@ -2681,7 +3342,9 @@ document
 ========================================================= */
 
 const pixKey =
-  document.querySelector("#pix-key");
+  document.querySelector(
+    "#pix-key"
+  );
 
 const deliveryBotUsername =
   document.querySelector(
@@ -2701,7 +3364,8 @@ const deliveryMessage =
 
 async function loadDeliverySettings(){
 
-  deliveryMessage.textContent = "";
+  deliveryMessage.textContent =
+    "";
 
 
   const {
@@ -2713,7 +3377,10 @@ async function loadDeliverySettings(){
       .select(
         "pix_key, delivery_bot_username, join_open"
       )
-      .eq("id",1)
+      .eq(
+        "id",
+        1
+      )
       .maybeSingle();
 
 
@@ -2743,7 +3410,9 @@ async function loadDeliverySettings(){
 
 
 document
-  .querySelector("#save-delivery-button")
+  .querySelector(
+    "#save-delivery-button"
+  )
   .addEventListener(
     "click",
     async ()=>{
@@ -2775,7 +3444,10 @@ document
               new Date().toISOString()
 
           })
-          .eq("id",1);
+          .eq(
+            "id",
+            1
+          );
 
 
       if(error){
@@ -2808,7 +3480,9 @@ document
 async function loadReviews(){
 
   const list =
-    document.querySelector("#reviews-list");
+    document.querySelector(
+      "#reviews-list"
+    );
 
 
   list.innerHTML =
@@ -2843,8 +3517,15 @@ async function loadReviews(){
 
     list.innerHTML =
       `<div class="empty-products">
-        <div style="font-size:40px">⭐</div>
-        <p>Nenhuma avaliação encontrada.</p>
+
+        <div style="font-size:40px">
+          ⭐
+        </div>
+
+        <p>
+          Nenhuma avaliação encontrada.
+        </p>
+
       </div>`;
 
     return;
@@ -2868,29 +3549,47 @@ async function loadReviews(){
       "Cliente";
 
 
-    const stars =
-      "★".repeat(
-        Number(review.rating || 0)
-      ) +
-      "☆".repeat(
-        5 - Number(review.rating || 0)
+    const rating =
+      Math.max(
+        0,
+        Math.min(
+          5,
+          Number(
+            review.rating || 0
+          )
+        )
       );
 
 
+    const stars =
+      "★".repeat(rating) +
+      "☆".repeat(5 - rating);
+
+
     card.innerHTML = `
-      <h3>${escapeHtml(author)}</h3>
+      <h3>
+        ${escapeHtml(author)}
+      </h3>
 
       <div class="review-stars">
         ${stars}
       </div>
 
       <p class="review-text">
-        ${escapeHtml(review.text || "Sem comentário.")}
+        ${escapeHtml(
+          review.text ||
+          "Sem comentário."
+        )}
       </p>
 
       <div class="review-author">
         Status:
-        <strong>${escapeHtml(review.status || "pending")}</strong>
+        <strong>
+          ${escapeHtml(
+            review.status ||
+            "pending"
+          )}
+        </strong>
       </div>
     `;
 
@@ -2902,7 +3601,10 @@ async function loadReviews(){
       "order-actions";
 
 
-    if(review.status === "pending"){
+    if(
+      review.status ===
+      "pending"
+    ){
 
       const approve =
         document.createElement("button");
@@ -2950,18 +3652,26 @@ async function loadReviews(){
         "status-badge";
 
       status.textContent =
-        review.status === "approved"
+        review.status ===
+        "approved"
           ? "✅ Aprovada"
           : "❌ Rejeitada";
 
-      actions.appendChild(status);
+      actions.appendChild(
+        status
+      );
 
     }
 
 
-    card.appendChild(actions);
+    card.appendChild(
+      actions
+    );
 
-    list.appendChild(card);
+
+    list.appendChild(
+      card
+    );
 
   });
 
@@ -3004,7 +3714,9 @@ async function updateReviewStatus(
 
 
 document
-  .querySelector("#refresh-reviews-button")
+  .querySelector(
+    "#refresh-reviews-button"
+  )
   .addEventListener(
     "click",
     loadReviews
@@ -3017,24 +3729,26 @@ document
 
 function money(value){
 
-  return Number(value || 0)
-    .toLocaleString(
-      "pt-BR",
-      {
-        style:"currency",
-        currency:"BRL"
-      }
-    );
+  return Number(
+    value || 0
+  ).toLocaleString(
+    "pt-BR",
+    {
+      style:"currency",
+      currency:"BRL"
+    }
+  );
 
 }
 
 
 function formatDate(value){
 
-  return new Date(value)
-    .toLocaleString(
-      "pt-BR"
-    );
+  return new Date(
+    value
+  ).toLocaleString(
+    "pt-BR"
+  );
 
 }
 
@@ -3074,11 +3788,26 @@ function formatOrderStatus(status){
 function escapeHtml(value=""){
 
   return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
@@ -3106,5 +3835,7 @@ logoutButton.addEventListener(
 
 checkAdminAccess();
 
-</script></body>
-  </html>
+</script>
+
+</body>
+      </html>
