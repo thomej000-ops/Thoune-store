@@ -95,6 +95,7 @@
       </div>
 
       <div class="product-grid" id="product-grid"></div>
+
       <div class="empty-state hidden" id="empty-state">
         <span>🌊</span>
         <h3>Nenhuma marreta encontrada</h3>
@@ -107,6 +108,7 @@
         <p class="eyebrow">COMO FUNCIONA</p>
         <h2>Como comprar sem complicação?</h2>
       </div>
+
       <div class="steps">
         <article><b>01</b><span>👤</span><h3>Faça seu login</h3><p>Entre na sua conta da Thoune Store.</p></article>
         <article><b>02</b><span>🛍️</span><h3>Escolha</h3><p>Encontre suas marretas e adicione ao carrinho.</p></article>
@@ -118,8 +120,12 @@
 
     <section class="reviews-section section">
       <div class="section-heading">
-        <div><p class="eyebrow">COMUNIDADE</p><h2>Quem compra, conta.</h2></div>
+        <div>
+          <p class="eyebrow">COMUNIDADE</p>
+          <h2>Quem compra, conta.</h2>
+        </div>
       </div>
+
       <div class="review-placeholder">
         <span>⭐</span>
         <p>As avaliações aprovadas pelos administradores aparecerão aqui.</p>
@@ -128,8 +134,15 @@
 
     <section class="support-section section">
       <div class="support-card">
-        <div><p class="eyebrow">SUPORTE</p><h2>Precisa de ajuda?</h2><p>Não encontrou o que procura? Fale com nosso suporte na Thoune Store pelo TikTok.</p></div>
-        <a class="primary-button" href="https://www.tiktok.com/@thounestoreofc" target="_blank" rel="noopener">Falar no TikTok ↗</a>
+        <div>
+          <p class="eyebrow">SUPORTE</p>
+          <h2>Precisa de ajuda?</h2>
+          <p>Não encontrou o que procura? Fale com nosso suporte na Thoune Store pelo TikTok.</p>
+        </div>
+
+        <a class="primary-button" href="https://www.tiktok.com/@thounestoreofc" target="_blank" rel="noopener">
+          Falar no TikTok ↗
+        </a>
       </div>
     </section>
 
@@ -138,113 +151,177 @@
         <p class="eyebrow">DÚVIDAS</p>
         <h2>Perguntas frequentes</h2>
       </div>
+
       <div class="faq-list">
-        <details><summary>Como faço um pedido?</summary><p>Escolha as marretas, ajuste as quantidades no carrinho e use “Realizar compra” quando a loja estiver online.</p></details>
-        <details><summary>Como funciona o pagamento?</summary><p>O pagamento é feito via Pix e as informações são apresentadas durante o fluxo de compra quando o atendimento estiver online.</p></details>
-        <details><summary>O estoque é reservado quando adiciono ao carrinho?</summary><p>Não. Montar o carrinho não reduz o estoque. A baixa acontece somente após a confirmação do pagamento pelo administrador.</p></details>
-        <details><summary>Posso acompanhar meu pedido?</summary><p>Sim. A versão completa terá uma área de conta para acompanhar o status do pedido.</p></details>
+        <details>
+          <summary>Como faço um pedido?</summary>
+          <p>Escolha as marretas, ajuste as quantidades no carrinho e use “Realizar compra” quando a loja estiver online.</p>
+        </details>
+
+        <details>
+          <summary>Como funciona o pagamento?</summary>
+          <p>O pagamento é feito via Pix e as informações são apresentadas durante o fluxo de compra quando o atendimento estiver online.</p>
+        </details>
+
+        <details>
+          <summary>O estoque é reservado quando adiciono ao carrinho?</summary>
+          <p>Não. Montar o carrinho não reduz o estoque. A baixa acontece somente após a confirmação do pagamento pelo administrador.</p>
+        </details>
+
+        <details>
+          <summary>Posso acompanhar meu pedido?</summary>
+          <p>Sim. A versão completa terá uma área de conta para acompanhar o status do pedido.</p>
+        </details>
       </div>
     </section>
 
     <section class="account-preview section" id="conta">
-  <div class="account-card">
-    <span class="account-icon">♙</span>
+      <div class="account-card">
+        <span class="account-icon">♙</span>
 
-    <div class="account-content">
-      <p class="eyebrow">MINHA CONTA</p>
-      <h2>Seu espaço na Thoune Store</h2>
-      <p id="account-message">Entre ou crie sua conta para acompanhar seus pedidos.</p>
-      <div id="profile-fields" class="profile-fields hidden">
+        <div class="account-content">
+          <p class="eyebrow">MINHA CONTA</p>
+          <h2>Seu espaço na Thoune Store</h2>
 
-  <label>
-    🎵 Usuário do TikTok
-    <input
-      id="tiktok-username"
-      type="text"
-      placeholder="@seuusuario"
-      autocomplete="off"
-    >
-  </label>
+          <p id="account-message">
+            Entre ou crie sua conta para acompanhar seus pedidos.
+          </p>
 
-  <label>
-    🎮 Usuário do Roblox
-    <input
-      id="roblox-username"
-      type="text"
-      placeholder="Seu usuário do Roblox"
-      autocomplete="off"
-    >
-  </label>
+          <div id="profile-fields" class="profile-fields hidden">
 
-  <button class="secondary-button full" id="save-profile-button">
-    💾 Salvar informações
-  </button>
+            <label>
+              🎵 Usuário do TikTok
+              <input
+                id="tiktok-username"
+                type="text"
+                placeholder="@seuusuario"
+                autocomplete="off"
+              >
+            </label>
 
-  <p id="profile-message"></p>
+            <label>
+              🎮 Usuário do Roblox
+              <input
+                id="roblox-username"
+                type="text"
+                placeholder="Seu usuário do Roblox"
+                autocomplete="off"
+              >
+            </label>
 
-      </div>
+            <button class="secondary-button full" id="save-profile-button">
+              💾 Salvar informações
+            </button>
 
-<div id="account-details" class="account-details hidden">
-  <p><strong>📧 E-mail:</strong> <span id="account-email"></span></p>
+            <p id="profile-message"></p>
+          </div>
 
-  <div class="account-orders">
-    <h3>📦 Meus pedidos</h3>
-    <div id="orders-list">
-  <p id="orders-message">Você ainda não possui pedidos.</p>
-    </div>
-  </div>
-</div>
+          <div id="account-details" class="account-details hidden">
+            <p>
+              <strong>📧 E-mail:</strong>
+              <span id="account-email"></span>
+            </p>
 
-      <div class="account-form">
-        <input
-          id="auth-email"
-          type="email"
-          placeholder="Seu e-mail"
-          autocomplete="email"
-        >
+            <div class="account-orders">
+              <h3>📦 Meus pedidos</h3>
 
-        <input
-          id="auth-password"
-          type="password"
-          placeholder="Sua senha"
-          autocomplete="current-password"
-        >
+              <div id="orders-list">
+                <p id="orders-message">
+                  Você ainda não possui pedidos.
+                </p>
+              </div>
+            </div>
+          </div>
 
-        <div class="account-actions">
-          <button class="primary-button" id="login-button">
-            Entrar
-          </button>
+          <div class="account-form">
+            <input
+              id="auth-email"
+              type="email"
+              placeholder="Seu e-mail"
+              autocomplete="email"
+            >
 
-          <button class="secondary-button" id="signup-button">
-            Criar conta
-          </button>
+            <input
+              id="auth-password"
+              type="password"
+              placeholder="Sua senha"
+              autocomplete="current-password"
+            >
+
+            <div class="account-actions">
+              <button class="primary-button" id="login-button">
+                Entrar
+              </button>
+
+              <button class="secondary-button" id="signup-button">
+                Criar conta
+              </button>
+            </div>
+
+            <button class="secondary-button full hidden" id="logout-button">
+              Sair da conta
+            </button>
+          </div>
         </div>
-
-        <button class="secondary-button full hidden" id="logout-button">
-          Sair da conta
-        </button>
       </div>
-    </div>
-  </div>
     </section>
   </main>
 
+  <!-- =============================== -->
+  <!-- CARRINHO -->
+  <!-- =============================== -->
+
   <aside class="cart-drawer" id="cart-drawer" aria-label="Carrinho">
     <div class="drawer-backdrop" id="close-cart"></div>
+
     <div class="drawer-panel">
-      <div class="drawer-header"><div><p class="eyebrow">SEU PEDIDO</p><h2>Carrinho</h2></div><button class="close-button" id="close-cart-button">×</button></div>
+      <div class="drawer-header">
+        <div>
+          <p class="eyebrow">SEU PEDIDO</p>
+          <h2>Carrinho</h2>
+        </div>
+
+        <button class="close-button" id="close-cart-button">
+          ×
+        </button>
+      </div>
+
       <div class="cart-items" id="cart-items"></div>
-      <div class="cart-empty" id="cart-empty"><span>🛒</span><p>Seu carrinho está vazio.</p><small>Escolha uma marreta para começar.</small></div>
+
+      <div class="cart-empty" id="cart-empty">
+        <span>🛒</span>
+        <p>Seu carrinho está vazio.</p>
+        <small>Escolha uma marreta para começar.</small>
+      </div>
+
       <div class="drawer-footer">
-        <div class="total-line"><span>Total</span><strong id="cart-total">R$ 0,00</strong></div>
-        <button class="primary-button full" id="checkout-button">Realizar compra</button>
-        <button class="secondary-button full" id="copy-order-button">📋 Copiar pedido</button>
-        <small class="checkout-note">O pagamento é realizado via Pix quando o atendimento estiver online.</small>
+        <div class="total-line">
+          <span>Total</span>
+          <strong id="cart-total">R$ 0,00</strong>
+        </div>
+
+        <button class="primary-button full" id="checkout-button">
+          Realizar compra
+        </button>
+
+        <button class="secondary-button full" id="copy-order-button">
+          📋 Copiar pedido
+        </button>
+
+        <small class="checkout-note">
+          O pagamento é realizado via Pix quando o atendimento estiver online.
+        </small>
       </div>
     </div>
   </aside>
+
+  <!-- =============================== -->
+  <!-- CHECKOUT -->
+  <!-- =============================== -->
+
   <section class="checkout-section section hidden" id="checkout-section">
     <div class="checkout-card">
+
       <div class="section-heading">
         <div>
           <p class="eyebrow">FINALIZAR PEDIDO</p>
@@ -255,30 +332,65 @@
 
       <div class="checkout-content">
 
+        <!-- ITENS -->
         <div class="checkout-items">
           <h3>📦 Itens do pedido</h3>
           <div id="checkout-items"></div>
         </div>
 
+        <!-- PAGAMENTO PIX -->
         <div class="pix-payment">
-  <h3>💳 Pagamento via Pix</h3>
+          <h3>💳 Pagamento via Pix</h3>
 
-  <p>Escaneie o QR Code abaixo para realizar o pagamento.</p>
+          <p>
+            Escaneie o QR Code abaixo ou use a chave Pix para realizar o pagamento.
+          </p>
 
-  <img
-  src="pix-qr.png"
-  alt="QR Code para pagamento via Pix"
-  class="pix-qr"
-  width="260"
-  height="260"
->
+          <img
+            src="pix-qr.png"
+            alt="QR Code para pagamento via Pix"
+            class="pix-qr"
+            width="260"
+            height="260"
+          >
+
+          <div class="pix-key-box">
+            <span class="pix-key-label">Chave Pix</span>
+
+            <div class="pix-key-row">
+              <strong
+                id="checkout-pix-key"
+                class="pix-key-value"
+              >
+                Chave Pix não configurada.
+              </strong>
+
+              <button
+                type="button"
+                class="secondary-button"
+                id="copy-pix-key-button"
+              >
+                📋 Copiar
+              </button>
+            </div>
+          </div>
+
+          <small class="pix-payment-note">
+            Confira o valor do pedido antes de realizar o pagamento.
+          </small>
         </div>
+
+        <!-- DADOS DA ENTREGA -->
         <div class="checkout-data">
           <h3>👤 Dados da entrega</h3>
 
           <label>
             🎵 Usuário do TikTok
-            <input id="checkout-tiktok" type="text" readonly>
+            <input
+              id="checkout-tiktok"
+              type="text"
+              readonly
+            >
           </label>
 
           <label>
@@ -296,49 +408,68 @@
           </small>
 
           <label>
-  💳 Nome do remetente do Pix
-  <input
-    id="checkout-pix-name"
-    type="text"
-    placeholder="Nome que aparecerá no Pix"
-    autocomplete="off"
-  >
-</label>
+            💳 Nome do remetente do Pix
+            <input
+              id="checkout-pix-name"
+              type="text"
+              placeholder="Nome que aparecerá no Pix"
+              autocomplete="off"
+            >
+          </label>
 
-<small>
-  Informe o nome exatamente como aparecerá na transação Pix.
-</small>
+          <small>
+            Informe o nome exatamente como aparecerá na transação Pix.
+          </small>
         </div>
 
+        <!-- TOTAL -->
         <div class="checkout-total">
           <span>Total do pedido</span>
           <strong id="checkout-total">R$ 0,00</strong>
         </div>
 
+        <!-- AÇÕES -->
         <div class="checkout-actions">
           <button class="secondary-button" id="checkout-back">
             ← Voltar ao carrinho
           </button>
 
-          
           <button class="primary-button" id="confirm-order-button">
-  Confirmar pedido
-</button>
+            Confirmar pedido
+          </button>
 
-<button class="secondary-button full hidden" id="verify-payment-button">
-  🔎 Verificar pagamento
-</button>
+          <button
+            class="secondary-button full hidden"
+            id="verify-payment-button"
+          >
+            🔎 Verificar pagamento
+          </button>
         </div>
 
       </div>
     </div>
   </section>
+
   <footer class="site-footer">
-    <div><strong>Thoune Store</strong><p>Mais que uma loja, uma comunidade.</p></div>
-    <a href="https://www.tiktok.com/@thounestoreofc" target="_blank" rel="noopener">@thounestoreofc ↗</a>
-    <small>© 2026 Thoune Store · Todos os direitos reservados.</small>
+    <div>
+      <strong>Thoune Store</strong>
+      <p>Mais que uma loja, uma comunidade.</p>
+    </div>
+
+    <a
+      href="https://www.tiktok.com/@thounestoreofc"
+      target="_blank"
+      rel="noopener"
+    >
+      @thounestoreofc ↗
+    </a>
+
+    <small>
+      © 2026 Thoune Store · Todos os direitos reservados.
+    </small>
   </footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module" src="app.js"></script>
 </body>
 </html>
