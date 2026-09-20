@@ -1,3 +1,6 @@
+body {
+  background: red !important;
+}
 :root{
   --deep:#082c3a;
   --deep-2:#0d4051;
