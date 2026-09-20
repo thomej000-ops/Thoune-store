@@ -2305,37 +2305,161 @@ async function loadPayments(){
       </p>
     `;
 
+async function loadPayments(){
 
-    const itemsBox =
+  const list =
+    document.querySelector("#payments-list");
+
+  list.innerHTML =
+    "<p>Carregando pagamentos...</p>";
+
+
+  const {
+    data: payments,
+    error
+  } =
+    await supabaseClient
+      .from("payments")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
+
+
+  if(error){
+
+    list.innerHTML =
+      `<p class="message error-message">
+        ${escapeHtml(error.message)}
+      </p>`;
+
+    return;
+  }
+
+
+  const pending = [];
+
+
+  for(const payment of payments || []){
+
+    if(payment.status !== "pending"){
+      continue;
+    }
+
+
+    const {
+      data: order,
+      error: orderError
+    } =
+      await supabaseClient
+        .from("orders")
+        .select("*")
+        .eq(
+          "id",
+          payment.order_id
+        )
+        .maybeSingle();
+
+
+    if(orderError){
+
+      console.error(
+        "Erro ao carregar pedido do pagamento:",
+        orderError
+      );
+
+      continue;
+    }
+
+
+    /*
+      O pagamento só aparece no ADM
+      depois que o cliente informou
+      que realizou o Pix.
+    */
+
+    if(
+      !order ||
+      order.status !==
+        "awaiting_verification"
+    ){
+
+      continue;
+    }
+
+
+    pending.push({
+      payment,
+      order
+    });
+
+  }
+
+
+  if(!pending.length){
+
+    list.innerHTML =
+      `<div class="empty-products">
+        <div style="font-size:40px">💳</div>
+        <p>Nenhum pagamento aguardando confirmação.</p>
+      </div>`;
+
+    return;
+  }
+
+
+  list.innerHTML = "";
+
+
+  for(const entry of pending){
+
+    const order =
+      entry.order;
+
+
+    const {
+      data: items,
+      error: itemsError
+    } =
+      await supabaseClient
+        .from("order_items")
+        .select("*")
+        .eq(
+          "order_id",
+          order.id
+        );
+
+
+    if(itemsError){
+
+      console.error(
+        "Erro ao carregar itens do pedido:",
+        itemsError
+      );
+
+    }
+
+
+    const card =
       document.createElement("div");
 
-    itemsBox.className =
-      "order-items";
+    card.className =
+      "payment-card";
 
 
     const title =
-      document.createElement("strong");
+      document.createElement("h3");
 
     title.textContent =
-      "Itens do pedido";
-
-    itemsBox.appendChild(title);
+      `💳 Pedido #${order.id.slice(0,8)}`;
 
 
-    (items || []).forEach(item => {
+    const date =
+      document.createElement("p");
 
-      const row =
-        document.createElement("div");
-
-      row.className =
-        "order-item";
-
-      row.textContent =
-        `${item.product_name} × ${item.quantity}`;
-
-      itemsBox.appendChild(row);
-
-    });
+    date.innerHTML =
+      `<strong>Data:</strong> ${formatDate(order.created_at)}`;
 
 
     const status =
@@ -2345,7 +2469,81 @@ async function loadPayments(){
       "payment-status";
 
     status.textContent =
-      "⏳ Aguardando confirmação";
+      "⏳ Cliente informou o pagamento";
+
+
+    const privateInfo =
+      document.createElement("div");
+
+    privateInfo.className =
+      "private-info";
+
+    privateInfo.innerHTML = `
+      <strong>🔒 Dados informados pelo cliente</strong>
+
+      <div style="margin-top:8px">
+        <strong>Nome no Pix:</strong>
+        ${escapeHtml(
+          order.pix_name ||
+          "Não informado"
+        )}
+      </div>
+
+      <div style="margin-top:5px">
+        <strong>Roblox:</strong>
+        ${escapeHtml(
+          order.delivery_username ||
+          "Não informado"
+        )}
+      </div>
+    `;
+
+
+    const total =
+      document.createElement("p");
+
+    total.innerHTML =
+      `<strong>Total:</strong> ${money(order.total)}`;
+
+
+    const itemsBox =
+      document.createElement("div");
+
+    itemsBox.className =
+      "order-items";
+
+
+    const itemsTitle =
+      document.createElement("strong");
+
+    itemsTitle.textContent =
+      "Itens do pedido";
+
+
+    itemsBox.appendChild(
+      itemsTitle
+    );
+
+
+    for(const item of items || []){
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "order-item";
+
+      row.textContent =
+        `${item.product_name} × ${item.quantity} — ${money(
+          Number(item.product_price) *
+          Number(item.quantity)
+        )}`;
+
+      itemsBox.appendChild(
+        row
+      );
+
+    }
 
 
     const button =
@@ -2362,12 +2560,92 @@ async function loadPayments(){
 
 
     button.onclick =
-      ()=>confirmPayment(order.id);
+      async () => {
+
+        /*
+          O botão só é bloqueado depois
+          que o administrador confirma
+          a pergunta de segurança.
+        */
+
+        if(
+          !confirm(
+            "Você confirmou que o pagamento realmente caiu no Pix?"
+          )
+        ){
+
+          return;
+        }
+
+
+        button.disabled = true;
+
+        button.textContent =
+          "Confirmando...";
+
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient.rpc(
+            "confirm_payment",
+            {
+              p_order_id:
+                order.id
+            }
+          );
+
+
+        if(error){
+
+          button.disabled = false;
+
+          button.textContent =
+            "✅ Confirmar pagamento";
+
+          alert(
+            "Não foi possível confirmar o pagamento:\n" +
+            error.message
+          );
+
+          return;
+        }
+
+
+        if(!data?.success){
+
+          button.disabled = false;
+
+          button.textContent =
+            "✅ Confirmar pagamento";
+
+          alert(
+            "O pagamento não pôde ser confirmado."
+          );
+
+          return;
+        }
+
+
+        alert(
+          "Pagamento confirmado com sucesso! ✅\n\n" +
+          "O estoque foi atualizado atomicamente."
+        );
+
+
+        await loadPayments();
+
+      };
 
 
     card.append(
-      itemsBox,
+      title,
+      date,
       status,
+      privateInfo,
+      total,
+      itemsBox,
       button
     );
 
@@ -2377,7 +2655,6 @@ async function loadPayments(){
   }
 
 }
-
 
 async function confirmPayment(orderId){
 
@@ -2390,17 +2667,11 @@ async function confirmPayment(orderId){
 
   const {
     data,
-    error
-  } =
-    await supabaseClient.rpc(
-      "confirm_payment",
-      {
-        p_order_id: orderId
-      }
+    
     );
 
 
-  if(error){
+  if(error){o
 
     alert(
       "Não foi possível confirmar o pagamento:\n" +
