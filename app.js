@@ -1599,6 +1599,11 @@ const checkoutPixKey =
     "#checkout-pix-key"
   );
 
+const copyPixKeyButton =
+  document.querySelector(
+    "#copy-pix-key-button"
+  );
+
 const checkoutTotal =
   document.querySelector(
     "#checkout-total"
@@ -1699,6 +1704,41 @@ document
       }
     }
   );
+
+// ===============================
+// COPIAR CHAVE PIX
+// ===============================
+
+copyPixKeyButton?.addEventListener(
+  "click",
+  async () => {
+    const pixKey =
+      storeSettings.pix_key?.trim();
+
+    if (!pixKey) {
+      toast(
+        "A chave Pix não está configurada."
+      );
+
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(
+        pixKey
+      );
+
+      toast(
+        "Chave Pix copiada! ✅"
+      );
+
+    } catch {
+      toast(
+        "Não foi possível copiar a chave Pix."
+      );
+    }
+  }
+);
 
 // ===============================
 // CHECKOUT
