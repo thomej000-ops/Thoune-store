@@ -1,6 +1,22 @@
-import { loadCart, orderText, clearCart, cartTotal, money } from "./cart.js";
-import { renderProducts, renderCart, updateCartBadge, toast } from "./ui.js";
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
+import {
+  loadCart,
+  orderText,
+  clearCart,
+  cartTotal,
+  money
+} from "./cart.js";
+
+import {
+  renderProducts,
+  renderCart,
+  updateCartBadge,
+  toast
+} from "./ui.js";
+
+import {
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+} from "./config.js";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
@@ -30,10 +46,74 @@ const saveProfileButton = document.querySelector("#save-profile-button");
 const profileMessage = document.querySelector("#profile-message");
 
 // ===============================
+// CONFIGURAÇÕES PÚBLICAS DA LOJA
+// ===============================
+
+let storeSettings = {
+  online: false,
+  delivery_bot_username: "",
+  join_open: false,
+  discount_percent: 0,
+  discount_active: false
+};
+
+async function loadPublicStoreSettings() {
+  const { data, error } = await supabaseClient
+    .from("public_store_settings")
+    .select(
+      "online, delivery_bot_username, join_open, discount_percent, discount_active"
+    )
+    .eq("id", 1)
+    .maybeSingle();
+
+  if (error) {
+    console.error(
+      "Erro ao carregar configurações públicas da loja:",
+      error
+    );
+
+    return storeSettings;
+  }
+
+  storeSettings = {
+    online: Boolean(data?.online),
+    delivery_bot_username:
+      data?.delivery_bot_username || "",
+    join_open: Boolean(data?.join_open),
+    discount_percent:
+      Number(data?.discount_percent) || 0,
+    discount_active:
+      Boolean(data?.discount_active)
+  };
+
+  return storeSettings;
+}
+
+function getEffectivePrice(price) {
+  const basePrice = Number(price) || 0;
+
+  if (
+    !storeSettings.discount_active ||
+    storeSettings.discount_percent <= 0
+  ) {
+    return basePrice;
+  }
+
+  const discount =
+    storeSettings.discount_percent / 100;
+
+  return Number(
+    (basePrice * (1 - discount)).toFixed(2)
+  );
+}
+
+// ===============================
 // PERFIL
 // ===============================
 
 async function loadProfile(userId) {
+  if (!userId) return;
+
   const { data, error } = await supabaseClient
     .from("profiles")
     .select("tiktok_username, roblox_username")
@@ -41,13 +121,24 @@ async function loadProfile(userId) {
     .maybeSingle();
 
   if (error) {
-    console.error("Erro ao carregar perfil:", error);
+    console.error(
+      "Erro ao carregar perfil:",
+      error
+    );
+
     return;
   }
 
   if (data) {
-    tiktokUsername.value = data.tiktok_username || "";
-    robloxUsername.value = data.roblox_username || "";
+    if (tiktokUsername) {
+      tiktokUsername.value =
+        data.tiktok_username || "";
+    }
+
+    if (robloxUsername) {
+      robloxUsername.value =
+        data.roblox_username || "";
+    }
   }
 }
 
@@ -56,56 +147,44 @@ async function loadProfile(userId) {
 // ===============================
 
 async function loadStoreStatus() {
-  const statusElement = document.querySelector("#service-status");
+  const statusElement =
+    document.querySelector("#service-status");
 
   if (!statusElement) return;
 
-  const { data, error } = await supabaseClient
-    .from("store_settings")
-    .select("online")
-    .eq("id", 1)
-    .maybeSingle();
+  await loadPublicStoreSettings();
 
-  if (error) {
-    console.error("Erro ao carregar status:", error);
-    return;
-  }
-
-  const online = Boolean(data?.online);
+  const online =
+    Boolean(storeSettings.online);
 
   statusElement.innerHTML = online
     ? "<span></span> Atendimento online"
     : "<span></span> Atendimento offline";
 
-  statusElement.classList.toggle("online", online);
-  statusElement.classList.toggle("offline", !online);
-}
+  statusElement.classList.toggle(
+    "online",
+    online
+  );
 
-loadStoreStatus();
+  statusElement.classList.toggle(
+    "offline",
+    !online
+  );
+}
 
 // ===============================
 // CONFIGURAÇÃO DO BOT
 // ===============================
 
 async function loadDeliverySettings() {
-  const { data, error } = await supabaseClient
-    .from("store_settings")
-    .select("delivery_bot_username, join_open")
-    .eq("id", 1)
-    .maybeSingle();
-
-  if (error) {
-    console.error("Erro ao carregar configuração do bot:", error);
-
-    return {
-      bot_username: "",
-      join_open: false
-    };
-  }
+  await loadPublicStoreSettings();
 
   return {
-    bot_username: data?.delivery_bot_username || "",
-    join_open: Boolean(data?.join_open)
+    bot_username:
+      storeSettings.delivery_bot_username,
+
+    join_open:
+      storeSettings.join_open
   };
 }
 
@@ -114,25 +193,42 @@ async function loadDeliverySettings() {
 // ===============================
 
 function getOrderNumber(orderId) {
-  return orderId ? orderId.slice(0, 8).toUpperCase() : "--------";
+  return orderId
+    ? orderId
+        .slice(0, 8)
+        .toUpperCase()
+    : "--------";
 }
 
-function createDeliveryMessage(order, items, settings) {
-  const orderNumber = getOrderNumber(order.id);
+function createDeliveryMessage(
+  order,
+  items,
+  settings
+) {
+  const orderNumber =
+    getOrderNumber(order.id);
 
   const itemLines = items.length
     ? items
-        .map(item => `${item.product_name} × ${item.quantity}`)
+        .map(
+          item =>
+            `${item.product_name} × ${item.quantity}`
+        )
         .join("\n")
     : "Itens do pedido";
 
-  const botName = settings.bot_username
-    ? `@${settings.bot_username.replace(/^@/, "")}`
-    : "Bot da Thoune Store";
+  const botName =
+    settings.bot_username
+      ? `@${settings.bot_username.replace(
+          /^@/,
+          ""
+        )}`
+      : "Bot da Thoune Store";
 
-  const joinText = settings.join_open
-    ? "🔓 O perfil está com Join Aberto. Entre no mesmo servidor que o bot e aguarde a entrega."
-    : "🔎 Pesquise pelo perfil do nosso bot no Roblox e siga as instruções de entrega.";
+  const joinText =
+    settings.join_open
+      ? "🔓 O perfil está com Join Aberto. Entre no mesmo servidor que o bot e aguarde a entrega."
+      : "🔎 Pesquise pelo perfil do nosso bot no Roblox e siga as instruções de entrega.";
 
   return `📦 Seu pedido está pronto para entrega!
 
@@ -156,12 +252,23 @@ ${joinText}
 
 function statusLabel(status) {
   const labels = {
-    awaiting_payment: "Aguardando pagamento",
-    awaiting_verification: "Aguardando verificação",
-    payment_confirmed: "Pagamento confirmado",
-    awaiting_delivery: "Aguardando entrega",
-    delivered: "Entregue",
-    cancelled: "Cancelado"
+    awaiting_payment:
+      "Aguardando pagamento",
+
+    awaiting_verification:
+      "Aguardando verificação",
+
+    payment_confirmed:
+      "Pagamento confirmado",
+
+    awaiting_delivery:
+      "Aguardando entrega",
+
+    delivered:
+      "Entregue",
+
+    cancelled:
+      "Cancelado"
   };
 
   return labels[status] || status;
@@ -171,33 +278,49 @@ function statusClass(status) {
   return `order-status-${status}`;
 }
 
-async function requestPaymentVerification(orderId, button) {
+async function requestPaymentVerification(
+  orderId,
+  button
+) {
+  if (!orderId || !button) return;
+
   button.disabled = true;
   button.textContent = "Enviando...";
 
   try {
-    const { error } = await supabaseClient.rpc(
-      "request_payment_verification",
-      {
-        p_order_id: orderId
-      }
-    );
+    const { error } =
+      await supabaseClient.rpc(
+        "request_payment_verification",
+        {
+          p_order_id: orderId
+        }
+      );
 
     if (error) {
       console.error(error);
-      toast("Não foi possível solicitar a verificação.");
+
+      toast(
+        "Não foi possível solicitar a verificação."
+      );
+
       return;
     }
 
-    localStorage.removeItem("thoune_current_order");
+    localStorage.removeItem(
+      "thoune_current_order"
+    );
 
-    toast("Pagamento informado! Aguardando verificação. ✅");
+    toast(
+      "Pagamento informado! Aguardando verificação. ✅"
+    );
 
     await loadCustomerOrders();
 
   } finally {
     button.disabled = false;
-    button.textContent = "🔎 Verificar pagamento";
+
+    button.textContent =
+      "🔎 Verificar pagamento";
   }
 }
 
@@ -205,15 +328,24 @@ async function requestPaymentVerification(orderId, button) {
 // AVALIAÇÕES
 // ===============================
 
-async function checkExistingReview(orderId) {
-  const { data, error } = await supabaseClient
-    .from("reviews")
-    .select("id, status, rating, text")
-    .eq("order_id", orderId)
-    .maybeSingle();
+async function checkExistingReview(
+  orderId
+) {
+  const { data, error } =
+    await supabaseClient
+      .from("reviews")
+      .select(
+        "id, status, rating, text"
+      )
+      .eq("order_id", orderId)
+      .maybeSingle();
 
   if (error) {
-    console.error("Erro ao verificar avaliação:", error);
+    console.error(
+      "Erro ao verificar avaliação:",
+      error
+    );
+
     return null;
   }
 
@@ -221,124 +353,188 @@ async function checkExistingReview(orderId) {
 }
 
 function createReviewForm(order) {
-  const box = document.createElement("div");
-  box.className = "review-form";
+  const box =
+    document.createElement("div");
 
-  const title = document.createElement("h4");
-  title.textContent = "⭐ Avalie seu pedido";
+  box.className =
+    "review-form";
 
-  const description = document.createElement("p");
+  const title =
+    document.createElement("h4");
+
+  title.textContent =
+    "⭐ Avalie seu pedido";
+
+  const description =
+    document.createElement("p");
+
   description.textContent =
     "Sua avaliação ajuda outros clientes e a Thoune Store.";
 
-  const stars = document.createElement("div");
-  stars.className = "review-stars";
+  const stars =
+    document.createElement("div");
+
+  stars.className =
+    "review-stars";
 
   let selectedRating = 0;
 
   for (let i = 1; i <= 5; i++) {
-    const star = document.createElement("button");
+    const star =
+      document.createElement("button");
 
     star.type = "button";
-    star.className = "review-star";
+    star.className =
+      "review-star";
+
     star.textContent = "☆";
+
     star.setAttribute(
       "aria-label",
       `${i} estrela${i > 1 ? "s" : ""}`
     );
 
-    star.addEventListener("click", () => {
-      selectedRating = i;
+    star.addEventListener(
+      "click",
+      () => {
+        selectedRating = i;
 
-      stars.querySelectorAll(".review-star").forEach(
-        (button, index) => {
-          button.textContent = index < i ? "★" : "☆";
-          button.classList.toggle(
-            "selected",
-            index < i
+        stars
+          .querySelectorAll(
+            ".review-star"
+          )
+          .forEach(
+            (button, index) => {
+              button.textContent =
+                index < i
+                  ? "★"
+                  : "☆";
+
+              button.classList.toggle(
+                "selected",
+                index < i
+              );
+            }
           );
-        }
-      );
-    });
+      }
+    );
 
     stars.appendChild(star);
   }
 
-  const textarea = document.createElement("textarea");
+  const textarea =
+    document.createElement("textarea");
 
-  textarea.className = "review-text";
+  textarea.className =
+    "review-text";
+
   textarea.placeholder =
     "Conte como foi sua experiência...";
+
   textarea.maxLength = 500;
   textarea.rows = 4;
 
-  const button = document.createElement("button");
+  const button =
+    document.createElement("button");
 
   button.type = "button";
-  button.className = "primary-button full";
-  button.textContent = "⭐ Enviar avaliação";
+  button.className =
+    "primary-button full";
 
-  const message = document.createElement("p");
-  message.className = "message";
+  button.textContent =
+    "⭐ Enviar avaliação";
 
-  button.addEventListener("click", async () => {
-    if (!selectedRating) {
-      toast("Escolha uma nota de 1 a 5 estrelas.");
-      return;
-    }
+  const message =
+    document.createElement("p");
 
-    button.disabled = true;
-    button.textContent = "Enviando...";
+  message.className =
+    "message";
 
-    try {
-      const { data, error } = await supabaseClient.rpc(
-        "create_review",
-        {
-          p_order_id: order.id,
-          p_rating: selectedRating,
-          p_text: textarea.value.trim()
-        }
-      );
-
-      if (error) {
-        console.error(
-          "Erro ao enviar avaliação:",
-          error
-        );
-
+  button.addEventListener(
+    "click",
+    async () => {
+      if (!selectedRating) {
         toast(
-          "Não foi possível enviar sua avaliação."
+          "Escolha uma nota de 1 a 5 estrelas."
         );
 
         return;
       }
 
-      message.textContent =
-        "Avaliação enviada! Ela ficará aguardando aprovação da loja. ✅";
+      button.disabled = true;
+      button.textContent =
+        "Enviando...";
 
-      message.classList.add("success");
+      try {
+        const { error } =
+          await supabaseClient.rpc(
+            "create_review",
+            {
+              p_order_id:
+                order.id,
 
-      button.classList.add("hidden");
+              p_rating:
+                selectedRating,
 
-      textarea.disabled = true;
+              p_text:
+                textarea.value.trim()
+            }
+          );
 
-      stars
-        .querySelectorAll(".review-star")
-        .forEach(star => {
-          star.disabled = true;
-        });
+        if (error) {
+          console.error(
+            "Erro ao enviar avaliação:",
+            error
+          );
 
-      toast("Avaliação enviada com sucesso! ⭐");
+          toast(
+            "Não foi possível enviar sua avaliação."
+          );
 
-    } finally {
-      button.disabled = false;
+          return;
+        }
 
-      if (!button.classList.contains("hidden")) {
-        button.textContent =
-          "⭐ Enviar avaliação";
+        message.textContent =
+          "Avaliação enviada! Ela ficará aguardando aprovação da loja. ✅";
+
+        message.classList.add(
+          "success"
+        );
+
+        button.classList.add(
+          "hidden"
+        );
+
+        textarea.disabled = true;
+
+        stars
+          .querySelectorAll(
+            ".review-star"
+          )
+          .forEach(
+            star => {
+              star.disabled = true;
+            }
+          );
+
+        toast(
+          "Avaliação enviada com sucesso! ⭐"
+        );
+
+      } finally {
+        button.disabled = false;
+
+        if (
+          !button.classList.contains(
+            "hidden"
+          )
+        ) {
+          button.textContent =
+            "⭐ Enviar avaliação";
+        }
       }
     }
-  });
+  );
 
   box.appendChild(title);
   box.appendChild(description);
@@ -350,21 +546,31 @@ function createReviewForm(order) {
   return box;
 }
 
-function createReviewStatus(review) {
-  const box = document.createElement("div");
-  box.className = "order-info-box";
+function createReviewStatus(
+  review
+) {
+  const box =
+    document.createElement("div");
+
+  box.className =
+    "order-info-box";
 
   if (review.status === "pending") {
     box.textContent =
       "⭐ Sua avaliação foi enviada e está aguardando aprovação da loja.";
 
-  } else if (review.status === "approved") {
+  } else if (
+    review.status === "approved"
+  ) {
     box.textContent =
       "⭐ Sua avaliação foi aprovada e está publicada na comunidade!";
 
-  } else if (review.status === "rejected") {
+  } else if (
+    review.status === "rejected"
+  ) {
     box.textContent =
       "Sua avaliação não foi aprovada.";
+
   } else {
     box.textContent =
       "Sua avaliação está sendo analisada pela loja.";
@@ -379,20 +585,41 @@ function createReviewStatus(review) {
 
 async function loadCustomerOrders() {
   const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
+    data: {
+      session
+    }
+  } =
+    await supabaseClient.auth
+      .getSession();
 
-  if (!session?.user || !ordersList) return;
+  if (
+    !session?.user ||
+    !ordersList
+  ) {
+    return;
+  }
 
   ordersList.innerHTML = "";
 
-  const { data: orders, error } = await supabaseClient
-    .from("orders")
-    .select("id, status, total, created_at")
-    .eq("customer_id", session.user.id)
-    .order("created_at", {
-      ascending: false
-    });
+  const {
+    data: orders,
+    error
+  } =
+    await supabaseClient
+      .from("orders")
+      .select(
+        "id, status, total, created_at"
+      )
+      .eq(
+        "customer_id",
+        session.user.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
 
   if (error) {
     console.error(
@@ -400,40 +627,73 @@ async function loadCustomerOrders() {
       error
     );
 
-    ordersMessage.textContent =
-      "Não foi possível carregar seus pedidos.";
+    if (ordersMessage) {
+      ordersMessage.textContent =
+        "Não foi possível carregar seus pedidos.";
+    }
 
     return;
   }
 
-  if (!orders || !orders.length) {
-    ordersMessage.textContent =
-      "Você ainda não possui pedidos.";
+  if (
+    !orders ||
+    !orders.length
+  ) {
+    if (ordersMessage) {
+      ordersMessage.textContent =
+        "Você ainda não possui pedidos.";
 
-    ordersMessage.classList.remove("hidden");
+      ordersMessage.classList.remove(
+        "hidden"
+      );
+    }
 
     return;
   }
 
-  ordersMessage.classList.add("hidden");
+  if (ordersMessage) {
+    ordersMessage.classList.add(
+      "hidden"
+    );
+  }
 
-  const settings = await loadDeliverySettings();
+  const settings =
+    await loadDeliverySettings();
 
   for (const order of orders) {
-    const card = document.createElement("article");
-    card.className = "customer-order";
+    const card =
+      document.createElement(
+        "article"
+      );
 
-    const header = document.createElement("div");
-    header.className = "customer-order-header";
+    card.className =
+      "customer-order";
 
-    const title = document.createElement("strong");
+    const header =
+      document.createElement("div");
+
+    header.className =
+      "customer-order-header";
+
+    const title =
+      document.createElement(
+        "strong"
+      );
+
     title.textContent =
-      `Pedido #${getOrderNumber(order.id)}`;
+      `Pedido #${getOrderNumber(
+        order.id
+      )}`;
 
-    const status = document.createElement("span");
+    const status =
+      document.createElement(
+        "span"
+      );
 
     status.className =
-      `order-status ${statusClass(order.status)}`;
+      `order-status ${statusClass(
+        order.status
+      )}`;
 
     status.textContent =
       statusLabel(order.status);
@@ -441,19 +701,29 @@ async function loadCustomerOrders() {
     header.appendChild(title);
     header.appendChild(status);
 
-    const date = document.createElement("small");
+    const date =
+      document.createElement("small");
 
     date.textContent =
-      new Date(order.created_at)
-        .toLocaleString("pt-BR");
+      new Date(
+        order.created_at
+      ).toLocaleString(
+        "pt-BR"
+      );
 
-    const { data: items, error: itemsError } =
+    const {
+      data: items,
+      error: itemsError
+    } =
       await supabaseClient
         .from("order_items")
         .select(
           "product_name, quantity, product_price"
         )
-        .eq("order_id", order.id);
+        .eq(
+          "order_id",
+          order.id
+        );
 
     if (itemsError) {
       console.error(
@@ -462,21 +732,35 @@ async function loadCustomerOrders() {
       );
     }
 
-    const itemList = document.createElement("div");
+    const itemList =
+      document.createElement(
+        "div"
+      );
+
     itemList.className =
       "customer-order-items";
 
     for (const item of items || []) {
-      const itemRow = document.createElement("div");
+      const itemRow =
+        document.createElement(
+          "div"
+        );
 
       const itemName =
-        document.createElement("span");
+        document.createElement(
+          "span"
+        );
 
       itemName.textContent =
         `${item.product_name} × ${item.quantity}`;
 
-      itemRow.appendChild(itemName);
-      itemList.appendChild(itemRow);
+      itemRow.appendChild(
+        itemName
+      );
+
+      itemList.appendChild(
+        itemRow
+      );
     }
 
     card.appendChild(header);
@@ -487,21 +771,30 @@ async function loadCustomerOrders() {
     // PAGAMENTO
     // ===============================
 
-    if (order.status === "awaiting_payment") {
+    if (
+      order.status ===
+      "awaiting_payment"
+    ) {
       const paymentBox =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       paymentBox.className =
         "order-action-box";
 
       const text =
-        document.createElement("p");
+        document.createElement(
+          "p"
+        );
 
       text.textContent =
         "Realize o Pix mostrado no checkout e depois informe que o pagamento foi realizado.";
 
       const button =
-        document.createElement("button");
+        document.createElement(
+          "button"
+        );
 
       button.className =
         "secondary-button full";
@@ -509,17 +802,22 @@ async function loadCustomerOrders() {
       button.textContent =
         "🔎 Verificar pagamento";
 
-      button.addEventListener("click", () => {
-        requestPaymentVerification(
-          order.id,
-          button
-        );
-      });
+      button.addEventListener(
+        "click",
+        () => {
+          requestPaymentVerification(
+            order.id,
+            button
+          );
+        }
+      );
 
       paymentBox.appendChild(text);
       paymentBox.appendChild(button);
 
-      card.appendChild(paymentBox);
+      card.appendChild(
+        paymentBox
+      );
     }
 
     // ===============================
@@ -531,7 +829,9 @@ async function loadCustomerOrders() {
       "awaiting_verification"
     ) {
       const info =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       info.className =
         "order-info-box";
@@ -551,7 +851,9 @@ async function loadCustomerOrders() {
       "payment_confirmed"
     ) {
       const info =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       info.className =
         "order-info-box";
@@ -571,19 +873,25 @@ async function loadCustomerOrders() {
       "awaiting_delivery"
     ) {
       const deliveryBox =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       deliveryBox.className =
         "delivery-instructions";
 
       const title =
-        document.createElement("h4");
+        document.createElement(
+          "h4"
+        );
 
       title.textContent =
         "📦 Seu pedido está pronto para entrega!";
 
       const message =
-        document.createElement("pre");
+        document.createElement(
+          "pre"
+        );
 
       message.className =
         "delivery-message";
@@ -596,7 +904,9 @@ async function loadCustomerOrders() {
         );
 
       const copyButton =
-        document.createElement("button");
+        document.createElement(
+          "button"
+        );
 
       copyButton.className =
         "secondary-button full";
@@ -624,20 +934,35 @@ async function loadCustomerOrders() {
         }
       );
 
-      deliveryBox.appendChild(title);
-      deliveryBox.appendChild(message);
-      deliveryBox.appendChild(copyButton);
+      deliveryBox.appendChild(
+        title
+      );
 
-      card.appendChild(deliveryBox);
+      deliveryBox.appendChild(
+        message
+      );
+
+      deliveryBox.appendChild(
+        copyButton
+      );
+
+      card.appendChild(
+        deliveryBox
+      );
     }
 
     // ===============================
     // ENTREGUE + AVALIAÇÃO
     // ===============================
 
-    if (order.status === "delivered") {
+    if (
+      order.status ===
+      "delivered"
+    ) {
       const info =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       info.className =
         "order-success-box";
@@ -648,17 +973,45 @@ async function loadCustomerOrders() {
       card.appendChild(info);
 
       const review =
-        await checkExistingReview(order.id);
+        await checkExistingReview(
+          order.id
+        );
 
       if (review) {
         card.appendChild(
-          createReviewStatus(review)
+          createReviewStatus(
+            review
+          )
         );
       } else {
         card.appendChild(
-          createReviewForm(order)
+          createReviewForm(
+            order
+          )
         );
       }
+    }
+
+    // ===============================
+    // CANCELADO
+    // ===============================
+
+    if (
+      order.status ===
+      "cancelled"
+    ) {
+      const info =
+        document.createElement(
+          "div"
+        );
+
+      info.className =
+        "order-info-box";
+
+      info.textContent =
+        "❌ Este pedido foi cancelado.";
+
+      card.appendChild(info);
     }
 
     ordersList.appendChild(card);
@@ -671,61 +1024,109 @@ async function loadCustomerOrders() {
 
 async function updateAccountUI() {
   const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
+    data: {
+      session
+    }
+  } =
+    await supabaseClient.auth
+      .getSession();
 
   if (session?.user) {
-    accountDetails.classList.remove("hidden");
+    accountDetails?.classList.remove(
+      "hidden"
+    );
 
-    accountEmail.textContent =
-      session.user.email || "";
+    if (accountEmail) {
+      accountEmail.textContent =
+        session.user.email || "";
+    }
 
-    profileFields.classList.remove("hidden");
+    profileFields?.classList.remove(
+      "hidden"
+    );
 
-    profileFields.style.display = "block";
+    if (profileFields) {
+      profileFields.style.display =
+        "block";
+    }
 
-    accountMessage.textContent =
-      "Você está conectado à sua conta.";
+    if (accountMessage) {
+      accountMessage.textContent =
+        "Você está conectado à sua conta.";
+    }
 
-    loginButton.classList.add("hidden");
+    loginButton?.classList.add(
+      "hidden"
+    );
 
-    signupButton.classList.add("hidden");
+    signupButton?.classList.add(
+      "hidden"
+    );
 
-    logoutButton.classList.remove("hidden");
+    logoutButton?.classList.remove(
+      "hidden"
+    );
 
-    authEmail.value =
-      session.user.email || "";
+    if (authEmail) {
+      authEmail.value =
+        session.user.email || "";
 
-    authEmail.disabled = true;
+      authEmail.disabled = true;
+    }
 
-    authPassword.classList.add("hidden");
+    authPassword?.classList.add(
+      "hidden"
+    );
 
-    await loadProfile(session.user.id);
+    await loadProfile(
+      session.user.id
+    );
 
     await loadCustomerOrders();
 
   } else {
-    profileFields.classList.add("hidden");
+    profileFields?.classList.add(
+      "hidden"
+    );
 
-    accountDetails.classList.add("hidden");
+    accountDetails?.classList.add(
+      "hidden"
+    );
 
-    accountEmail.textContent = "";
+    if (accountEmail) {
+      accountEmail.textContent =
+        "";
+    }
 
-    ordersMessage.textContent =
-      "Você ainda não possui pedidos.";
+    if (ordersMessage) {
+      ordersMessage.textContent =
+        "Você ainda não possui pedidos.";
+    }
 
-    accountMessage.textContent =
-      "Entre ou crie sua conta para acompanhar seus pedidos.";
+    if (accountMessage) {
+      accountMessage.textContent =
+        "Entre ou crie sua conta para acompanhar seus pedidos.";
+    }
 
-    loginButton.classList.remove("hidden");
+    loginButton?.classList.remove(
+      "hidden"
+    );
 
-    signupButton.classList.remove("hidden");
+    signupButton?.classList.remove(
+      "hidden"
+    );
 
-    logoutButton.classList.add("hidden");
+    logoutButton?.classList.add(
+      "hidden"
+    );
 
-    authEmail.disabled = false;
+    if (authEmail) {
+      authEmail.disabled = false;
+    }
 
-    authPassword.classList.remove("hidden");
+    authPassword?.classList.remove(
+      "hidden"
+    );
   }
 }
 
@@ -733,7 +1134,7 @@ async function updateAccountUI() {
 // LOGIN
 // ===============================
 
-loginButton.addEventListener(
+loginButton?.addEventListener(
   "click",
   async () => {
     const email =
@@ -778,7 +1179,7 @@ loginButton.addEventListener(
 // CADASTRO
 // ===============================
 
-signupButton.addEventListener(
+signupButton?.addEventListener(
   "click",
   async () => {
     const email =
@@ -804,10 +1205,11 @@ signupButton.addEventListener(
     }
 
     const { error } =
-      await supabaseClient.auth.signUp({
-        email,
-        password
-      });
+      await supabaseClient.auth
+        .signUp({
+          email,
+          password
+        });
 
     if (error) {
       toast(
@@ -830,11 +1232,12 @@ signupButton.addEventListener(
 // LOGOUT
 // ===============================
 
-logoutButton.addEventListener(
+logoutButton?.addEventListener(
   "click",
   async () => {
     const { error } =
-      await supabaseClient.auth.signOut();
+      await supabaseClient.auth
+        .signOut();
 
     if (error) {
       toast(
@@ -844,7 +1247,9 @@ logoutButton.addEventListener(
       return;
     }
 
-    toast("Você saiu da conta.");
+    toast(
+      "Você saiu da conta."
+    );
 
     await updateAccountUI();
   }
@@ -860,12 +1265,16 @@ supabaseClient.auth.onAuthStateChange(
 // SALVAR PERFIL
 // ===============================
 
-saveProfileButton.addEventListener(
+saveProfileButton?.addEventListener(
   "click",
   async () => {
     const {
-      data: { session }
-    } = await supabaseClient.auth.getSession();
+      data: {
+        session
+      }
+    } =
+      await supabaseClient.auth
+        .getSession();
 
     if (!session?.user) {
       toast(
@@ -909,10 +1318,14 @@ saveProfileButton.addEventListener(
       return;
     }
 
-    profileMessage.textContent =
-      "Informações salvas com sucesso! ✅";
+    if (profileMessage) {
+      profileMessage.textContent =
+        "Informações salvas com sucesso! ✅";
+    }
 
-    toast("Perfil atualizado!");
+    toast(
+      "Perfil atualizado!"
+    );
   }
 );
 
@@ -929,14 +1342,22 @@ let search = "";
 let sort = "popular";
 
 async function loadProducts() {
-  const { data, error } =
+  await loadPublicStoreSettings();
+
+  const {
+    data,
+    error
+  } =
     await supabaseClient
       .from("products")
       .select("*")
       .eq("active", true)
-      .order("sort_order", {
-        ascending: true
-      });
+      .order(
+        "sort_order",
+        {
+          ascending: true
+        }
+      );
 
   if (error) {
     console.error(
@@ -952,115 +1373,54 @@ async function loadProducts() {
     return;
   }
 
-  products = data || [];
+  /*
+   * O preço original continua existindo no
+   * Supabase. Aqui criamos apenas o preço
+   * utilizado na interface.
+   *
+   * O create_order() recalcula tudo novamente
+   * no banco e continua sendo a autoridade final.
+   */
+  products =
+    (data || []).map(
+      product => ({
+        ...product,
+
+        price:
+          getEffectivePrice(
+            product.price
+          ),
+
+        original_price:
+          Number(product.price) || 0
+      })
+    );
 
   refresh();
 }
 
-loadProducts();
-
-const menuToggle =
-  document.querySelector("#menu-toggle");
-
-const mobileNav =
-  document.querySelector("#mobile-nav");
-
-menuToggle.addEventListener(
-  "click",
-  () => {
-    mobileNav.classList.toggle(
-      "open"
-    );
-  }
-);
-
-mobileNav
-  .querySelectorAll("a")
-  .forEach(a => {
-    a.addEventListener(
-      "click",
-      () => {
-        mobileNav.classList.remove(
-          "open"
-        );
-      }
-    );
-  });
-
-document
-  .querySelectorAll(".category")
-  .forEach(button => {
-    button.addEventListener(
-      "click",
-      () => {
-        document
-          .querySelectorAll(
-            ".category"
-          )
-          .forEach(b =>
-            b.classList.remove(
-              "active"
-            )
-          );
-
-        button.classList.add(
-          "active"
-        );
-
-        selectedCategory =
-          button.dataset.category;
-
-        refresh();
-      }
-    );
-  });
-
-document
-  .querySelector("#search-input")
-  .addEventListener(
-    "input",
-    e => {
-      search =
-        e.target.value
-          .trim()
-          .toLowerCase();
-
-      refresh();
-    }
-  );
-
-document
-  .querySelector("#sort-select")
-  .addEventListener(
-    "change",
-    e => {
-      sort =
-        e.target.value;
-
-      refresh();
-    }
-  );
-
 function filtered() {
   let result =
-    products.filter(product => {
-      const categoryMatch =
-        selectedCategory ===
-          "Todas" ||
-        product.category ===
-          selectedCategory;
+    products.filter(
+      product => {
+        const categoryMatch =
+          selectedCategory ===
+            "Todas" ||
+          product.category ===
+            selectedCategory;
 
-      const searchMatch =
-        product.name
-          .toLowerCase()
-          .includes(search);
+        const searchMatch =
+          product.name
+            .toLowerCase()
+            .includes(search);
 
-      return (
-        product.active &&
-        categoryMatch &&
-        searchMatch
-      );
-    });
+        return (
+          product.active &&
+          categoryMatch &&
+          searchMatch
+        );
+      }
+    );
 
   if (sort === "low") {
     result.sort(
@@ -1092,6 +1452,109 @@ function refresh() {
     filtered()
   );
 }
+
+// ===============================
+// MENU MOBILE
+// ===============================
+
+const menuToggle =
+  document.querySelector(
+    "#menu-toggle"
+  );
+
+const mobileNav =
+  document.querySelector(
+    "#mobile-nav"
+  );
+
+menuToggle?.addEventListener(
+  "click",
+  () => {
+    mobileNav?.classList.toggle(
+      "open"
+    );
+  }
+);
+
+mobileNav
+  ?.querySelectorAll("a")
+  .forEach(
+    a => {
+      a.addEventListener(
+        "click",
+        () => {
+          mobileNav.classList.remove(
+            "open"
+          );
+        }
+      );
+    }
+  );
+
+// ===============================
+// FILTROS
+// ===============================
+
+document
+  .querySelectorAll(".category")
+  .forEach(
+    button => {
+      button.addEventListener(
+        "click",
+        () => {
+          document
+            .querySelectorAll(
+              ".category"
+            )
+            .forEach(
+              b =>
+                b.classList.remove(
+                  "active"
+                )
+            );
+
+          button.classList.add(
+            "active"
+          );
+
+          selectedCategory =
+            button.dataset.category;
+
+          refresh();
+        }
+      );
+    }
+  );
+
+document
+  .querySelector(
+    "#search-input"
+  )
+  ?.addEventListener(
+    "input",
+    e => {
+      search =
+        e.target.value
+          .trim()
+          .toLowerCase();
+
+      refresh();
+    }
+  );
+
+document
+  .querySelector(
+    "#sort-select"
+  )
+  ?.addEventListener(
+    "change",
+    e => {
+      sort =
+        e.target.value;
+
+      refresh();
+    }
+  );
 
 // ===============================
 // CARRINHO
@@ -1133,7 +1596,7 @@ const checkoutBack =
   );
 
 function openCart() {
-  drawer.classList.add(
+  drawer?.classList.add(
     "open"
   );
 
@@ -1143,28 +1606,34 @@ function openCart() {
 }
 
 function closeCart() {
-  drawer.classList.remove(
+  drawer?.classList.remove(
     "open"
   );
 }
 
 document
-  .querySelector("#open-cart")
-  .addEventListener(
+  .querySelector(
+    "#open-cart"
+  )
+  ?.addEventListener(
     "click",
     openCart
   );
 
 document
-  .querySelector("#close-cart")
-  .addEventListener(
+  .querySelector(
+    "#close-cart"
+  )
+  ?.addEventListener(
     "click",
     closeCart
   );
 
 document
-  .querySelector("#close-cart-button")
-  .addEventListener(
+  .querySelector(
+    "#close-cart-button"
+  )
+  ?.addEventListener(
     "click",
     closeCart
   );
@@ -1186,7 +1655,7 @@ document
   .querySelector(
     "#copy-order-button"
   )
-  .addEventListener(
+  ?.addEventListener(
     "click",
     async () => {
       const cart =
@@ -1225,7 +1694,7 @@ document
   .querySelector(
     "#checkout-button"
   )
-  .addEventListener(
+  ?.addEventListener(
     "click",
     async () => {
       const cart =
@@ -1240,10 +1709,11 @@ document
       }
 
       const {
-        data: { session }
+        data: {
+          session
+        }
       } =
-        await supabaseClient
-          .auth
+        await supabaseClient.auth
           .getSession();
 
       if (!session?.user) {
@@ -1252,10 +1722,14 @@ document
         );
 
         document
-          .querySelector("#conta")
+          .querySelector(
+            "#conta"
+          )
           ?.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+            behavior:
+              "smooth",
+            block:
+              "start"
           });
 
         return;
@@ -1265,10 +1739,47 @@ document
         session.user.id
       );
 
+      /*
+       * Atualiza as configurações antes
+       * de montar o checkout para refletir
+       * uma promoção que possa ter sido
+       * alterada pelo ADM.
+       */
+      await loadPublicStoreSettings();
+
       checkoutItems.innerHTML =
         "";
 
+      let checkoutTotalValue =
+        0;
+
       for (const item of cart) {
+        const currentProduct =
+          products.find(
+            product =>
+              product.id ===
+              item.id
+          );
+
+        const basePrice =
+          currentProduct
+            ? Number(
+                currentProduct.original_price
+              )
+            : Number(item.price);
+
+        const effectivePrice =
+          getEffectivePrice(
+            basePrice
+          );
+
+        const subtotal =
+          effectivePrice *
+          item.qty;
+
+        checkoutTotalValue +=
+          subtotal;
+
         const row =
           document.createElement(
             "div"
@@ -1283,9 +1794,12 @@ document
           );
 
         image.src =
-          item.image || "";
+          currentProduct?.image ||
+          item.image ||
+          "";
 
         image.alt =
+          currentProduct?.name ||
           item.name;
 
         const info =
@@ -1299,6 +1813,7 @@ document
           );
 
         name.textContent =
+          currentProduct?.name ||
           item.name;
 
         const details =
@@ -1308,10 +1823,9 @@ document
 
         details.textContent =
           `${item.qty} × ${money(
-            item.price
+            effectivePrice
           )} = ${money(
-            item.price *
-            item.qty
+            subtotal
           )}`;
 
         info.appendChild(
@@ -1335,36 +1849,45 @@ document
         );
       }
 
-      checkoutTiktok.value =
-        tiktokUsername.value ||
-        "";
+      if (checkoutTiktok) {
+        checkoutTiktok.value =
+          tiktokUsername.value ||
+          "";
+      }
 
-      checkoutRoblox.value =
-        robloxUsername.value ||
-        "";
+      if (checkoutRoblox) {
+        checkoutRoblox.value =
+          robloxUsername.value ||
+          "";
+      }
 
-      checkoutTotal.textContent =
-        money(
-          cartTotal(cart)
-        );
+      if (checkoutTotal) {
+        checkoutTotal.textContent =
+          money(
+            checkoutTotalValue
+          );
+      }
 
-      checkoutSection.classList.remove(
+      checkoutSection?.classList.remove(
         "hidden"
       );
 
       closeCart();
 
-      checkoutSection.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+      checkoutSection?.scrollIntoView({
+        behavior:
+          "smooth",
+
+        block:
+          "start"
       });
     }
   );
 
-checkoutBack.addEventListener(
+checkoutBack?.addEventListener(
   "click",
   () => {
-    checkoutSection.classList.add(
+    checkoutSection?.classList.add(
       "hidden"
     );
 
@@ -1391,7 +1914,7 @@ const confirmOrderButton =
     "#confirm-order-button"
   );
 
-confirmOrderButton.addEventListener(
+confirmOrderButton?.addEventListener(
   "click",
   async () => {
     const cart =
@@ -1406,7 +1929,9 @@ confirmOrderButton.addEventListener(
     }
 
     const {
-      data: { session }
+      data: {
+        session
+      }
     } =
       await supabaseClient.auth
         .getSession();
@@ -1424,11 +1949,11 @@ confirmOrderButton.addEventListener(
         .getElementById(
           "checkout-pix-name"
         )
-        .value
+        ?.value
         .trim();
 
     const robloxName =
-      checkoutRoblox.value.trim();
+      checkoutRoblox?.value.trim();
 
     if (!robloxName) {
       toast(
@@ -1453,14 +1978,25 @@ confirmOrderButton.addEventListener(
       "Criando pedido...";
 
     try {
+      /*
+       * Somente IDs e quantidades são
+       * enviados ao banco.
+       *
+       * O preço NÃO vem do frontend.
+       * create_order() consulta products
+       * e store_settings diretamente no
+       * Supabase.
+       */
       const items =
-        cart.map(item => ({
-          product_id:
-            item.id,
+        cart.map(
+          item => ({
+            product_id:
+              item.id,
 
-          quantity:
-            item.qty
-        }));
+            quantity:
+              item.qty
+          })
+        );
 
       const {
         data,
@@ -1516,7 +2052,7 @@ confirmOrderButton.addEventListener(
         "hidden"
       );
 
-      verifyPaymentButton.classList.remove(
+      verifyPaymentButton?.classList.remove(
         "hidden"
       );
 
@@ -1536,7 +2072,7 @@ confirmOrderButton.addEventListener(
 // VERIFICAR PAGAMENTO
 // ===============================
 
-verifyPaymentButton.addEventListener(
+verifyPaymentButton?.addEventListener(
   "click",
   async () => {
     if (!currentOrderId) {
@@ -1608,10 +2144,14 @@ verifyPaymentButton.addEventListener(
 // INICIALIZAÇÃO
 // ===============================
 
-refresh();
+await loadPublicStoreSettings();
+
+await loadStoreStatus();
+
+await loadProducts();
 
 updateCartBadge(
   loadCart()
 );
 
-updateAccountUI();
+await updateAccountUI();
