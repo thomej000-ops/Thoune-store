@@ -116,15 +116,20 @@
       padding: 0;
     }
 
-    .product-form {
+    .product-form,
+    .settings-box,
+    .review-card,
+    .order-card,
+    .payment-card {
       background: #f8fcfd;
       border: 1px solid #dcecef;
       border-radius: 20px;
       padding: 22px;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
-    .product-form h3 {
+    .product-form h3,
+    .settings-box h3 {
       margin-top: 0;
     }
 
@@ -257,18 +262,19 @@
       border-color: #efcaca;
     }
 
-    .stock-ok {
+    .small-button.success {
+      color: #18733b;
+      border-color: #b9dec6;
+    }
+
+    .stock-ok,
+    .status-active {
       color: #18733b;
       font-weight: 800;
     }
 
     .stock-empty {
       color: #b33131;
-      font-weight: 800;
-    }
-
-    .status-active {
-      color: #18733b;
       font-weight: 800;
     }
 
@@ -289,31 +295,12 @@
       font-weight: 700;
     }
 
-    .payment-card {
-      border: 1px solid #dcecef;
-      border-radius: 20px;
-      padding: 20px;
-      background: #fff;
+    .success-message {
+      color: #18733b;
     }
 
-    .payment-card h3 {
-      margin-top: 0;
-    }
-
-    .payment-items {
-      margin-top: 15px;
-      padding: 14px;
-      border-radius: 14px;
-      background: #f7fbfc;
-    }
-
-    .payment-item {
-      padding: 8px 0;
-      border-bottom: 1px solid #e1eef0;
-    }
-
-    .payment-item:last-child {
-      border-bottom: 0;
+    .error-message {
+      color: #a12d2d;
     }
 
     .payment-status {
@@ -325,6 +312,103 @@
       font-size: 13px;
       font-weight: 800;
       margin-top: 12px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #eaf5f7;
+      color: #315d68;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .review-stars {
+      font-size: 20px;
+      letter-spacing: 2px;
+      margin: 8px 0;
+    }
+
+    .review-text {
+      margin: 12px 0;
+      line-height: 1.6;
+    }
+
+    .review-author {
+      font-size: 13px;
+      color: #60777d;
+    }
+
+    .settings-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+      padding: 16px;
+      border: 1px solid #dcecef;
+      border-radius: 16px;
+      background: #fff;
+      margin-bottom: 15px;
+    }
+
+    .settings-status strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .setting-description {
+      margin: 0;
+      color: #60777d;
+      font-size: 13px;
+    }
+
+    .discount-preview {
+      margin-top: 8px;
+      color: #315d68;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .order-items {
+      margin-top: 15px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .order-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #e1eef0;
+    }
+
+    .order-item:last-child {
+      border-bottom: 0;
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .order-total {
+      margin-top: 15px;
+      font-size: 17px;
+    }
+
+    .private-info {
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff8e8;
+      border: 1px solid #f0dfb1;
+      margin-top: 12px;
+    }
+
+    .private-info strong {
+      color: #79520c;
     }
 
     @media (max-width: 700px) {
@@ -376,439 +460,328 @@
 
 <body>
 
-  <main class="admin">
+<main class="admin">
 
-    <a class="back" href="index.html">← Voltar para a loja</a>
+  <a class="back" href="index.html">← Voltar para a loja</a>
 
-    <!-- CARREGANDO -->
-    <section class="admin-card" id="loading-screen">
-      <p class="eyebrow">THOUNE STORE</p>
-      <h1>Verificando acesso...</h1>
-      <p>Aguarde enquanto verificamos sua conta.</p>
-    </section>
+  <!-- CARREGANDO -->
+  <section class="admin-card" id="loading-screen">
+    <p class="eyebrow">THOUNE STORE</p>
+    <h1>Verificando acesso...</h1>
+    <p>Aguarde enquanto verificamos sua conta.</p>
+  </section>
 
-    <!-- ACESSO NEGADO -->
-    <section class="admin-card hidden" id="access-denied">
-      <div class="access-message">
-        <div style="font-size:48px">🔒</div>
+  <!-- ACESSO NEGADO -->
+  <section class="admin-card hidden" id="access-denied">
+    <div class="access-message">
+      <div style="font-size:48px">🔒</div>
 
-        <p class="eyebrow">ACESSO RESTRITO</p>
+      <p class="eyebrow">ACESSO RESTRITO</p>
 
-        <h1>Acesso negado</h1>
+      <h1>Acesso negado</h1>
 
-        <p>
-          Esta área é exclusiva para administradores da Thoune Store.
+      <p>
+        Esta área é exclusiva para administradores da Thoune Store.
+      </p>
+
+      <a class="primary-button" href="index.html">
+        Voltar para a loja
+      </a>
+    </div>
+  </section>
+
+  <!-- PAINEL -->
+  <section class="admin-card hidden" id="admin-panel">
+
+    <!-- DASHBOARD -->
+    <div id="dashboard-section">
+
+      <div class="admin-header">
+
+        <div class="admin-status">
+          🟢 Administrador autenticado
+        </div>
+
+        <p class="eyebrow" style="margin-top:20px">
+          ÁREA ADMINISTRATIVA
         </p>
 
-        <a class="primary-button" href="index.html">
-          Voltar para a loja
-        </a>
+        <h1>Thoune Store ADM</h1>
+
+        <p>
+          Gerencie produtos, pedidos, pagamentos, atendimento,
+          promoção, entrega e avaliações.
+        </p>
+
       </div>
-    </section>
 
-    <!-- PAINEL ADMIN -->
-    <section class="admin-card hidden" id="admin-panel">
+      <div class="admin-grid">
 
-      <!-- DASHBOARD -->
-      <div id="dashboard-section">
+        <button class="admin-option" id="products-option">
+          <strong>📦 Produtos</strong>
+          <p>Adicionar, editar, remover produtos e controlar estoque.</p>
+        </button>
 
-        <div class="admin-header">
+        <button class="admin-option" id="orders-option">
+          <strong>🧾 Pedidos</strong>
+          <p>Visualizar pedidos e acompanhar as entregas.</p>
+        </button>
 
-          <div class="admin-status">
-            🟢 Administrador autenticado
-          </div>
+        <button class="admin-option" id="payments-option">
+          <strong>💳 Pagamentos</strong>
+          <p>Conferir pagamentos e confirmar pedidos.</p>
+        </button>
 
-          <p class="eyebrow" style="margin-top:20px">
-            ÁREA ADMINISTRATIVA
-          </p>
+        <button class="admin-option" id="service-option">
+          <strong>🟢 Atendimento</strong>
+          <p>Controlar o status online ou offline da loja.</p>
+        </button>
 
-          <h1>Thoune Store ADM</h1>
+        <button class="admin-option" id="promotion-option">
+          <strong>🏷️ Promoção</strong>
+          <p>Definir e ativar o desconto global da loja.</p>
+        </button>
 
-          <p>
-            Gerencie produtos, pedidos, estoque e configurações da loja.
-          </p>
+        <button class="admin-option" id="delivery-option">
+          <strong>🤖 Entrega</strong>
+          <p>Configurar bot, Join Aberto e informações de entrega.</p>
+        </button>
 
-        </div>
-
-        <div class="admin-grid">
-
-          <button class="admin-option" id="products-option">
-            <strong>📦 Produtos</strong>
-            <p>Adicionar, editar, remover produtos e controlar estoque.</p>
-          </button>
-
-          <button class="admin-option" id="orders-option">
-            <strong>🧾 Pedidos</strong>
-            <p>Visualizar pedidos e acompanhar o status das compras.</p>
-          </button>
-
-          <button class="admin-option" id="payments-option">
-            <strong>💳 Pagamentos</strong>
-            <p>Conferir pagamentos e confirmar pedidos.</p>
-          </button>
-
-          <button class="admin-option" id="service-option">
-            <strong>🟢 Atendimento</strong>
-            <p>Controlar o status online ou offline da loja.</p>
-          </button>
-
-        </div>
-
-        <button
-          class="secondary-button logout-admin"
-          id="admin-logout"
-        >
-          Sair da conta
+        <button class="admin-option" id="reviews-option">
+          <strong>⭐ Avaliações</strong>
+          <p>Moderar avaliações enviadas pelos clientes.</p>
         </button>
 
       </div>
 
-      <!-- PRODUTOS -->
-      <div id="products-section" class="hidden">
+      <button
+        class="secondary-button logout-admin"
+        id="admin-logout"
+      >
+        Sair da conta
+      </button>
 
-        <div class="section-header">
-          <div>
-            <button class="back-admin" id="back-dashboard">
-              ← Voltar ao painel
-            </button>
+    </div>
 
-            <p class="eyebrow" style="margin-top:18px">
-              CATÁLOGO
-            </p>
+    <!-- PRODUTOS -->
+    <div id="products-section" class="hidden">
 
-            <h2>📦 Produtos</h2>
-
-            <p>
-              Gerencie as marretas disponíveis na loja.
-            </p>
-          </div>
-
-          <button class="primary-button" id="new-product-button">
-            ➕ Nova marreta
-          </button>
-        </div>
-
-        <!-- FORMULÁRIO -->
-        <div class="product-form hidden" id="product-form">
-
-          <h3 id="form-title">Adicionar marreta</h3>
-
-          <div class="form-grid">
-
-            <div class="form-field full">
-              <label for="product-name">Nome da marreta</label>
-
-              <input
-                id="product-name"
-                type="text"
-                placeholder="Ex.: Party Balloons"
-              >
-            </div>
-
-            <div class="form-field">
-
-              <label for="product-category">
-                Raridade
-              </label>
-
-              <select id="product-category">
-                <option value="Lendária">Lendária</option>
-                <option value="Épica">Épica</option>
-                <option value="Rara">Rara</option>
-                <option value="Comum">Comum</option>
-                <option value="Exclusiva">Exclusiva</option>
-              </select>
-
-            </div>
-
-            <div class="form-field">
-
-              <label for="product-price">
-                Preço (R$)
-              </label>
-
-              <input
-                id="product-price"
-                type="number"
-                min="0"
-                step="0.01"
-                placeholder="0,00"
-              >
-
-            </div>
-
-            <div class="form-field">
-
-              <label for="product-stock">
-                Estoque
-              </label>
-
-              <input
-                id="product-stock"
-                type="number"
-                min="0"
-                step="1"
-                placeholder="0"
-              >
-
-            </div>
-
-            <div class="form-field">
-
-              <label for="product-order">
-                Ordem no catálogo
-              </label>
-
-              <input
-                id="product-order"
-                type="number"
-                min="0"
-                step="1"
-                placeholder="0"
-              >
-
-            </div>
-
-            <div class="form-field full">
-
-              <label for="product-image">
-                URL da imagem
-              </label>
-
-              <input
-                id="product-image"
-                type="url"
-                placeholder="https://..."
-              >
-
-            </div>
-
-            <div class="form-field full">
-
-              <label for="product-description">
-                Descrição
-              </label>
-
-              <textarea
-                id="product-description"
-                placeholder="Descrição opcional da marreta..."
-              ></textarea>
-
-            </div>
-
-            <div class="checkbox-field">
-
-              <input
-                id="product-active"
-                type="checkbox"
-                checked
-              >
-
-              <label for="product-active">
-                Produto ativo no catálogo
-              </label>
-
-            </div>
-
-          </div>
-
-          <div class="form-actions">
-
-            <button
-              class="primary-button"
-              id="save-product-button"
-            >
-              Salvar marreta
-            </button>
-
-            <button
-              class="secondary-button"
-              id="cancel-product-button"
-            >
-              Cancelar
-            </button>
-
-          </div>
-
-          <p
-            class="message"
-            id="product-form-message"
-          ></p>
-
-        </div>
-
-        <!-- LISTA -->
+      <div class="section-header">
         <div>
-
-          <div class="section-header">
-
-            <div>
-
-              <h3>
-                Marretas cadastradas
-              </h3>
-
-              <p id="products-count">
-                Carregando...
-              </p>
-
-            </div>
-
-            <button
-              class="small-button"
-              id="refresh-products-button"
-            >
-              🔄 Atualizar
-            </button>
-
-          </div>
-
-          <div
-            class="products-list"
-            id="products-list"
-          ></div>
-
-        </div>
-
-      </div>
-
-      <!-- PEDIDOS -->
-      <div id="orders-section" class="hidden">
-
-        <div class="section-header">
-
-          <div>
-
-            <button
-              class="back-admin"
-              id="back-orders-dashboard"
-            >
-              ← Voltar ao painel
-            </button>
-
-            <p
-              class="eyebrow"
-              style="margin-top:18px"
-            >
-              VENDAS
-            </p>
-
-            <h2>📦 Pedidos</h2>
-
-            <p>
-              Gerencie os pedidos realizados pelos clientes.
-            </p>
-
-          </div>
-
-          <button
-            class="small-button"
-            id="refresh-orders-button"
-          >
-            🔄 Atualizar
+          <button class="back-admin" id="back-products-dashboard">
+            ← Voltar ao painel
           </button>
 
-        </div>
-
-        <div
-          id="orders-message"
-          class="message"
-        ></div>
-
-        <div
-          id="orders-list"
-          class="products-list"
-        >
-          <p>Carregando pedidos...</p>
-        </div>
-
-      </div>
-
-      <!-- PAGAMENTOS -->
-      <div id="payments-section" class="hidden">
-
-        <div class="section-header">
-
-          <div>
-
-            <button
-              class="back-admin"
-              id="back-payments-dashboard"
-            >
-              ← Voltar ao painel
-            </button>
-
-            <p
-              class="eyebrow"
-              style="margin-top:18px"
-            >
-              FINANCEIRO
-            </p>
-
-            <h2>💳 Pagamentos</h2>
-
-            <p>
-              Confira os pagamentos informados pelos clientes.
-            </p>
-
-          </div>
-
-          <button
-            class="small-button"
-            id="refresh-payments-button"
-          >
-            🔄 Atualizar
-          </button>
-
-        </div>
-
-        <div
-          id="payments-list"
-          class="products-list"
-        >
-          <p>Carregando pagamentos...</p>
-        </div>
-
-      </div>
-
-      <!-- ATENDIMENTO -->
-      <div id="service-section" class="hidden">
-
-        <div class="section-header">
-
-          <div>
-
-            <button
-              class="back-admin"
-              id="back-service-dashboard"
-            >
-              ← Voltar ao painel
-            </button>
-
-            <p
-              class="eyebrow"
-              style="margin-top:18px"
-            >
-              LOJA
-            </p>
-
-            <h2>🟢 Atendimento</h2>
-
-            <p>
-              Controle o status de atendimento da Thoune Store.
-            </p>
-
-          </div>
-
-        </div>
-
-        <div class="admin-card">
-
-          <h3>Status atual</h3>
-
-          <p id="service-status-text">
-            Carregando...
+          <p class="eyebrow" style="margin-top:18px">
+            CATÁLOGO
           </p>
+
+          <h2>📦 Produtos</h2>
+
+          <p>
+            Gerencie as marretas disponíveis na loja.
+          </p>
+        </div>
+
+        <button class="primary-button" id="new-product-button">
+          ➕ Nova marreta
+        </button>
+      </div>
+
+      <div class="product-form hidden" id="product-form">
+
+        <h3 id="form-title">Adicionar marreta</h3>
+
+        <div class="form-grid">
+
+          <div class="form-field full">
+            <label for="product-name">Nome da marreta</label>
+            <input id="product-name" type="text" placeholder="Ex.: Party Balloons">
+          </div>
+
+          <div class="form-field">
+            <label for="product-category">Raridade</label>
+
+            <select id="product-category">
+              <option value="Lendária">Lendária</option>
+              <option value="Épica">Épica</option>
+              <option value="Rara">Rara</option>
+              <option value="Comum">Comum</option>
+              <option value="Exclusiva">Exclusiva</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="product-price">Preço (R$)</label>
+            <input id="product-price" type="number" min="0" step="0.01">
+          </div>
+
+          <div class="form-field">
+            <label for="product-stock">Estoque</label>
+            <input id="product-stock" type="number" min="0" step="1">
+          </div>
+
+          <div class="form-field">
+            <label for="product-order">Ordem no catálogo</label>
+            <input id="product-order" type="number" min="0" step="1">
+          </div>
+
+          <div class="form-field full">
+            <label for="product-image">URL da imagem</label>
+            <input id="product-image" type="url" placeholder="https://...">
+          </div>
+
+          <div class="form-field full">
+            <label for="product-description">Descrição</label>
+            <textarea id="product-description"></textarea>
+          </div>
+
+          <div class="checkbox-field">
+            <input id="product-active" type="checkbox" checked>
+            <label for="product-active">Produto ativo no catálogo</label>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+
+          <button class="primary-button" id="save-product-button">
+            Salvar marreta
+          </button>
+
+          <button class="secondary-button" id="cancel-product-button">
+            Cancelar
+          </button>
+
+        </div>
+
+        <p class="message" id="product-form-message"></p>
+
+      </div>
+
+      <div class="section-header">
+
+        <div>
+          <h3>Marretas cadastradas</h3>
+          <p id="products-count">Carregando...</p>
+        </div>
+
+        <button class="small-button" id="refresh-products-button">
+          🔄 Atualizar
+        </button>
+
+      </div>
+
+      <div class="products-list" id="products-list"></div>
+
+    </div>
+
+    <!-- PEDIDOS -->
+    <div id="orders-section" class="hidden">
+
+      <div class="section-header">
+
+        <div>
+          <button class="back-admin" id="back-orders-dashboard">
+            ← Voltar ao painel
+          </button>
+
+          <p class="eyebrow" style="margin-top:18px">
+            VENDAS
+          </p>
+
+          <h2>🧾 Pedidos</h2>
+
+          <p>
+            Acompanhe os pedidos e o processo de entrega.
+          </p>
+        </div>
+
+        <button class="small-button" id="refresh-orders-button">
+          🔄 Atualizar
+        </button>
+
+      </div>
+
+      <div id="orders-message" class="message"></div>
+
+      <div id="orders-list" class="products-list">
+        <p>Carregando pedidos...</p>
+      </div>
+
+    </div>
+
+    <!-- PAGAMENTOS -->
+    <div id="payments-section" class="hidden">
+
+      <div class="section-header">
+
+        <div>
+          <button class="back-admin" id="back-payments-dashboard">
+            ← Voltar ao painel
+          </button>
+
+          <p class="eyebrow" style="margin-top:18px">
+            FINANCEIRO
+          </p>
+
+          <h2>💳 Pagamentos</h2>
+
+          <p>
+            Confirme manualmente os pagamentos recebidos.
+          </p>
+        </div>
+
+        <button class="small-button" id="refresh-payments-button">
+          🔄 Atualizar
+        </button>
+
+      </div>
+
+      <div id="payments-list" class="products-list">
+        <p>Carregando pagamentos...</p>
+      </div>
+
+    </div>
+
+    <!-- ATENDIMENTO -->
+    <div id="service-section" class="hidden">
+
+      <div class="section-header">
+
+        <div>
+          <button class="back-admin" id="back-service-dashboard">
+            ← Voltar ao painel
+          </button>
+
+          <p class="eyebrow" style="margin-top:18px">
+            LOJA
+          </p>
+
+          <h2>🟢 Atendimento</h2>
+
+          <p>
+            Controle o status de atendimento da Thoune Store.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="settings-box">
+
+        <h3>Status atual</h3>
+
+        <div class="settings-status">
+
+          <div>
+            <strong id="service-status-text">
+              Carregando...
+            </strong>
+
+            <p class="setting-description">
+              Esse status é exibido no site para os clientes.
+            </p>
+          </div>
 
           <button
             class="primary-button"
@@ -821,1750 +794,1894 @@
 
       </div>
 
-    </section>
+    </div>
 
-  </main>
+    <!-- PROMOÇÃO -->
+    <div id="promotion-section" class="hidden">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+      <div class="section-header">
 
-  <script type="module">
+        <div>
+          <button class="back-admin" id="back-promotion-dashboard">
+            ← Voltar ao painel
+          </button>
 
-    import {
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    } from "./config.js";
+          <p class="eyebrow" style="margin-top:18px">
+            PROMOÇÃO
+          </p>
+
+          <h2>🏷️ Desconto global</h2>
+
+          <p>
+            O desconto é calculado pelo banco de dados no momento da compra.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="settings-box">
+
+        <h3>Configuração da promoção</h3>
+
+        <div class="form-grid">
+
+          <div class="form-field">
+
+            <label for="discount-percent">
+              Desconto (%)
+            </label>
+
+            <input
+              id="discount-percent"
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+              placeholder="10"
+            >
+
+            <div
+              class="discount-preview"
+              id="discount-preview"
+            ></div>
+
+          </div>
+
+          <div class="checkbox-field">
+
+            <input
+              id="discount-active"
+              type="checkbox"
+            >
+
+            <label for="discount-active">
+              Promoção ativa
+            </label>
+
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+
+          <button
+            class="primary-button"
+            id="save-discount-button"
+          >
+            Salvar promoção
+          </button>
+
+        </div>
+
+        <p class="message" id="discount-message"></p>
+
+      </div>
+
+    </div>
+
+    <!-- ENTREGA -->
+    <div id="delivery-section" class="hidden">
+
+      <div class="section-header">
+
+        <div>
+          <button class="back-admin" id="back-delivery-dashboard">
+            ← Voltar ao painel
+          </button>
+
+          <p class="eyebrow" style="margin-top:18px">
+            ENTREGA
+          </p>
+
+          <h2>🤖 Configurações de entrega</h2>
+
+          <p>
+            Configure as informações utilizadas durante a entrega.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="settings-box">
+
+        <h3>Bot de entrega</h3>
+
+        <div class="form-field">
+
+          <label for="delivery-bot-username">
+            Usuário do bot
+          </label>
+
+          <input
+            id="delivery-bot-username"
+            type="text"
+            placeholder="Nome do usuário do bot"
+          >
+
+        </div>
+
+        <div class="checkbox-field">
+          <input id="join-open" type="checkbox">
+          <label for="join-open">
+            Join Aberto
+          </label>
+        </div>
+
+        <p class="setting-description">
+          O site apenas exibe essa informação. Ele não controla
+          diretamente servidores ou sessões do Roblox.
+        </p>
+
+        <div class="form-actions">
+
+          <button
+            class="primary-button"
+            id="save-delivery-button"
+          >
+            Salvar configurações
+          </button>
+
+        </div>
+
+        <p class="message" id="delivery-message"></p>
+
+      </div>
+
+    </div>
+
+    <!-- AVALIAÇÕES -->
+    <div id="reviews-section" class="hidden">
+
+      <div class="section-header">
+
+        <div>
+          <button class="back-admin" id="back-reviews-dashboard">
+            ← Voltar ao painel
+          </button>
+
+          <p class="eyebrow" style="margin-top:18px">
+            COMUNIDADE
+          </p>
+
+          <h2>⭐ Avaliações</h2>
+
+          <p>
+            Aprove ou rejeite avaliações enviadas pelos clientes.
+          </p>
+        </div>
+
+        <button class="small-button" id="refresh-reviews-button">
+          🔄 Atualizar
+        </button>
+
+      </div>
+
+      <div id="reviews-list" class="products-list">
+        <p>Carregando avaliações...</p>
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script type="module">
+
+import {
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+} from "./config.js";
 
 
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const loadingScreen =
+  document.querySelector("#loading-screen");
+
+const accessDenied =
+  document.querySelector("#access-denied");
+
+const adminPanel =
+  document.querySelector("#admin-panel");
+
+const logoutButton =
+  document.querySelector("#admin-logout");
+
+
+const sections = {
+  dashboard: document.querySelector("#dashboard-section"),
+  products: document.querySelector("#products-section"),
+  orders: document.querySelector("#orders-section"),
+  payments: document.querySelector("#payments-section"),
+  service: document.querySelector("#service-section"),
+  promotion: document.querySelector("#promotion-section"),
+  delivery: document.querySelector("#delivery-section"),
+  reviews: document.querySelector("#reviews-section")
+};
+
+
+/* =========================================================
+   ACESSO
+========================================================= */
+
+async function checkAdminAccess(){
+
+  const {
+    data: { session }
+  } =
+    await supabaseClient.auth.getSession();
+
+
+  if(!session?.user){
+
+    loadingScreen.classList.add("hidden");
+    accessDenied.classList.remove("hidden");
+
+    return false;
+  }
+
+
+  const {
+    data: profile,
+    error
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select("role")
+      .eq("id", session.user.id)
+      .maybeSingle();
+
+
+  if(
+    error ||
+    !profile ||
+    profile.role !== "admin"
+  ){
+
+    console.error(
+      "Acesso administrativo negado:",
+      error
+    );
+
+    loadingScreen.classList.add("hidden");
+    accessDenied.classList.remove("hidden");
+
+    return false;
+  }
+
+
+  loadingScreen.classList.add("hidden");
+  adminPanel.classList.remove("hidden");
+
+  return true;
+}
+
+
+/* =========================================================
+   NAVEGAÇÃO
+========================================================= */
+
+function hideAllSections(){
+
+  Object.values(sections)
+    .forEach(section =>
+      section.classList.add("hidden")
+    );
+
+}
+
+
+function showDashboard(){
+
+  hideAllSections();
+
+  sections.dashboard.classList.remove("hidden");
+
+  closeProductForm();
+
+}
+
+
+function showSection(name){
+
+  hideAllSections();
+
+  sections[name].classList.remove("hidden");
+
+}
+
+
+document
+  .querySelector("#products-option")
+  .addEventListener("click", async ()=>{
+
+    showSection("products");
+
+    await loadProducts();
+
+  });
+
+
+document
+  .querySelector("#orders-option")
+  .addEventListener("click", async ()=>{
+
+    showSection("orders");
+
+    await loadOrders();
+
+  });
+
+
+document
+  .querySelector("#payments-option")
+  .addEventListener("click", async ()=>{
+
+    showSection("payments");
+
+    await loadPayments();
+
+  });
+
+
+document
+  .querySelector("#service-option")
+  .addEventListener("click", async ()=>{
+
+    showSection("service");
+
+    await loadServiceStatus();
+
+  });
+
+
+document
+  .querySelector("#promotion-option")
+  .addEventListener("click", async ()=>{
+
+    showSection("promotion");
+
+    await loadPromotion();
+
+  });
+
+
+document
+  .querySelector("#delivery-option")
+  .addEventListener("click", async ()=>{
+
+    showSection("delivery");
+
+    await loadDeliverySettings();
+
+  });
+
+
+document
+  .querySelector("#reviews-option")
+  .addEventListener("click", async ()=>{
+
+    showSection("reviews");
+
+    await loadReviews();
+
+  });
+
+
+[
+  "#back-products-dashboard",
+  "#back-orders-dashboard",
+  "#back-payments-dashboard",
+  "#back-service-dashboard",
+  "#back-promotion-dashboard",
+  "#back-delivery-dashboard",
+  "#back-reviews-dashboard"
+].forEach(selector => {
+
+  document
+    .querySelector(selector)
+    .addEventListener("click", showDashboard);
+
+});
+
+
+/* =========================================================
+   PRODUTOS
+========================================================= */
+
+const productForm =
+  document.querySelector("#product-form");
+
+const formTitle =
+  document.querySelector("#form-title");
+
+const productName =
+  document.querySelector("#product-name");
+
+const productCategory =
+  document.querySelector("#product-category");
+
+const productPrice =
+  document.querySelector("#product-price");
+
+const productStock =
+  document.querySelector("#product-stock");
+
+const productOrder =
+  document.querySelector("#product-order");
+
+const productImage =
+  document.querySelector("#product-image");
+
+const productDescription =
+  document.querySelector("#product-description");
+
+const productActive =
+  document.querySelector("#product-active");
+
+const saveProductButton =
+  document.querySelector("#save-product-button");
+
+const cancelProductButton =
+  document.querySelector("#cancel-product-button");
+
+const newProductButton =
+  document.querySelector("#new-product-button");
+
+const productsList =
+  document.querySelector("#products-list");
+
+const productsCount =
+  document.querySelector("#products-count");
+
+const refreshProductsButton =
+  document.querySelector("#refresh-products-button");
+
+const productFormMessage =
+  document.querySelector("#product-form-message");
+
+
+let editingProductId = null;
+
+
+function openProductForm(product=null){
+
+  productForm.classList.remove("hidden");
+
+  productFormMessage.textContent = "";
+
+
+  if(product){
+
+    editingProductId = product.id;
+
+    formTitle.textContent = "Editar marreta";
+
+    productName.value = product.name || "";
+
+    productCategory.value =
+      product.category || "Comum";
+
+    productPrice.value =
+      product.price ?? "";
+
+    productStock.value =
+      product.stock ?? 0;
+
+    productOrder.value =
+      product.sort_order ?? 0;
+
+    productImage.value =
+      product.image || "";
+
+    productDescription.value =
+      product.description || "";
+
+    productActive.checked =
+      product.active !== false;
+
+    saveProductButton.textContent =
+      "Salvar alterações";
+
+  }else{
+
+    editingProductId = null;
+
+    formTitle.textContent =
+      "Adicionar marreta";
+
+    productName.value = "";
+
+    productCategory.value =
+      "Comum";
+
+    productPrice.value = "";
+
+    productStock.value = 0;
+
+    productOrder.value = 0;
+
+    productImage.value = "";
+
+    productDescription.value = "";
+
+    productActive.checked = true;
+
+    saveProductButton.textContent =
+      "Salvar marreta";
+
+  }
+
+
+  productForm.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+}
+
+
+function closeProductForm(){
+
+  productForm.classList.add("hidden");
+
+  editingProductId = null;
+
+  productFormMessage.textContent = "";
+
+  productName.value = "";
+
+  productCategory.value = "Comum";
+
+  productPrice.value = "";
+
+  productStock.value = 0;
+
+  productOrder.value = 0;
+
+  productImage.value = "";
+
+  productDescription.value = "";
+
+  productActive.checked = true;
+
+  saveProductButton.textContent =
+    "Salvar marreta";
+
+}
+
+
+newProductButton.addEventListener(
+  "click",
+  ()=>openProductForm()
+);
+
+
+cancelProductButton.addEventListener(
+  "click",
+  closeProductForm
+);
+
+
+async function loadProducts(){
+
+  productsList.innerHTML =
+    "<p>Carregando produtos...</p>";
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("products")
+      .select("*")
+      .order(
+        "sort_order",
+        {ascending:true}
+      )
+      .order(
+        "name",
+        {ascending:true}
       );
 
 
-    /* ELEMENTOS PRINCIPAIS */
+  if(error){
 
-    const loadingScreen =
-      document.querySelector("#loading-screen");
+    console.error(
+      "Erro ao carregar produtos:",
+      error
+    );
 
-    const accessDenied =
-      document.querySelector("#access-denied");
+    productsList.innerHTML =
+      `<p class="message error-message">
+        Não foi possível carregar os produtos:
+        ${escapeHtml(error.message)}
+      </p>`;
 
-    const adminPanel =
-      document.querySelector("#admin-panel");
-
-    const logoutButton =
-      document.querySelector("#admin-logout");
-
-
-    /* SEÇÕES */
-
-    const dashboardSection =
-      document.querySelector("#dashboard-section");
-
-    const productsSection =
-      document.querySelector("#products-section");
-
-    const ordersSection =
-      document.querySelector("#orders-section");
-
-    const paymentsSection =
-      document.querySelector("#payments-section");
-
-    const serviceSection =
-      document.querySelector("#service-section");
+    return;
+  }
 
 
-    /* BOTÕES DASHBOARD */
-
-    const productsOption =
-      document.querySelector("#products-option");
-
-    const ordersOption =
-      document.querySelector("#orders-option");
-
-    const paymentsOption =
-      document.querySelector("#payments-option");
-
-    const serviceOption =
-      document.querySelector("#service-option");
+  const products = data || [];
 
 
-    /* FORM PRODUTO */
-
-    const productForm =
-      document.querySelector("#product-form");
-
-    const formTitle =
-      document.querySelector("#form-title");
-
-    const productName =
-      document.querySelector("#product-name");
-
-    const productCategory =
-      document.querySelector("#product-category");
-
-    const productPrice =
-      document.querySelector("#product-price");
-
-    const productStock =
-      document.querySelector("#product-stock");
-
-    const productOrder =
-      document.querySelector("#product-order");
-
-    const productImage =
-      document.querySelector("#product-image");
-
-    const productDescription =
-      document.querySelector("#product-description");
-
-    const productActive =
-      document.querySelector("#product-active");
-
-    const saveProductButton =
-      document.querySelector("#save-product-button");
-
-    const cancelProductButton =
-      document.querySelector("#cancel-product-button");
-
-    const newProductButton =
-      document.querySelector("#new-product-button");
-
-    const productsList =
-      document.querySelector("#products-list");
-
-    const productsCount =
-      document.querySelector("#products-count");
-
-    const refreshProductsButton =
-      document.querySelector("#refresh-products-button");
-
-    const productFormMessage =
-      document.querySelector("#product-form-message");
+  productsCount.textContent =
+    `${products.length} produto(s) cadastrado(s).`;
 
 
-    let editingProductId = null;
+  if(!products.length){
+
+    productsList.innerHTML = `
+      <div class="empty-products">
+        <div style="font-size:40px">📦</div>
+        <p>Nenhuma marreta cadastrada ainda.</p>
+      </div>
+    `;
+
+    return;
+  }
 
 
-    /* ACESSO ADMIN */
-
-    async function checkAdminAccess() {
-
-      const {
-        data: { session }
-      } =
-        await supabaseClient.auth.getSession();
+  productsList.innerHTML = "";
 
 
-      if (!session?.user) {
+  products.forEach(product => {
 
-        loadingScreen.classList.add("hidden");
+    const item =
+      document.createElement("div");
 
-        accessDenied.classList.remove("hidden");
-
-        return false;
-      }
-
-
-      const {
-        data: profile,
-        error
-      } =
-        await supabaseClient
-          .from("profiles")
-          .select("role")
-          .eq("id", session.user.id)
-          .maybeSingle();
+    item.className =
+      "product-admin-item";
 
 
-      if (
-        error ||
-        !profile ||
-        profile.role !== "admin"
-      ) {
+    const image =
+      document.createElement("img");
 
-        console.error(
-          "Acesso administrativo negado:",
-          error
-        );
+    image.className =
+      "product-admin-image";
 
-        loadingScreen.classList.add("hidden");
+    image.src =
+      product.image || "";
 
-        accessDenied.classList.remove("hidden");
+    image.alt =
+      product.name || "Marreta";
 
-        return false;
-      }
+    image.onerror = ()=>{
+      image.style.opacity = ".35";
+    };
 
 
-      loadingScreen.classList.add("hidden");
+    const info =
+      document.createElement("div");
 
-      adminPanel.classList.remove("hidden");
+    info.className =
+      "product-admin-info";
 
-      return true;
+
+    const name =
+      document.createElement("strong");
+
+    name.textContent =
+      product.name || "Sem nome";
+
+
+    const meta =
+      document.createElement("div");
+
+    meta.className =
+      "product-admin-meta";
+
+
+    const rarity =
+      document.createElement("span");
+
+    rarity.textContent =
+      product.category || "Sem raridade";
+
+
+    const price =
+      document.createElement("span");
+
+    price.textContent =
+      money(product.price);
+
+
+    const stock =
+      document.createElement("span");
+
+    stock.textContent =
+      `Estoque: ${product.stock ?? 0}`;
+
+    stock.className =
+      product.stock > 0
+        ? "stock-ok"
+        : "stock-empty";
+
+
+    const status =
+      document.createElement("span");
+
+    status.textContent =
+      product.active
+        ? "● Ativo"
+        : "● Inativo";
+
+    status.className =
+      product.active
+        ? "status-active"
+        : "status-inactive";
+
+
+    meta.append(
+      rarity,
+      price,
+      stock,
+      status
+    );
+
+    info.append(
+      name,
+      meta
+    );
+
+
+    const actions =
+      document.createElement("div");
+
+    actions.className =
+      "product-admin-actions";
+
+
+    const editButton =
+      document.createElement("button");
+
+    editButton.className =
+      "small-button";
+
+    editButton.textContent =
+      "✏️ Editar";
+
+    editButton.onclick =
+      ()=>openProductForm(product);
+
+
+    const toggleButton =
+      document.createElement("button");
+
+    toggleButton.className =
+      "small-button";
+
+    toggleButton.textContent =
+      product.active
+        ? "👁️ Desativar"
+        : "👁️ Ativar";
+
+    toggleButton.onclick =
+      ()=>toggleProduct(product);
+
+
+    const deleteButton =
+      document.createElement("button");
+
+    deleteButton.className =
+      "small-button danger";
+
+    deleteButton.textContent =
+      "🗑️ Excluir";
+
+    deleteButton.onclick =
+      ()=>deleteProduct(product);
+
+
+    actions.append(
+      editButton,
+      toggleButton,
+      deleteButton
+    );
+
+
+    item.append(
+      image,
+      info,
+      actions
+    );
+
+
+    productsList.appendChild(item);
+
+  });
+
+}
+
+
+saveProductButton.addEventListener(
+  "click",
+  async ()=>{
+
+    const name =
+      productName.value.trim();
+
+    const category =
+      productCategory.value;
+
+    const price =
+      Number(productPrice.value);
+
+    const stock =
+      Number(productStock.value);
+
+    const sortOrder =
+      Number(productOrder.value);
+
+    const image =
+      productImage.value.trim();
+
+    const description =
+      productDescription.value.trim();
+
+    const active =
+      productActive.checked;
+
+
+    if(!name){
+
+      productFormMessage.textContent =
+        "Informe o nome da marreta.";
+
+      return;
     }
 
 
-    /* NAVEGAÇÃO */
+    if(
+      !Number.isFinite(price) ||
+      price < 0
+    ){
 
-    function hideAllSections() {
+      productFormMessage.textContent =
+        "Informe um preço válido.";
 
-      dashboardSection.classList.add("hidden");
-      productsSection.classList.add("hidden");
-      ordersSection.classList.add("hidden");
-      paymentsSection.classList.add("hidden");
-      serviceSection.classList.add("hidden");
-
+      return;
     }
 
 
-    function showDashboard() {
+    if(
+      !Number.isInteger(stock) ||
+      stock < 0
+    ){
 
-      hideAllSections();
+      productFormMessage.textContent =
+        "Informe um estoque válido.";
 
-      dashboardSection.classList.remove("hidden");
+      return;
+    }
+
+
+    if(
+      !Number.isInteger(sortOrder) ||
+      sortOrder < 0
+    ){
+
+      productFormMessage.textContent =
+        "Informe uma ordem válida.";
+
+      return;
+    }
+
+
+    saveProductButton.disabled = true;
+
+    const editing =
+      Boolean(editingProductId);
+
+    saveProductButton.textContent =
+      editing
+        ? "Salvando..."
+        : "Adicionando...";
+
+
+    try{
+
+      const productData = {
+
+        name,
+
+        description:
+          description || null,
+
+        price,
+
+        category,
+
+        image:
+          image || null,
+
+        stock,
+
+        sort_order:
+          sortOrder,
+
+        active
+
+      };
+
+
+      let result;
+
+
+      if(editingProductId){
+
+        result =
+          await supabaseClient
+            .from("products")
+            .update(productData)
+            .eq(
+              "id",
+              editingProductId
+            );
+
+      }else{
+
+        result =
+          await supabaseClient
+            .from("products")
+            .insert(productData);
+
+      }
+
+
+      if(result.error){
+
+        productFormMessage.textContent =
+          "Erro: " +
+          result.error.message;
+
+        return;
+      }
+
 
       closeProductForm();
 
-    }
+      await loadProducts();
 
+    }finally{
 
-    /* PRODUTOS */
-
-    productsOption.addEventListener(
-      "click",
-      () => {
-
-        hideAllSections();
-
-        productsSection.classList.remove(
-          "hidden"
-        );
-
-        loadProducts();
-
-      }
-    );
-
-
-    document
-      .querySelector("#back-dashboard")
-      .addEventListener(
-        "click",
-        showDashboard
-      );
-
-
-    document
-      .querySelector("#back-orders-dashboard")
-      .addEventListener(
-        "click",
-        showDashboard
-      );
-
-
-    document
-      .querySelector("#back-payments-dashboard")
-      .addEventListener(
-        "click",
-        showDashboard
-      );
-
-
-    document
-      .querySelector("#back-service-dashboard")
-      .addEventListener(
-        "click",
-        showDashboard
-      );
-
-
-    /* FORMULÁRIO */
-
-    function openProductForm(product = null) {
-
-      productForm.classList.remove(
-        "hidden"
-      );
-
-      productFormMessage.textContent = "";
-
-
-      if (product) {
-
-        editingProductId = product.id;
-
-        formTitle.textContent =
-          "Editar marreta";
-
-        productName.value =
-          product.name || "";
-
-        productCategory.value =
-          product.category || "Comum";
-
-        productPrice.value =
-          product.price ?? "";
-
-        productStock.value =
-          product.stock ?? 0;
-
-        productOrder.value =
-          product.sort_order ?? 0;
-
-        productImage.value =
-          product.image || "";
-
-        productDescription.value =
-          product.description || "";
-
-        productActive.checked =
-          product.active !== false;
-
-        saveProductButton.textContent =
-          "Salvar alterações";
-
-      } else {
-
-        editingProductId = null;
-
-        formTitle.textContent =
-          "Adicionar marreta";
-
-        productName.value = "";
-
-        productCategory.value =
-          "Comum";
-
-        productPrice.value = "";
-
-        productStock.value = 0;
-
-        productOrder.value = 0;
-
-        productImage.value = "";
-
-        productDescription.value = "";
-
-        productActive.checked = true;
-
-        saveProductButton.textContent =
-          "Salvar marreta";
-
-      }
-
-
-      productForm.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-
-    }
-
-
-    function closeProductForm() {
-
-      productForm.classList.add(
-        "hidden"
-      );
-
-      editingProductId = null;
-
-      productFormMessage.textContent = "";
-
-      productName.value = "";
-
-      productCategory.value =
-        "Comum";
-
-      productPrice.value = "";
-
-      productStock.value = 0;
-
-      productOrder.value = 0;
-
-      productImage.value = "";
-
-      productDescription.value = "";
-
-      productActive.checked = true;
+      saveProductButton.disabled = false;
 
       saveProductButton.textContent =
-        "Salvar marreta";
+        editing
+          ? "Salvar alterações"
+          : "Salvar marreta";
 
     }
 
-
-    newProductButton.addEventListener(
-      "click",
-      () => openProductForm()
-    );
-
-
-    cancelProductButton.addEventListener(
-      "click",
-      closeProductForm
-    );
-
-
-    /* CARREGAR PRODUTOS */
-
-    async function loadProducts() {
-
-      productsList.innerHTML =
-        "<p>Carregando produtos...</p>";
-
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient
-          .from("products")
-          .select("*")
-          .order(
-            "sort_order",
-            { ascending: true }
-          )
-          .order(
-            "name",
-            { ascending: true }
-          );
-
-
-      if (error) {
-
-        console.error(
-          "Erro ao carregar produtos:",
-          error
-        );
-
-        productsList.innerHTML =
-          `<p class="message">
-            Não foi possível carregar os produtos:
-            ${escapeHtml(error.message)}
-          </p>`;
-
-        productsCount.textContent =
-          "Erro ao carregar.";
-
-        return;
-      }
-
-
-      const products = data || [];
-
-
-      productsCount.textContent =
-        `${products.length} produto(s) cadastrado(s).`;
-
-
-      if (!products.length) {
-
-        productsList.innerHTML = `
-          <div class="empty-products">
-            <div style="font-size:40px">📦</div>
-            <p>Nenhuma marreta cadastrada ainda.</p>
-          </div>
-        `;
-
-        return;
-      }
-
-
-      productsList.innerHTML = "";
-
-
-      products.forEach(product => {
-
-        const item =
-          document.createElement("div");
-
-        item.className =
-          "product-admin-item";
-
-
-        const image =
-          document.createElement("img");
-
-        image.className =
-          "product-admin-image";
-
-        image.src =
-          product.image || "";
-
-        image.alt =
-          product.name || "Marreta";
-
-        image.onerror = () => {
-
-          image.style.opacity =
-            "0.35";
-
-        };
-
-
-        const info =
-          document.createElement("div");
-
-        info.className =
-          "product-admin-info";
-
-
-        const name =
-          document.createElement("strong");
-
-        name.textContent =
-          product.name || "Sem nome";
-
-
-        const meta =
-          document.createElement("div");
-
-        meta.className =
-          "product-admin-meta";
-
-
-        const rarity =
-          document.createElement("span");
-
-        rarity.textContent =
-          product.category ||
-          "Sem raridade";
-
-
-        const price =
-          document.createElement("span");
-
-        price.textContent =
-          "R$ " +
-          Number(product.price || 0)
-            .toFixed(2)
-            .replace(".", ",");
-
-
-        const stock =
-          document.createElement("span");
-
-        stock.textContent =
-          `Estoque: ${product.stock ?? 0}`;
-
-        stock.className =
-          product.stock > 0
-            ? "stock-ok"
-            : "stock-empty";
-
-
-        const status =
-          document.createElement("span");
-
-        status.textContent =
-          product.active
-            ? "● Ativo"
-            : "● Inativo";
-
-        status.className =
-          product.active
-            ? "status-active"
-            : "status-inactive";
-
-
-        meta.appendChild(rarity);
-        meta.appendChild(price);
-        meta.appendChild(stock);
-        meta.appendChild(status);
-
-
-        info.appendChild(name);
-        info.appendChild(meta);
-
-
-        const actions =
-          document.createElement("div");
-
-        actions.className =
-          "product-admin-actions";
-
-
-        const editButton =
-          document.createElement("button");
-
-        editButton.className =
-          "small-button";
-
-        editButton.textContent =
-          "✏️ Editar";
-
-        editButton.addEventListener(
-          "click",
-          () =>
-            openProductForm(product)
-        );
-
-
-        const toggleButton =
-          document.createElement("button");
-
-        toggleButton.className =
-          "small-button";
-
-        toggleButton.textContent =
-          product.active
-            ? "👁️ Desativar"
-            : "👁️ Ativar";
-
-        toggleButton.addEventListener(
-          "click",
-          () =>
-            toggleProduct(product)
-        );
-
-
-        const deleteButton =
-          document.createElement("button");
-
-        deleteButton.className =
-          "small-button danger";
-
-        deleteButton.textContent =
-          "🗑️ Excluir";
-
-        deleteButton.addEventListener(
-          "click",
-          () =>
-            deleteProduct(product)
-        );
-
-
-        actions.appendChild(
-          editButton
-        );
-
-        actions.appendChild(
-          toggleButton
-        );
-
-        actions.appendChild(
-          deleteButton
-        );
-
-
-        item.appendChild(image);
-        item.appendChild(info);
-        item.appendChild(actions);
-
-
-        productsList.appendChild(item);
-
-      });
-
-    }
-
-
-    /* SALVAR PRODUTO */
-
-    saveProductButton.addEventListener(
-      "click",
-      async () => {
-
-        const name =
-          productName.value.trim();
-
-        const category =
-          productCategory.value;
-
-        const price =
-          Number(productPrice.value);
-
-        const stock =
-          Number(productStock.value);
-
-        const sortOrder =
-          Number(productOrder.value);
-
-        const image =
-          productImage.value.trim();
-
-        const description =
-          productDescription.value.trim();
-
-        const active =
-          productActive.checked;
-
-
-        if (!name) {
-
-          productFormMessage.textContent =
-            "Informe o nome da marreta.";
-
-          return;
-        }
-
-
-        if (
-          !Number.isFinite(price) ||
-          price < 0
-        ) {
-
-          productFormMessage.textContent =
-            "Informe um preço válido.";
-
-          return;
-        }
-
-
-        if (
-          !Number.isInteger(stock) ||
-          stock < 0
-        ) {
-
-          productFormMessage.textContent =
-            "Informe um estoque válido.";
-
-          return;
-        }
-
-
-        if (
-          !Number.isInteger(sortOrder) ||
-          sortOrder < 0
-        ) {
-
-          productFormMessage.textContent =
-            "Informe uma ordem válida.";
-
-          return;
-        }
-
-
-        saveProductButton.disabled =
-          true;
-
-        const wasEditing =
-          Boolean(editingProductId);
-
-        saveProductButton.textContent =
-          wasEditing
-            ? "Salvando..."
-            : "Adicionando...";
-
-        productFormMessage.textContent =
-          "";
-
-
-        try {
-
-          const productData = {
-
-            name,
-
-            description:
-              description || null,
-
-            price,
-
-            category,
-
-            image:
-              image || null,
-
-            stock,
-
-            sort_order:
-              sortOrder,
-
-            active
-
-          };
-
-
-          let result;
-
-
-          if (editingProductId) {
-
-            result =
-              await supabaseClient
-                .from("products")
-                .update(productData)
-                .eq(
-                  "id",
-                  editingProductId
-                );
-
-          } else {
-
-            result =
-              await supabaseClient
-                .from("products")
-                .insert(
-                  productData
-                );
-
-          }
-
-
-          if (result.error) {
-
-            console.error(
-              "Erro ao salvar produto:",
-              result.error
-            );
-
-            productFormMessage.textContent =
-              "Erro: " +
-              result.error.message;
-
-            return;
-          }
-
-
-          closeProductForm();
-
-          await loadProducts();
-
-        } finally {
-
-          saveProductButton.disabled =
-            false;
-
-          saveProductButton.textContent =
-            wasEditing
-              ? "Salvar alterações"
-              : "Salvar marreta";
-
-        }
-
-      }
-    );
-
-
-    /* ATIVAR / DESATIVAR */
-
-    async function toggleProduct(product) {
-
-      const action =
-        product.active
-          ? "desativar"
-          : "ativar";
-
-
-      const confirmed =
-        confirm(
-          `Deseja ${action} "${product.name}"?`
-        );
-
-
-      if (!confirmed) return;
-
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from("products")
-          .update({
-            active:
-              !product.active
-          })
-          .eq(
-            "id",
-            product.id
-          );
-
-
-      if (error) {
-
-        console.error(
-          "Erro ao alterar status:",
-          error
-        );
-
-        alert(
-          "Não foi possível alterar o status: " +
-          error.message
-        );
-
-        return;
-      }
-
-
-      await loadProducts();
-
-    }
-
-
-    /* EXCLUIR */
-
-    async function deleteProduct(product) {
-
-      const confirmed =
-        confirm(
-          `Tem certeza que deseja excluir "${product.name}"?\n\nEssa ação não pode ser desfeita.`
-        );
-
-
-      if (!confirmed) return;
-
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from("products")
-          .delete()
-          .eq(
-            "id",
-            product.id
-          );
-
-
-      if (error) {
-
-        console.error(
-          "Erro ao excluir produto:",
-          error
-        );
-
-        alert(
-          "Não foi possível excluir: " +
-          error.message
-        );
-
-        return;
-      }
-
-
-      await loadProducts();
-
-    }
-
-
-    refreshProductsButton.addEventListener(
-      "click",
-      loadProducts
-    );
-
-
-    /* PEDIDOS */
-
-    async function loadOrders() {
-
-      const ordersList =
-        document.querySelector(
-          "#orders-list"
-        );
-
-
-      ordersList.innerHTML =
-        "<p>Carregando pedidos...</p>";
-
-
-      const {
-        data: orders,
-        error
-      } =
-        await supabaseClient
-          .from("orders")
-          .select("*")
-          .order(
-            "created_at",
-            { ascending: false }
-          );
-
-
-      if (error) {
-
-        console.error(
-          "Erro ao carregar pedidos:",
-          error
-        );
-
-        ordersList.innerHTML =
-          "<p>Erro ao carregar pedidos.</p>";
-
-        return;
-      }
-
-
-      if (
-        !orders ||
-        orders.length === 0
-      ) {
-
-        ordersList.innerHTML =
-          "<p>Nenhum pedido encontrado.</p>";
-
-        return;
-      }
-
-
-      ordersList.innerHTML = "";
-
-
-      for (const order of orders) {
-
-        const {
-          data: items,
-          error: itemsError
-        } =
-          await supabaseClient
-            .from("order_items")
-            .select("*")
-            .eq(
-              "order_id",
-              order.id
-            );
-
-
-        if (itemsError) {
-
-          console.error(
-            "Erro ao carregar itens:",
-            itemsError
-          );
-
-          continue;
-        }
-
-
-        const orderCard =
-          document.createElement(
-            "div"
-          );
-
-        orderCard.className =
-          "admin-card";
-
-
-        const itemsContainer =
-          document.createElement(
-            "div"
-          );
-
-        itemsContainer.style.marginTop =
-          "14px";
-
-        const itemsTitle =
-          document.createElement(
-            "strong"
-          );
-
-        itemsTitle.textContent =
-          "Itens:";
-
-        itemsContainer.appendChild(
-          itemsTitle
-        );
-
-
-        (items || []).forEach(
-          item => {
-
-            const row =
-              document.createElement(
-                "div"
-              );
-
-            row.style.padding =
-              "8px 0";
-
-            row.style.borderBottom =
-              "1px solid #e1eef0";
-
-            row.textContent =
-              `${item.product_name} × ${item.quantity} — R$ ${Number(item.product_price).toFixed(2).replace(".", ",")}`;
-
-            itemsContainer.appendChild(
-              row
-            );
-
-          }
-        );
-
-
-        const title =
-          document.createElement(
-            "h3"
-          );
-
-        title.textContent =
-          `📦 Pedido #${order.id.slice(0, 8)}`;
-
-
-        const date =
-          document.createElement(
-            "p"
-          );
-
-        date.innerHTML =
-          `<strong>Data:</strong> ${new Date(order.created_at).toLocaleString("pt-BR")}`;
-
-
-        const customer =
-          document.createElement(
-            "p"
-          );
-
-        customer.innerHTML =
-          `<strong>Cliente:</strong> ${escapeHtml(order.customer_id)}`;
-
-
-        const delivery =
-          document.createElement(
-            "p"
-          );
-
-        delivery.innerHTML =
-          `<strong>Usuário para entrega:</strong> ${escapeHtml(order.delivery_username || "Não informado")}`;
-
-
-        const pixName =
-          document.createElement(
-            "p"
-          );
-
-        pixName.innerHTML =
-          `<strong>Nome do remetente Pix:</strong> ${escapeHtml(order.pix_name || "Não informado")}`;
-
-
-        const status =
-          document.createElement(
-            "p"
-          );
-
-        status.innerHTML =
-          `<strong>Status:</strong> ${escapeHtml(order.status)}`;
-
-
-        const total =
-          document.createElement(
-            "p"
-          );
-
-        total.style.marginTop =
-          "14px";
-
-        total.innerHTML =
-          `<strong>Total: R$ ${Number(order.total).toFixed(2).replace(".", ",")}</strong>`;
-
-
-        const actions =
-          document.createElement(
-            "div"
-          );
-
-        actions.style.display =
-          "flex";
-
-        actions.style.gap =
-          "10px";
-
-        actions.style.flexWrap =
-          "wrap";
-
-        actions.style.marginTop =
-          "15px";
-
-
-        if (
-          order.status ===
-          "payment_confirmed"
-        ) {
-
-          const button =
-            document.createElement(
-              "button"
-            );
-
-          button.className =
-            "primary-button";
-
-          button.textContent =
-            "📦 Enviar para entrega";
-
-          button.addEventListener(
-            "click",
-            () =>
-              updateOrderStatus(
-                order.id,
-                "awaiting_delivery"
-              )
-          );
-
-          actions.appendChild(
-            button
-          );
-
-        }
-
-
-        if (
-          order.status ===
-          "awaiting_delivery"
-        ) {
-
-          const button =
-            document.createElement(
-              "button"
-            );
-
-          button.className =
-            "primary-button";
-
-          button.textContent =
-            "✅ Marcar como entregue";
-
-          button.addEventListener(
-            "click",
-            () =>
-              updateOrderStatus(
-                order.id,
-                "delivered"
-              )
-          );
-
-          actions.appendChild(
-            button
-          );
-
-        }
-
-
-        orderCard.appendChild(title);
-        orderCard.appendChild(date);
-        orderCard.appendChild(customer);
-        orderCard.appendChild(delivery);
-        orderCard.appendChild(pixName);
-        orderCard.appendChild(status);
-        orderCard.appendChild(itemsContainer);
-        orderCard.appendChild(total);
-        orderCard.appendChild(actions);
-
-
-        ordersList.appendChild(
-          orderCard
-        );
-
-      }
-
-    }
-
-
-    async function updateOrderStatus(
-      orderId,
-      newStatus
-    ) {
-
-      const {
-        error
-      } =
-        await supabaseClient
-          .from("orders")
-          .update({
-            status:
-              newStatus,
-
-            updated_at:
-              new Date().toISOString()
-          })
-          .eq(
-            "id",
-            orderId
-          );
-
-
-      if (error) {
-
-        console.error(
-          "Erro ao atualizar pedido:",
-          error
-        );
-
-        alert(
-          "Não foi possível atualizar o pedido: " +
-          error.message
-        );
-
-        return;
-      }
-
-
-      alert(
-        "Pedido atualizado com sucesso! ✅"
+  }
+);
+
+
+async function toggleProduct(product){
+
+  const action =
+    product.active
+      ? "desativar"
+      : "ativar";
+
+
+  if(
+    !confirm(
+      `Deseja ${action} "${product.name}"?`
+    )
+  ) return;
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("products")
+      .update({
+        active: !product.active
+      })
+      .eq(
+        "id",
+        product.id
       );
 
 
-      await loadOrders();
+  if(error){
+
+    alert(
+      "Não foi possível alterar o status:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  await loadProducts();
+
+}
+
+
+async function deleteProduct(product){
+
+  if(
+    !confirm(
+      `Tem certeza que deseja excluir "${product.name}"?\n\nEssa ação não pode ser desfeita.`
+    )
+  ) return;
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("products")
+      .delete()
+      .eq(
+        "id",
+        product.id
+      );
+
+
+  if(error){
+
+    alert(
+      "Não foi possível excluir:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  await loadProducts();
+
+}
+
+
+refreshProductsButton.addEventListener(
+  "click",
+  loadProducts
+);
+
+
+/* =========================================================
+   PEDIDOS
+========================================================= */
+
+async function loadOrders(){
+
+  const list =
+    document.querySelector("#orders-list");
+
+  const message =
+    document.querySelector("#orders-message");
+
+
+  list.innerHTML =
+    "<p>Carregando pedidos...</p>";
+
+  message.textContent = "";
+
+
+  const {
+    data: orders,
+    error
+  } =
+    await supabaseClient
+      .from("orders")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
+
+
+  if(error){
+
+    list.innerHTML =
+      `<p class="message error-message">
+        ${escapeHtml(error.message)}
+      </p>`;
+
+    return;
+  }
+
+
+  if(!orders?.length){
+
+    list.innerHTML =
+      `<div class="empty-products">
+        <div style="font-size:40px">📦</div>
+        <p>Nenhum pedido encontrado.</p>
+      </div>`;
+
+    return;
+  }
+
+
+  list.innerHTML = "";
+
+
+  for(const order of orders){
+
+    const {
+      data: items
+    } =
+      await supabaseClient
+        .from("order_items")
+        .select("*")
+        .eq(
+          "order_id",
+          order.id
+        );
+
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "order-card";
+
+
+    const title =
+      document.createElement("h3");
+
+    title.textContent =
+      `📦 Pedido #${order.id.slice(0,8)}`;
+
+
+    const date =
+      document.createElement("p");
+
+    date.innerHTML =
+      `<strong>Data:</strong> ${formatDate(order.created_at)}`;
+
+
+    const status =
+      document.createElement("p");
+
+    status.innerHTML =
+      `<strong>Status:</strong> `;
+
+    const statusBadge =
+      document.createElement("span");
+
+    statusBadge.className =
+      "status-badge";
+
+    statusBadge.textContent =
+      formatOrderStatus(order.status);
+
+    status.appendChild(statusBadge);
+
+
+    const customer =
+      document.createElement("p");
+
+    customer.innerHTML =
+      `<strong>Cliente:</strong> ${escapeHtml(order.customer_id)}`;
+
+
+    const privateInfo =
+      document.createElement("div");
+
+    privateInfo.className =
+      "private-info";
+
+    privateInfo.innerHTML = `
+      <strong>🔒 Dados privados da entrega</strong>
+      <div style="margin-top:8px">
+        <strong>Roblox:</strong>
+        ${escapeHtml(order.delivery_username || "Não informado")}
+      </div>
+      <div style="margin-top:5px">
+        <strong>Pix:</strong>
+        ${escapeHtml(order.pix_name || "Não informado")}
+      </div>
+    `;
+
+
+    const itemsBox =
+      document.createElement("div");
+
+    itemsBox.className =
+      "order-items";
+
+
+    const itemsTitle =
+      document.createElement("strong");
+
+    itemsTitle.textContent =
+      "Itens do pedido";
+
+    itemsBox.appendChild(itemsTitle);
+
+
+    (items || []).forEach(item => {
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "order-item";
+
+      row.textContent =
+        `${item.product_name} × ${item.quantity} — ${money(
+          Number(item.product_price) *
+          Number(item.quantity)
+        )}`;
+
+      itemsBox.appendChild(row);
+
+    });
+
+
+    const total =
+      document.createElement("div");
+
+    total.className =
+      "order-total";
+
+    total.innerHTML =
+      `<strong>Total: ${money(order.total)}</strong>`;
+
+
+    const actions =
+      document.createElement("div");
+
+    actions.className =
+      "order-actions";
+
+
+    if(
+      order.status ===
+      "awaiting_delivery"
+    ){
+
+      const delivered =
+        document.createElement("button");
+
+      delivered.className =
+        "primary-button";
+
+      delivered.textContent =
+        "✅ Marcar como entregue";
+
+      delivered.onclick =
+        ()=>markDelivered(order.id);
+
+      actions.appendChild(delivered);
 
     }
 
 
-    ordersOption.addEventListener(
-      "click",
-      () => {
+    if(
+      order.status ===
+      "delivered"
+    ){
 
-        hideAllSections();
+      const deliveredLabel =
+        document.createElement("span");
 
-        ordersSection.classList.remove(
-          "hidden"
-        );
+      deliveredLabel.className =
+        "status-badge";
 
-        loadOrders();
+      deliveredLabel.textContent =
+        "✅ Entregue";
 
-      }
+      actions.appendChild(
+        deliveredLabel
+      );
+
+    }
+
+
+    card.append(
+      title,
+      date,
+      customer,
+      status,
+      privateInfo,
+      itemsBox,
+      total,
+      actions
     );
 
 
-    document
-      .querySelector(
-        "#refresh-orders-button"
+    list.appendChild(card);
+
+  }
+
+}
+
+
+async function markDelivered(orderId){
+
+  if(
+    !confirm(
+      "Marcar este pedido como entregue?"
+    )
+  ) return;
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("orders")
+      .update({
+        status: "delivered",
+        updated_at:
+          new Date().toISOString()
+      })
+      .eq(
+        "id",
+        orderId
       )
-      .addEventListener(
-        "click",
-        loadOrders
+      .eq(
+        "status",
+        "awaiting_delivery"
       );
 
 
-    /* PAGAMENTOS */
+  if(error){
 
-    async function loadPayments() {
+    alert(
+      "Não foi possível atualizar o pedido:\n" +
+      error.message
+    );
 
-      const paymentsList =
-        document.querySelector(
-          "#payments-list"
-        );
+    return;
+  }
 
 
-      paymentsList.innerHTML =
-        "<p>Carregando pagamentos...</p>";
+  await loadOrders();
 
+}
 
-      const {
-        data: payments,
-        error
-      } =
-        await supabaseClient
-          .from("payments")
-          .select("*")
-          .order(
-            "created_at",
-            { ascending: false }
-          );
 
+document
+  .querySelector("#refresh-orders-button")
+  .addEventListener(
+    "click",
+    loadOrders
+  );
 
-      if (error) {
 
-        console.error(
-          "Erro ao carregar pagamentos:",
-          error
-        );
+/* =========================================================
+   PAGAMENTOS
+========================================================= */
 
-        paymentsList.innerHTML = `
-          <div class="empty-products">
-            <div style="font-size:40px">⚠️</div>
-            <p>Não foi possível carregar os pagamentos.</p>
-            <p>${escapeHtml(error.message)}</p>
-          </div>
-        `;
+async function loadPayments(){
 
-        return;
-      }
+  const list =
+    document.querySelector("#payments-list");
 
 
-      const pendingPayments =
-        (payments || [])
-          .filter(
-            payment =>
-              payment.status ===
-              "pending"
-          );
+  list.innerHTML =
+    "<p>Carregando pagamentos...</p>";
 
 
-      if (
-        !pendingPayments.length
-      ) {
-
-        paymentsList.innerHTML = `
-          <div class="empty-products">
-            <div style="font-size:40px">💳</div>
-            <p>Nenhum pagamento aguardando confirmação.</p>
-          </div>
-        `;
-
-        return;
-      }
-
-
-      paymentsList.innerHTML = "";
-
-
-      for (
-        const payment
-        of pendingPayments
-      ) {
-
-        const {
-          data: order,
-          error: orderError
-        } =
-          await supabaseClient
-            .from("orders")
-            .select("*")
-            .eq(
-              "id",
-              payment.order_id
-            )
-            .maybeSingle();
-
-
-        if (
-          orderError ||
-          !order
-        ) {
-
-          console.error(
-            "Erro ao carregar pedido do pagamento:",
-            orderError
-          );
-
-          continue;
-        }
-
-
-        const {
-          data: items
-        } =
-          await supabaseClient
-            .from("order_items")
-            .select("*")
-            .eq(
-              "order_id",
-              order.id
-            );
-
-
-        const card =
-          document.createElement(
-            "div"
-          );
-
-        card.className =
-          "payment-card";
-
-
-        const title =
-          document.createElement(
-            "h3"
-          );
-
-        title.textContent =
-          `💳 Pedido #${order.id.slice(0, 8)}`;
-
-
-        const date =
-          document.createElement(
-            "p"
-          );
-
-        date.innerHTML =
-          `<strong>Data:</strong> ${new Date(order.created_at).toLocaleString("pt-BR")}`;
-
-
-        const pixName =
-          document.createElement(
-            "p"
-          );
-
-        pixName.innerHTML =
-          `<strong>Nome do remetente Pix:</strong> ${escapeHtml(order.pix_name || "Não informado")}`;
-
-
-        const delivery =
-          document.createElement(
-            "p"
-          );
-
-        delivery.innerHTML =
-          `<strong>Usuário para entrega:</strong> ${escapeHtml(order.delivery_username || "Não informado")}`;
-
-
-        const total =
-          document.createElement(
-            "p"
-          );
-
-        total.innerHTML =
-          `<strong>Total:</strong> R$ ${Number(order.total).toFixed(2).replace(".", ",")}`;
-
-
-        const itemsBox =
-          document.createElement(
-            "div"
-          );
-
-        itemsBox.className =
-          "payment-items";
-
-
-        const itemsTitle =
-          document.createElement(
-            "strong"
-          );
-
-        itemsTitle.textContent =
-          "Itens do pedido";
-
-        itemsBox.appendChild(
-          itemsTitle
-        );
-
-
-        (items || []).forEach(
-          item => {
-
-            const itemRow =
-              document.createElement(
-                "div"
-              );
-
-            itemRow.className =
-              "payment-item";
-
-            itemRow.textContent =
-              `${item.product_name} × ${item.quantity}`;
-
-            itemsBox.appendChild(
-              itemRow
-            );
-
-          }
-        );
-
-
-        const status =
-          document.createElement(
-            "div"
-          );
-
-        status.className =
-          "payment-status";
-
-        status.textContent =
-          "⏳ Aguardando confirmação";
-
-
-        const confirmButton =
-          document.createElement(
-            "button"
-          );
-
-        confirmButton.className =
-          "primary-button";
-
-        confirmButton.style.marginTop =
-          "15px";
-
-        confirmButton.textContent =
-          "✅ Confirmar pagamento";
-
-
-        confirmButton.addEventListener(
-          "click",
-          () =>
-            confirmPayment(
-              order.id
-            )
-        );
-
-
-        card.appendChild(title);
-        card.appendChild(date);
-        card.appendChild(pixName);
-        card.appendChild(delivery);
-        card.appendChild(total);
-        card.appendChild(itemsBox);
-        card.appendChild(status);
-        card.appendChild(confirmButton);
-
-
-        paymentsList.appendChild(
-          card
-        );
-
-      }
-
-    }
-
-
-    async function confirmPayment(
-      orderId
-    ) {
-
-      const confirmed =
-        confirm(
-          "Você confirmou que o pagamento deste pedido realmente caiu no Pix?"
-        );
-
-
-      if (!confirmed) return;
-
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient.rpc(
-          "confirm_payment",
-          {
-            p_order_id:
-              orderId
-          }
-        );
-
-
-      if (error) {
-
-        console.error(
-          "Erro ao confirmar pagamento:",
-          error
-        );
-
-        alert(
-          "Não foi possível confirmar o pagamento:\n" +
-          error.message
-        );
-
-        return;
-      }
-
-
-      if (
-        !data?.success
-      ) {
-
-        alert(
-          "Não foi possível confirmar o pagamento."
-        );
-
-        return;
-      }
-
-
-      alert(
-        "Pagamento confirmado com sucesso! ✅\n\nO estoque foi atualizado."
+  const {
+    data: payments,
+    error
+  } =
+    await supabaseClient
+      .from("payments")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
       );
 
 
-      await loadPayments();
+  if(error){
 
-    }
+    list.innerHTML =
+      `<p class="message error-message">
+        ${escapeHtml(error.message)}
+      </p>`;
+
+    return;
+  }
 
 
-    paymentsOption.addEventListener(
-      "click",
-      () => {
+  const pending =
+    (payments || [])
+      .filter(
+        payment =>
+          payment.status === "pending"
+      );
 
-        hideAllSections();
 
-        paymentsSection.classList.remove(
-          "hidden"
+  if(!pending.length){
+
+    list.innerHTML =
+      `<div class="empty-products">
+        <div style="font-size:40px">💳</div>
+        <p>Nenhum pagamento aguardando confirmação.</p>
+      </div>`;
+
+    return;
+  }
+
+
+  list.innerHTML = "";
+
+
+  for(const payment of pending){
+
+    const {
+      data: order
+    } =
+      await supabaseClient
+        .from("orders")
+        .select("*")
+        .eq(
+          "id",
+          payment.order_id
+        )
+        .maybeSingle();
+
+
+    if(!order) continue;
+
+
+    const {
+      data: items
+    } =
+      await supabaseClient
+        .from("order_items")
+        .select("*")
+        .eq(
+          "order_id",
+          order.id
         );
 
-        loadPayments();
 
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "payment-card";
+
+
+    card.innerHTML = `
+      <h3>💳 Pedido #${order.id.slice(0,8)}</h3>
+
+      <p>
+        <strong>Data:</strong>
+        ${formatDate(order.created_at)}
+      </p>
+
+      <div class="private-info">
+        <strong>🔒 Dados informados pelo cliente</strong>
+
+        <div style="margin-top:8px">
+          <strong>Nome no Pix:</strong>
+          ${escapeHtml(order.pix_name || "Não informado")}
+        </div>
+
+        <div style="margin-top:5px">
+          <strong>Roblox:</strong>
+          ${escapeHtml(order.delivery_username || "Não informado")}
+        </div>
+      </div>
+
+      <p>
+        <strong>Total:</strong>
+        ${money(order.total)}
+      </p>
+    `;
+
+
+    const itemsBox =
+      document.createElement("div");
+
+    itemsBox.className =
+      "order-items";
+
+
+    const title =
+      document.createElement("strong");
+
+    title.textContent =
+      "Itens do pedido";
+
+    itemsBox.appendChild(title);
+
+
+    (items || []).forEach(item => {
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "order-item";
+
+      row.textContent =
+        `${item.product_name} × ${item.quantity}`;
+
+      itemsBox.appendChild(row);
+
+    });
+
+
+    const status =
+      document.createElement("div");
+
+    status.className =
+      "payment-status";
+
+    status.textContent =
+      "⏳ Aguardando confirmação";
+
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "primary-button";
+
+    button.style.marginTop =
+      "15px";
+
+    button.textContent =
+      "✅ Confirmar pagamento";
+
+
+    button.onclick =
+      ()=>confirmPayment(order.id);
+
+
+    card.append(
+      itemsBox,
+      status,
+      button
+    );
+
+
+    list.appendChild(card);
+
+  }
+
+}
+
+
+async function confirmPayment(orderId){
+
+  if(
+    !confirm(
+      "Você confirmou que o pagamento realmente caiu no Pix?"
+    )
+  ) return;
+
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.rpc(
+      "confirm_payment",
+      {
+        p_order_id: orderId
       }
     );
 
 
-    document
-      .querySelector(
-        "#refresh-payments-button"
+  if(error){
+
+    alert(
+      "Não foi possível confirmar o pagamento:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  if(!data?.success){
+
+    alert(
+      "O pagamento não pôde ser confirmado."
+    );
+
+    return;
+  }
+
+
+  alert(
+    "Pagamento confirmado com sucesso! ✅\n\n" +
+    "O estoque foi atualizado atomicamente."
+  );
+
+
+  await loadPayments();
+
+}
+
+
+document
+  .querySelector("#refresh-payments-button")
+  .addEventListener(
+    "click",
+    loadPayments
+  );
+
+
+/* =========================================================
+   ATENDIMENTO
+========================================================= */
+
+let serviceOnline = false;
+
+
+async function loadServiceStatus(){
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("store_settings")
+      .select("online")
+      .eq("id",1)
+      .maybeSingle();
+
+
+  if(error){
+
+    alert(
+      "Não foi possível carregar o status:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  serviceOnline =
+    Boolean(data?.online);
+
+
+  updateServiceUI();
+
+}
+
+
+function updateServiceUI(){
+
+  const text =
+    document.querySelector(
+      "#service-status-text"
+    );
+
+  const button =
+    document.querySelector(
+      "#toggle-service-button"
+    );
+
+
+  if(serviceOnline){
+
+    text.textContent =
+      "🟢 Atendimento online";
+
+    button.textContent =
+      "🔴 Colocar offline";
+
+  }else{
+
+    text.textContent =
+      "⚪ Atendimento offline";
+
+    button.textContent =
+      "🟢 Colocar online";
+
+  }
+
+}
+
+
+async function toggleService(){
+
+  const newStatus =
+    !serviceOnline;
+
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("store_settings")
+      .update({
+        online: newStatus,
+        updated_at:
+          new Date().toISOString()
+      })
+      .eq("id",1);
+
+
+  if(error){
+
+    alert(
+      "Não foi possível alterar o atendimento:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  serviceOnline =
+    newStatus;
+
+
+  updateServiceUI();
+
+}
+
+
+document
+  .querySelector("#toggle-service-button")
+  .addEventListener(
+    "click",
+    toggleService
+  );
+
+
+/* =========================================================
+   PROMOÇÃO
+========================================================= */
+
+const discountPercent =
+  document.querySelector("#discount-percent");
+
+const discountActive =
+  document.querySelector("#discount-active");
+
+const discountPreview =
+  document.querySelector("#discount-preview");
+
+const discountMessage =
+  document.querySelector("#discount-message");
+
+
+function updateDiscountPreview(){
+
+  const value =
+    Number(discountPercent.value);
+
+
+  if(
+    !Number.isFinite(value) ||
+    value <= 0
+  ){
+
+    discountPreview.textContent =
+      "Nenhum desconto configurado.";
+
+    return;
+  }
+
+
+  discountPreview.textContent =
+    `Desconto configurado: ${value}%`;
+
+}
+
+
+discountPercent.addEventListener(
+  "input",
+  updateDiscountPreview
+);
+
+
+async function loadPromotion(){
+
+  discountMessage.textContent =
+    "";
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("store_settings")
+      .select(
+        "discount_percent, discount_active"
       )
-      .addEventListener(
-        "click",
-        loadPayments
-      );
+      .eq("id",1)
+      .maybeSingle();
 
 
-    /* ATENDIMENTO */
+  if(error){
 
-    let serviceOnline = false;
+    discountMessage.textContent =
+      "Erro: " +
+      error.message;
 
+    discountMessage.className =
+      "message error-message";
 
-    async function loadServiceStatus() {
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient
-          .from("store_settings")
-          .select("online")
-          .eq("id", 1)
-          .maybeSingle();
+    return;
+  }
 
 
-      if (error) {
+  discountPercent.value =
+    data?.discount_percent ?? 0;
 
-        console.error(
-          "Erro ao carregar atendimento:",
-          error
-        );
+  discountActive.checked =
+    Boolean(data?.discount_active);
+
+
+  updateDiscountPreview();
+
+}
+
+
+document
+  .querySelector("#save-discount-button")
+  .addEventListener(
+    "click",
+    async ()=>{
+
+      const percent =
+        Number(discountPercent.value);
+
+      const active =
+        discountActive.checked;
+
+
+      if(
+        !Number.isFinite(percent) ||
+        percent < 0 ||
+        percent > 100
+      ){
+
+        discountMessage.textContent =
+          "O desconto deve estar entre 0% e 100%.";
+
+        discountMessage.className =
+          "message error-message";
 
         return;
       }
-
-
-      serviceOnline =
-        Boolean(
-          data?.online
-        );
-
-
-      updateServiceUI();
-
-    }
-
-
-    function updateServiceUI() {
-
-      const text =
-        document.querySelector(
-          "#service-status-text"
-        );
-
-      const button =
-        document.querySelector(
-          "#toggle-service-button"
-        );
-
-
-      if (serviceOnline) {
-
-        text.textContent =
-          "🟢 Atendimento online";
-
-        button.textContent =
-          "🔴 Colocar offline";
-
-      } else {
-
-        text.textContent =
-          "⚪ Atendimento offline";
-
-        button.textContent =
-          "🟢 Colocar online";
-
-      }
-
-    }
-
-
-    async function toggleService() {
-
-      const newStatus =
-        !serviceOnline;
 
 
       const {
@@ -2573,118 +2690,464 @@
         await supabaseClient
           .from("store_settings")
           .update({
-            online:
-              newStatus,
+
+            discount_percent:
+              percent,
+
+            discount_active:
+              active,
 
             updated_at:
               new Date().toISOString()
+
           })
-          .eq(
-            "id",
-            1
-          );
+          .eq("id",1);
 
 
-      if (error) {
+      if(error){
 
-        console.error(
-          "Erro ao alterar atendimento:",
-          error
-        );
+        discountMessage.textContent =
+          "Erro: " +
+          error.message;
 
-        alert(
-          "Não foi possível alterar o atendimento: " +
-          error.message
-        );
+        discountMessage.className =
+          "message error-message";
 
         return;
       }
 
 
-      serviceOnline =
-        newStatus;
+      discountMessage.textContent =
+        "Promoção salva com sucesso! ✅";
 
+      discountMessage.className =
+        "message success-message";
 
-      updateServiceUI();
+      updateDiscountPreview();
 
     }
+  );
 
 
-    serviceOption.addEventListener(
-      "click",
-      async () => {
+/* =========================================================
+   ENTREGA
+========================================================= */
 
-        hideAllSections();
+const deliveryBotUsername =
+  document.querySelector(
+    "#delivery-bot-username"
+  );
 
-        serviceSection.classList.remove(
-          "hidden"
-        );
+const joinOpen =
+  document.querySelector(
+    "#join-open"
+  );
 
-        await loadServiceStatus();
+const deliveryMessage =
+  document.querySelector(
+    "#delivery-message"
+  );
 
-      }
-    );
+
+async function loadDeliverySettings(){
+
+  deliveryMessage.textContent = "";
 
 
-    document
-      .querySelector(
-        "#toggle-service-button"
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("store_settings")
+      .select(
+        "delivery_bot_username, join_open"
       )
-      .addEventListener(
-        "click",
-        toggleService
+      .eq("id",1)
+      .maybeSingle();
+
+
+  if(error){
+
+    deliveryMessage.textContent =
+      "Erro: " +
+      error.message;
+
+    deliveryMessage.className =
+      "message error-message";
+
+    return;
+  }
+
+
+  deliveryBotUsername.value =
+    data?.delivery_bot_username || "";
+
+  joinOpen.checked =
+    data?.join_open !== false;
+
+}
+
+
+document
+  .querySelector("#save-delivery-button")
+  .addEventListener(
+    "click",
+    async ()=>{
+
+      const username =
+        deliveryBotUsername.value.trim();
+
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("store_settings")
+          .update({
+
+            delivery_bot_username:
+              username || null,
+
+            join_open:
+              joinOpen.checked,
+
+            updated_at:
+              new Date().toISOString()
+
+          })
+          .eq("id",1);
+
+
+      if(error){
+
+        deliveryMessage.textContent =
+          "Erro: " +
+          error.message;
+
+        deliveryMessage.className =
+          "message error-message";
+
+        return;
+      }
+
+
+      deliveryMessage.textContent =
+        "Configurações de entrega salvas! ✅";
+
+      deliveryMessage.className =
+        "message success-message";
+
+    }
+  );
+
+
+/* =========================================================
+   AVALIAÇÕES
+========================================================= */
+
+async function loadReviews(){
+
+  const list =
+    document.querySelector("#reviews-list");
+
+
+  list.innerHTML =
+    "<p>Carregando avaliações...</p>";
+
+
+  const {
+    data: reviews,
+    error
+  } =
+    await supabaseClient
+      .from("reviews")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
       );
 
 
-    /* ESCAPAR HTML */
+  if(error){
 
-    function escapeHtml(value) {
+    list.innerHTML =
+      `<p class="message error-message">
+        ${escapeHtml(error.message)}
+      </p>`;
 
-      return String(value)
-        .replaceAll(
-          "&",
-          "&amp;"
-        )
-        .replaceAll(
-          "<",
-          "&lt;"
-        )
-        .replaceAll(
-          ">",
-          "&gt;"
-        )
-        .replaceAll(
-          '"',
-          "&quot;"
-        )
-        .replaceAll(
-          "'",
-          "&#039;"
+    return;
+  }
+
+
+  if(!reviews?.length){
+
+    list.innerHTML =
+      `<div class="empty-products">
+        <div style="font-size:40px">⭐</div>
+        <p>Nenhuma avaliação encontrada.</p>
+      </div>`;
+
+    return;
+  }
+
+
+  list.innerHTML = "";
+
+
+  reviews.forEach(review => {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "review-card";
+
+
+    const author =
+      review.tiktok_username ||
+      "Cliente";
+
+
+    const stars =
+      "★".repeat(
+        Number(review.rating || 0)
+      ) +
+      "☆".repeat(
+        5 - Number(review.rating || 0)
+      );
+
+
+    card.innerHTML = `
+      <h3>${escapeHtml(author)}</h3>
+
+      <div class="review-stars">
+        ${stars}
+      </div>
+
+      <p class="review-text">
+        ${escapeHtml(review.text || "Sem comentário.")}
+      </p>
+
+      <div class="review-author">
+        Status:
+        <strong>${escapeHtml(review.status || "pending")}</strong>
+      </div>
+    `;
+
+
+    const actions =
+      document.createElement("div");
+
+    actions.className =
+      "order-actions";
+
+
+    if(review.status === "pending"){
+
+      const approve =
+        document.createElement("button");
+
+      approve.className =
+        "small-button success";
+
+      approve.textContent =
+        "✅ Aprovar";
+
+      approve.onclick =
+        ()=>updateReviewStatus(
+          review.id,
+          "approved"
         );
+
+
+      const reject =
+        document.createElement("button");
+
+      reject.className =
+        "small-button danger";
+
+      reject.textContent =
+        "❌ Rejeitar";
+
+      reject.onclick =
+        ()=>updateReviewStatus(
+          review.id,
+          "rejected"
+        );
+
+
+      actions.append(
+        approve,
+        reject
+      );
+
+    }else{
+
+      const status =
+        document.createElement("span");
+
+      status.className =
+        "status-badge";
+
+      status.textContent =
+        review.status === "approved"
+          ? "✅ Aprovada"
+          : "❌ Rejeitada";
+
+      actions.appendChild(status);
 
     }
 
 
-    /* LOGOUT */
+    card.appendChild(actions);
 
-    logoutButton.addEventListener(
-      "click",
-      async () => {
+    list.appendChild(card);
 
-        await supabaseClient.auth.signOut();
+  });
 
-        window.location.href =
-          "index.html";
+}
 
+
+async function updateReviewStatus(
+  reviewId,
+  status
+){
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("reviews")
+      .update({
+        status
+      })
+      .eq(
+        "id",
+        reviewId
+      );
+
+
+  if(error){
+
+    alert(
+      "Não foi possível atualizar a avaliação:\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  await loadReviews();
+
+}
+
+
+document
+  .querySelector("#refresh-reviews-button")
+  .addEventListener(
+    "click",
+    loadReviews
+  );
+
+
+/* =========================================================
+   UTILITÁRIOS
+========================================================= */
+
+function money(value){
+
+  return Number(value || 0)
+    .toLocaleString(
+      "pt-BR",
+      {
+        style:"currency",
+        currency:"BRL"
       }
     );
 
+}
 
-    /* INICIAR */
 
-    checkAdminAccess();
+function formatDate(value){
 
-  </script>
+  return new Date(value)
+    .toLocaleString(
+      "pt-BR"
+    );
+
+}
+
+
+function formatOrderStatus(status){
+
+  const labels = {
+
+    awaiting_payment:
+      "Aguardando pagamento",
+
+    awaiting_verification:
+      "Aguardando verificação",
+
+    payment_confirmed:
+      "Pagamento confirmado",
+
+    awaiting_delivery:
+      "Aguardando entrega",
+
+    delivered:
+      "Entregue",
+
+    cancelled:
+      "Cancelado"
+
+  };
+
+
+  return labels[status] ||
+    status ||
+    "Desconhecido";
+
+}
+
+
+function escapeHtml(value=""){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+logoutButton.addEventListener(
+  "click",
+  async ()=>{
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href =
+      "index.html";
+
+  }
+);
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+checkAdminAccess();
+
+</script>
 
 </body>
-            </html>
+  </html>
