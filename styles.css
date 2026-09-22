@@ -879,7 +879,7 @@ a{
    COMO FUNCIONA
 ========================================================= */
 
-.how-section{
+.section.how-section{
   background:
     radial-gradient(
       circle at 10% 15%,
