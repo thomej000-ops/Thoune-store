@@ -2104,3 +2104,46 @@ a{
     margin:18px auto !important;
   }
         }
+
+/* CORREÇÃO DEFINITIVA — SEÇÃO COMO COMPRAR */
+
+.section.how-section{
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(68,151,169,.18),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      #061f2a 0%,
+      #0d4051 100%
+    ) !important;
+
+  color:#fff !important;
+}
+
+.section.how-section .section-heading h2{
+  color:#fff !important;
+}
+
+.section.how-section .eyebrow{
+  color:#8fc3cf !important;
+}
+
+.section.how-section .steps article{
+  background:rgba(255,255,255,.045) !important;
+  border-color:rgba(255,255,255,.13) !important;
+}
+
+.section.how-section .steps h3{
+  color:#fff !important;
+}
+
+.section.how-section .steps p{
+  color:#b6d0d6 !important;
+}
+
+.section.how-section .steps b{
+  color:#7daebb !important;
+}
