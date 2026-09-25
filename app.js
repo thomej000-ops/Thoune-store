@@ -597,14 +597,9 @@ async function loadCustomerOrders() {
     data: {
       session
     }
-  } =
-    await supabaseClient.auth
-      .getSession();
+  } = await supabaseClient.auth.getSession();
 
-  if (
-    !session?.user ||
-    !ordersList
-  ) {
+  if (!session?.user || !ordersList) {
     return;
   }
 
@@ -613,22 +608,13 @@ async function loadCustomerOrders() {
   const {
     data: orders,
     error
-  } =
-    await supabaseClient
-      .from("orders")
-      .select(
-        "id, status, total, created_at"
-      )
-      .eq(
-        "customer_id",
-        session.user.id
-      )
-      .order(
-        "created_at",
-        {
-          ascending: false
-        }
-      );
+  } = await supabaseClient
+    .from("orders")
+    .select("id, status, total, created_at")
+    .eq("customer_id", session.user.id)
+    .order("created_at", {
+      ascending: false
+    });
 
   if (error) {
     console.error(
@@ -639,31 +625,24 @@ async function loadCustomerOrders() {
     if (ordersMessage) {
       ordersMessage.textContent =
         "Não foi possível carregar seus pedidos.";
+      ordersMessage.classList.remove("hidden");
     }
 
     return;
   }
 
-  if (
-    !orders ||
-    !orders.length
-  ) {
+  if (!orders || !orders.length) {
     if (ordersMessage) {
       ordersMessage.textContent =
         "Você ainda não possui pedidos.";
-
-      ordersMessage.classList.remove(
-        "hidden"
-      );
+      ordersMessage.classList.remove("hidden");
     }
 
     return;
   }
 
   if (ordersMessage) {
-    ordersMessage.classList.add(
-      "hidden"
-    );
+    ordersMessage.classList.add("hidden");
   }
 
   const settings =
@@ -671,9 +650,7 @@ async function loadCustomerOrders() {
 
   for (const order of orders) {
     const card =
-      document.createElement(
-        "article"
-      );
+      document.createElement("article");
 
     card.className =
       "customer-order";
@@ -685,24 +662,16 @@ async function loadCustomerOrders() {
       "customer-order-header";
 
     const title =
-      document.createElement(
-        "strong"
-      );
+      document.createElement("strong");
 
     title.textContent =
-      `Pedido #${getOrderNumber(
-        order.id
-      )}`;
+      `Pedido #${getOrderNumber(order.id)}`;
 
     const status =
-      document.createElement(
-        "span"
-      );
+      document.createElement("span");
 
     status.className =
-      `order-status ${statusClass(
-        order.status
-      )}`;
+      `order-status ${statusClass(order.status)}`;
 
     status.textContent =
       statusLabel(order.status);
@@ -714,25 +683,18 @@ async function loadCustomerOrders() {
       document.createElement("small");
 
     date.textContent =
-      new Date(
-        order.created_at
-      ).toLocaleString(
-        "pt-BR"
-      );
+      new Date(order.created_at)
+        .toLocaleString("pt-BR");
 
     const {
       data: items,
       error: itemsError
-    } =
-      await supabaseClient
-        .from("order_items")
-        .select(
-          "product_name, quantity, product_price"
-        )
-        .eq(
-          "order_id",
-          order.id
-        );
+    } = await supabaseClient
+      .from("order_items")
+      .select(
+        "product_name, quantity, product_price"
+      )
+      .eq("order_id", order.id);
 
     if (itemsError) {
       console.error(
@@ -742,39 +704,240 @@ async function loadCustomerOrders() {
     }
 
     const itemList =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
     itemList.className =
       "customer-order-items";
 
     for (const item of items || []) {
       const itemRow =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
       const itemName =
-        document.createElement(
-          "span"
-        );
+        document.createElement("span");
 
       itemName.textContent =
         `${item.product_name} × ${item.quantity}`;
 
-      itemRow.appendChild(
-        itemName
-      );
-
-      itemList.appendChild(
-        itemRow
-      );
+      itemRow.appendChild(itemName);
+      itemList.appendChild(itemRow);
     }
 
     card.appendChild(header);
     card.appendChild(date);
     card.appendChild(itemList);
+
+    // ===============================
+    // AGUARDANDO PAGAMENTO
+    // ===============================
+
+    if (order.status === "awaiting_payment") {
+      const paymentBox =
+        document.createElement("div");
+
+      paymentBox.className =
+        "order-action-box";
+
+      const text =
+        document.createElement("p");
+
+      text.textContent =
+        "Seu pedido foi criado. Realize o Pix mostrado no checkout e depois informe o pagamento.";
+
+      const button =
+        document.createElement("button");
+
+      button.className =
+        "secondary-button full";
+
+      button.textContent =
+        "🔎 Verificar pagamento";
+
+      button.addEventListener(
+        "click",
+        () => {
+          requestPaymentVerification(
+            order.id,
+            button
+          );
+        }
+      );
+
+      paymentBox.appendChild(text);
+      paymentBox.appendChild(button);
+
+      card.appendChild(paymentBox);
+    }
+
+    // ===============================
+    // AGUARDANDO VERIFICAÇÃO
+    // ===============================
+
+    if (
+      order.status ===
+      "awaiting_verification"
+    ) {
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "order-info-box";
+
+      info.textContent =
+        "⏳ Pagamento informado. A loja está verificando seu pagamento.";
+
+      card.appendChild(info);
+    }
+
+    // ===============================
+    // PAGAMENTO CONFIRMADO
+    // ===============================
+
+    if (
+      order.status ===
+      "payment_confirmed"
+    ) {
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "order-info-box";
+
+      info.textContent =
+        "✅ Pagamento confirmado! Sua entrega está sendo preparada.";
+
+      card.appendChild(info);
+    }
+
+    // ===============================
+    // AGUARDANDO ENTREGA
+    // ===============================
+
+    if (
+      order.status ===
+      "awaiting_delivery"
+    ) {
+      const deliveryBox =
+        document.createElement("div");
+
+      deliveryBox.className =
+        "delivery-instructions";
+
+      const title =
+        document.createElement("h4");
+
+      title.textContent =
+        "📦 Pedido pronto para entrega!";
+
+      const message =
+        document.createElement("pre");
+
+      message.className =
+        "delivery-message";
+
+      message.textContent =
+        createDeliveryMessage(
+          order,
+          items || [],
+          settings
+        );
+
+      const copyButton =
+        document.createElement("button");
+
+      copyButton.className =
+        "secondary-button full";
+
+      copyButton.textContent =
+        "📋 Copiar instruções";
+
+      copyButton.addEventListener(
+        "click",
+        async () => {
+          try {
+            await navigator.clipboard.writeText(
+              message.textContent
+            );
+
+            toast(
+              "Instruções copiadas! ✅"
+            );
+
+          } catch {
+            toast(
+              "Não foi possível copiar automaticamente."
+            );
+          }
+        }
+      );
+
+      deliveryBox.appendChild(title);
+      deliveryBox.appendChild(message);
+      deliveryBox.appendChild(copyButton);
+
+      card.appendChild(deliveryBox);
+    }
+
+    // ===============================
+    // ENTREGUE
+    // ===============================
+
+    if (order.status === "delivered") {
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "order-success-box";
+
+      info.textContent =
+        "✅ Pedido entregue com sucesso!";
+
+      card.appendChild(info);
+
+      /*
+       * Depois que o pedido foi entregue,
+       * mostramos somente o resumo neutro
+       * e a avaliação.
+       *
+       * Não carregamos dados de pagamento,
+       * Pix, Roblox ou informações privadas
+       * de entrega para esta etapa.
+       */
+
+      const review =
+        await checkExistingReview(order.id);
+
+      if (review) {
+        card.appendChild(
+          createReviewStatus(review)
+        );
+      } else {
+        card.appendChild(
+          createReviewForm(order)
+        );
+      }
+    }
+
+    // ===============================
+    // CANCELADO
+    // ===============================
+
+    if (order.status === "cancelled") {
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "order-info-box";
+
+      info.textContent =
+        "❌ Este pedido foi cancelado.";
+
+      card.appendChild(info);
+    }
+
+    ordersList.appendChild(card);
+  }
+}
 
     // ===============================
     // PAGAMENTO
