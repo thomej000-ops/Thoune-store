@@ -22,6 +22,64 @@
   <div id="toast-region" class="toast-region" aria-live="polite"></div>
 
   <!-- ===================================================== -->
+  <!-- PAINEL FLUTUANTE — PEDIDO ATUAL -->
+  <!-- ===================================================== -->
+
+  <aside
+    class="order-floating-panel hidden"
+    id="current-order-panel"
+    aria-label="Acompanhamento do pedido"
+  >
+
+    <div class="order-floating-header">
+
+      <div>
+        <span class="order-floating-eyebrow">
+          PEDIDO ATUAL
+        </span>
+
+        <h2>
+          📦 Acompanhamento
+        </h2>
+      </div>
+
+      <button
+        type="button"
+        class="order-floating-close"
+        id="close-current-order-panel"
+        aria-label="Fechar acompanhamento do pedido"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div
+      class="order-floating-content"
+      id="current-order-content"
+    >
+
+      <!-- O app.js preencherá esta área -->
+
+    </div>
+
+
+    <div class="order-floating-footer">
+
+      <button
+        type="button"
+        class="secondary-button"
+        id="open-orders-from-floating"
+      >
+        Ver meus pedidos
+      </button>
+
+    </div>
+
+  </aside>
+  
+  <!-- ===================================================== -->
   <!-- HEADER -->
   <!-- ===================================================== -->
 
