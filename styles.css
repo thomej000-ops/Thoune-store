@@ -2147,3 +2147,272 @@ a{
 .section.how-section .steps b{
   color:#7daebb !important;
 }
+
+/* =====================================================
+   PAINEL FLUTUANTE — PEDIDO ATUAL
+   ===================================================== */
+
+.order-floating-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: min(390px, calc(100vw - 32px));
+  max-height: min(720px, calc(100vh - 48px));
+
+  display: flex;
+  flex-direction: column;
+
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(23, 103, 122, 0.16);
+  border-radius: 22px;
+
+  box-shadow:
+    0 20px 55px rgba(8, 44, 58, 0.22),
+    0 4px 16px rgba(8, 44, 58, 0.08);
+
+  overflow: hidden;
+
+  z-index: 1000;
+
+  animation:
+    orderFloatingIn 0.25s ease-out;
+}
+
+.order-floating-panel.hidden {
+  display: none;
+}
+
+/* Cabeçalho */
+
+.order-floating-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 18px 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--deep, #082c3a),
+      var(--deep-2, #0d4051)
+    );
+
+  color: #fff;
+}
+
+.order-floating-eyebrow {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+
+  opacity: 0.72;
+}
+
+.order-floating-header h2 {
+  margin: 0;
+
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.order-floating-close {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 auto;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+
+  font-size: 25px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.order-floating-close:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(1.04);
+}
+
+.order-floating-close:active {
+  transform: scale(0.96);
+}
+
+/* Conteúdo */
+
+.order-floating-content {
+  flex: 1;
+
+  padding: 18px 20px;
+
+  overflow-y: auto;
+
+  color: var(--deep, #082c3a);
+}
+
+.order-floating-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.order-floating-content::-webkit-scrollbar-thumb {
+  background: rgba(23, 103, 122, 0.22);
+  border-radius: 20px;
+}
+
+/* Status */
+
+.order-floating-status {
+  display: inline-flex;
+  align-items: center;
+
+  width: fit-content;
+
+  margin-bottom: 8px;
+  padding: 7px 11px;
+
+  border-radius: 999px;
+
+  background: var(--mist, #eaf5f7);
+
+  color: var(--teal, #17677a);
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.order-floating-number {
+  margin: 0 0 16px;
+
+  color: #607984;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Itens */
+
+.order-floating-items {
+  margin-bottom: 14px;
+  padding: 14px;
+
+  background: #f7fbfc;
+
+  border: 1px solid rgba(23, 103, 122, 0.1);
+  border-radius: 14px;
+}
+
+.order-floating-items strong {
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: var(--deep, #082c3a);
+
+  font-size: 13px;
+}
+
+.order-floating-item {
+  display: flex;
+  align-items: center;
+
+  padding: 7px 0;
+
+  border-top: 1px solid rgba(23, 103, 122, 0.08);
+
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.order-floating-item:first-of-type {
+  border-top: 0;
+}
+
+/* Informações */
+
+.order-floating-info {
+  margin-top: 12px;
+  padding: 13px 14px;
+
+  background: var(--mist, #eaf5f7);
+
+  border: 1px solid rgba(23, 103, 122, 0.12);
+  border-radius: 14px;
+
+  color: var(--deep, #082c3a);
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Pix */
+
+.order-floating-pix {
+  margin-bottom: 12px;
+  padding: 14px;
+
+  background: #f7fbfc;
+
+  border: 1px solid rgba(23, 103, 122, 0.12);
+  border-radius: 14px;
+}
+
+.order-floating-pix strong {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 14px;
+}
+
+.order-floating-pix p {
+  margin: 0 0 10px;
+
+  color: #607984;
+
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.order-floating-pix-key {
+  margin-bottom: 10px;
+  padding: 10px 11px;
+
+  background: #fff;
+
+  border: 1px dashed rgba(23, 103, 122, 0.3);
+  border-radius: 10px;
+
+  color: var(--deep, #082c3a);
+
+  font-size: 12px;
+  font-weight: 700;
+
+  word-break: break-word;
+}
+
+/* Entrega */
+
+.order-floating-delivery {
+  margin-top: 12px;
+  padding: 14px;
+
+  background: #f7fbfc;
+
+  border: 1px solid rgba(23, 103, 122, 
