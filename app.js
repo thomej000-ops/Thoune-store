@@ -2113,14 +2113,19 @@ verifyPaymentButton?.addEventListener(
 // INICIALIZAÇÃO
 // ===============================
 
+console.log("APP INICIANDO");
+
 await loadPublicStoreSettings();
+console.log("CONFIG CARREGADA");
 
 await loadStoreStatus();
+console.log("STATUS CARREGADO");
 
 await loadProducts();
+console.log("PRODUTOS CARREGADOS");
 
-updateCartBadge(
-  loadCart()
-);
+updateCartBadge(loadCart());
+console.log("CARRINHO CARREGADO");
 
 await updateAccountUI();
+console.log("CONTA CARREGADA");
