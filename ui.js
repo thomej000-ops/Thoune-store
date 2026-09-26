@@ -1,4 +1,5 @@
 import {
+  loadCart,
   addToCart,
   changeQty,
   removeFromCart,
@@ -678,14 +679,18 @@ export function updateCartBadge(
 
 
   /*
-    Quando nenhum carrinho é passado,
-    carregamos o carrinho atual diretamente.
+    Se o carrinho for informado,
+    usamos ele diretamente.
+
+    Se não for informado,
+    carregamos o carrinho atual
+    salvo pelo cart.js.
   */
 
   const currentCart =
     Array.isArray(cart)
       ? cart
-      : [];
+      : loadCart();
 
 
   badge.textContent =
@@ -717,4 +722,4 @@ function escapeHtml(
         character
       ]
   );
-                        }
+}
