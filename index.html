@@ -1,1 +1,1357 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Thoune Store — marretas para Flee the Facility.">
+  <title>Thoune Store — Flee the Facility</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="./styles.css?v=999">
+</head>
+
+<body>
+
+  <div id="toast-region" class="toast-region" aria-live="polite"></div>
+
+  <!-- ===================================================== -->
+  <!-- PEDIDO ATUAL — PAINEL FLUTUANTE -->
+  <!-- ===================================================== -->
+
+  <aside
+    class="order-floating-panel hidden"
+    id="current-order-panel"
+    aria-label="Acompanhamento do pedido"
+  >
+
+    <div class="order-floating-header">
+
+      <div>
+        <span class="order-floating-eyebrow">
+          PEDIDO ATUAL
+        </span>
+
+        <h2>📦 Acompanhamento</h2>
+      </div>
+
+      <button
+        type="button"
+        class="order-floating-close"
+        id="close-current-order-panel"
+        aria-label="Fechar acompanhamento do pedido"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div
+      class="order-floating-content"
+      id="current-order-content"
+    ></div>
+
+    <div class="order-floating-footer">
+
+      <button
+        type="button"
+        class="secondary-button"
+        id="open-orders-from-floating"
+      >
+        Ver meus pedidos
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="site-header" id="top">
+
+    <a
+      class="brand"
+      href="#inicio"
+      aria-label="Thoune Store - início"
+    >
+
+      <span class="brand-mark">
+        <img
+          src="snoopy-banner.jpg"
+          alt="Snoopy da identidade da Thoune Store"
+        >
+      </span>
+
+      <span class="brand-text">
+        <strong>Thoune Store</strong>
+        <small>Flee the Facility</small>
+      </span>
+
+    </a>
+
+
+    <nav
+      class="desktop-nav"
+      aria-label="Navegação principal"
+    >
+      <a href="#catalogo">Itens</a>
+      <a href="#como-comprar">Como comprar</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+
+
+    <div class="header-actions">
+
+      <a
+        class="icon-button account-button"
+        href="#conta"
+        aria-label="Minha conta"
+      >
+        ♙
+      </a>
+
+      <button
+        class="icon-button cart-button"
+        id="open-cart"
+        aria-label="Abrir carrinho"
+      >
+        🛒
+        <span
+          class="cart-count"
+          id="cart-count"
+        >
+          0
+        </span>
+      </button>
+
+      <button
+        class="menu-button"
+        id="menu-toggle"
+        aria-label="Abrir menu"
+      >
+        ☰
+      </button>
+
+    </div>
+
+
+    <nav
+      class="mobile-nav"
+      id="mobile-nav"
+      aria-label="Menu mobile"
+    >
+      <a href="#catalogo">Itens</a>
+      <a href="#como-comprar">Como comprar</a>
+      <a href="#faq">FAQ</a>
+      <a href="#conta">Minha conta</a>
+    </nav>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- CONTEÚDO -->
+  <!-- ===================================================== -->
+
+  <main>
+
+    <!-- =================================================== -->
+    <!-- HERO -->
+    <!-- =================================================== -->
+
+    <section
+      class="hero"
+      id="inicio"
+    >
+
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+
+        <div
+          class="online-pill"
+          id="service-status"
+        >
+          <span></span>
+          Atendimento online
+        </div>
+
+        <p class="eyebrow">
+          THOUNE STORE · FLEE THE FACILITY
+        </p>
+
+        <h1>
+          Encontre a marreta<br>
+          <em>que combina com você.</em>
+        </h1>
+
+        <p class="hero-subtitle">
+          Marretas para Flee the Facility organizadas por raridades e prontas para você escolher.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================== -->
+    <!-- BENEFÍCIOS -->
+    <!-- =================================================== -->
+
+    <section class="benefits section">
+
+      <article>
+        <span>🔒</span>
+        <div>
+          <strong>Compra segura</strong>
+          <p>Seu pedido é acompanhado do início ao fim.</p>
+        </div>
+      </article>
+
+      <article>
+        <span>📋</span>
+        <div>
+          <strong>Pedido acompanhado</strong>
+          <p>Você sabe em que etapa sua compra está.</p>
+        </div>
+      </article>
+
+      <article>
+        <span>📦</span>
+        <div>
+          <strong>Entrega garantida</strong>
+          <p>Após a confirmação, você recebe as instruções.</p>
+        </div>
+      </article>
+
+      <article>
+        <span>💬</span>
+        <div>
+          <strong>Atendimento especial</strong>
+          <p>Suporte direto pelo TikTok da loja.</p>
+        </div>
+      </article>
+
+      <article>
+        <span>💳</span>
+        <div>
+          <strong>Pix</strong>
+          <p>Pagamento rápido e combinado no atendimento.</p>
+        </div>
+      </article>
+
+    </section>
+
+
+    <!-- =================================================== -->
+    <!-- CATÁLOGO -->
+    <!-- =================================================== -->
+
+    <section
+      class="catalog-section section"
+      id="catalogo"
+    >
+
+      <div class="section-heading">
+
+        <div>
+
+          <p class="eyebrow">
+            CATÁLOGO
+          </p>
+
+          <h2>
+            Marretas disponíveis
+          </h2>
+
+          <p>
+            Encontre sua próxima marreta sem complicação.
+          </p>
+
+        </div>
+
+        <div
+          class="catalog-count"
+          id="catalog-count"
+        >
+          0 itens
+        </div>
+
+      </div>
+
+
+      <div class="catalog-tools">
+
+        <label class="search-box">
+
+          <span>⌕</span>
+
+          <input
+            id="search-input"
+            type="search"
+            placeholder="Pesquisar marreta pelo nome"
+            autocomplete="off"
+          >
+
+        </label>
+
+
+        <select
+          id="sort-select"
+          aria-label="Ordenar produtos"
+        >
+          <option value="popular">
+            Mais populares
+          </option>
+
+          <option value="low">
+            Menor preço
+          </option>
+
+          <option value="high">
+            Maior preço
+          </option>
+        </select>
+
+      </div>
+
+
+      <div
+        class="category-row"
+        id="category-row"
+        aria-label="Categorias"
+      >
+
+        <button
+          class="category active"
+          data-category="Todas"
+        >
+          Todas
+        </button>
+
+        <button
+          class="category"
+          data-category="Lendária"
+        >
+          Lendária
+        </button>
+
+        <button
+          class="category"
+          data-category="Épica"
+        >
+          Épica
+        </button>
+
+        <button
+          class="category"
+          data-category="Rara"
+        >
+          Rara
+        </button>
+
+        <button
+          class="category"
+          data-category="Comum"
+        >
+          Comum
+        </button>
+
+        <button
+          class="category"
+          data-category="Exclusiva"
+        >
+          Exclusiva
+        </button>
+
+      </div>
+
+
+      <div
+        class="product-grid"
+        id="product-grid"
+      ></div>
+
+
+      <div
+        class="empty-state hidden"
+        id="empty-state"
+      >
+
+        <span>🌊</span>
+
+        <h3>
+          Nenhuma marreta encontrada
+        </h3>
+
+        <p>
+          Tente outro nome ou categoria.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================== -->
+    <!-- COMO COMPRAR -->
+    <!-- =================================================== -->
+
+    <section
+      class="how-section section"
+      id="como-comprar"
+    >
+
+      <div class="section-heading centered">
+
+        <p class="eyebrow">
+          COMO FUNCIONA
+        </p>
+
+        <h2>
+          Como comprar sem complicação?
+        </h2>
+
+      </div>
+
+
+      <div class="steps">
+
+        <article>
+          <b>01</b>
+          <span>👤</span>
+          <h3>Faça seu login</h3>
+          <p>Entre na sua conta da Thoune Store.</p>
+        </article>
+
+        <article>
+          <b>02</b>
+          <span>🛍️</span>
+          <h3>Escolha</h3>
+          <p>Encontre suas marretas e adicione ao carrinho.</p>
+        </article>
+
+        <article>
+          <b>03</b>
+          <span>🧾</span>
+          <h3>Confira</h3>
+          <p>Revise quantidades e veja o total do pedido.</p>
+        </article>
+
+        <article>
+          <b>04</b>
+          <span>💳</span>
+          <h3>Realize a compra</h3>
+          <p>Com a loja online, o site mostra o Pix.</p>
+        </article>
+
+        <article>
+          <b>05</b>
+          <span>📦</span>
+          <h3>Receba</h3>
+          <p>Após a confirmação, siga as instruções de entrega.</p>
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================== -->
+    <!-- AVALIAÇÕES -->
+    <!-- =================================================== -->
+
+    <section class="reviews-section section">
+
+      <div class="section-heading">
+
+        <div>
+
+          <p class="eyebrow">
+            COMUNIDADE
+          </p>
+
+          <h2>
+            Quem compra, conta.
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="review-placeholder">
+
+        <span>⭐</span>
+
+        <p>
+          As avaliações aprovadas pelos administradores aparecerão aqui.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================== -->
+    <!-- SUPORTE -->
+    <!-- =================================================== -->
+
+    <section class="support-section section">
+
+      <div class="support-card">
+
+        <div>
+
+          <p class="eyebrow">
+            SUPORTE
+          </p>
+
+          <h2>
+            Precisa de ajuda?
+          </h2>
+
+          <p>
+            Não encontrou o que procura? Fale com nosso suporte na Thoune Store pelo TikTok.
+          </p>
+
+        </div>
+
+
+        <a
+          class="primary-button"
+          href="https://www.tiktok.com/@thounestoreofc"
+          target="_blank"
+          rel="noopener"
+        >
+          Falar no TikTok ↗
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================== -->
+    <!-- FAQ -->
+    <!-- =================================================== -->
+
+    <section
+      class="faq-section section"
+      id="faq"
+    >
+
+      <div class="section-heading centered">
+
+        <p class="eyebrow">
+          DÚVIDAS
+        </p>
+
+        <h2>
+          Perguntas frequentes
+        </h2>
+
+      </div>
+
+
+      <div class="faq-list">
+
+        <details>
+
+          <summary>
+            Como faço um pedido?
+          </summary>
+
+          <p>
+            Escolha as marretas, ajuste as quantidades no carrinho e use “Realizar compra” quando a loja estiver online.
+          </p>
+
+        </details>
+
+
+        <details>
+
+          <summary>
+            Como funciona o pagamento?
+          </summary>
+
+          <p>
+            O pagamento é feito via Pix e as informações são apresentadas durante o fluxo de compra quando o atendimento estiver online.
+          </p>
+
+        </details>
+
+
+        <details>
+
+          <summary>
+            O estoque é reservado quando adiciono ao carrinho?
+          </summary>
+
+          <p>
+            Não. Montar o carrinho não reduz o estoque. A baixa acontece somente após a confirmação do pagamento pelo administrador.
+          </p>
+
+        </details>
+
+
+        <details>
+
+          <summary>
+            Posso acompanhar meu pedido?
+          </summary>
+
+          <p>
+            Sim. A área de conta permite acompanhar o status dos pedidos.
+          </p>
+
+        </details>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================== -->
+    <!-- MINHA CONTA -->
+    <!-- =================================================== -->
+
+    <section
+      class="account-preview section"
+      id="conta"
+    >
+
+      <div class="account-card">
+
+        <span class="account-icon">
+          ♙
+        </span>
+
+
+        <div class="account-content">
+
+          <p class="eyebrow">
+            MINHA CONTA
+          </p>
+
+          <h2>
+            Seu espaço na Thoune Store
+          </h2>
+
+
+          <p id="account-message">
+            Entre ou crie sua conta para acompanhar seus pedidos.
+          </p>
+
+
+          <!-- PERFIL -->
+
+          <div
+            id="profile-fields"
+            class="profile-fields hidden"
+          >
+
+            <label>
+              🎵 Usuário do TikTok
+
+              <input
+                id="tiktok-username"
+                type="text"
+                placeholder="@seuusuario"
+                autocomplete="off"
+              >
+            </label>
+
+
+            <label>
+              🎮 Usuário do Roblox
+
+              <input
+                id="roblox-username"
+                type="text"
+                placeholder="Seu usuário do Roblox"
+                autocomplete="off"
+              >
+            </label>
+
+
+            <button
+              class="secondary-button full"
+              id="save-profile-button"
+            >
+              💾 Salvar informações
+            </button>
+
+
+            <p id="profile-message"></p>
+
+          </div>
+
+
+          <!-- ÁREA LOGADA -->
+
+          <div
+            id="account-details"
+            class="account-details hidden"
+          >
+
+            <div class="account-user-summary">
+
+              <div>
+
+                <span class="account-summary-label">
+                  CONTA
+                </span>
+
+                <strong id="account-email"></strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- MENU DA CONTA -->
+
+            <div
+              class="account-menu"
+              id="account-menu"
+            >
+
+              <button
+                type="button"
+                class="account-menu-button"
+                id="open-orders-panel"
+              >
+
+                <span class="account-menu-icon">
+                  📦
+                </span>
+
+                <span>
+                  <strong>Meus pedidos</strong>
+                  <small>Acompanhe suas compras</small>
+                </span>
+
+                <b>›</b>
+
+              </button>
+
+
+              <button
+                type="button"
+                class="account-menu-button"
+                id="open-notifications-panel"
+              >
+
+                <span class="account-menu-icon">
+                  🔔
+                </span>
+
+                <span>
+                  <strong>Notificações</strong>
+                  <small>Avisos sobre seus pedidos</small>
+                </span>
+
+                <b>›</b>
+
+              </button>
+
+
+              <button
+                type="button"
+                class="account-menu-button"
+                id="open-profile-panel"
+              >
+
+                <span class="account-menu-icon">
+                  👤
+                </span>
+
+                <span>
+                  <strong>Meus dados</strong>
+                  <small>TikTok e Roblox</small>
+                </span>
+
+                <b>›</b>
+
+              </button>
+
+            </div>
+
+
+            <!-- PAINEL DE PEDIDOS -->
+
+            <div
+              class="account-panel hidden"
+              id="orders-panel"
+            >
+
+              <div class="account-panel-header">
+
+                <button
+                  type="button"
+                  class="account-panel-back"
+                  data-account-back
+                >
+                  ←
+                </button>
+
+                <div>
+                  <span>HISTÓRICO</span>
+                  <h3>Meus pedidos</h3>
+                </div>
+
+              </div>
+
+
+              <div
+                class="account-panel-content"
+                id="orders-list"
+              >
+
+                <p id="orders-message">
+                  Você ainda não possui pedidos.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <!-- PAINEL DE NOTIFICAÇÕES -->
+
+            <div
+              class="account-panel hidden"
+              id="notifications-panel"
+            >
+
+              <div class="account-panel-header">
+
+                <button
+                  type="button"
+                  class="account-panel-back"
+                  data-account-back
+                >
+                  ←
+                </button>
+
+                <div>
+                  <span>AVISOS</span>
+                  <h3>Notificações</h3>
+                </div>
+
+              </div>
+
+
+              <div
+                class="account-panel-content"
+                id="notifications-list"
+              >
+
+                <p id="notifications-message">
+                  Você não possui novas notificações.
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <!-- PAINEL DE PERFIL -->
+
+            <div
+              class="account-panel hidden"
+              id="profile-panel"
+            >
+
+              <div class="account-panel-header">
+
+                <button
+                  type="button"
+                  class="account-panel-back"
+                  data-account-back
+                >
+                  ←
+                </button>
+
+                <div>
+                  <span>SEUS DADOS</span>
+                  <h3>Meus dados</h3>
+                </div>
+
+              </div>
+
+
+              <div class="account-panel-content">
+
+                <div class="profile-fields">
+
+                  <label>
+                    🎵 Usuário do TikTok
+
+                    <input
+                      id="profile-panel-tiktok"
+                      type="text"
+                      placeholder="@seuusuario"
+                      autocomplete="off"
+                    >
+                  </label>
+
+
+                  <label>
+                    🎮 Usuário do Roblox
+
+                    <input
+                      id="profile-panel-roblox"
+                      type="text"
+                      placeholder="Seu usuário do Roblox"
+                      autocomplete="off"
+                    >
+                  </label>
+
+
+                  <button
+                    type="button"
+                    class="secondary-button full"
+                    id="profile-panel-save"
+                  >
+                    💾 Salvar informações
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- FORMULÁRIO DE AUTENTICAÇÃO -->
+
+            <div class="account-form">
+
+              <input
+                id="auth-email"
+                type="email"
+                placeholder="Seu e-mail"
+                autocomplete="email"
+              >
+
+
+              <input
+                id="auth-password"
+                type="password"
+                placeholder="Sua senha"
+                autocomplete="current-password"
+              >
+
+
+              <div class="account-actions">
+
+                <button
+                  class="primary-button"
+                  id="login-button"
+                >
+                  Entrar
+                </button>
+
+
+                <button
+                  class="secondary-button"
+                  id="signup-button"
+                >
+                  Criar conta
+                </button>
+
+              </div>
+
+
+              <button
+                class="secondary-button full hidden"
+                id="logout-button"
+              >
+                Sair da conta
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ===================================================== -->
+  <!-- CARRINHO -->
+  <!-- ===================================================== -->
+
+  <aside
+    class="cart-drawer"
+    id="cart-drawer"
+    aria-label="Carrinho"
+  >
+
+    <div
+      class="drawer-backdrop"
+      id="close-cart"
+    ></div>
+
+
+    <div class="drawer-panel">
+
+      <div class="drawer-header">
+
+        <div>
+          <p class="eyebrow">SEU PEDIDO</p>
+          <h2>Carrinho</h2>
+        </div>
+
+        <button
+          class="close-button"
+          id="close-cart-button"
+          aria-label="Fechar carrinho"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div
+        class="cart-items"
+        id="cart-items"
+      ></div>
+
+
+      <div
+        class="cart-empty"
+        id="cart-empty"
+      >
+
+        <span>🛒</span>
+
+        <p>
+          Seu carrinho está vazio.
+        </p>
+
+        <small>
+          Escolha uma marreta para começar.
+        </small>
+
+      </div>
+
+
+      <div class="drawer-footer">
+
+        <div class="total-line">
+
+          <span>Total</span>
+
+          <strong id="cart-total">
+            R$ 0,00
+          </strong>
+
+        </div>
+
+
+        <button
+          class="primary-button full"
+          id="checkout-button"
+        >
+          Realizar compra
+        </button>
+
+
+        <button
+          class="secondary-button full"
+          id="copy-order-button"
+        >
+          📋 Copiar pedido
+        </button>
+
+
+        <small class="checkout-note">
+          O pagamento é realizado via Pix quando o atendimento estiver online.
+        </small>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ===================================================== -->
+  <!-- CHECKOUT -->
+  <!-- ===================================================== -->
+
+  <section
+    class="checkout-section section hidden"
+    id="checkout-section"
+  >
+
+    <div class="checkout-card">
+
+      <div class="section-heading">
+
+        <div>
+
+          <p class="eyebrow">
+            FINALIZAR PEDIDO
+          </p>
+
+          <h2>
+            Confira sua compra
+          </h2>
+
+          <p>
+            Revise seus itens e confirme os dados para continuar.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="checkout-content">
+
+        <!-- ITENS -->
+
+        <div class="checkout-items">
+
+          <h3>
+            📦 Itens do pedido
+          </h3>
+
+          <div id="checkout-items"></div>
+
+        </div>
+
+
+        <!-- PAGAMENTO -->
+
+        <div class="pix-payment">
+
+          <h3>
+            💳 Pagamento via Pix
+          </h3>
+
+          <p>
+            Escaneie o QR Code abaixo ou use a chave Pix para realizar o pagamento.
+          </p>
+
+
+          <img
+            src="pix-qr.png"
+            alt="QR Code para pagamento via Pix"
+            class="pix-qr"
+            width="260"
+            height="260"
+          >
+
+
+          <div class="pix-key-box">
+
+            <span class="pix-key-label">
+              Chave Pix
+            </span>
+
+
+            <div class="pix-key-row">
+
+              <strong
+                id="checkout-pix-key"
+                class="pix-key-value"
+              >
+                Chave Pix não configurada.
+              </strong>
+
+
+              <button
+                type="button"
+                class="secondary-button"
+                id="copy-pix-key-button"
+              >
+                📋 Copiar
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <small class="pix-payment-note">
+            Confira o valor do pedido antes de realizar o pagamento.
+          </small>
+
+        </div>
+
+
+        <!-- DADOS -->
+
+        <div class="checkout-data">
+
+          <h3>
+            👤 Dados da entrega
+          </h3>
+
+
+          <label>
+            🎵 Usuário do TikTok
+
+            <input
+              id="checkout-tiktok"
+              type="text"
+              readonly
+            >
+          </label>
+
+
+          <label>
+            🎮 Usuário do Roblox
+
+            <input
+              id="checkout-roblox"
+              type="text"
+              placeholder="Seu usuário do Roblox"
+              autocomplete="off"
+            >
+          </label>
+
+
+          <small>
+            O usuário do Roblox acima será usado somente neste pedido.
+          </small>
+
+
+          <label>
+            💳 Nome do remetente do Pix
+
+            <input
+              id="checkout-pix-name"
+              type="text"
+              placeholder="Nome que aparecerá no Pix"
+              autocomplete="off"
+            >
+          </label>
+
+
+          <small>
+            Informe o nome exatamente como aparecerá na transação Pix.
+          </small>
+
+        </div>
+
+
+        <!-- TOTAL -->
+
+        <div class="checkout-total">
+
+          <span>
+            Total do pedido
+          </span>
+
+          <strong id="checkout-total">
+            R$ 0,00
+          </strong>
+
+        </div>
+
+
+        <!-- AÇÕES -->
+
+        <div class="checkout-actions">
+
+          <button
+            class="secondary-button"
+            id="checkout-back"
+          >
+            ← Voltar ao carrinho
+          </button>
+
+
+          <button
+            class="primary-button"
+            id="confirm-order-button"
+          >
+            Confirmar pedido
+          </button>
+
+
+          <button
+            class="secondary-button full hidden"
+            id="verify-payment-button"
+          >
+            🔎 Verificar pagamento
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- FOOTER -->
+  <!-- ===================================================== -->
+
+  <footer class="site-footer">
+
+    <div>
+
+      <strong>
+        Thoune Store
+      </strong>
+
+      <p>
+        Mais que uma loja, uma comunidade.
+      </p>
+
+    </div>
+
+
+    <a
+      href="https://www.tiktok.com/@thounestoreofc"
+      target="_blank"
+      rel="noopener"
+    >
+      @thounestoreofc ↗
+    </a>
+
+
+    <small>
+      © 2026 Thoune Store · Todos os direitos reservados.
+    </small>
+
+  </footer>
+
+
+  <!-- ===================================================== -->
+  <!-- SCRIPTS -->
+  <!-- ===================================================== -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script
+    type="module"
+    src="app.js"
+  ></script>
+
+</body>
+  </html>
