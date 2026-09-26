@@ -2415,4 +2415,1081 @@ a{
 
   background: #f7fbfc;
 
-  border: 1px solid rgba(23, 103, 122, 
+  border: 1px solid rgba(23, 103, 122, 0.12);
+  border-radius: 14px;
+
+  color: var(--deep, #082c3a);
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.order-floating-delivery strong {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 14px;
+}
+
+.order-floating-delivery p {
+  margin: 0;
+
+  color: #607984;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.order-floating-actions {
+  display: flex;
+  gap: 8px;
+
+  padding: 14px 20px 18px;
+
+  border-top: 1px solid var(--line);
+
+  background: rgba(255,255,255,.96);
+}
+
+.order-floating-actions button {
+  flex: 1;
+}
+
+
+/* =========================================================
+   STATUS DOS PEDIDOS
+========================================================= */
+
+.order-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  width: fit-content;
+
+  padding: 7px 10px;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  line-height: 1.2;
+}
+
+.order-status::before {
+  content: "";
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+
+/* Aguardando pagamento */
+
+.order-status.awaiting_payment {
+  color: #9a6b00;
+  background: #fff6d9;
+}
+
+
+/* Aguardando verificação */
+
+.order-status.awaiting_verification {
+  color: #946000;
+  background: #fff1d7;
+}
+
+
+/* Pagamento confirmado */
+
+.order-status.payment_confirmed {
+  color: #176b8a;
+  background: #e3f5fa;
+}
+
+
+/* Aguardando entrega */
+
+.order-status.awaiting_delivery {
+  color: #23734c;
+  background: #e5f7ed;
+}
+
+
+/* Entregue */
+
+.order-status.delivered {
+  color: #23734c;
+  background: #dff5e8;
+}
+
+
+/* Cancelado */
+
+.order-status.cancelled {
+  color: #a74752;
+  background: #fde9ec;
+}
+
+
+/* =========================================================
+   ÁREA DA CONTA
+========================================================= */
+
+.account-section {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(234,245,247,.45),
+      rgba(255,255,255,.65)
+    );
+}
+
+.account-card {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.account-card-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.account-card-header > div:last-child {
+  min-width: 0;
+}
+
+.account-card .eyebrow {
+  margin-bottom: 5px;
+}
+
+
+/* =========================================================
+   CAMPOS DE PERFIL / AUTENTICAÇÃO
+========================================================= */
+
+.profile-fields,
+.account-details {
+  width: 100%;
+  margin-top: 22px;
+}
+
+.profile-fields {
+  display: grid;
+  gap: 13px;
+
+  padding-top: 22px;
+
+  border-top: 1px solid var(--line);
+}
+
+.profile-fields label,
+.profile-panel label {
+  display: grid;
+  gap: 7px;
+
+  color: var(--deep);
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.profile-fields input,
+.profile-panel input,
+#auth-email,
+#auth-password {
+  width: 100%;
+
+  min-height: 46px;
+
+  border: 1px solid var(--line);
+  border-radius: 13px;
+
+  background: #fff;
+
+  color: var(--ink);
+
+  padding: 0 13px;
+
+  outline: none;
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.profile-fields input:focus,
+.profile-panel input:focus,
+#auth-email:focus,
+#auth-password:focus {
+  border-color: #8fc4cf;
+
+  box-shadow:
+    0 0 0 4px rgba(43,130,149,.08);
+}
+
+.profile-fields small,
+.profile-panel small {
+  color: var(--muted);
+
+  font-size: 10px;
+
+  line-height: 1.45;
+}
+
+#profile-message,
+#account-message,
+#orders-message,
+#notifications-message {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#profile-message {
+  color: var(--muted);
+}
+
+
+/* =========================================================
+   DETALHES DA CONTA
+========================================================= */
+
+.account-details {
+  display: grid;
+  gap: 14px;
+
+  padding-top: 22px;
+
+  border-top: 1px solid var(--line);
+}
+
+.account-email-box {
+  padding: 13px 15px;
+
+  background: var(--mist-2);
+
+  border: 1px solid var(--line);
+
+  border-radius: 14px;
+}
+
+.account-email-box span {
+  display: block;
+
+  color: var(--muted);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+  letter-spacing: .08em;
+
+  margin-bottom: 5px;
+}
+
+.account-email-box strong {
+  display: block;
+
+  overflow-wrap:anywhere;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   MENU DA CONTA
+========================================================= */
+
+.account-menu {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3,minmax(0,1fr));
+
+  gap: 10px;
+
+  margin-top: 18px;
+}
+
+.account-menu button {
+  min-height: 82px;
+
+  border: 1px solid var(--line);
+
+  border-radius: 16px;
+
+  background: #fff;
+
+  color: var(--deep);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 14px;
+
+  text-align:left;
+
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease,
+    background .2s ease;
+}
+
+.account-menu button:hover {
+  transform: translateY(-2px);
+
+  border-color: #a9ccd4;
+
+  background: #f8fcfd;
+
+  box-shadow:
+    0 8px 20px rgba(8,44,58,.07);
+}
+
+.account-menu button strong {
+  font-size: 12px;
+}
+
+.account-menu button small {
+  color: var(--muted);
+
+  font-size: 10px;
+
+  line-height: 1.3;
+}
+
+
+/* =========================================================
+   PAINÉIS INTERNOS DA CONTA
+========================================================= */
+
+.account-panel {
+  width:100%;
+
+  margin-top:18px;
+
+  padding-top:18px;
+
+  border-top:1px solid var(--line);
+}
+
+.account-panel.hidden {
+  display:none !important;
+}
+
+.account-panel-header {
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  margin-bottom:16px;
+}
+
+.account-panel-back {
+  width:36px;
+  height:36px;
+
+  flex:0 0 auto;
+
+  border:1px solid var(--line);
+
+  border-radius:11px;
+
+  background:#fff;
+
+  color:var(--deep);
+
+  font-size:17px;
+
+  display:grid;
+
+  place-items:center;
+
+  transition:.2s ease;
+}
+
+.account-panel-back:hover {
+  background:var(--mist);
+
+  transform:translateX(-2px);
+}
+
+.account-panel-header h3 {
+  margin:0;
+
+  font:
+    800 19px
+    Manrope,
+    sans-serif;
+}
+
+
+/* =========================================================
+   LISTA DE PEDIDOS
+========================================================= */
+
+.orders-list {
+  display:grid;
+
+  gap:12px;
+}
+
+.order-card {
+  padding:16px;
+
+  background:#fff;
+
+  border:1px solid var(--line);
+
+  border-radius:17px;
+
+  box-shadow:
+    0 5px 18px rgba(8,44,58,.045);
+
+  transition:.2s ease;
+}
+
+.order-card:hover {
+  border-color:#c1dfe5;
+
+  box-shadow:
+    0 9px 24px rgba(8,44,58,.07);
+}
+
+.order-card-header {
+  display:flex;
+
+  align-items:flex-start;
+
+  justify-content:space-between;
+
+  gap:12px;
+
+  margin-bottom:12px;
+}
+
+.order-card-number {
+  color:var(--muted);
+
+  font-size:10px;
+
+  font-weight:800;
+
+  letter-spacing:.05em;
+}
+
+.order-card h4 {
+  margin:3px 0 0;
+
+  font-size:14px;
+}
+
+.order-card-items {
+  display:grid;
+
+  gap:6px;
+
+  padding:11px;
+
+  background:#f7fbfc;
+
+  border:1px solid #e0eef1;
+
+  border-radius:12px;
+
+  margin-bottom:12px;
+}
+
+.order-card-item {
+  display:flex;
+
+  justify-content:space-between;
+
+  gap:10px;
+
+  color:#46636d;
+
+  font-size:11px;
+}
+
+.order-card-item strong {
+  color:var(--ink);
+}
+
+.order-card-footer {
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:12px;
+}
+
+.order-card-total {
+  font:
+    800 16px
+    Manrope,
+    sans-serif;
+}
+
+.order-card-date {
+  color:var(--muted);
+
+  font-size:10px;
+}
+
+
+/* =========================================================
+   AVISO DE PAGAMENTO CONFIRMADO
+========================================================= */
+
+.order-confirmed-message {
+  margin-top:12px;
+
+  padding:13px 14px;
+
+  border-radius:13px;
+
+  background:#e4f7ec;
+
+  border:1px solid #c4e9d3;
+
+  color:#236b45;
+
+  font-size:12px;
+
+  line-height:1.5;
+}
+
+.order-delivery-message {
+  margin-top:12px;
+
+  padding:13px 14px;
+
+  border-radius:13px;
+
+  background:#e3f5fa;
+
+  border:1px solid #c4e4eb;
+
+  color:#17677a;
+
+  font-size:12px;
+
+  line-height:1.5;
+}
+
+
+/* =========================================================
+   CANCELAMENTO
+========================================================= */
+
+.cancel-order-button {
+  width:100%;
+
+  margin-top:10px;
+
+  border:1px solid #f0cbd0;
+
+  border-radius:12px;
+
+  background:#fff5f6;
+
+  color:#a74752;
+
+  padding:10px 13px;
+
+  font-size:11px;
+
+  font-weight:800;
+
+  transition:.2s ease;
+}
+
+.cancel-order-button:hover {
+  background:#fde9ec;
+
+  border-color:#e8b4bb;
+
+  transform:translateY(-1px);
+}
+
+.cancel-order-button:disabled {
+  opacity:.55;
+
+  cursor:not-allowed;
+
+  transform:none;
+}
+
+
+/* =========================================================
+   NOTIFICAÇÕES
+========================================================= */
+
+.notifications-list {
+  display:grid;
+
+  gap:10px;
+}
+
+.notification-card {
+  display:flex;
+
+  align-items:flex-start;
+
+  gap:12px;
+
+  padding:14px;
+
+  background:#fff;
+
+  border:1px solid var(--line);
+
+  border-radius:15px;
+
+  box-shadow:
+    0 4px 15px rgba(8,44,58,.035);
+}
+
+.notification-icon {
+  width:38px;
+  height:38px;
+
+  flex:0 0 auto;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:12px;
+
+  background:var(--mist);
+
+  color:var(--teal);
+
+  font-size:17px;
+}
+
+.notification-card strong {
+  display:block;
+
+  font-size:12px;
+
+  margin-bottom:4px;
+}
+
+.notification-card p {
+  margin:0;
+
+  color:var(--muted);
+
+  font-size:11px;
+
+  line-height:1.5;
+}
+
+.notification-card small {
+  display:block;
+
+  color:#8ba0a7;
+
+  font-size:9px;
+
+  margin-top:7px;
+}
+
+
+/* =========================================================
+   PERFIL
+========================================================= */
+
+.profile-panel-content {
+  display:grid;
+
+  gap:13px;
+}
+
+.profile-panel-save {
+  margin-top:4px;
+}
+
+.profile-panel-note {
+  padding:12px 14px;
+
+  border-radius:13px;
+
+  background:var(--mist);
+
+  color:#54727b;
+
+  font-size:11px;
+
+  line-height:1.5;
+}
+
+
+/* =========================================================
+   AUTENTICAÇÃO
+========================================================= */
+
+.auth-form {
+  display:grid;
+
+  gap:12px;
+
+  width:100%;
+
+  margin-top:20px;
+
+  padding-top:20px;
+
+  border-top:1px solid var(--line);
+}
+
+.auth-form label {
+  display:grid;
+
+  gap:7px;
+
+  font-size:12px;
+  font-weight:800;
+
+  color:var(--deep);
+}
+
+.auth-actions {
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:8px;
+}
+
+.logout-button {
+  margin-top:8px;
+}
+
+
+/* =========================================================
+   ESTADO ONLINE / OFFLINE
+========================================================= */
+
+.online-pill.online {
+  border-color:rgba(117,223,154,.3);
+}
+
+.online-pill.online span {
+  background:#75df9a;
+
+  box-shadow:
+    0 0 0 5px rgba(117,223,154,.13);
+}
+
+.online-pill.offline {
+  border-color:rgba(231,92,105,.38);
+
+  background:rgba(130,25,39,.16);
+}
+
+.online-pill.offline span {
+  background:#f06470;
+
+  box-shadow:
+    0 0 0 5px rgba(240,100,112,.13);
+}
+
+.online-pill.offline {
+  color:#ffe4e7;
+}
+
+
+/* =========================================================
+   CHECKOUT
+========================================================= */
+
+.checkout-section {
+  background:
+    linear-gradient(
+      180deg,
+      #eef8fa,
+      #f8fcfd
+    );
+}
+
+.checkout-card {
+  max-width:900px;
+
+  margin:0 auto;
+
+  background:#fff;
+
+  border:1px solid var(--line);
+
+  border-radius:24px;
+
+  padding:26px;
+
+  box-shadow:
+    0 12px 35px rgba(8,44,58,.07);
+}
+
+.checkout-items {
+  display:grid;
+
+  gap:9px;
+
+  margin-bottom:18px;
+}
+
+.checkout-item {
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:12px;
+
+  padding:12px;
+
+  background:#f7fbfc;
+
+  border:1px solid #e0eef1;
+
+  border-radius:13px;
+
+  font-size:12px;
+}
+
+.checkout-form {
+  display:grid;
+
+  gap:13px;
+}
+
+.checkout-form label {
+  display:grid;
+
+  gap:7px;
+
+  font-size:12px;
+
+  font-weight:800;
+}
+
+.checkout-form input {
+  width:100%;
+
+  height:46px;
+
+  border:1px solid var(--line);
+
+  border-radius:13px;
+
+  padding:0 13px;
+
+  outline:none;
+
+  background:#fff;
+}
+
+.checkout-form input:focus {
+  border-color:#8fc4cf;
+
+  box-shadow:
+    0 0 0 4px rgba(43,130,149,.08);
+}
+
+.checkout-total {
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  padding:17px 0;
+
+  margin-top:4px;
+
+  border-top:1px solid var(--line);
+
+  border-bottom:1px solid var(--line);
+
+  font-weight:800;
+}
+
+.checkout-total strong {
+  font:
+    800 24px
+    Manrope,
+    sans-serif;
+}
+
+.checkout-actions {
+  display:flex;
+
+  gap:9px;
+
+  margin-top:15px;
+}
+
+
+/* =========================================================
+   ACESSIBILIDADE / FOCO
+========================================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  outline:3px solid rgba(43,130,149,.25);
+
+  outline-offset:2px;
+}
+
+
+/* =========================================================
+   MOBILE — CONTA E PEDIDOS
+========================================================= */
+
+@media(max-width:760px){
+
+  .account-card {
+    padding:20px;
+
+    border-radius:20px;
+  }
+
+  .account-card-header {
+    align-items:flex-start;
+  }
+
+  .account-menu {
+    grid-template-columns:1fr;
+
+    gap:8px;
+  }
+
+  .account-menu button {
+    min-height:64px;
+
+    flex-direction:row;
+
+    align-items:center;
+
+    justify-content:space-between;
+  }
+
+  .account-menu button small {
+    text-align:right;
+
+    max-width:45%;
+  }
+
+  .order-floating-panel {
+    right:12px;
+    bottom:12px;
+
+    width:calc(100vw - 24px);
+
+    max-height:calc(100vh - 24px);
+
+    border-radius:20px;
+  }
+
+  .order-floating-header {
+    padding:16px;
+  }
+
+  .order-floating-content {
+    padding:16px;
+  }
+
+  .order-floating-actions {
+    padding:12px 16px 15px;
+  }
+
+  .order-card-header,
+  .order-card-footer {
+    align-items:flex-start;
+
+    flex-direction:column;
+  }
+
+  .checkout-card {
+    padding:19px;
+
+    border-radius:20px;
+  }
+
+  .checkout-actions {
+    flex-direction:column;
+  }
+
+  .auth-actions {
+    grid-template-columns:1fr;
+  }
+}
+
+
+/* =========================================================
+   MOBILE PEQUENO
+========================================================= */
+
+@media(max-width:430px){
+
+  .account-card {
+    padding:17px;
+  }
+
+  .account-card-header {
+    gap:13px;
+  }
+
+  .account-icon {
+    width:48px;
+    height:48px;
+
+    border-radius:15px;
+
+    font-size:21px;
+  }
+
+  .account-card h2 {
+    font-size:21px;
+  }
+
+  .order-floating-status {
+    font-size:11px;
+  }
+
+  .order-floating-number {
+    font-size:10px;
+  }
+
+  .order-floating-actions {
+    flex-direction:column;
+  }
+
+  .notification-card {
+    padding:12px;
+  }
+  }
