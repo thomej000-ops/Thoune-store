@@ -3889,3 +3889,182 @@ body:has(.admin){
   background:rgba(52,183,112,.14) !important;
   color:#86e0a8 !important;
 }
+
+/* =========================================================
+   THOUNE V1002 — acabamento responsivo e iconografia
+   ========================================================= */
+
+:root{
+  --page-max:1440px;
+  --content-max:1320px;
+  --hairline:rgba(111,204,218,.14);
+}
+
+/* Ícones leves, sem emojis */
+.ui-icon{
+  width:19px;
+  height:19px;
+  display:inline-block;
+  position:relative;
+  flex:0 0 19px;
+  color:currentColor;
+}
+.ui-icon::before,
+.ui-icon::after{content:"";position:absolute;box-sizing:border-box;}
+.ui-icon-user::before{width:7px;height:7px;border:1.6px solid currentColor;border-radius:50%;left:6px;top:1px;}
+.ui-icon-user::after{width:13px;height:7px;border:1.6px solid currentColor;border-radius:9px 9px 5px 5px;border-bottom-color:currentColor;left:3px;bottom:1px;}
+.ui-icon-cart::before{width:13px;height:9px;border:1.6px solid currentColor;border-top:0;transform:skew(-8deg);left:4px;top:5px;border-radius:1px 1px 3px 3px;}
+.ui-icon-cart::after{width:3px;height:3px;border-radius:50%;background:currentColor;left:6px;bottom:1px;box-shadow:7px 0 0 currentColor;}
+.ui-icon-menu::before{width:17px;height:1.5px;background:currentColor;left:1px;top:4px;box-shadow:0 5px 0 currentColor,0 10px 0 currentColor;border-radius:2px;}
+.ui-icon-search::before{width:11px;height:11px;border:1.6px solid currentColor;border-radius:50%;left:1px;top:1px;}
+.ui-icon-search::after{width:7px;height:1.6px;background:currentColor;transform:rotate(45deg);left:11px;top:13px;border-radius:2px;}
+.ui-icon-heart::before{width:12px;height:12px;border:1.5px solid currentColor;transform:rotate(45deg);left:3px;top:3px;border-radius:2px 2px 5px 2px;}
+.ui-icon-lock::before{width:13px;height:10px;border:1.5px solid currentColor;border-radius:3px;left:3px;top:8px;}
+.ui-icon-lock::after{width:8px;height:8px;border:1.5px solid currentColor;border-bottom:0;border-radius:8px 8px 0 0;left:5.5px;top:2px;}
+.ui-icon-clipboard::before{width:13px;height:14px;border:1.5px solid currentColor;border-radius:3px;left:3px;top:3px;}
+.ui-icon-clipboard::after{width:7px;height:3px;border:1.5px solid currentColor;border-radius:3px;left:6px;top:1px;background:transparent;}
+.ui-icon-box::before{width:13px;height:11px;border:1.5px solid currentColor;left:3px;top:5px;transform:skewY(-12deg);}
+.ui-icon-box::after{width:7px;height:1.5px;background:currentColor;left:6px;top:9px;transform:rotate(30deg);}
+.ui-icon-chat::before{width:15px;height:11px;border:1.5px solid currentColor;border-radius:7px;left:2px;top:2px;}
+.ui-icon-chat::after{width:5px;height:5px;border-left:1.5px solid currentColor;transform:skew(-25deg);left:4px;bottom:1px;}
+.ui-icon-card::before{width:16px;height:11px;border:1.5px solid currentColor;border-radius:3px;left:1px;top:4px;}
+.ui-icon-card::after{width:14px;height:1.5px;background:currentColor;left:2px;top:8px;}
+.ui-icon-bag::before{width:13px;height:12px;border:1.5px solid currentColor;border-radius:2px;left:3px;top:5px;}
+.ui-icon-bag::after{width:7px;height:6px;border:1.5px solid currentColor;border-bottom:0;border-radius:7px 7px 0 0;left:6px;top:1px;}
+.ui-icon-receipt::before{width:12px;height:15px;border:1.5px solid currentColor;left:3px;top:1px;border-radius:2px;}
+.ui-icon-receipt::after{width:7px;height:1.5px;background:currentColor;left:5px;top:6px;box-shadow:0 4px 0 currentColor;}
+.ui-icon-wave::before{width:16px;height:8px;border-top:1.5px solid currentColor;border-radius:50%;left:1px;top:7px;transform:rotate(-6deg);}
+
+/* Estrutura desktop: conteúdo centralizado para não esticar em monitores largos. */
+.site-header > .brand,
+.site-header > .desktop-nav,
+.site-header > .header-actions{position:relative;z-index:2;}
+.site-header{padding-inline:max(22px,calc((100vw - var(--page-max))/2));}
+
+.section > .section-heading,
+.section > .catalog-tools,
+.section > .category-row,
+.section > .product-grid,
+.section > .empty-state,
+.section > .catalog-loading,
+.section > .steps,
+.section > .reviews-grid,
+.section > .support-card,
+.section > .faq-list,
+.section > .site-footer{width:min(100%,var(--content-max));margin-inline:auto;}
+
+.hero-content{width:min(100%,var(--content-max));margin-inline:auto;padding-inline:0;}
+.hero{padding-inline:max(22px,calc((100vw - var(--content-max))/2));}
+
+.benefits{padding-inline:max(22px,calc((100vw - var(--content-max))/2));}
+.benefits article{min-width:0;}
+
+.product-grid{grid-template-columns:repeat(4,minmax(220px,1fr));gap:20px;}
+.product-card{min-width:0;}
+.product-name{max-width:100%;}
+
+.catalog-tools{align-items:center;}
+.search-box{min-width:260px;}
+#sort-select{min-width:210px;}
+.catalog-favorites-button{white-space:nowrap;}
+
+/* Botão da hero não deve parecer texto selecionado. */
+.hero-actions{display:flex;align-items:center;gap:12px;margin-top:28px;}
+.hero-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  min-height:48px;
+  padding:0 19px;
+  border:1px solid rgba(108,225,238,.38);
+  border-radius:14px;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.01em;
+  text-decoration:none;
+  user-select:none;
+  -webkit-user-select:none;
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease;
+}
+.hero-arrow{font-size:16px;line-height:1;transition:transform .2s ease;}
+.hero-link:hover .hero-arrow{transform:translate(2px,-2px);}
+
+/* Ícones de benefícios e passos */
+.benefit-icon,.steps article > span{display:grid;place-items:center;}
+.benefit-icon .ui-icon{width:20px;height:20px;}
+.steps article > span{min-height:32px;color:#71d8e5;}
+
+/* Desktop largo */
+@media(min-width:1400px){
+  .site-header{height:82px;}
+  .hero{min-height:680px;}
+  .hero-content{padding-top:92px;padding-bottom:92px;}
+  .product-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;}
+}
+
+/* Notebook/tablet horizontal */
+@media(min-width:761px) and (max-width:1180px){
+  .site-header{gap:16px;padding-inline:24px;}
+  .desktop-nav{gap:16px;font-size:13px;}
+  .hero{padding-inline:40px;}
+  .hero-content{padding-top:72px;padding-bottom:72px;}
+  .section{padding-inline:30px;}
+  .product-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .benefits{grid-template-columns:repeat(3,minmax(0,1fr));padding-inline:30px;}
+  .catalog-tools{flex-wrap:wrap;}
+  .search-box{flex:1 1 320px;}
+}
+
+/* Mobile: menu realmente dark e sem overflow horizontal. */
+@media(max-width:760px){
+  .site-header{padding-inline:14px;}
+  .mobile-nav{
+    display:none;
+    position:absolute;
+    top:68px;
+    left:10px;
+    right:10px;
+    width:auto;
+    padding:8px;
+    border:1px solid rgba(103,183,197,.16);
+    border-radius:16px;
+    background:rgba(5,22,29,.97);
+    box-shadow:0 24px 55px rgba(0,0,0,.42);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+  }
+  .mobile-nav.open{display:grid;}
+  .mobile-nav a,.mobile-nav button{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    min-height:46px;
+    padding:0 14px;
+    color:#dceff2;
+    background:transparent;
+    border:0;
+    border-radius:11px;
+    font:700 13px "DM Sans",system-ui,sans-serif;
+    text-align:left;
+  }
+  .mobile-nav a:hover,.mobile-nav button:hover{background:rgba(29,155,176,.13);}
+  .hero{padding-inline:20px;}
+  .hero-content{padding:58px 0 70px;}
+  .hero-link{min-height:46px;padding-inline:17px;}
+  .catalog-tools{width:100%;}
+}
+
+@media(max-width:430px){
+  .header-actions{gap:1px;}
+  .icon-button,.menu-button{width:40px;height:40px;}
+  .hero-content{padding-top:50px;}
+  .hero h1{font-size:40px;line-height:1.01;}
+  .hero-subtitle{max-width:34rem;}
+}
+
+/* Nunca permitir que elementos grandes criem scroll lateral no desktop ou mobile. */
+html,body{overflow-x:hidden;}
+img,video,svg{max-width:100%;}
+

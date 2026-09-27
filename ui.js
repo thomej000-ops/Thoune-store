@@ -44,7 +44,7 @@ export function renderProducts(products = []) {
     const out = Number.isFinite(stock) && stock <= 0;
     const image = product.image
       ? `<img src="${escape(product.image)}" alt="${escape(product.name)}" loading="lazy">`
-      : `<span class="product-image-placeholder">🔨</span>`;
+      : `<span class="product-image-placeholder">◇</span>`;
 
     return `
       <article class="product-card" data-product-id="${escape(product.id)}">

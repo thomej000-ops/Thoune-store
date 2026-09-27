@@ -270,7 +270,7 @@ export function orderText(
   cart = loadCart()
 ) {
   if (!Array.isArray(cart) || !cart.length) {
-    return "📦 Pedido — Thoune Store\n\nNenhum item no carrinho.";
+    return "◫ Pedido — Thoune Store\n\nNenhum item no carrinho.";
   }
 
 
@@ -284,11 +284,11 @@ export function orderText(
 
 
   return [
-    "📦 Pedido — Thoune Store",
+    "◫ Pedido — Thoune Store",
     "",
     ...lines,
     "",
-    `💰 Total: ${money(
+    `◇ Total: ${money(
       cartTotal(cart)
     )}`
   ].join("\n");
