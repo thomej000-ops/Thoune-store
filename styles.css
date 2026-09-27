@@ -4068,3 +4068,105 @@ body:has(.admin){
 html,body{overflow-x:hidden;}
 img,video,svg{max-width:100%;}
 
+
+/* =========================================================
+   THOUNE V1003 — modal polish, icon scale and visual cleanup
+   ========================================================= */
+
+html{scroll-behavior:smooth;}
+body.overlay-lock{overflow:hidden !important;}
+
+/* Larger, centered line icons. */
+.ui-icon{width:26px;height:26px;flex:0 0 26px;display:inline-block;position:relative;color:currentColor;}
+.ui-icon-user::before{width:9px;height:9px;border-width:1.8px;left:8.5px;top:1px;}
+.ui-icon-user::after{width:17px;height:9px;border-width:1.8px;left:4.5px;bottom:1px;}
+.ui-icon-cart::before{width:17px;height:11px;border-width:1.8px;left:5px;top:7px;}
+.ui-icon-cart::after{width:4px;height:4px;left:7px;bottom:1px;box-shadow:9px 0 0 currentColor;}
+.ui-icon-menu::before{width:21px;height:1.8px;left:2.5px;top:4px;box-shadow:0 7px 0 currentColor,0 14px 0 currentColor;}
+.ui-icon-heart::before{width:15px;height:15px;border-width:1.8px;left:5.5px;top:5px;}
+.ui-icon-box::before{width:17px;height:14px;border-width:1.8px;left:4.5px;top:7px;}
+.ui-icon-box::after{width:9px;height:1.8px;left:8.5px;top:12px;}
+.ui-icon-bag::before{width:17px;height:15px;border-width:1.8px;left:4.5px;top:8px;}
+.ui-icon-bag::after{width:9px;height:7px;border-width:1.8px;left:8.5px;top:2px;}
+.ui-icon-receipt::before{width:15px;height:19px;border-width:1.8px;left:5.5px;top:2px;}
+.ui-icon-receipt::after{width:9px;height:1.8px;left:8.5px;top:8px;box-shadow:0 5px 0 currentColor;}
+.ui-icon-card::before{width:20px;height:14px;border-width:1.8px;left:3px;top:6px;}
+.ui-icon-card::after{width:18px;height:1.8px;left:4px;top:11px;}
+.ui-icon-clipboard::before{width:17px;height:19px;border-width:1.8px;left:4.5px;top:4px;}
+.ui-icon-clipboard::after{width:9px;height:4px;border-width:1.8px;left:8.5px;top:1px;}
+.ui-icon-lock::before{width:17px;height:13px;border-width:1.8px;left:4.5px;top:10px;}
+.ui-icon-lock::after{width:10px;height:10px;border-width:1.8px;left:8px;top:2px;}
+.ui-icon-at::before{content:"@";position:absolute;inset:0;display:grid;place-items:center;font:700 18px/1 system-ui,sans-serif;}
+.ui-icon-game::before{width:20px;height:13px;border:1.8px solid currentColor;border-radius:7px;left:3px;top:7px;transform:rotate(-5deg);}
+.ui-icon-game::after{content:"";position:absolute;width:6px;height:6px;border-left:1.8px solid currentColor;border-bottom:1.8px solid currentColor;left:7px;top:10px;transform:rotate(-45deg);box-shadow:7px -2px 0 -1px currentColor;}
+.ui-icon-check::before{width:18px;height:10px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;left:4px;top:5px;transform:rotate(-45deg);}
+.ui-icon-spark::before{width:14px;height:14px;border:1.6px solid currentColor;left:6px;top:6px;transform:rotate(45deg);border-radius:4px;}
+.ui-icon-spark::after{width:24px;height:1.6px;background:currentColor;left:1px;top:12px;transform:rotate(90deg);}
+
+.icon-button,.menu-button{width:46px;height:46px;border-radius:14px;}
+.icon-button .ui-icon,.menu-button .ui-icon{transform:scale(.95);}
+.cart-button .ui-icon{transform:scale(1.05);}
+.favorite-button{display:grid;place-items:center;overflow:visible;}
+.favorite-button .ui-icon{transform:scale(.78);}
+.favorite-button.active .ui-icon{color:#8de5ed;}
+.catalog-favorites-button{display:inline-flex;align-items:center;justify-content:center;gap:9px;}
+.catalog-favorites-button .ui-icon{transform:scale(.85);}
+
+/* How-to icons are intentionally prominent instead of tiny glyphs. */
+.steps article > span{width:66px;height:66px;min-height:66px;margin:24px 0 17px;border:1px solid rgba(103,213,226,.22);border-radius:20px;background:linear-gradient(145deg,rgba(24,91,105,.42),rgba(8,42,52,.7));box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 12px 28px rgba(0,0,0,.16);}
+.steps article > span .ui-icon{width:30px;height:30px;transform:scale(1);}
+.benefit-icon{width:52px;height:52px;border-radius:16px;}
+.benefit-icon .ui-icon{width:26px;height:26px;}
+.review-placeholder-icon{display:grid !important;place-items:center !important;width:56px;height:56px;margin-inline:auto;border-radius:18px;background:rgba(29,155,176,.12);border:1px solid rgba(103,183,197,.16);color:#7ce1eb;}
+.review-placeholder-icon .ui-icon{width:28px;height:28px;}
+
+/* All account/favorite surfaces become floating vertical windows. */
+.account-side-panel,
+#favorites-panel,
+#notifications-global-panel,
+#order-details-modal{position:fixed;inset:0;z-index:160;display:grid;place-items:center;padding:20px;background:rgba(0,8,12,.74);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);}
+.account-side-panel.hidden,
+#favorites-panel.hidden,
+#notifications-global-panel.hidden{display:none !important;}
+.side-panel-inner{width:min(520px,calc(100vw - 32px));max-height:min(86vh,820px);overflow:auto;border:1px solid rgba(103,183,197,.18);border-radius:26px;padding:26px;background:linear-gradient(180deg,#0b2a35,#071a22);box-shadow:0 34px 100px rgba(0,0,0,.55);}
+.side-panel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+.side-panel-content{min-width:0;}
+
+/* Cart is a floating vertical card, not a full-height side drawer. */
+.cart-drawer{position:fixed;inset:0;z-index:150;display:grid;place-items:center;padding:20px;background:rgba(0,8,12,.74);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);visibility:hidden;opacity:0;transition:opacity .22s ease,visibility .22s ease;}
+.cart-drawer.open{visibility:visible;opacity:1;}
+.cart-drawer .drawer-backdrop{position:absolute;inset:0;background:transparent;opacity:1;backdrop-filter:none;}
+.drawer-panel{position:relative;z-index:1;width:min(520px,calc(100vw - 32px));height:min(86vh,820px);max-height:86vh;border:1px solid rgba(103,183,197,.18);border-radius:26px;padding:26px;background:linear-gradient(180deg,#0b2a35,#071a22);box-shadow:0 34px 100px rgba(0,0,0,.55);transform:translateY(14px) scale(.985);transition:transform .24s ease;}
+.cart-drawer.open .drawer-panel{transform:none;}
+.drawer-panel .cart-items{min-height:0;}
+.cart-empty span{display:grid;place-items:center;width:64px;height:64px;margin:0 auto;border-radius:20px;background:rgba(29,155,176,.12);border:1px solid rgba(103,183,197,.15);color:#7ce1eb;}
+.cart-empty span .ui-icon{width:32px;height:32px;}
+
+/* Keep every text/input inside overlays dark-theme consistent. */
+.side-panel-inner input,.side-panel-inner select,.side-panel-inner textarea,.drawer-panel input,.drawer-panel select,.drawer-panel textarea{background:#071b23 !important;color:#edf8fa !important;border-color:rgba(103,183,197,.18) !important;}
+.side-panel-inner label,.drawer-panel label{color:#d8ecef;}
+.side-panel-inner .profile-fields{border-top-color:rgba(103,183,197,.13);}
+.account-user-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:20px;}
+.account-summary-item{padding:14px 15px;border:1px solid rgba(103,183,197,.14);border-radius:16px;background:rgba(12,46,56,.65);}
+.account-summary-item strong{display:block;margin-top:5px;color:#edf9fa;font-size:14px;overflow-wrap:anywhere;}
+.account-summary-label{font-size:9px;font-weight:800;letter-spacing:.12em;color:#78aeb8;}
+.account-menu{grid-template-columns:repeat(3,minmax(0,1fr));}
+.account-menu button{background:rgba(12,46,56,.72);border-color:rgba(103,183,197,.14);color:#eaf7f8;}
+.account-menu button:hover{background:rgba(20,73,86,.78);border-color:rgba(103,183,197,.30);}
+.account-menu-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:rgba(29,155,176,.12);color:#7ce1eb;}
+.account-menu-icon .ui-icon{width:21px;height:21px;}
+.field-label-icon{display:inline-flex !important;align-items:center;gap:7px;}
+.field-label-icon .ui-icon{width:17px;height:17px;flex-basis:17px;}
+.account-form-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:rgba(29,155,176,.12);color:#7ce1eb;flex:0 0 auto;}
+
+/* Remove remaining emoji-like heart text if old markup survives. */
+.favorite-button{font-size:0;}
+
+@media(max-width:760px){
+  .cart-drawer,.account-side-panel,#favorites-panel,#notifications-global-panel,#order-details-modal{padding:12px;}
+  .drawer-panel,.side-panel-inner{width:calc(100vw - 24px);height:min(88vh,760px);max-height:88vh;border-radius:22px;padding:20px;}
+  .account-user-summary{grid-template-columns:1fr;}
+  .account-menu{grid-template-columns:1fr;}
+  .steps{grid-template-columns:1fr !important;}
+  .steps article > span{width:60px;height:60px;min-height:60px;}
+}

@@ -329,9 +329,7 @@
 
       <article>
 
-        <span class="benefit-icon">
-          ⌑
-        </span>
+        <span class="benefit-icon"><span class="ui-icon ui-icon-lock" aria-hidden="true"></span></span>
 
         <div>
           <strong>
@@ -799,8 +797,8 @@
         id="reviews-empty"
       >
 
-        <span>
-          ⭐
+        <span class="review-placeholder-icon">
+          <span class="ui-icon ui-icon-spark" aria-hidden="true"></span>
         </span>
 
         <p>
@@ -1043,9 +1041,7 @@
 
               <label>
 
-                <span>
-                  ♪ Usuário do TikTok
-                </span>
+                <span class="field-label-icon"><span class="ui-icon ui-icon-at" aria-hidden="true"></span> Usuário do TikTok</span>
 
                 <input
                   id="tiktok-username"
@@ -1059,9 +1055,7 @@
 
               <label>
 
-                <span>
-                  ◇ Usuário do Roblox
-                </span>
+                <span class="field-label-icon"><span class="ui-icon ui-icon-game" aria-hidden="true"></span> Usuário do Roblox</span>
 
                 <input
                   id="roblox-username"
@@ -1078,7 +1072,7 @@
                 class="secondary-button full"
                 id="save-profile-button"
               >
-                ⌄ Salvar informações
+                <span class="ui-icon ui-icon-check" aria-hidden="true"></span> Salvar informações
               </button>
 
 
@@ -1104,16 +1098,14 @@
 
               <div class="account-user-summary">
 
-                <div>
+                <div class="account-summary-item">
+                  <span class="account-summary-label">TIKTOK</span>
+                  <strong id="account-email">—</strong>
+                </div>
 
-                  <span class="account-summary-label">
-                    CONTA
-                  </span>
-
-                  <strong id="account-email">
-                    —
-                  </strong>
-
+                <div class="account-summary-item">
+                  <span class="account-summary-label">ROBLOX</span>
+                  <strong id="account-roblox">—</strong>
                 </div>
 
               </div>
@@ -1184,33 +1176,7 @@
                 </button>
 
 
-                <button
-                  type="button"
-                  class="account-menu-button"
-                  id="open-profile-panel"
-                >
 
-                  <span class="account-menu-icon">
-                    <span class="ui-icon ui-icon-user" aria-hidden="true"></span>
-                  </span>
-
-                  <span>
-
-                    <strong>
-                      Meus dados
-                    </strong>
-
-                    <small>
-                      TikTok e Roblox
-                    </small>
-
-                  </span>
-
-                  <b>
-                    ›
-                  </b>
-
-                </button>
 
 
                 <button
@@ -1220,7 +1186,7 @@
                 >
 
                   <span class="account-menu-icon">
-                    ❤️
+                    <span class="ui-icon ui-icon-heart" aria-hidden="true"></span>
                   </span>
 
                   <span>
@@ -1351,100 +1317,6 @@
 
 
               <!-- ========================================
-                   PAINEL DE PERFIL
-              ========================================= -->
-
-              <div
-                class="account-panel hidden"
-                id="profile-panel"
-              >
-
-                <div class="account-panel-header">
-
-                  <button
-                    type="button"
-                    class="account-panel-back"
-                    data-account-back
-                    aria-label="Voltar para o menu da conta"
-                  >
-                    ←
-                  </button>
-
-
-                  <div>
-
-                    <span>
-                      SEUS DADOS
-                    </span>
-
-                    <h3>
-                      Meus dados
-                    </h3>
-
-                  </div>
-
-                </div>
-
-
-                <div class="account-panel-content">
-
-                  <div class="profile-fields">
-
-                    <label>
-
-                      <span>
-                        ♪ Usuário do TikTok
-                      </span>
-
-                      <input
-                        id="profile-panel-tiktok"
-                        type="text"
-                        placeholder="@seuusuario"
-                        autocomplete="off"
-                      >
-
-                    </label>
-
-
-                    <label>
-
-                      <span>
-                        ◇ Usuário do Roblox
-                      </span>
-
-                      <input
-                        id="profile-panel-roblox"
-                        type="text"
-                        placeholder="Seu usuário do Roblox"
-                        autocomplete="off"
-                      >
-
-                    </label>
-
-
-                    <button
-                      type="button"
-                      class="secondary-button full"
-                      id="profile-panel-save"
-                    >
-                      ⌄ Salvar informações
-                    </button>
-
-
-                    <p
-                      id="profile-panel-message"
-                      class="profile-message"
-                      aria-live="polite"
-                    ></p>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-
-              <!-- ========================================
                    PAINEL DE FAVORITOS DA CONTA
               ========================================= -->
 
@@ -1507,9 +1379,7 @@
 
               <div class="account-form-heading">
 
-                <span>
-                  ⌑
-                </span>
+                <span class="account-form-icon"><span class="ui-icon ui-icon-lock" aria-hidden="true"></span></span>
 
                 <div>
 
@@ -1648,9 +1518,7 @@
 
         <div class="panel-empty-state">
 
-          <span>
-            ❤️
-          </span>
+          <span class="panel-empty-icon"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span></span>
 
           <h3>
             Nenhum favorito ainda
@@ -1861,7 +1729,7 @@
           class="secondary-button full"
           id="copy-order-button"
         >
-          ▤ Copiar pedido
+          <span class="ui-icon ui-icon-clipboard" aria-hidden="true"></span> Copiar pedido
         </button>
 
 
@@ -2093,9 +1961,7 @@
 
           <label>
 
-            <span>
-              ♪ Usuário do TikTok
-            </span>
+            <span class="field-label-icon"><span class="ui-icon ui-icon-at" aria-hidden="true"></span> Usuário do TikTok</span>
 
             <input
               id="checkout-tiktok"

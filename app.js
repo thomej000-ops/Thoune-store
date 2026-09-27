@@ -62,12 +62,25 @@ function setHidden(element, hidden) {
   element.setAttribute("aria-hidden", hidden ? "true" : "false");
 }
 
+function syncOverlayLock() {
+  const overlays = document.querySelectorAll(
+    "#account-panel-modal, #cart-drawer, #checkout-section, #favorites-panel, #product-modal, #notifications-global-panel, #order-details-modal"
+  );
+
+  const hasOpenOverlay = Array.from(overlays).some((element) =>
+    element.classList.contains("open")
+  );
+
+  document.body.classList.toggle("overlay-lock", hasOpenOverlay);
+}
+
 function openPanel(element) {
   if (!element) return;
 
   element.classList.add("open");
   element.classList.remove("hidden");
   element.setAttribute("aria-hidden", "false");
+  syncOverlayLock();
 }
 
 function closePanel(element) {
@@ -76,6 +89,7 @@ function closePanel(element) {
   element.classList.remove("open");
   element.classList.add("hidden");
   element.setAttribute("aria-hidden", "true");
+  syncOverlayLock();
 }
 
 function formatDate(date) {
@@ -266,11 +280,6 @@ async function loadProfile() {
     $("#roblox-username").value =
       currentProfile.roblox_username || "";
 
-    $("#profile-panel-tiktok").value =
-      currentProfile.tiktok_username || "";
-
-    $("#profile-panel-roblox").value =
-      currentProfile.roblox_username || "";
   }
 }
 
@@ -419,10 +428,17 @@ function updateAccountUI() {
     accountMessage.textContent = "Você está conectado.";
   }
 
-  const email = $("#account-email");
+  const accountTikTok = $("#account-email");
+  const accountRoblox = $("#account-roblox");
 
-  if (email) {
-    email.textContent = currentUser.email || "";
+  if (accountTikTok) {
+    accountTikTok.textContent = currentProfile?.tiktok_username
+      ? `@${String(currentProfile.tiktok_username).replace(/^@/, "")}`
+      : "Não informado";
+  }
+
+  if (accountRoblox) {
+    accountRoblox.textContent = currentProfile?.roblox_username || "Não informado";
   }
 
   $("#tiktok-username").value =
@@ -431,11 +447,6 @@ function updateAccountUI() {
   $("#roblox-username").value =
     currentProfile?.roblox_username || "";
 
-  $("#profile-panel-tiktok").value =
-    currentProfile?.tiktok_username || "";
-
-  $("#profile-panel-roblox").value =
-    currentProfile?.roblox_username || "";
 }
 
 async function openAccountPanel() {
@@ -776,7 +787,7 @@ function renderFavoritesPanel() {
           data-favorite-remove="${escapeHtml(product.id)}"
           aria-label="Remover dos favoritos"
         >
-          ♥
+          <span class="ui-icon ui-icon-heart" aria-hidden="true"></span>
         </button>
       </article>
     `;
@@ -1808,11 +1819,6 @@ async function openNotificationsPanel() {
 function openProfilePanel() {
   closeAccountSubpanels();
 
-  $("#profile-panel-tiktok").value =
-    currentProfile?.tiktok_username || "";
-
-  $("#profile-panel-roblox").value =
-    currentProfile?.roblox_username || "";
 
   openPanel($("#profile-panel"));
 }

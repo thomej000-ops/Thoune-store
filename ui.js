@@ -50,7 +50,7 @@ export function renderProducts(products = []) {
       <article class="product-card" data-product-id="${escape(product.id)}">
         <div class="product-card-image">
           ${image}
-          <button type="button" class="favorite-button" data-favorite="${escape(product.id)}" aria-label="Adicionar aos favoritos">♡</button>
+          <button type="button" class="favorite-button" data-favorite="${escape(product.id)}" aria-label="Adicionar aos favoritos"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span></button>
         </div>
         <div class="product-card-content">
           <span class="product-card-category">${escape(product.category || "")}</span>
@@ -70,7 +70,6 @@ export function renderProducts(products = []) {
   container.querySelectorAll("[data-favorite]").forEach(button => {
     const key = `thoune-fav-${button.dataset.favorite}`;
     if (localStorage.getItem(key) === "1") {
-      button.textContent = "♥";
       button.classList.add("active");
     }
   });
