@@ -4244,3 +4244,164 @@ body.overlay-lock{overflow:hidden !important;}
   .icon-button .ui-icon,.menu-button .ui-icon{font-size:21px !important;}
   .steps article > span .ui-icon{font-size:27px !important;}
 }
+
+/* =========================================================
+   THOUNE V1005 — limpeza final de contraste e responsividade
+   ========================================================= */
+
+/* Pesquisa: nunca cortar o texto ou o ícone. */
+.search-box{min-width:0;overflow:visible;}
+.search-box span{width:30px;min-width:30px;display:inline-flex;align-items:center;justify-content:center;line-height:1;}
+.search-box input{min-width:0;overflow:hidden;text-overflow:ellipsis;}
+
+/* Favoritos: impedir aparência de botão nativo do navegador. */
+.catalog-favorites-button{
+  min-height:50px;
+  padding:0 16px;
+  border:1px solid rgba(103,183,197,.18);
+  border-radius:15px;
+  background:rgba(10,39,48,.80);
+  color:#eaf7f8;
+  box-shadow:0 8px 24px rgba(0,0,0,.15);
+  font:700 13px "DM Sans",system-ui,sans-serif;
+  cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
+  transition:.2s ease;
+}
+.catalog-favorites-button:hover{
+  background:rgba(29,155,176,.18);
+  border-color:rgba(85,200,216,.42);
+  transform:translateY(-1px);
+}
+.catalog-favorites-button .ui-icon{font-size:22px !important;width:30px !important;height:30px !important;}
+
+/* FAQ: corrigir o seletor real usado no HTML e manter tudo escuro. */
+.faq-list details{
+  background:linear-gradient(180deg,rgba(10,39,48,.92),rgba(7,29,37,.92));
+  border-color:rgba(103,183,197,.16);
+  color:#eaf7f8;
+  box-shadow:0 10px 30px rgba(0,0,0,.14);
+}
+.faq-list summary{color:#eaf7f8;}
+.faq-list details p{color:#9db7bd;}
+.faq-list summary:after{color:#69d8e5;}
+.faq-list details[open]{border-color:rgba(85,200,216,.30);}
+
+/* Suporte: remover qualquer aparência clara herdada. */
+.support-card{
+  background:linear-gradient(135deg,rgba(9,39,49,.96),rgba(6,25,32,.96)) !important;
+  border-color:rgba(103,183,197,.16) !important;
+  color:#eaf7f8;
+  box-shadow:0 20px 55px rgba(0,0,0,.22);
+}
+.support-card h2{color:#edf9fa !important;}
+.support-card p:not(.eyebrow){color:#9db7bd !important;}
+
+/* Ícones/emoji: espaço real suficiente para nunca cortar glifos coloridos. */
+.ui-icon{overflow:visible !important;line-height:1 !important;}
+.steps article > span{overflow:visible;}
+.steps article > span .ui-icon{font-size:31px !important;line-height:1 !important;}
+.benefit-icon .ui-icon{font-size:27px !important;line-height:1 !important;}
+.account-menu-icon .ui-icon{font-size:22px !important;line-height:1 !important;}
+
+/* Mobile: catálogo e pesquisa sem esmagamento. */
+@media(max-width:760px){
+  .catalog-tools{gap:10px;}
+  .search-box{height:48px;padding-inline:11px;}
+  .search-box span{width:28px;min-width:28px;}
+  .search-box input{font-size:13px;}
+  .catalog-favorites-button{width:100%;min-height:48px;}
+  .steps article{padding:19px;}
+  .steps article > span{margin-top:17px;margin-bottom:14px;}
+}
+
+@media(max-width:430px){
+  .catalog-favorites-button{font-size:12px;}
+  .catalog-favorites-button .ui-icon{font-size:21px !important;}
+  .search-box input{font-size:12px;}
+}
+
+
+/* =========================================================
+   THOUNE V1006 — conta sem duplicação + emojis estáveis
+   ========================================================= */
+
+/* O botão 👤 do cabeçalho é a única entrada para Minha conta.
+   O item duplicado do menu mobile foi removido do HTML. */
+
+/* Os dados do perfil já aparecem nos campos de edição acima;
+   esconder o resumo repetido evita duplicação visual sem quebrar
+   o JavaScript que ainda atualiza esses elementos. */
+.account-user-summary{
+  display:none !important;
+}
+
+/* Emoji com área suficiente para não serem cortados. */
+.ui-icon{
+  overflow:visible !important;
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  line-height:1 !important;
+  white-space:nowrap;
+  flex:0 0 auto;
+}
+
+.icon-button .ui-icon,
+.menu-button .ui-icon,
+.cart-button .ui-icon{
+  width:32px !important;
+  height:32px !important;
+  font-size:23px !important;
+}
+
+.account-menu-icon{
+  width:38px !important;
+  min-width:38px !important;
+  height:38px !important;
+  min-height:38px !important;
+  overflow:visible !important;
+  display:grid !important;
+  place-items:center !important;
+  line-height:1 !important;
+  font-size:22px !important;
+}
+
+.account-menu-icon .ui-icon{
+  width:30px !important;
+  height:30px !important;
+  font-size:21px !important;
+}
+
+.favorite-button .ui-icon,
+.catalog-favorites-button .ui-icon{
+  width:32px !important;
+  height:32px !important;
+  font-size:21px !important;
+  overflow:visible !important;
+}
+
+.steps article > span .ui-icon,
+.benefit-icon .ui-icon{
+  overflow:visible !important;
+  line-height:1 !important;
+}
+
+@media(max-width:430px){
+  .icon-button .ui-icon,
+  .menu-button .ui-icon,
+  .cart-button .ui-icon{
+    width:30px !important;
+    height:30px !important;
+    font-size:21px !important;
+  }
+
+  .account-menu-icon{
+    width:36px !important;
+    min-width:36px !important;
+    height:36px !important;
+    min-height:36px !important;
+    font-size:21px !important;
+  }
+}
