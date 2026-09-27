@@ -1087,9 +1087,8 @@ async function createOrder() {
   const { data, error } =
     await supabaseClient.rpc("create_order", {
       p_items: items,
-      p_tiktok_username: tiktokUsername,
-      p_roblox_username: robloxUsername,
-      p_pix_sender_name: pixName
+      p_pix_name: pixName,
+      p_delivery_username: robloxUsername
     });
 
   if (button) {
@@ -1240,7 +1239,7 @@ async function fetchOrder(orderId) {
     .from("orders")
     .select("*")
     .eq("id", orderId)
-    .eq("user_id", currentUser.id)
+    .eq("customer_id", currentUser.id)
     .maybeSingle();
 
   if (error) {
@@ -1268,7 +1267,7 @@ async function loadCurrentOrder() {
     const { data, error } = await supabaseClient
       .from("orders")
       .select("*")
-      .eq("user_id", currentUser.id)
+      .eq("customer_id", currentUser.id)
       .order("created_at", { ascending: false })
       .limit(10);
 
@@ -1406,7 +1405,7 @@ async function loadCustomerOrders() {
   const { data, error } = await supabaseClient
     .from("orders")
     .select("*")
-    .eq("user_id", currentUser.id)
+    .eq("customer_id", currentUser.id)
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -1612,7 +1611,7 @@ async function loadNotifications() {
   const { data, error } = await supabaseClient
     .from("notifications")
     .select("*")
-    .eq("user_id", currentUser.id)
+    .eq("customer_id", currentUser.id)
     .order("created_at", { ascending: false })
     .limit(30);
 
