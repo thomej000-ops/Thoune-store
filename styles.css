@@ -3493,3 +3493,399 @@ summary:focus-visible {
     padding:12px;
   }
   }
+
+
+/* =========================================================
+   THOUNE STORE — NOVA IDENTIDADE VISUAL v1001
+   Dark / azul-petróleo / moderno
+   ========================================================= */
+
+:root{
+  --deep:#06161d;
+  --deep-2:#092630;
+  --teal:#1d9bb0;
+  --teal-light:#55c8d8;
+  --mist:#103743;
+  --mist-2:#0b2a35;
+  --white:#f4fbfd;
+  --ink:#e9f5f7;
+  --muted:#8eabb3;
+  --line:rgba(103,183,197,.16);
+  --card:#0c2730;
+  --blue-bg:#071c24;
+  --blue-bg-2:#0a252e;
+  --shadow:0 22px 70px rgba(0,0,0,.32);
+  --shadow-soft:0 12px 35px rgba(0,0,0,.22);
+  --shadow-card:0 10px 32px rgba(0,0,0,.25);
+  --radius:22px;
+}
+
+html{
+  background:#06161d;
+}
+
+body{
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 8% 0%,rgba(29,155,176,.14),transparent 27%),
+    radial-gradient(circle at 92% 18%,rgba(36,113,132,.12),transparent 30%),
+    linear-gradient(180deg,#06161d 0%,#071d26 48%,#06161d 100%);
+}
+
+.site-header{
+  background:rgba(5,19,25,.82);
+  border-bottom:1px solid rgba(103,183,197,.14);
+  box-shadow:0 10px 35px rgba(0,0,0,.20);
+}
+
+.brand-mark{
+  box-shadow:0 10px 30px rgba(0,0,0,.38),0 0 0 1px rgba(91,200,216,.18);
+}
+
+.brand-text strong{color:#f4fbfd}
+.brand-text small{color:#76959e}
+
+.desktop-nav{color:#a8c2c8}
+.desktop-nav a:hover{color:var(--teal-light)}
+
+.icon-button{
+  background:rgba(16,55,67,.65);
+  border-color:rgba(103,183,197,.16);
+  color:#eaf8fa;
+}
+.icon-button:hover{
+  background:rgba(29,155,176,.20);
+  border-color:rgba(85,200,216,.38);
+}
+
+.hero{
+  min-height:650px;
+  background-color:#06161d;
+}
+
+.hero::after{
+  background:
+    radial-gradient(circle at 72% 28%,rgba(55,193,211,.20),transparent 25%),
+    radial-gradient(circle at 88% 78%,rgba(17,104,124,.25),transparent 32%);
+}
+
+.hero-overlay{
+  background:
+    linear-gradient(90deg,rgba(3,13,18,.97) 0%,rgba(5,28,36,.82) 52%,rgba(5,28,36,.48) 100%);
+}
+
+.hero h1{
+  text-shadow:0 8px 40px rgba(0,0,0,.38);
+}
+
+.hero h1 em{
+  color:#5ed1df;
+}
+
+.hero-subtitle{color:#b9d1d6}
+
+.hero-link{
+  background:#1490a5;
+  color:#f5feff;
+  border-color:#2cb4c8;
+  box-shadow:0 12px 30px rgba(20,144,165,.25);
+}
+.hero-link:hover{
+  background:#1aa9be;
+  transform:translateY(-2px);
+}
+
+.online-pill{
+  background:rgba(11,45,55,.58);
+  border-color:rgba(123,215,228,.24);
+}
+
+.section{
+  background:transparent;
+}
+
+.section:nth-of-type(even){
+  background:rgba(7,31,39,.48);
+}
+
+.section-heading h2{color:#f0f9fa}
+.section-heading p:not(.eyebrow){color:var(--muted)}
+
+.benefits{
+  background:linear-gradient(180deg,rgba(7,30,38,.94),rgba(6,24,31,.98));
+  border-bottom-color:rgba(103,183,197,.12);
+}
+
+.benefits article:hover{
+  background:rgba(17,58,69,.55);
+  border-color:rgba(103,183,197,.20);
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+
+.benefits span{
+  background:rgba(29,155,176,.13);
+}
+
+.benefits strong{color:#e8f5f7}
+.benefits p{color:#87a5ad}
+
+.search-box,
+#sort-select,
+.category{
+  background:rgba(10,39,48,.80);
+  border-color:rgba(103,183,197,.16);
+  color:#e9f5f7;
+  box-shadow:0 8px 24px rgba(0,0,0,.15);
+}
+
+.search-box input,
+#sort-select{
+  color:#e9f5f7;
+}
+
+.search-box input::placeholder{color:#6f8d96}
+.search-box span{color:#6faab5}
+
+.search-box:focus-within,
+#sort-select:focus{
+  border-color:rgba(85,200,216,.55);
+  box-shadow:0 0 0 4px rgba(29,155,176,.10),0 10px 28px rgba(0,0,0,.18);
+}
+
+.category{color:#9fb9bf}
+.category:hover,
+.category.active{
+  background:rgba(29,155,176,.18);
+  border-color:rgba(85,200,216,.42);
+  color:#dff8fb;
+}
+
+.product-card{
+  background:linear-gradient(180deg,rgba(13,43,52,.98),rgba(9,34,42,.98));
+  border-color:rgba(103,183,197,.14);
+  box-shadow:var(--shadow-card);
+}
+
+.product-card:hover{
+  border-color:rgba(85,200,216,.38);
+  box-shadow:0 24px 55px rgba(0,0,0,.34),0 0 30px rgba(29,155,176,.08);
+}
+
+.product-image{
+  background:
+    radial-gradient(circle at 50% 30%,rgba(65,184,202,.14),transparent 42%),
+    linear-gradient(145deg,#0d3540,#071d25);
+}
+
+.favorite{
+  background:rgba(5,24,30,.72);
+  border-color:rgba(174,235,242,.16);
+  color:#e9f8fa;
+}
+
+.favorite.active{background:rgba(170,62,92,.28)}
+.product-info{color:#eaf7f8}
+.product-info p{color:#8caab2}
+.product-info strong{color:#f5fbfc}
+
+.product-price,
+.price{color:#69d8e5}
+
+.empty-state{
+  background:rgba(9,37,46,.72);
+  border-color:rgba(103,183,197,.14);
+  color:#c4d8dc;
+}
+
+.reviews,
+.review-card,
+.faq-item{
+  background:rgba(9,36,45,.70);
+  border-color:rgba(103,183,197,.14);
+  color:#eaf5f7;
+}
+
+.faq-item summary{color:#e8f6f8}
+.faq-item p{color:#91abb2}
+
+.site-footer{
+  background:#040f14;
+  border-top:1px solid rgba(103,183,197,.12);
+  color:#8ca6ad;
+}
+
+.site-footer a{color:#9dc7cf}
+
+.cart-drawer,
+.account-panel,
+.notifications-panel,
+.order-floating-panel{
+  background:rgba(4,18,24,.90);
+  color:#eaf7f8;
+}
+
+.drawer-panel{
+  background:linear-gradient(180deg,#09232d,#06171e);
+  border-left:1px solid rgba(103,183,197,.14);
+}
+
+.drawer-header h2,
+.side-panel-header h2{color:#f0fafb}
+
+.close-button{
+  background:rgba(17,59,70,.75);
+  color:#eaf7f8;
+}
+.close-button:hover{background:rgba(29,155,176,.28)}
+
+.cart-item{
+  background:rgba(12,43,52,.88);
+  border-color:rgba(103,183,197,.14);
+  box-shadow:none;
+}
+
+.cart-item strong,
+.cart-item span{color:#e7f4f6}
+
+.checkout-section{
+  background:linear-gradient(180deg,#071c24,#06161d);
+}
+
+.checkout-card{
+  background:rgba(9,36,45,.94);
+  border-color:rgba(103,183,197,.15);
+  box-shadow:var(--shadow-soft);
+}
+
+.checkout-item{
+  background:rgba(14,49,59,.72);
+  border-color:rgba(103,183,197,.14);
+  color:#dcecef;
+}
+
+.checkout-form input{
+  background:#071b23;
+  color:#edf8fa;
+  border-color:rgba(103,183,197,.18);
+}
+
+.checkout-form input::placeholder{color:#6f8c94}
+
+.checkout-total{
+  border-color:rgba(103,183,197,.15);
+}
+
+.modal-backdrop,
+.drawer-backdrop{
+  background:rgba(0,7,10,.72);
+  backdrop-filter:blur(5px);
+}
+
+.modal-card,
+.account-card,
+.side-panel-inner{
+  background:linear-gradient(180deg,#0b2a35,#071b23);
+  border-color:rgba(103,183,197,.16);
+  color:#eaf7f8;
+  box-shadow:0 30px 90px rgba(0,0,0,.48);
+}
+
+.modal-close{
+  background:rgba(17,59,70,.8);
+  color:#eaf7f8;
+}
+
+.toast{
+  background:#0b2d37;
+  color:#effbfc;
+  border-color:rgba(103,183,197,.18);
+  box-shadow:0 18px 45px rgba(0,0,0,.35);
+}
+
+.profile-panel-note,
+.notification-icon{
+  background:rgba(29,155,176,.12);
+}
+
+.notification-card{
+  background:rgba(10,39,48,.82);
+  border-color:rgba(103,183,197,.14);
+  box-shadow:none;
+}
+
+.notification-card p,
+.notification-card small{color:#88a6ae}
+
+.auth-form{border-color:rgba(103,183,197,.14)}
+.auth-form label{color:#d9ebee}
+
+button,
+a{
+  -webkit-tap-highlight-color:transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+summary:focus-visible{
+  outline:3px solid rgba(85,200,216,.30);
+}
+
+@media(max-width:760px){
+  .site-header{
+    background:rgba(5,19,25,.94);
+  }
+}
+
+/* =========================================================
+   ADMIN — acompanha a identidade da loja
+   ========================================================= */
+
+body:has(.admin){
+  background:
+    radial-gradient(circle at 10% 0%,rgba(29,155,176,.13),transparent 28%),
+    linear-gradient(180deg,#06161d,#071d26 55%,#06161d) !important;
+  color:#eaf7f8;
+}
+
+.admin-card{
+  background:rgba(9,36,45,.94) !important;
+  border-color:rgba(103,183,197,.16) !important;
+  box-shadow:0 24px 70px rgba(0,0,0,.28) !important;
+}
+
+.admin-header h1,
+.admin-header h2,
+.admin-card h1,
+.admin-card h2,
+.admin-card h3,
+.admin-card strong{
+  color:#edf9fa;
+}
+
+.admin-card p,
+.admin-card small,
+.admin-card label{
+  color:#91adb5;
+}
+
+.admin input,
+.admin select,
+.admin textarea,
+.admin-card input,
+.admin-card select,
+.admin-card textarea{
+  background:#071b23 !important;
+  color:#edf8fa !important;
+  border-color:rgba(103,183,197,.18) !important;
+}
+
+.admin button{
+  border-color:rgba(103,183,197,.16);
+}
+
+.admin-status{
+  background:rgba(52,183,112,.14) !important;
+  color:#86e0a8 !important;
+}
