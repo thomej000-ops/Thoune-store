@@ -11,3 +11,9 @@ Ajustes desta versão, focados somente no que foi solicitado:
 
 
 Versão 1014: os ícones foram incorporados diretamente ao styles.css. Não é necessária a pasta icons.
+
+
+## v1015
+- Final vector icon system with consistent sizing and no external icon folder.
+- Fixed Terms modal positioning/scroll behavior.
+- Added cache-busting version for styles.css.

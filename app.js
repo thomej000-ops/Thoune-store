@@ -209,11 +209,17 @@ function toggleTheme() {
 // ============================================================
 
 function openTerms() {
-  openPanel($("#terms-modal"));
+  const modal = $("#terms-modal");
+  if (!modal) return;
+  const card = modal.querySelector(".terms-card");
+  openPanel(modal);
+  if (card) card.scrollTop = 0;
 }
 
 function closeTerms() {
-  closePanel($("#terms-modal"));
+  const modal = $("#terms-modal");
+  closePanel(modal);
+  syncOverlayLock();
 }
 
 // ============================================================
