@@ -745,6 +745,38 @@
 
           <div class="form-field">
 
+            <label for="product-discount-percent">
+              Desconto individual (%)
+            </label>
+
+            <input
+              id="product-discount-percent"
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+              placeholder="Ex.: 15"
+            >
+
+          </div>
+
+
+          <div class="checkbox-field">
+
+            <input
+              id="product-discount-active"
+              type="checkbox"
+            >
+
+            <label for="product-discount-active">
+              Aplicar desconto individual
+            </label>
+
+          </div>
+
+
+          <div class="form-field">
+
             <label for="product-stock">
               Estoque
             </label>
@@ -1654,6 +1686,12 @@ const productPrice =
 const productStock =
   document.querySelector("#product-stock");
 
+const productDiscountPercent =
+  document.querySelector("#product-discount-percent");
+
+const productDiscountActive =
+  document.querySelector("#product-discount-active");
+
 const productOrder =
   document.querySelector("#product-order");
 
@@ -1718,6 +1756,12 @@ function openProductForm(product=null){
     productStock.value =
       product.stock ?? 0;
 
+    productDiscountPercent.value =
+      product.discount_percent ?? 0;
+
+    productDiscountActive.checked =
+      product.discount_active === true;
+
     productOrder.value =
       product.sort_order ?? 0;
 
@@ -1748,6 +1792,9 @@ function openProductForm(product=null){
     productPrice.value = "";
 
     productStock.value = 0;
+
+    productDiscountPercent.value = 0;
+    productDiscountActive.checked = false;
 
     productOrder.value = 0;
 
@@ -1967,10 +2014,17 @@ async function loadProducts(){
         : "status-inactive";
 
 
+    const discount = document.createElement("span");
+    if (product.discount_active && Number(product.discount_percent) > 0) {
+      discount.textContent = `-${Number(product.discount_percent)}% OFF`;
+      discount.className = "admin-discount-badge";
+    }
+
     meta.append(
       rarity,
       price,
       stock,
+      ...(discount.textContent ? [discount] : []),
       status
     );
 
@@ -2066,6 +2120,12 @@ saveProductButton.addEventListener(
     const stock =
       Number(productStock.value);
 
+    const discountPercent =
+      Number(productDiscountPercent.value || 0);
+
+    const discountActive =
+      productDiscountActive.checked;
+
     const sortOrder =
       Number(productOrder.value);
 
@@ -2113,6 +2173,19 @@ saveProductButton.addEventListener(
 
 
     if(
+      !Number.isFinite(discountPercent) ||
+      discountPercent < 0 ||
+      discountPercent > 100
+    ){
+
+      productFormMessage.textContent =
+        "Informe um desconto entre 0% e 100%.";
+
+      return;
+    }
+
+
+    if(
       !Number.isInteger(sortOrder) ||
       sortOrder < 0
     ){
@@ -2153,6 +2226,9 @@ saveProductButton.addEventListener(
           image || null,
 
         stock,
+
+        discount_percent: discountPercent,
+        discount_active: discountActive,
 
         sort_order:
           sortOrder,

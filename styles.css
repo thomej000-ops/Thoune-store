@@ -5168,3 +5168,83 @@ body.theme-light .theme-icon-img::after{content:'';position:absolute;width:10px;
 
 /* Remove leftover decorative glyphs where vector icons now exist. */
 .benefit-icon{font-size:0!important;}
+
+
+/* =========================================================
+   v1016 — EMOJIS, PRODUCT FOCUS, CART POLISH
+========================================================= */
+.ui-icon{
+  -webkit-mask:none !important;
+  mask:none !important;
+  background:none !important;
+  width:1.35em !important;
+  height:1.35em !important;
+  flex:0 0 1.35em !important;
+  display:inline-grid !important;
+  place-items:center !important;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif !important;
+  font-size:1.15em !important;
+  line-height:1 !important;
+  color:inherit !important;
+}
+.ui-icon::before{display:block !important;line-height:1 !important;}
+.ui-icon-user::before{content:"👤" !important;}
+.ui-icon-cart::before{content:"🛒" !important;}
+.ui-icon-menu::before{content:"☰" !important;}
+.ui-icon-heart::before{content:"♡" !important;}
+.favorite.active .ui-icon-heart::before,.favorite-button.active .ui-icon-heart::before{content:"♥" !important;}
+.ui-icon-search::before{content:"🔍" !important;}
+.ui-icon-bag::before{content:"🛍️" !important;}
+.ui-icon-box::before{content:"📦" !important;}
+.ui-icon-card::before{content:"💳" !important;}
+.ui-icon-lock::before{content:"🔒" !important;}
+.ui-icon-headset::before{content:"🎧" !important;}
+.ui-icon-receipt::before{content:"🧾" !important;}
+.ui-icon-like::before{content:"👍" !important;}
+.ui-icon-check::before{content:"✓" !important;}
+.ui-icon-at::before{content:"@" !important;}
+.ui-icon-game::before{content:"🎮" !important;}
+.ui-icon-clipboard::before{content:"📋" !important;}
+.ui-icon-spark::before{content:"✨" !important;}
+.ui-icon-wave::before{content:"〰️" !important;}
+.theme-icon-img{display:grid !important;place-items:center !important;font-size:20px !important;line-height:1 !important;}
+
+/* Remove the old product-detail interaction: catalog cards are not buttons. */
+.product-card{cursor:default !important;}
+.product-card .product-image{cursor:default !important;}
+.product-card .favorite,.product-card .add-button{cursor:pointer !important;}
+
+/* Product images get depth and a gentle floating motion. */
+.product-image{overflow:hidden !important;position:relative !important;isolation:isolate;}
+.product-image img{
+  filter:drop-shadow(0 18px 14px rgba(0,0,0,.42)) drop-shadow(0 0 14px rgba(83,214,229,.12)) !important;
+  transform-origin:center bottom;
+  animation:hammerFloat 4.8s ease-in-out infinite;
+  transition:transform .28s ease,filter .28s ease;
+}
+.product-card:hover .product-image img{transform:translateY(-7px) rotate(-1.5deg) scale(1.035) !important;filter:drop-shadow(0 25px 18px rgba(0,0,0,.46)) drop-shadow(0 0 18px rgba(83,214,229,.20)) !important;}
+@keyframes hammerFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-5px) rotate(.8deg)}}
+.product-card{box-shadow:0 18px 38px rgba(0,0,0,.18),0 0 0 1px rgba(100,216,229,.07) inset !important;}
+
+/* Cart image should sit on the cart surface, not a white square. */
+.cart-item-image{background:transparent !important;border-color:rgba(104,215,229,.16) !important;}
+.cart-item-image img{background:transparent !important;mix-blend-mode:multiply;filter:drop-shadow(0 8px 7px rgba(0,0,0,.30));}
+.cart-price-line{display:flex !important;align-items:center !important;gap:8px !important;flex-wrap:wrap !important;}
+.cart-price-original{opacity:.58 !important;text-decoration:line-through !important;}
+.cart-discount-badge{display:inline-flex !important;align-items:center !important;padding:4px 8px !important;border-radius:999px !important;background:rgba(75,213,171,.12) !important;border:1px solid rgba(75,213,171,.25) !important;color:#6fe1c2 !important;font-size:11px !important;font-weight:900 !important;}
+.checkout-discount{display:inline-block;margin-left:7px;color:#6fe1c2;font-weight:800;}
+.checkout-item del{opacity:.52;font-weight:500;margin-right:4px;}
+
+/* Roblox identity marker in the account summary. */
+.roblox-mini-logo{display:inline-grid;place-items:center;width:18px;height:18px;margin-right:4px;border-radius:4px;background:#111;color:#fff;font:900 11px/1 system-ui,sans-serif;transform:skew(-8deg);}
+
+/* Individual discount in admin. */
+.admin-discount-badge{display:inline-flex;padding:4px 7px;border-radius:999px;background:#e5faf2;color:#157a5a;font-weight:900;font-size:11px;}
+
+/* Opening effect: subtle bubbles + glow, only once per tab. */
+.opening-effect{position:fixed;inset:0;z-index:99999;pointer-events:none;overflow:hidden;background:radial-gradient(circle at 50% 46%,rgba(77,218,232,.10),transparent 38%),rgba(3,18,24,.36);animation:openingFade 1.75s ease forwards;}
+.opening-bubble{position:absolute;display:block;width:var(--size,42px);height:var(--size,42px);border-radius:50%;border:1px solid rgba(126,231,241,.35);background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.22),rgba(88,220,233,.08) 42%,transparent 70%);box-shadow:0 0 26px rgba(82,216,231,.16);animation:bubbleRise 1.65s ease-out forwards;}
+.b1{--size:30px;left:9%;bottom:-40px}.b2{--size:54px;left:22%;bottom:-60px;animation-delay:.08s}.b3{--size:22px;left:36%;bottom:-30px;animation-delay:.16s}.b4{--size:72px;left:51%;bottom:-80px;animation-delay:.04s}.b5{--size:35px;left:66%;bottom:-45px;animation-delay:.18s}.b6{--size:24px;left:78%;bottom:-35px;animation-delay:.12s}.b7{--size:48px;left:88%;bottom:-55px;animation-delay:.22s}.b8{--size:18px;left:44%;bottom:-25px;animation-delay:.3s}.b9{--size:28px;left:14%;bottom:-30px;animation-delay:.25s}.b10{--size:40px;left:59%;bottom:-45px;animation-delay:.32s}
+@keyframes bubbleRise{0%{opacity:0;transform:translate3d(0,0,0) scale(.55)}20%{opacity:1}100%{opacity:0;transform:translate3d(0,-78vh,0) scale(1.12)}}
+@keyframes openingFade{0%{opacity:1}72%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.opening-effect,.opening-bubble,.product-image img{animation:none !important}.opening-effect{display:none !important}}

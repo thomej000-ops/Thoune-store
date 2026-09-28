@@ -37,6 +37,7 @@ export function loadCart() {
           item.original_price != null
             ? Number(item.original_price) || Number(item.price) || 0
             : Number(item.price) || 0,
+        discount_percent: Number(item.discount_percent) || 0,
         image: item.image
           ? String(item.image)
           : "",
@@ -117,6 +118,7 @@ export function addToCart(product) {
       price,
       original_price:
         originalPrice,
+      discount_percent: Number(product.discount_percent) || 0,
       image:
         product.image
           ? String(product.image)

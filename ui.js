@@ -99,6 +99,7 @@ function cartRow(item) {
   const originalPrice = Number(item.original_price ?? item.price) || 0;
   const currentPrice = Number(item.price) || 0;
   const hasDiscount = originalPrice > currentPrice + 0.001;
+  const discountPercent = Number(item.discount_percent) || (hasDiscount ? Math.round((1 - currentPrice / originalPrice) * 100) : 0);
   const lineOriginal = originalPrice * qty;
 
   return `
@@ -109,7 +110,7 @@ function cartRow(item) {
         <div class="cart-price-line">
           ${hasDiscount ? `<span class="cart-price-original">${money(lineOriginal)}</span>` : ""}
           <span class="cart-item-price-current">${money(line)}</span>
-          ${hasDiscount ? `<span class="cart-discount-badge">DESCONTO</span>` : ""}
+          ${hasDiscount ? `<span class="cart-discount-badge">-${discountPercent}% OFF</span>` : ""}
         </div>
         <div class="cart-quantity">
           <button type="button" class="cart-qty-button" data-cart-minus="${escape(item.id)}" aria-label="Diminuir quantidade">−</button>

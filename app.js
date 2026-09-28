@@ -137,27 +137,31 @@ function clearCurrentOrderStorage() {
   saveCurrentOrderId(null);
 }
 
-function getEffectivePrice(price) {
+function getDiscountPercent(product) {
+  const individualActive = Boolean(product?.discount_active);
+  const individual = Number(product?.discount_percent) || 0;
+
+  if (individualActive && individual > 0) {
+    return Math.min(100, individual);
+  }
+
+  if (storeSettings.discount_active) {
+    return Math.min(100, Number(storeSettings.discount_percent) || 0);
+  }
+
+  return 0;
+}
+
+function getEffectivePrice(price, discountPercent = 0) {
   const value = Number(price) || 0;
+  const discount = Math.min(100, Math.max(0, Number(discountPercent) || 0));
 
-  if (!storeSettings.discount_active) {
-    return value;
-  }
-
-  const discount = Number(storeSettings.discount_percent) || 0;
-
-  if (discount <= 0) {
-    return value;
-  }
-
-  return Math.max(
-    0,
-    value * (1 - discount / 100)
-  );
+  if (discount <= 0) return value;
+  return Math.max(0, Math.round(value * (1 - discount / 100) * 100) / 100);
 }
 
 function getProductPrice(product) {
-  return getEffectivePrice(product?.price);
+  return getEffectivePrice(product?.price, getDiscountPercent(product));
 }
 
 function escapeHtml(value) {
@@ -180,7 +184,7 @@ function applyTheme(theme) {
   const icon = $("#theme-icon");
   const button = $("#theme-toggle");
 
-  if (icon) icon.textContent = "";
+  if (icon) icon.textContent = light ? "☀️" : "🌙";
   if (button) {
     button.setAttribute(
       "aria-label",
@@ -188,6 +192,17 @@ function applyTheme(theme) {
     );
     button.title = light ? "Modo escuro" : "Modo claro";
   }
+}
+
+
+function playOpeningEffect() {
+  if (sessionStorage.getItem("thoune-opening-effect-v1016")) return;
+  sessionStorage.setItem("thoune-opening-effect-v1016", "1");
+  const layer = document.createElement("div");
+  layer.className = "opening-effect";
+  layer.innerHTML = Array.from({length: 10}, (_, i) => `<span class="opening-bubble b${i+1}"></span>`).join("");
+  document.body.appendChild(layer);
+  window.setTimeout(() => layer.remove(), 1800);
 }
 
 function initializeTheme() {
@@ -745,15 +760,15 @@ function renderCatalog() {
       `${filtered.length} ${filtered.length === 1 ? "item" : "itens"}`;
   }
 
-  const discountPercent = Number(storeSettings.discount_percent) || 0;
   const displayProducts = filtered.map(product => {
     const originalPrice = Number(product.price) || 0;
-    const price = getProductPrice(product);
+    const discountPercent = getDiscountPercent(product);
+    const price = getEffectivePrice(originalPrice, discountPercent);
     return {
       ...product,
       price,
       original_price: originalPrice,
-      discount_percent: storeSettings.discount_active && price < originalPrice ? discountPercent : 0
+      discount_percent: discountPercent
     };
   });
 
@@ -1069,20 +1084,25 @@ function renderCheckout() {
 
   if (!container) return;
 
-  container.innerHTML = cart.map(item => `
-    <div class="checkout-item">
-      <span>
-        ${escapeHtml(item.name)} ×${Number(item.qty) || 1}
-      </span>
+  container.innerHTML = cart.map(item => {
+    const qty = Number(item.qty) || 1;
+    const price = Number(item.price) || 0;
+    const original = Number(item.original_price ?? price) || price;
+    const hasDiscount = original > price + 0.001;
+    const percent = Number(item.discount_percent) || (hasDiscount ? Math.round((1 - price / original) * 100) : 0);
+    return `
+      <div class="checkout-item">
+        <span>
+          ${escapeHtml(item.name)} ×${qty}
+          ${hasDiscount ? `<small class="checkout-discount">-${percent}% OFF</small>` : ""}
+        </span>
 
-      <strong>
-        ${money(
-          (Number(item.price) || 0) *
-          (Number(item.qty) || 0)
-        )}
-      </strong>
-    </div>
-  `).join("");
+        <strong>
+          ${hasDiscount ? `<del>${money(original * qty)}</del> ` : ""}${money(price * qty)}
+        </strong>
+      </div>
+    `;
+  }).join("");
 
   const total = cart.reduce(
     (sum, item) =>
@@ -2274,6 +2294,7 @@ function setupEvents() {
             price: getProductPrice(product),
             original_price:
               Number(product.price) || 0,
+            discount_percent: getDiscountPercent(product),
             image: product.image || "",
             qty: 1
           }
@@ -2319,21 +2340,6 @@ function setupEvents() {
       return;
     }
 
-    const productButton =
-      event.target.closest("[data-product-id]");
-
-    if (
-      productButton &&
-      !event.target.closest(
-        "button[data-product-add], [data-favorite]"
-      )
-    ) {
-      openProductModal(
-        productButton.dataset.productId
-      );
-
-      return;
-    }
 
     const orderButton =
       event.target.closest(
@@ -2412,6 +2418,7 @@ window.addEventListener("unhandledrejection", event => {
 
 async function initialize() {
   initializeTheme();
+  playOpeningEffect();
   setupEvents();
 
   syncCartUI();
