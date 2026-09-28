@@ -30,7 +30,7 @@
 
   <link
     rel="stylesheet"
-    href="./styles.css?v=1001"
+    href="./styles.css?v=1008"
   >
 </head>
 
@@ -212,7 +212,7 @@
         aria-label="Alternar modo claro e escuro"
         title="Alternar tema"
       >
-        <span id="theme-icon" aria-hidden="true">☾</span>
+        <span id="theme-icon" class="theme-icon-img" aria-hidden="true"></span>
       </button>
 
 
@@ -487,24 +487,15 @@
         </label>
 
 
-        <select
-          id="sort-select"
-          aria-label="Ordenar produtos"
-        >
-
-          <option value="popular">
-            Mais populares
-          </option>
-
-          <option value="low">
-            Menor preço
-          </option>
-
-          <option value="high">
-            Maior preço
-          </option>
-
-        </select>
+        <label class="sort-box">
+          <span class="sort-icon" aria-hidden="true"><span class="ui-icon ui-icon-box"></span></span>
+          <select id="sort-select" aria-label="Ordenar produtos">
+            <option value="popular">Mais populares</option>
+            <option value="low">Menor preço</option>
+            <option value="high">Maior preço</option>
+          </select>
+          <span class="sort-arrow" aria-hidden="true">⌄</span>
+        </label>
 
 
         <button
@@ -783,6 +774,17 @@
 
       </div>
 
+      <div class="reviews-toolbar" aria-label="Ordenação das avaliações">
+        <div>
+          <span class="reviews-toolbar-label">Avaliações populares</span>
+          <small>Veja primeiro as avaliações que outros clientes consideraram úteis.</small>
+        </div>
+        <div class="review-sort-tabs" role="tablist" aria-label="Ordenar avaliações">
+          <button type="button" class="review-sort-tab active" data-review-sort="helpful">Mais úteis</button>
+          <button type="button" class="review-sort-tab" data-review-sort="recent">Recentes</button>
+          <button type="button" class="review-sort-tab" data-review-sort="rating">Melhor nota</button>
+        </div>
+      </div>
 
       <div
         class="reviews-grid"
@@ -923,6 +925,46 @@
             Sim. Em “Minha conta”, você pode acessar “Meus pedidos” e acompanhar cada etapa da compra.
           </p>
 
+        </details>
+
+        <details>
+          <summary>Posso alterar a quantidade depois de adicionar ao carrinho?</summary>
+          <p>Sim. O carrinho permite aumentar ou diminuir a quantidade enquanto o pedido ainda não foi enviado.</p>
+        </details>
+
+        <details>
+          <summary>O que acontece se uma marreta ficar sem estoque?</summary>
+          <p>O produto aparece como esgotado e não pode ser adicionado a um novo pedido até que o estoque seja atualizado.</p>
+        </details>
+
+        <details>
+          <summary>Preciso informar meu usuário do Roblox?</summary>
+          <p>Sim. Ele é usado para identificar para qual usuário a entrega deve ser realizada.</p>
+        </details>
+
+        <details>
+          <summary>Onde vejo minhas notificações?</summary>
+          <p>Depois de entrar na conta, abra o botão de usuário e acesse Notificações para consultar avisos relacionados aos seus pedidos.</p>
+        </details>
+
+        <details>
+          <summary>Posso cancelar um pedido?</summary>
+          <p>Se precisar cancelar ou corrigir alguma informação, entre em contato com o atendimento o quanto antes. A possibilidade depende da etapa em que o pedido estiver.</p>
+        </details>
+
+        <details>
+          <summary>Como funciona uma avaliação?</summary>
+          <p>Depois de uma compra entregue, o cliente pode avaliar o pedido. Outros clientes também podem marcar uma avaliação com 👍 quando ela for útil.</p>
+        </details>
+
+        <details>
+          <summary>O que significa “avaliação popular”?</summary>
+          <p>É uma avaliação que recebeu mais marcações de utilidade de outros clientes. Isso ajuda a destacar experiências que foram consideradas úteis pela comunidade.</p>
+        </details>
+
+        <details>
+          <summary>Como entro em contato com a loja?</summary>
+          <p>Use o botão de suporte e fale com a Thoune Store pelo TikTok oficial indicado no site.</p>
         </details>
 
 
@@ -1152,7 +1194,7 @@
                 >
 
                   <span class="account-menu-icon" aria-hidden="true">
-                    🔔
+                    <span class="ui-icon ui-icon-headset" aria-hidden="true"></span>
                   </span>
 
                   <span>
@@ -2221,6 +2263,12 @@
           <h3>Estoque</h3>
           <p>Adicionar um produto ao carrinho não reserva estoque. A baixa acontece na confirmação do pagamento.</p>
         </section>
+        <section><h3>Dados da conta</h3><p>Os dados usados para identificar a entrega devem ser informados corretamente pelo cliente. O site não exige que o e-mail seja exibido publicamente no perfil.</p></section>
+        <section><h3>Entrega digital</h3><p>As marretas são itens digitais. Após a confirmação do pagamento, a loja utiliza os dados informados para realizar a entrega.</p></section>
+        <section><h3>Disponibilidade da loja</h3><p>Quando o atendimento estiver offline, novas compras podem ficar temporariamente indisponíveis até a loja voltar a operar.</p></section>
+        <section><h3>Preços e descontos</h3><p>O valor final mostrado no checkout é calculado com base no produto e nas configurações de desconto vigentes no momento do pedido.</p></section>
+        <section><h3>Avaliações</h3><p>As avaliações podem ser publicadas após aprovação. Outros clientes podem marcar uma avaliação como útil usando 👍.</p></section>
+        <section><h3>Contato</h3><p>Em caso de dúvida, correção de dados ou problema com um pedido, utilize o canal de atendimento informado no site.</p></section>
       </div>
     </div>
   </div>

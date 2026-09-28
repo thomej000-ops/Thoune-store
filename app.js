@@ -41,6 +41,7 @@ let storeSettings = {
 let currentCategory = "Todas";
 let currentSearch = "";
 let currentSort = "popular";
+let currentReviewSort = "helpful";
 
 let currentOrderId =
   localStorage.getItem("thoune-current-order-id") || null;
@@ -179,7 +180,7 @@ function applyTheme(theme) {
   const icon = $("#theme-icon");
   const button = $("#theme-toggle");
 
-  if (icon) icon.textContent = light ? "☀" : "☾";
+  if (icon) icon.textContent = "";
   if (button) {
     button.setAttribute(
       "aria-label",
@@ -274,7 +275,10 @@ function updateStoreStatus() {
   const serviceStatus = $("#service-status");
 
   if (serviceStatus) {
-    serviceStatus.textContent = statusText;
+    const dot = serviceStatus.querySelector("span");
+    const label = serviceStatus.querySelector("strong");
+    if (label) label.textContent = statusText;
+    if (dot) dot.classList.toggle("offline-dot", !online);
     serviceStatus.classList.toggle("offline", !online);
   }
 
@@ -497,6 +501,8 @@ function updateAccountUI() {
 }
 
 async function openAccountPanel() {
+  $("#account-details")?.classList.remove("subpanel-open");
+  closeAccountSubpanels();
   openPanel($("#account-panel-modal"));
 
   if (currentUser) {
@@ -506,6 +512,8 @@ async function openAccountPanel() {
 }
 
 function closeAccountPanel() {
+  $("#account-details")?.classList.remove("subpanel-open");
+  closeAccountSubpanels();
   closePanel($("#account-panel-modal"));
 }
 
@@ -861,7 +869,13 @@ function renderAccountFavorites() {
 
   container.innerHTML = favorites.map(product => `
     <div class="account-favorite-row">
-      <span>${escapeHtml(product.name)}</span>
+      <div class="account-favorite-thumb">
+        ${product.image ? `<img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy">` : `<span class="ui-icon ui-icon-box" aria-hidden="true"></span>`}
+      </div>
+      <div>
+        <strong>${escapeHtml(product.name)}</strong>
+        <small>${escapeHtml(product.category || "Item")}</small>
+      </div>
       <strong>${money(getProductPrice(product))}</strong>
     </div>
   `).join("");
@@ -1790,15 +1804,14 @@ async function loadGlobalNotifications() {
 async function loadPublicReviews() {
   const container = $("#reviews-grid");
   const empty = $("#reviews-empty");
-
   if (!container) return;
 
   const { data, error } = await supabaseClient
     .from("reviews")
-    .select("rating, text, created_at")
+    .select("id, rating, text, created_at, tiktok_username, tiktok_avatar")
     .eq("status", "approved")
     .order("created_at", { ascending: false })
-    .limit(12);
+    .limit(24);
 
   if (error) {
     console.error("Erro ao carregar avaliações:", error);
@@ -1807,37 +1820,90 @@ async function loadPublicReviews() {
 
   if (!data?.length) {
     container.innerHTML = "";
-
-    if (empty) {
-      setHidden(empty, false);
-    }
-
+    setHidden(empty, false);
     return;
   }
 
-  if (empty) {
-    setHidden(empty, true);
+  setHidden(empty, true);
+
+  let helpfulMap = {};
+  try {
+    const ids = data.map(review => review.id);
+    const { data: helpfulData, error: helpfulError } =
+      await supabaseClient.rpc("get_review_helpfulness", { p_review_ids: ids });
+    if (!helpfulError && Array.isArray(helpfulData)) {
+      helpfulMap = Object.fromEntries(
+        helpfulData.map(row => [String(row.review_id), {
+          count: Number(row.helpful_count) || 0,
+          voted: Boolean(row.user_voted)
+        }])
+      );
+    }
+  } catch (error) {
+    console.warn("Sistema de utilidade das avaliações ainda não configurado.", error);
   }
 
-  container.innerHTML = data.map(review => {
-    const rating = Math.min(
-      5,
-      Math.max(1, Number(review.rating) || 0)
-    );
+  const enriched = data.map(review => ({
+    ...review,
+    helpfulCount: helpfulMap[String(review.id)]?.count || 0,
+    userVoted: helpfulMap[String(review.id)]?.voted || false
+  }));
+
+  if (currentReviewSort === "recent") {
+    enriched.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  } else if (currentReviewSort === "rating") {
+    enriched.sort((a, b) => Number(b.rating) - Number(a.rating) || b.helpfulCount - a.helpfulCount);
+  } else {
+    enriched.sort((a, b) => b.helpfulCount - a.helpfulCount || new Date(b.created_at) - new Date(a.created_at));
+  }
+
+  container.innerHTML = enriched.map(review => {
+    const rating = Math.min(5, Math.max(1, Number(review.rating) || 0));
+    const username = review.tiktok_username
+      ? `@${String(review.tiktok_username).replace(/^@/, "")}`
+      : "Cliente Thoune Store";
+    const avatar = review.tiktok_avatar
+      ? `<img src="${escapeHtml(review.tiktok_avatar)}" alt="" loading="lazy">`
+      : `<span class="review-avatar-fallback"><span class="ui-icon ui-icon-user" aria-hidden="true"></span></span>`;
 
     return `
-      <article class="review-card">
-        <div class="review-rating">
-          ${"★".repeat(rating)}
-          ${"☆".repeat(5 - rating)}
+      <article class="review-card" data-review-id="${escapeHtml(review.id)}">
+        <div class="review-card-top">
+          <div class="review-author">
+            <span class="review-avatar">${avatar}</span>
+            <div><strong>${escapeHtml(username)}</strong><small>${formatDate(review.created_at)}</small></div>
+          </div>
+          <div class="review-rating" aria-label="${rating} de 5 estrelas">${"★".repeat(rating)}${"☆".repeat(5 - rating)}</div>
         </div>
-
-        <p>${escapeHtml(review.text || "")}</p>
-
-        <span>Cliente Thoune Store</span>
+        <p class="review-text">${escapeHtml(review.text || "Sem comentário.")}</p>
+        <button type="button" class="review-helpful ${review.userVoted ? "active" : ""}" data-review-helpful="${escapeHtml(review.id)}" aria-pressed="${review.userVoted ? "true" : "false"}">
+          <span class="review-helpful-icon"><span class="ui-icon ui-icon-like" aria-hidden="true"></span></span>
+          <span>Achou útil</span>
+          <b>${review.helpfulCount}</b>
+        </button>
       </article>
     `;
   }).join("");
+}
+
+async function toggleReviewHelpful(reviewId) {
+  if (!currentUser) {
+    toast("Entre na sua conta para marcar uma avaliação como útil.");
+    await openAccountPanel();
+    return;
+  }
+
+  const { error } = await supabaseClient.rpc("toggle_review_helpful", {
+    p_review_id: reviewId
+  });
+
+  if (error) {
+    console.error("Erro ao marcar avaliação como útil:", error);
+    toast("Não foi possível registrar seu voto. Verifique se a função foi criada no Supabase.", "error");
+    return;
+  }
+
+  await loadPublicReviews();
 }
 
 // ============================================================
@@ -1851,27 +1917,34 @@ function closeAccountSubpanels() {
   closePanel($("#favorites-account-panel"));
 }
 
+function openAccountHome() {
+  closeAccountSubpanels();
+  $("#account-details")?.classList.remove("subpanel-open");
+}
+
 async function openOrdersPanel() {
   closeAccountSubpanels();
+  $("#account-details")?.classList.add("subpanel-open");
   openPanel($("#orders-panel"));
   await loadCustomerOrders();
 }
 
 async function openNotificationsPanel() {
   closeAccountSubpanels();
+  $("#account-details")?.classList.add("subpanel-open");
   openPanel($("#notifications-panel"));
   await loadNotifications();
 }
 
 function openProfilePanel() {
   closeAccountSubpanels();
-
-
+  $("#account-details")?.classList.add("subpanel-open");
   openPanel($("#profile-panel"));
 }
 
 function openAccountFavoritesPanel() {
   closeAccountSubpanels();
+  $("#account-details")?.classList.add("subpanel-open");
   renderAccountFavorites();
   openPanel($("#favorites-account-panel"));
 }
@@ -1882,6 +1955,7 @@ function openAccountFavoritesPanel() {
 
 function closeAllPanels() {
   closePanel($("#account-panel-modal"));
+  $("#account-details")?.classList.remove("subpanel-open");
   closePanel($("#orders-panel"));
   closePanel($("#notifications-panel"));
   closePanel($("#profile-panel"));
@@ -1967,6 +2041,11 @@ function setupEvents() {
       "click",
       saveProfileFromProfilePanel
     );
+
+  // Voltar do histórico/notificações/favoritos para o início da conta
+  $$('[data-account-back]').forEach(button => {
+    button.addEventListener('click', openAccountHome);
+  });
 
   // Subpainéis
   $("#open-orders-panel")
@@ -2278,6 +2357,23 @@ function setupEvents() {
 
       return;
     }
+  });
+
+  // Avaliações
+  $$("[data-review-sort]").forEach(button => {
+    button.addEventListener("click", async () => {
+      currentReviewSort = button.dataset.reviewSort || "helpful";
+      $$("[data-review-sort]").forEach(item => item.classList.toggle("active", item === button));
+      await loadPublicReviews();
+    });
+  });
+
+  $("#reviews-grid")?.addEventListener("click", async event => {
+    const button = event.target.closest("[data-review-helpful]");
+    if (!button) return;
+    button.disabled = true;
+    await toggleReviewHelpful(button.dataset.reviewHelpful);
+    button.disabled = false;
   });
 
   // ESC

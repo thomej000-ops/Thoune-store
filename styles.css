@@ -4753,3 +4753,194 @@ body.theme-light .terms-content p{color:#63818a;}
   .catalog-tools{grid-template-columns:1fr;}
   #sort-select,.catalog-favorites-button{height:52px;min-height:52px;}
 }
+
+/* =========================================================
+   THOUNE V1008 — RECONSTRUÇÃO VISUAL DOS ÍCONES E PAINÉIS
+   ========================================================= */
+
+/* Ícones das referências enviadas pelo dono da loja: limpos, grandes e sem emoji. */
+.ui-icon-user,
+.ui-icon-cart,
+.ui-icon-menu,
+.ui-icon-heart,
+.ui-icon-search,
+.ui-icon-bag,
+.ui-icon-box,
+.ui-icon-card,
+.ui-icon-like,
+.ui-icon-lock,
+.ui-icon-headset{
+  position:relative !important;
+  display:inline-block !important;
+  width:28px !important;
+  height:28px !important;
+  flex:0 0 28px !important;
+  background-color:currentColor !important;
+  background-repeat:no-repeat !important;
+  background-position:center !important;
+  background-size:contain !important;
+  -webkit-mask-repeat:no-repeat !important;
+  mask-repeat:no-repeat !important;
+  -webkit-mask-position:center !important;
+  mask-position:center !important;
+  -webkit-mask-size:contain !important;
+  mask-size:contain !important;
+}
+.ui-icon-user::before,.ui-icon-user::after,
+.ui-icon-cart::before,.ui-icon-cart::after,
+.ui-icon-menu::before,.ui-icon-menu::after,
+.ui-icon-heart::before,.ui-icon-heart::after,
+.ui-icon-search::before,.ui-icon-search::after,
+.ui-icon-bag::before,.ui-icon-bag::after,
+.ui-icon-box::before,.ui-icon-box::after,
+.ui-icon-card::before,.ui-icon-card::after,
+.ui-icon-like::before,.ui-icon-like::after,
+.ui-icon-lock::before,.ui-icon-lock::after,
+.ui-icon-headset::before,.ui-icon-headset::after{display:none !important;content:none !important;}
+.ui-icon-user{-webkit-mask-image:url('./icons/user.png');mask-image:url('./icons/user.png');}
+.ui-icon-cart{-webkit-mask-image:url('./icons/bag.png');mask-image:url('./icons/bag.png');}
+.ui-icon-menu{-webkit-mask-image:url('./icons/menu.png');mask-image:url('./icons/menu.png');}
+.ui-icon-heart{-webkit-mask-image:url('./icons/heart.png');mask-image:url('./icons/heart.png');}
+.ui-icon-search{-webkit-mask-image:url('./icons/search.png');mask-image:url('./icons/search.png');}
+.ui-icon-bag{-webkit-mask-image:url('./icons/bag.png');mask-image:url('./icons/bag.png');}
+.ui-icon-box{-webkit-mask-image:url('./icons/box.png');mask-image:url('./icons/box.png');}
+.ui-icon-card{-webkit-mask-image:url('./icons/card.png');mask-image:url('./icons/card.png');}
+.ui-icon-like{-webkit-mask-image:url('./icons/like.png');mask-image:url('./icons/like.png');}
+.ui-icon-lock{-webkit-mask-image:url('./icons/lock.png');mask-image:url('./icons/lock.png');}
+.ui-icon-headset{-webkit-mask-image:url('./icons/headset.png');mask-image:url('./icons/headset.png');}
+
+.theme-icon-img{
+  display:block;width:23px;height:23px;background:currentColor;
+  -webkit-mask:url('./icons/moon.png') center/contain no-repeat;
+  mask:url('./icons/moon.png') center/contain no-repeat;
+}
+
+/* Remove the old emoji heart entirely. */
+.favorite.active .ui-icon-heart::before,
+.favorite-button.active .ui-icon-heart::before{content:none !important;}
+.favorite.active .ui-icon-heart,.favorite-button.active .ui-icon-heart{color:#7bdbe5 !important;}
+.ui-icon{filter:none !important;}
+
+/* Status: the original JS was replacing the whole pill text and deleting the dot. */
+.online-pill{gap:10px !important;}
+.online-pill > span{display:block !important;flex:0 0 9px !important;}
+.online-pill.offline > span{background:#ff6473 !important;box-shadow:0 0 0 5px rgba(255,100,115,.12),0 0 18px rgba(255,100,115,.35) !important;}
+.online-pill:not(.offline) > span{background:#48df8a !important;box-shadow:0 0 0 5px rgba(72,223,138,.12),0 0 18px rgba(72,223,138,.42) !important;}
+
+/* Header: more air between actions. */
+.header-actions{gap:12px !important;}
+@media(max-width:760px){.header-actions{gap:7px !important;}.icon-button,.menu-button,.theme-button{width:43px !important;height:43px !important;min-width:43px !important;border-radius:14px !important;}}
+
+/* Floating windows: always hidden until JS opens them. */
+#favorites-panel.hidden,
+#notifications-global-panel.hidden,
+#account-panel-modal.hidden,
+#product-modal.hidden,
+#terms-modal.hidden,
+#cart-drawer.hidden,
+#checkout-section.hidden,
+#order-details-modal.hidden{display:none !important;visibility:hidden !important;opacity:0 !important;pointer-events:none !important;}
+
+/* Internal account views never appear over the account home. */
+.account-panel.hidden{display:none !important;}
+.account-panel{animation:panelSlide .22s ease both;}
+@keyframes panelSlide{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+
+/* Catalog back to the compact two-column store layout on phones. */
+@media(max-width:760px){
+  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:12px !important;}
+  .product-card{border-radius:18px !important;overflow:hidden;}
+  .product-image{aspect-ratio:1/1 !important;min-height:0 !important;}
+  .product-info{padding:13px !important;}
+  .product-name{font-size:14px !important;}
+  .product-info p{display:none !important;}
+  .product-bottom{gap:8px !important;align-items:end !important;}
+  .add-button{width:100% !important;font-size:12px !important;padding-inline:9px !important;}
+}
+
+/* Search + popular sorting are one cohesive control bar. */
+.sort-box{position:relative;display:flex;align-items:center;min-width:210px;height:58px;padding:0 42px 0 15px;border:1px solid var(--border-ocean);border-radius:17px;background:linear-gradient(180deg,rgba(10,43,54,.92),rgba(6,29,38,.92));box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 10px 25px rgba(0,0,0,.12);}
+.sort-box .sort-icon{display:grid;place-items:center;width:30px;height:30px;margin-right:8px;color:#72dce8;}
+.sort-box .sort-icon .ui-icon{width:22px !important;height:22px !important;flex-basis:22px !important;}
+.sort-box select{appearance:none;border:0;background:transparent;color:#eaf8fa;outline:0;width:100%;height:100%;font-weight:700;cursor:pointer;}
+.sort-box select option{background:#09252f;color:#eaf8fa;}
+.sort-arrow{position:absolute;right:16px;color:#72dce8;font-size:18px;pointer-events:none;transform:translateY(-2px);}
+@media(max-width:760px){.sort-box{min-width:0;width:100%;}.catalog-tools{gap:10px !important;}}
+
+/* FAQ: clean plus control instead of native browser marker. */
+.faq-list details summary{list-style:none !important;position:relative;padding-right:54px !important;cursor:pointer;}
+.faq-list details summary::-webkit-details-marker{display:none !important;}
+.faq-list details summary::after{content:'+';position:absolute;right:16px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:10px;display:grid;place-items:center;border:1px solid rgba(96,211,225,.22);background:rgba(42,166,184,.10);color:#76dce7;font:600 22px/1 system-ui,sans-serif;transition:transform .2s ease,background .2s ease;}
+.faq-list details[open] summary::after{content:'−';background:rgba(42,166,184,.18);}
+
+/* Reviews: community-style cards + useful button. */
+.reviews-toolbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 20px;padding:17px 18px;border:1px solid rgba(98,207,222,.14);border-radius:20px;background:linear-gradient(135deg,rgba(10,43,54,.78),rgba(6,26,34,.88));}
+.reviews-toolbar-label{display:block;font:800 15px Manrope,sans-serif;color:#eaf8fa;}
+.reviews-toolbar small{display:block;margin-top:4px;color:#789aa3;}
+.review-sort-tabs{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
+.review-sort-tab{border:1px solid rgba(95,205,219,.14);border-radius:999px;background:rgba(7,31,40,.75);color:#8fb1b9;padding:9px 13px;font-weight:700;cursor:pointer;transition:.2s ease;}
+.review-sort-tab:hover,.review-sort-tab.active{color:#eaf8fa;background:rgba(28,125,143,.28);border-color:rgba(96,211,225,.35);transform:translateY(-1px);}
+.review-card{position:relative;overflow:hidden;}
+.review-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#59d8e5,transparent);opacity:.8;}
+.review-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.review-author{display:flex;align-items:center;gap:10px;min-width:0;}
+.review-avatar{width:40px;height:40px;min-width:40px;border-radius:13px;overflow:hidden;display:grid;place-items:center;background:#0d4351;border:1px solid rgba(104,215,229,.16);color:#7adce8;}
+.review-avatar img{width:100%;height:100%;object-fit:cover;}
+.review-avatar-fallback{display:grid;place-items:center;}
+.review-avatar-fallback .ui-icon{width:21px !important;height:21px !important;flex-basis:21px !important;}
+.review-author strong{display:block;font-size:13px;color:#eaf8fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px;}
+.review-author small{display:block;color:#789aa3;font-size:10px;margin-top:2px;}
+.review-rating{white-space:nowrap;font-size:14px !important;letter-spacing:1px !important;}
+.review-text{min-height:58px;}
+.review-helpful{display:inline-flex;align-items:center;gap:8px;margin-top:14px;border:1px solid rgba(95,205,219,.14);border-radius:12px;background:rgba(7,31,40,.72);color:#8fb1b9;padding:8px 10px;cursor:pointer;transition:.2s ease;}
+.review-helpful:hover,.review-helpful.active{color:#eaf8fa;border-color:rgba(95,211,225,.34);background:rgba(29,135,151,.20);}
+.review-helpful-icon{display:grid;place-items:center;width:23px;height:23px;color:#78dce6;}
+.review-helpful-icon .ui-icon{width:21px !important;height:21px !important;flex-basis:21px !important;}
+.review-helpful b{color:#72dce8;min-width:12px;text-align:center;}
+@media(max-width:760px){.reviews-toolbar{align-items:flex-start;flex-direction:column;}.review-sort-tabs{justify-content:flex-start;}.review-sort-tab{font-size:12px;padding:8px 11px;}}
+
+/* Terms get the same floating-window language and more breathing room. */
+.terms-card{border-radius:28px !important;}
+.terms-content{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px !important;}
+.terms-content section{min-height:125px;display:flex;flex-direction:column;justify-content:center;}
+@media(max-width:650px){.terms-content{grid-template-columns:1fr;}.terms-content section{min-height:0;}}
+
+/* Account home: clear hierarchy and less cramped information. */
+.account-user-summary{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px !important;margin-bottom:20px !important;}
+.account-summary-item{padding:16px 17px !important;border:1px solid rgba(95,205,219,.13);border-radius:17px;background:rgba(7,31,40,.62);}
+.account-summary-label{display:block;font-size:10px;letter-spacing:.12em;color:#6f9aa3;margin-bottom:7px;}
+.account-summary-item strong{display:block;color:#eaf8fa;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.account-menu button{min-height:112px !important;grid-template-columns:auto 1fr auto !important;}
+@media(max-width:520px){.account-user-summary{grid-template-columns:1fr;}.account-menu button{min-height:96px !important;}}
+
+/* Admin: override the old inline white surfaces. */
+.admin-page,body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !important;color:#eaf8fa !important;}
+.admin-card,.product-form,.settings-box,.review-card,.order-card,.payment-card,.admin-option{background:linear-gradient(180deg,#0a2d39,#061b23) !important;color:#eaf8fa !important;border-color:rgba(95,205,219,.16) !important;box-shadow:0 18px 50px rgba(0,0,0,.28) !important;}
+.form-field label,.section-header h2,.admin-header h1,.admin-header p,.admin-option strong,.product-form h3,.settings-box h3{color:#eaf8fa !important;}
+.form-field input,.form-field select,.form-field textarea{background:#061a22 !important;color:#eaf8fa !important;border-color:rgba(95,205,219,.18) !important;}
+.admin-status{background:rgba(72,223,138,.10) !important;color:#76e3a0 !important;border:1px solid rgba(72,223,138,.16);}
+.back-admin{color:#7bdbe5 !important;}
+
+@media(prefers-reduced-motion:no-preference){
+  .product-card,.review-card,.steps article,.support-card{transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;}
+  .product-card:hover,.review-card:hover,.steps article:hover{transform:translateY(-5px);}
+}
+
+body.theme-light .theme-icon-img{-webkit-mask-image:url('./icons/sun.png');mask-image:url('./icons/sun.png');}
+
+/* Conta: cada seção interna vira uma tela limpa, em vez de ficar empilhada com o menu. */
+.account-details.subpanel-open .account-user-summary,
+.account-details.subpanel-open > .account-menu{display:none !important;}
+.account-details.subpanel-open .account-panel.open{display:block !important;margin-top:0;border-top:0;padding-top:0;}
+.account-details.subpanel-open .account-panel{animation:accountSubpanelIn .24s ease both;}
+@keyframes accountSubpanelIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+.account-panel-header{padding-bottom:14px;border-bottom:1px solid rgba(95,205,219,.10);}
+.account-panel-back{border:1px solid rgba(95,205,219,.15) !important;background:rgba(8,37,47,.7) !important;color:#7bdbe5 !important;border-radius:12px !important;}
+.account-panel-content{padding-top:6px;}
+.account-panel-content .panel-message{padding:30px 12px !important;}
+.account-favorite-row{display:grid !important;grid-template-columns:52px 1fr auto;align-items:center;gap:12px;padding:11px !important;border:1px solid rgba(95,205,219,.12);border-radius:15px;background:rgba(7,31,40,.62);margin-bottom:9px;}
+.account-favorite-row::before{content:'';display:block;width:52px;height:52px;border-radius:13px;background:linear-gradient(145deg,#0d4351,#071f28);}
+.account-favorite-row::before{display:none !important;}
+.account-favorite-thumb{width:52px;height:52px;border-radius:13px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(145deg,#0d4351,#071f28);color:#73dce7;}
+.account-favorite-thumb img{width:100%;height:100%;object-fit:cover;}
+.account-favorite-row small{display:block;color:#789aa3;font-size:10px;margin-top:3px;}
