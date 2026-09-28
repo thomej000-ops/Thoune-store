@@ -1,21 +1,13 @@
-# Thoune Store — pacote final
+# Thoune Store — v1013
 
-Arquivos principais:
-- index.html — loja/catálogo
-- admin.html — painel administrativo
-- app.js — lógica da loja, conta, pedidos e checkout
-- ui.js — renderização de catálogo, carrinho e notificações
-- cart.js — carrinho local
-- config.js — configuração pública do Supabase
-- styles.css — visual responsivo
-- pix-qr.png — QR Code Pix existente
-- demo-products.js — dados de demonstração
+Ajustes desta versão, focados somente no que foi solicitado:
 
-## Publicação
-Envie estes arquivos para a raiz do repositório do GitHub Pages.
+- removido o botão duplicado “Ver pedido” da lista de Meus pedidos;
+- controles de quantidade e remoção do carrinho redesenhados, sem os botões HTML brancos padrão;
+- correção do estado vazio do carrinho para não aparecer junto com itens;
+- descontos agora ficam explícitos no catálogo, no detalhe do produto e no carrinho, com preço anterior e preço final;
+- iconografia principal atualizada usando as referências visuais enviadas para o projeto;
+- sem alteração da estrutura do Supabase ou das demais funcionalidades.
 
-## Supabase
-O frontend usa somente a chave pública/publishable do Supabase. Não coloque Secret/Service Role Key no GitHub.
 
-## Observação de asset
-O projeto original referencia `snoopy-banner.jpg`, mas esse arquivo não estava disponível nos arquivos recebidos para montagem deste ZIP. Adicione o arquivo original `snoopy-banner.jpg` na raiz do repositório para restaurar a imagem do hero e da marca.
+Versão 1014: os ícones foram incorporados diretamente ao styles.css. Não é necessária a pasta icons.

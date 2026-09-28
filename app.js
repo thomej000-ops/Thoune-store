@@ -739,7 +739,19 @@ function renderCatalog() {
       `${filtered.length} ${filtered.length === 1 ? "item" : "itens"}`;
   }
 
-  renderProducts(filtered);
+  const discountPercent = Number(storeSettings.discount_percent) || 0;
+  const displayProducts = filtered.map(product => {
+    const originalPrice = Number(product.price) || 0;
+    const price = getProductPrice(product);
+    return {
+      ...product,
+      price,
+      original_price: originalPrice,
+      discount_percent: storeSettings.discount_active && price < originalPrice ? discountPercent : 0
+    };
+  });
+
+  renderProducts(displayProducts);
 
   setHidden(
     $("#empty-state"),
@@ -928,7 +940,8 @@ function openProductModal(productId) {
           ${
             storeSettings.discount_active &&
             price < original
-              ? `<span>${money(original)}</span>`
+              ? `<span class="product-detail-original">${money(original)}</span>
+                 <span class="product-detail-discount">-${Number(storeSettings.discount_percent) || 0}%</span>`
               : ""
           }
         </div>
@@ -1530,13 +1543,6 @@ async function loadCustomerOrders() {
         }
       </div>
 
-      <button
-        type="button"
-        class="secondary-button"
-        data-open-order-details="${escapeHtml(order.id)}"
-      >
-        Ver pedido
-      </button>
     </article>
   `).join("");
 }
