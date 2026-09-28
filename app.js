@@ -1913,7 +1913,6 @@ async function toggleReviewHelpful(reviewId) {
 function closeAccountSubpanels() {
   closePanel($("#orders-panel"));
   closePanel($("#notifications-panel"));
-  closePanel($("#profile-panel"));
   closePanel($("#favorites-account-panel"));
 }
 
@@ -1936,12 +1935,6 @@ async function openNotificationsPanel() {
   await loadNotifications();
 }
 
-function openProfilePanel() {
-  closeAccountSubpanels();
-  $("#account-details")?.classList.add("subpanel-open");
-  openPanel($("#profile-panel"));
-}
-
 function openAccountFavoritesPanel() {
   closeAccountSubpanels();
   $("#account-details")?.classList.add("subpanel-open");
@@ -1958,7 +1951,6 @@ function closeAllPanels() {
   $("#account-details")?.classList.remove("subpanel-open");
   closePanel($("#orders-panel"));
   closePanel($("#notifications-panel"));
-  closePanel($("#profile-panel"));
   closePanel($("#favorites-account-panel"));
 
   closePanel($("#favorites-panel"));
@@ -2057,12 +2049,6 @@ function setupEvents() {
       openNotificationsPanel
     );
 
-  $("#open-profile-panel")
-    ?.addEventListener(
-      "click",
-      openProfilePanel
-    );
-
   $("#open-favorites-account")
     ?.addEventListener(
       "click",
@@ -2144,8 +2130,13 @@ function setupEvents() {
 
   $("#open-orders-from-floating")
   ?.addEventListener("click", async () => {
-    await openAccountPanel();
-    await openOrdersPanel();
+    try {
+      await openAccountPanel();
+      await openOrdersPanel();
+    } catch (error) {
+      console.error("Erro ao abrir pedidos:", error);
+      toast("Não foi possível abrir seus pedidos.", "error");
+    }
   });
 
   // Modal produto
@@ -2372,8 +2363,14 @@ function setupEvents() {
     const button = event.target.closest("[data-review-helpful]");
     if (!button) return;
     button.disabled = true;
-    await toggleReviewHelpful(button.dataset.reviewHelpful);
-    button.disabled = false;
+    try {
+      await toggleReviewHelpful(button.dataset.reviewHelpful);
+    } catch (error) {
+      console.error("Erro no voto da avaliação:", error);
+      toast("Não foi possível registrar o voto.", "error");
+    } finally {
+      button.disabled = false;
+    }
   });
 
   // ESC
@@ -2388,6 +2385,14 @@ function setupEvents() {
   $("#global-panel-backdrop")
     ?.addEventListener("click", closeAllPanels);
 }
+
+window.addEventListener("error", event => {
+  console.error("Thoune Store error:", event.error || event.message);
+});
+
+window.addEventListener("unhandledrejection", event => {
+  console.error("Thoune Store promise error:", event.reason);
+});
 
 // ============================================================
 // INICIALIZAÇÃO
