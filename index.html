@@ -203,6 +203,19 @@
       </button>
 
 
+      <!-- Tema -->
+
+      <button
+        type="button"
+        class="theme-button"
+        id="theme-toggle"
+        aria-label="Alternar modo claro e escuro"
+        title="Alternar tema"
+      >
+        <span id="theme-icon" aria-hidden="true">☾</span>
+      </button>
+
+
       <!-- Menu mobile -->
 
       <button
@@ -551,14 +564,6 @@
           data-category="Comum"
         >
           Comum
-        </button>
-
-        <button
-          type="button"
-          class="category"
-          data-category="Exclusiva"
-        >
-          Exclusiva
         </button>
 
       </div>
@@ -2152,6 +2157,10 @@
         Suporte
       </a>
 
+      <button type="button" class="footer-action" id="open-terms-button">
+        Termos
+      </button>
+
     </div>
 
 
@@ -2169,6 +2178,52 @@
     </small>
 
   </footer>
+
+
+  <!-- =====================================================
+       TERMOS — PAINEL FLUTUANTE
+  ====================================================== -->
+
+  <div
+    class="modal-shell hidden"
+    id="terms-modal"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Termos da loja"
+  >
+    <div class="modal-backdrop" id="terms-backdrop"></div>
+
+    <div class="modal-card terms-card">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">THOUNE STORE</p>
+          <h2>Termos da loja</h2>
+        </div>
+
+        <button type="button" class="close-button" id="close-terms" aria-label="Fechar termos">×</button>
+      </div>
+
+      <div class="terms-content">
+        <section>
+          <h3>Pedidos</h3>
+          <p>O pedido é criado com os dados informados no checkout e fica aguardando a confirmação do pagamento.</p>
+        </section>
+        <section>
+          <h3>Pagamento</h3>
+          <p>Os pagamentos são realizados via Pix. Confira o valor e os dados apresentados no checkout antes de pagar.</p>
+        </section>
+        <section>
+          <h3>Entrega</h3>
+          <p>A entrega das marretas ocorre após a confirmação do pagamento e segue as instruções apresentadas pela loja.</p>
+        </section>
+        <section>
+          <h3>Estoque</h3>
+          <p>Adicionar um produto ao carrinho não reserva estoque. A baixa acontece na confirmação do pagamento.</p>
+        </section>
+      </div>
+    </div>
+  </div>
 
 
   <!-- =====================================================

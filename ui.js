@@ -30,7 +30,7 @@ export function updateCartBadge(cart = loadCart()) {
 }
 
 export function renderProducts(products = []) {
-  const container = document.querySelector("#products-grid");
+  const container = document.querySelector("#product-grid");
   if (!container) return;
 
   if (!products.length) {
@@ -44,21 +44,29 @@ export function renderProducts(products = []) {
     const out = Number.isFinite(stock) && stock <= 0;
     const image = product.image
       ? `<img src="${escape(product.image)}" alt="${escape(product.name)}" loading="lazy">`
-      : `<span class="product-image-placeholder">◇</span>`;
+      : `<span class="placeholder">◇</span>`;
 
     return `
       <article class="product-card" data-product-id="${escape(product.id)}">
-        <div class="product-card-image">
+        <div class="product-image">
           ${image}
-          <button type="button" class="favorite-button" data-favorite="${escape(product.id)}" aria-label="Adicionar aos favoritos"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span></button>
+          <button type="button" class="favorite" data-favorite="${escape(product.id)}" aria-label="Adicionar aos favoritos">
+            <span class="ui-icon ui-icon-heart" aria-hidden="true"></span>
+          </button>
         </div>
-        <div class="product-card-content">
-          <span class="product-card-category">${escape(product.category || "")}</span>
-          <h3>${escape(product.name || "Produto")}</h3>
+
+        <div class="product-info">
+          <span class="rarity">${escape(product.category || "Item")}</span>
+          <h3 class="product-name">${escape(product.name || "Produto")}</h3>
           ${product.description ? `<p>${escape(product.description)}</p>` : ""}
-          <div class="product-card-bottom">
-            <strong>${money(price)}</strong>
-            <button type="button" class="primary-button small" data-product-add="${escape(product.id)}" ${out ? "disabled" : ""}>
+
+          <div class="product-bottom">
+            <div>
+              <strong class="price">${money(price)}</strong>
+              <div class="stock">${out ? "Esgotado" : `${Number.isFinite(stock) ? stock : 0} em estoque`}</div>
+            </div>
+
+            <button type="button" class="primary-button small add-button" data-product-add="${escape(product.id)}" ${out ? "disabled" : ""}>
               ${out ? "Esgotado" : "Adicionar"}
             </button>
           </div>

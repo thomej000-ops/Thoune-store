@@ -64,7 +64,7 @@ function setHidden(element, hidden) {
 
 function syncOverlayLock() {
   const overlays = document.querySelectorAll(
-    "#account-panel-modal, #cart-drawer, #checkout-section, #favorites-panel, #product-modal, #notifications-global-panel, #order-details-modal"
+    "#account-panel-modal, #cart-drawer, #checkout-section, #favorites-panel, #product-modal, #notifications-global-panel, #order-details-modal, #terms-modal"
   );
 
   const hasOpenOverlay = Array.from(overlays).some((element) =>
@@ -166,6 +166,53 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+// ============================================================
+// TEMA
+// ============================================================
+
+function applyTheme(theme) {
+  const light = theme === "light";
+  document.body.classList.toggle("theme-light", light);
+
+  const icon = $("#theme-icon");
+  const button = $("#theme-toggle");
+
+  if (icon) icon.textContent = light ? "☀" : "☾";
+  if (button) {
+    button.setAttribute(
+      "aria-label",
+      light ? "Ativar modo escuro" : "Ativar modo claro"
+    );
+    button.title = light ? "Modo escuro" : "Modo claro";
+  }
+}
+
+function initializeTheme() {
+  const saved = localStorage.getItem("thoune-theme");
+  applyTheme(saved === "light" ? "light" : "dark");
+}
+
+function toggleTheme() {
+  const next = document.body.classList.contains("theme-light")
+    ? "dark"
+    : "light";
+
+  localStorage.setItem("thoune-theme", next);
+  applyTheme(next);
+}
+
+// ============================================================
+// TERMOS
+// ============================================================
+
+function openTerms() {
+  openPanel($("#terms-modal"));
+}
+
+function closeTerms() {
+  closePanel($("#terms-modal"));
 }
 
 // ============================================================
@@ -655,12 +702,12 @@ function getFilteredProducts() {
     });
   }
 
-  if (currentSort === "price-low") {
+  if (currentSort === "low") {
     result.sort(
       (a, b) =>
         getProductPrice(a) - getProductPrice(b)
     );
-  } else if (currentSort === "price-high") {
+  } else if (currentSort === "high") {
     result.sort(
       (a, b) =>
         getProductPrice(b) - getProductPrice(a)
@@ -1847,6 +1894,7 @@ function closeAllPanels() {
   closePanel($("#cart-drawer"));
   closePanel($("#checkout-section"));
   closePanel($("#order-details-modal"));
+  closePanel($("#terms-modal"));
 
   closeCurrentOrderPanel();
 }
@@ -1883,6 +1931,12 @@ function closeMobileMenu() {
 // ============================================================
 
 function setupEvents() {
+  $("#theme-toggle")?.addEventListener("click", toggleTheme);
+
+  $("#open-terms-button")?.addEventListener("click", openTerms);
+  $("#close-terms")?.addEventListener("click", closeTerms);
+  $("#terms-backdrop")?.addEventListener("click", closeTerms);
+
   // Conta
   $("#open-account-button")
     ?.addEventListener("click", openAccountPanel);
@@ -2244,6 +2298,7 @@ function setupEvents() {
 // ============================================================
 
 async function initialize() {
+  initializeTheme();
   setupEvents();
 
   syncCartUI();
