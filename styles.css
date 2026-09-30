@@ -5248,3 +5248,222 @@ body.theme-light .theme-icon-img::after{content:'';position:absolute;width:10px;
 @keyframes bubbleRise{0%{opacity:0;transform:translate3d(0,0,0) scale(.55)}20%{opacity:1}100%{opacity:0;transform:translate3d(0,-78vh,0) scale(1.12)}}
 @keyframes openingFade{0%{opacity:1}72%{opacity:1}100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.opening-effect,.opening-bubble,.product-image img{animation:none !important}.opening-effect{display:none !important}}
+
+
+/* =========================================================
+   THOUNE V1017 — primeira rodada de correções
+========================================================= */
+
+/* Tema: usa o emoji definido pelo JS. Remove os pseudo-ícones antigos
+   que estavam sobrepondo o sol/lua e criando formas deformadas. */
+.theme-icon-img{
+  display:grid !important;
+  place-items:center !important;
+  width:26px !important;
+  height:26px !important;
+  background:none !important;
+  -webkit-mask:none !important;
+  mask:none !important;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif !important;
+  font-size:20px !important;
+  line-height:1 !important;
+}
+.theme-icon-img::before,
+.theme-icon-img::after{
+  content:none !important;
+  display:none !important;
+}
+
+/* Menu: um único símbolo, centralizado e sem as camadas de desenho antigas. */
+.menu-button .ui-icon-menu{
+  width:30px !important;
+  height:30px !important;
+  flex:0 0 30px !important;
+  font-size:24px !important;
+  line-height:1 !important;
+}
+.menu-button .ui-icon-menu::before{
+  content:"☰" !important;
+  position:static !important;
+  display:block !important;
+  width:auto !important;
+  height:auto !important;
+  background:none !important;
+  border:0 !important;
+  box-shadow:none !important;
+  transform:none !important;
+  font:inherit !important;
+}
+.menu-button .ui-icon-menu::after{content:none !important;display:none !important;}
+
+/* Coração: caráter único, reto e sem rotação. */
+.favorite-button .ui-icon-heart,
+.catalog-favorites-button .ui-icon-heart,
+.favorite-remove .ui-icon-heart,
+.panel-empty-icon .ui-icon-heart{
+  width:26px !important;
+  height:26px !important;
+  flex:0 0 26px !important;
+  font-family:system-ui,sans-serif !important;
+  font-size:25px !important;
+  line-height:1 !important;
+  transform:none !important;
+}
+.ui-icon-heart::before{
+  content:"♡" !important;
+  position:static !important;
+  display:block !important;
+  width:auto !important;
+  height:auto !important;
+  background:none !important;
+  border:0 !important;
+  box-shadow:none !important;
+  transform:none !important;
+  font:inherit !important;
+  line-height:1 !important;
+}
+.favorite.active .ui-icon-heart::before,
+.favorite-button.active .ui-icon-heart::before{
+  content:"♥" !important;
+}
+
+/* Favoritos: foto + informações + ação em uma linha compacta. */
+.favorite-item{
+  display:grid !important;
+  grid-template-columns:72px minmax(0,1fr) 42px !important;
+  align-items:center !important;
+  gap:13px !important;
+  padding:11px !important;
+  border-radius:18px !important;
+}
+.favorite-item-image{
+  width:72px !important;
+  height:72px !important;
+  flex:0 0 72px !important;
+  background:rgba(6,27,35,.55) !important;
+  border:1px solid rgba(103,183,197,.16) !important;
+  border-radius:16px !important;
+  display:grid !important;
+  place-items:center !important;
+}
+.favorite-item-image img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  padding:5px !important;
+  background:transparent !important;
+  display:block !important;
+}
+.favorite-item-info{min-width:0 !important;display:flex !important;flex-direction:column !important;gap:3px !important;}
+.favorite-item-info strong{font-size:14px !important;overflow:hidden !important;text-overflow:ellipsis !important;white-space:nowrap !important;}
+.favorite-item-info span{font-size:10px !important;color:#7fa5ad !important;}
+.favorite-item-info b{font-size:14px !important;color:#83e0e9 !important;}
+.favorite-remove{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  border-radius:13px !important;
+  display:grid !important;
+  place-items:center !important;
+  background:rgba(8,40,49,.8) !important;
+  border:1px solid rgba(103,183,197,.16) !important;
+  color:#9bdde5 !important;
+}
+.favorite-remove .ui-icon-heart{font-size:23px !important;}
+
+.account-favorite-row{
+  grid-template-columns:58px minmax(0,1fr) auto !important;
+  gap:12px !important;
+}
+.account-favorite-thumb{
+  width:58px !important;
+  height:58px !important;
+  flex:0 0 58px !important;
+  background:rgba(6,27,35,.55) !important;
+}
+.account-favorite-thumb img{
+  object-fit:contain !important;
+  padding:4px !important;
+  background:transparent !important;
+}
+
+/* Imagens no carrinho: nunca pintar um quadrado branco por trás. */
+.cart-item-image{
+  background:rgba(6,27,35,.48) !important;
+  display:grid !important;
+  place-items:center !important;
+}
+.cart-item-image img{
+  background:transparent !important;
+  object-fit:contain !important;
+  padding:4px !important;
+  mix-blend-mode:normal !important;
+}
+
+/* Checkout: menos texto permanente e mais espaço útil. */
+.checkout-block-heading{align-items:flex-start !important;}
+.checkout-block-heading p{display:none !important;}
+.checkout-help,
+.checkout-field-help{margin-top:4px !important;}
+.checkout-help summary,
+.checkout-field-help summary{
+  list-style:none !important;
+  cursor:pointer !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:5px !important;
+  color:#79b9c3 !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+}
+.checkout-help summary::-webkit-details-marker,
+.checkout-field-help summary::-webkit-details-marker{display:none !important;}
+.checkout-help p,
+.checkout-field-help p{
+  margin:7px 0 0 !important;
+  padding:9px 11px !important;
+  border-radius:11px !important;
+  background:rgba(103,183,197,.07) !important;
+  color:#8eabb3 !important;
+  font-size:11px !important;
+  line-height:1.5 !important;
+}
+.checkout-data{gap:11px !important;}
+
+/* Verificação: botão de confirmação e verificação não ficam apertados. */
+.checkout-actions{gap:10px !important;flex-wrap:wrap !important;}
+.checkout-actions .primary-button,
+.checkout-actions .secondary-button{min-height:48px !important;}
+
+/* Notificações: texto visível também em cartões escuros. */
+.notifications-panel .notification-card,
+#notifications-global-panel .notification-card,
+.notification-item{
+  color:#eaf8fa !important;
+}
+.notifications-panel .notification-card p,
+.notifications-panel .notification-card small,
+#notifications-global-panel .notification-card p,
+#notifications-global-panel .notification-card small,
+.notification-item small{
+  color:#b7d2d7 !important;
+}
+
+/* Quando o pedido é aberto após a criação, o painel deve parecer uma etapa própria. */
+.order-details-card .order-detail-actions{
+  padding-top:8px !important;
+  border-top:1px solid rgba(103,183,197,.12) !important;
+  margin-top:12px !important;
+}
+.order-details-card [data-order-verify]{
+  width:100% !important;
+  min-height:50px !important;
+  font-weight:800 !important;
+}
+
+@media(max-width:600px){
+  .favorite-item{grid-template-columns:64px minmax(0,1fr) 40px !important;gap:10px !important;}
+  .favorite-item-image{width:64px !important;height:64px !important;flex-basis:64px !important;}
+  .favorite-remove{width:40px !important;height:40px !important;min-width:40px !important;}
+  .checkout-help summary,.checkout-field-help summary{font-size:10px !important;}
+}

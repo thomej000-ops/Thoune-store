@@ -17,3 +17,6 @@ Versão 1014: os ícones foram incorporados diretamente ao styles.css. Não é n
 - Final vector icon system with consistent sizing and no external icon folder.
 - Fixed Terms modal positioning/scroll behavior.
 - Added cache-busting version for styles.css.
+
+
+Thoune Store v1017 — correções de fluxo de verificação, checkout compacto, tema/menu, favoritos e notificações.

@@ -1242,12 +1242,19 @@ async function createOrder() {
 
   setMessage(
     $("#checkout-message"),
-    "Pedido criado! Faça o pagamento via Pix e depois solicite a verificação.",
+    "Pedido criado. Faça o pagamento via Pix para continuar.",
     "success"
   );
 
+  // Depois de criar o pedido, abrimos diretamente o painel do pedido.
+  // Assim o cliente encontra imediatamente a ação de verificar o pagamento.
   await loadCurrentOrder();
   await loadCustomerOrders();
+
+  if (orderId) {
+    closePanel($("#checkout-section"));
+    await openOrderDetails(orderId);
+  }
 
   toast("Pedido criado com sucesso.");
 }

@@ -30,7 +30,7 @@
 
   <link
     rel="stylesheet"
-    href="./styles.css?v=1016"
+    href="./styles.css?v=1017"
   >
 </head>
 
@@ -1972,13 +1972,12 @@
 
             <div>
 
-              <h3>
-                Dados da entrega
-              </h3>
+              <h3>Dados da entrega</h3>
 
-              <p>
-                Esses dados serão usados para processar seu pedido.
-              </p>
+              <details class="checkout-help">
+                <summary>ⓘ Por que esses dados?</summary>
+                <p>Usamos estas informações somente para identificar o pedido e realizar a entrega.</p>
+              </details>
 
             </div>
 
@@ -2014,9 +2013,10 @@
           </label>
 
 
-          <small>
-            O usuário do Roblox será usado somente para a entrega deste pedido.
-          </small>
+          <details class="checkout-field-help">
+            <summary>ⓘ Sobre o usuário do Roblox</summary>
+            <p>Ele é usado somente para realizar a entrega deste pedido.</p>
+          </details>
 
 
           <label>
@@ -2035,9 +2035,10 @@
           </label>
 
 
-          <small>
-            Informe o nome exatamente como aparecerá na transação Pix.
-          </small>
+          <details class="checkout-field-help">
+            <summary>ⓘ Qual nome devo colocar?</summary>
+            <p>Use o nome exatamente como aparece na transação Pix.</p>
+          </details>
 
         </div>
 
@@ -2268,7 +2269,7 @@
 
   <script
     type="module"
-    src="./app.js"
+    src="./app.js?v=1017"
   ></script>
 
 </body>
