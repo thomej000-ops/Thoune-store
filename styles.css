@@ -5852,3 +5852,12 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
 .ui-icon-receipt::after{content:"🧾"!important;display:block!important}
 .ui-icon-headset::after{content:"🎧"!important;display:block!important}
 .ui-icon-like::after{content:"👍"!important;display:block!important}
+
+
+/* v1022: alinhamento de glifos/emoji nos ícones; remove posicionamento absoluto herdado. */
+.ui-icon { position:relative!important; display:inline-flex!important; align-items:center!important; justify-content:center!important; vertical-align:middle!important; width:1.45em!important; min-width:1.45em!important; height:1.45em!important; line-height:1!important; font-family:system-ui,"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important; font-weight:400!important; overflow:visible!important; transform:none!important; }
+.ui-icon::before { content:none!important; display:none!important; }
+.ui-icon::after { position:static!important; inset:auto!important; display:block!important; width:auto!important; height:auto!important; min-width:0!important; min-height:0!important; margin:0!important; padding:0!important; border:0!important; border-radius:0!important; box-shadow:none!important; background:transparent!important; transform:none!important; transform-origin:center!important; font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",system-ui,sans-serif!important; font-size:1em!important; font-weight:400!important; line-height:1!important; text-align:center!important; white-space:nowrap!important; }
+.ui-icon-menu::after { font-family:system-ui,sans-serif!important; font-size:1.25em!important; font-weight:600!important; }
+.ui-icon-heart::after { font-family:system-ui,sans-serif!important; font-size:1.4em!important; }
+.ui-icon-at::after { font-family:system-ui,sans-serif!important; font-weight:800!important; }

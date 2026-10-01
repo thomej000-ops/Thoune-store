@@ -31,3 +31,9 @@ Antes de publicar, mantenha as alterações SQL da v1016 e v1018 aplicadas no Su
 - Restaurados emojis nos ícones; removidos traços/pontos desenhados por pseudo-elementos CSS.
 - Tratamento de erros no carregamento e login do painel ADM, com mensagem clara em vez de tela presa carregando.
 - O acesso ADM continua exigindo autenticação e cargo de administrador configurado no Supabase.
+
+
+## v1022 — correção do ADM e alinhamento dos ícones
+- O acesso administrativo agora tem limite de tempo nas verificações de sessão, RPC e perfil; falhas mostram uma mensagem em vez de deixar a tela carregando indefinidamente.
+- Ícones ajustados para centralizar os glifos e emojis e remover posicionamento absoluto que os deslocava.
+- Se a conta não estiver marcada como admin no banco, o painel informa isso claramente; não contorna a autorização.

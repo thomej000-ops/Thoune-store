@@ -1500,68 +1500,66 @@ const sections = {
 ========================================================= */
 
 async function checkAdminAccess(){
-
   loadingScreen.classList.remove("hidden");
   accessDenied.classList.add("hidden");
   adminPanel.classList.add("hidden");
 
-  let session = null;
+  const revealDenied = (message = "") => {
+    loadingScreen.classList.add("hidden");
+    adminPanel.classList.add("hidden");
+    accessDenied.classList.remove("hidden");
+    if (message && adminLoginMessage) adminLoginMessage.textContent = message;
+    return false;
+  };
+  const revealPanel = () => {
+    loadingScreen.classList.add("hidden");
+    accessDenied.classList.add("hidden");
+    adminPanel.classList.remove("hidden");
+    return true;
+  };
+  const withTimeout = (promise, ms = 8000, label = "verificação") => Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error(`Tempo esgotado durante ${label}.`)), ms))
+  ]);
+
+  let session;
   try {
-    const result = await supabaseClient.auth.getSession();
-    session = result?.data?.session || null;
+    const result = await withTimeout(supabaseClient.auth.getSession(), 8000, "a leitura da sessão");
     if (result?.error) throw result.error;
+    session = result?.data?.session || null;
   } catch (err) {
     console.error("Falha ao recuperar sessão ADM:", err);
-    loadingScreen.classList.add("hidden");
-    accessDenied.classList.remove("hidden");
-    if (adminLoginMessage) adminLoginMessage.textContent = "Não foi possível verificar sua sessão. Atualize a página e tente novamente.";
-    return false;
+    return revealDenied("Não foi possível verificar a sessão. Confira a internet e tente entrar novamente.");
   }
 
-  if(!session?.user){
-    loadingScreen.classList.add("hidden");
-    accessDenied.classList.remove("hidden");
-    return false;
-  }
+  if (!session?.user) return revealDenied("Entre com o e-mail e a senha da sua conta administradora.");
 
   const user = session.user;
-  const metadataRole =
-    user.app_metadata?.role || user.user_metadata?.role || "";
+  const metadataRole = user.app_metadata?.role || user.user_metadata?.role || "";
+  if (metadataRole === "admin") return revealPanel();
 
-  if(metadataRole === "admin"){
-    loadingScreen.classList.add("hidden");
-    adminPanel.classList.remove("hidden");
-    return true;
+  // Tenta a função do banco, mas não deixa uma chamada travada prender a tela para sempre.
+  try {
+    const result = await withTimeout(supabaseClient.rpc("is_admin"), 7000, "a validação de administrador");
+    if (!result?.error && result?.data === true) return revealPanel();
+    if (result?.error) console.warn("RPC is_admin indisponível; tentando o perfil:", result.error.message);
+  } catch (err) {
+    console.warn("RPC is_admin falhou ou demorou; tentando o perfil:", err);
   }
 
-  const { data: rpcIsAdmin, error: rpcAdminError } =
-    await supabaseClient.rpc("is_admin");
-
-  if(!rpcAdminError && rpcIsAdmin === true){
-    loadingScreen.classList.add("hidden");
-    adminPanel.classList.remove("hidden");
-    return true;
+  try {
+    const result = await withTimeout(
+      supabaseClient.from("profiles").select("role").eq("id", user.id).maybeSingle(),
+      7000,
+      "a leitura do perfil"
+    );
+    if (!result?.error && result?.data?.role === "admin") return revealPanel();
+    console.error("Acesso administrativo negado:", result?.error || "perfil sem role admin");
+    return revealDenied("Sua conta entrou, mas não está marcada como administradora no Supabase.");
+  } catch (err) {
+    console.error("Falha ao consultar perfil administrativo:", err);
+    return revealDenied("A verificação demorou demais ou o banco recusou a consulta. Confira a conexão e as permissões do Supabase.");
   }
-
-  const {
-    data: profile,
-    error
-  } = await supabaseClient
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
-
-  if(!error && profile?.role === "admin"){
-    loadingScreen.classList.add("hidden");
-    adminPanel.classList.remove("hidden");
-    return true;
-  }
-
-  console.error("Acesso administrativo negado:", error || "role diferente de admin");
-  loadingScreen.classList.add("hidden");
-  accessDenied.classList.remove("hidden");
-  return false;
 }
 
 
@@ -2774,8 +2772,7 @@ async function markDelivered(orderId){
   if(!confirm("Marcar este pedido como entregue?")) return;
   const {data: deliveredOrder}=await supabaseClient.from("orders").select("customer_id").eq("id",orderId).maybeSingle();
   const {error}=await supabaseClient.from("orders").update({status:"delivered",updated_at:new Date().toISOString()}).eq("id",orderId).eq("status","awaiting_delivery");
-  if(error){alert("Não foi possível atualizar o pedido:
-"+error.message);return;}
+  if(error){alert("Não foi possível atualizar o pedido:\n"+error.message);return;}
   if(deliveredOrder?.customer_id){
     await supabaseClient.from("notifications").insert({customer_id:deliveredOrder.customer_id,title:"Pedido entregue 🎉",message:"Parabéns! Obrigado pela compra. Esperamos ver você novamente na Thoune Store. Sua avaliação está disponível no painel do pedido.",type:"order_delivered"});
   }
