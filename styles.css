@@ -5978,3 +5978,42 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
 .product-image-preview img { width:76px; height:76px; object-fit:contain; border-radius:12px; padding:6px; background:#062029; border:1px solid rgba(95,205,219,.2); }
 .image-upload-help { display:block; margin:7px 0 12px; color:#9dbbc3; font-size:12px; line-height:1.5; }
 #product-image-file { width:100%; padding:12px; border:1px dashed rgba(95,205,219,.35); border-radius:12px; background:#071e26; color:#dff4f7; }
+
+/* v1026 — ícones de marca em SVG e carrinho visível em Android. */
+#open-cart .cart-emoji {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  width: 30px !important;
+  height: 30px !important;
+  font-family: "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif !important;
+  font-size: 27px !important;
+  line-height: 30px !important;
+  text-align: center !important;
+  color: inherit !important;
+  transform: none !important;
+  filter: none !important;
+  z-index: 2 !important;
+}
+#open-cart .ui-icon-cart { display: none !important; }
+.tiktok-mini-logo, .roblox-mini-logo {
+  display: inline-grid !important;
+  place-items: center !important;
+  width: 22px !important;
+  height: 22px !important;
+  flex: 0 0 22px !important;
+  margin-right: 6px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: 6px !important;
+  vertical-align: middle !important;
+  transform: none !important;
+  box-sizing: border-box !important;
+}
+.tiktok-mini-logo { background: #07151a !important; }
+.tiktok-mini-logo svg { display: block !important; width: 18px !important; height: 18px !important; overflow: visible !important; }
+.roblox-mini-logo { background: #f4f8fa !important; color: #111820 !important; }
+.roblox-mini-logo svg { display: block !important; width: 18px !important; height: 18px !important; overflow: visible !important; }
+.account-summary-label .tiktok-mini-logo,
+.account-summary-label .roblox-mini-logo { width: 20px !important; height: 20px !important; }
