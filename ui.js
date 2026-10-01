@@ -26,7 +26,12 @@ export function toast(message, type = "info") {
 export function updateCartBadge(cart = loadCart()) {
   const count = cartCount(cart);
   const badge = document.querySelector("#cart-count");
-  if (badge) badge.textContent = String(count);
+  if (badge) {
+    badge.textContent = String(count);
+    badge.hidden = count <= 0;
+    badge.setAttribute("aria-hidden", count <= 0 ? "true" : "false");
+    badge.classList.toggle("is-empty", count <= 0);
+  }
 }
 
 export function renderProducts(products = []) {
