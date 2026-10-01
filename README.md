@@ -1,22 +1,10 @@
-# Thoune Store — v1013
+Thoune Store v1018
 
-Ajustes desta versão, focados somente no que foi solicitado:
+- Corrige o retorno visual da verificação de pagamento.
+- Aumenta e reorganiza os painéis de pagamento/pedido.
+- Monitora a mudança para entrega e abre o pedido automaticamente.
+- Mostra itens, Roblox, Join e link do bot no painel de entrega.
+- Adiciona avaliação pós-entrega.
+- Adiciona link do bot nas configurações de entrega do ADM.
 
-- removido o botão duplicado “Ver pedido” da lista de Meus pedidos;
-- controles de quantidade e remoção do carrinho redesenhados, sem os botões HTML brancos padrão;
-- correção do estado vazio do carrinho para não aparecer junto com itens;
-- descontos agora ficam explícitos no catálogo, no detalhe do produto e no carrinho, com preço anterior e preço final;
-- iconografia principal atualizada usando as referências visuais enviadas para o projeto;
-- sem alteração da estrutura do Supabase ou das demais funcionalidades.
-
-
-Versão 1014: os ícones foram incorporados diretamente ao styles.css. Não é necessária a pasta icons.
-
-
-## v1015
-- Final vector icon system with consistent sizing and no external icon folder.
-- Fixed Terms modal positioning/scroll behavior.
-- Added cache-busting version for styles.css.
-
-
-Thoune Store v1017 — correções de fluxo de verificação, checkout compacto, tema/menu, favoritos e notificações.
+Execute supabase_v1018_delivery_review.sql antes de usar o link do bot e o envio de avaliações.

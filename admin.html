@@ -1296,6 +1296,11 @@
         </div>
 
 
+        <div class="form-field" style="margin-top:14px;">
+          <label for="delivery-bot-url">Link do perfil do bot no Roblox</label>
+          <input id="delivery-bot-url" type="url" placeholder="https://www.roblox.com/users/.../profile">
+        </div>
+
         <div class="checkbox-field">
 
           <input
@@ -2672,49 +2677,15 @@ async function loadOrders(){
 
 
 async function markDelivered(orderId){
-
-  if(
-    !confirm(
-      "Marcar este pedido como entregue?"
-    )
-  ) return;
-
-
-  const {
-    error
-  } =
-    await supabaseClient
-      .from("orders")
-      .update({
-        status:
-          "delivered",
-
-        updated_at:
-          new Date().toISOString()
-      })
-      .eq(
-        "id",
-        orderId
-      )
-      .eq(
-        "status",
-        "awaiting_delivery"
-      );
-
-
-  if(error){
-
-    alert(
-      "Não foi possível atualizar o pedido:\n" +
-      error.message
-    );
-
-    return;
+  if(!confirm("Marcar este pedido como entregue?")) return;
+  const {data: deliveredOrder}=await supabaseClient.from("orders").select("customer_id").eq("id",orderId).maybeSingle();
+  const {error}=await supabaseClient.from("orders").update({status:"delivered",updated_at:new Date().toISOString()}).eq("id",orderId).eq("status","awaiting_delivery");
+  if(error){alert("Não foi possível atualizar o pedido:
+"+error.message);return;}
+  if(deliveredOrder?.customer_id){
+    await supabaseClient.from("notifications").insert({customer_id:deliveredOrder.customer_id,title:"Pedido entregue 🎉",message:"Parabéns! Obrigado pela compra. Esperamos ver você novamente na Thoune Store. Sua avaliação está disponível no painel do pedido.",type:"order_delivered"});
   }
-
-
   await loadOrders();
-
 }
 
 
@@ -3450,10 +3421,11 @@ const deliveryBotUsername =
     "#delivery-bot-username"
   );
 
+const deliveryBotUrl =
+  document.querySelector("#delivery-bot-url");
+
 const joinOpen =
-  document.querySelector(
-    "#join-open"
-  );
+  document.querySelector("#join-open");
 
 const deliveryMessage =
   document.querySelector(
@@ -3474,7 +3446,7 @@ async function loadDeliverySettings(){
     await supabaseClient
       .from("store_settings")
       .select(
-        "pix_key, delivery_bot_username, join_open"
+        "pix_key, delivery_bot_username, delivery_bot_url, join_open"
       )
       .eq(
         "id",
@@ -3502,6 +3474,9 @@ async function loadDeliverySettings(){
   deliveryBotUsername.value =
     data?.delivery_bot_username || "";
 
+  deliveryBotUrl.value =
+    data?.delivery_bot_url || "";
+
   joinOpen.checked =
     data?.join_open !== false;
 
@@ -3521,6 +3496,8 @@ document
 
       const username =
         deliveryBotUsername.value.trim();
+      const botUrl =
+        deliveryBotUrl.value.trim();
 
 
       const {
@@ -3535,6 +3512,9 @@ document
 
             delivery_bot_username:
               username || null,
+
+            delivery_bot_url:
+              botUrl || null,
 
             join_open:
               joinOpen.checked,

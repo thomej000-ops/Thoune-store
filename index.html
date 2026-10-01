@@ -9,6 +9,7 @@
   >
 
   <meta name="theme-color" content="#082c3a">
+  <meta name="thoune-version" content="v1018">
 
   <title>Thoune Store — Flee the Facility</title>
 
@@ -2090,6 +2091,19 @@
 
   </div>
 
+
+  <div class="modal-shell hidden" id="review-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Avaliar pedido">
+    <div class="modal-backdrop" data-close-review></div>
+    <div class="modal-card review-modal-card">
+      <div class="modal-header"><div><p class="eyebrow">SUA EXPERIÊNCIA</p><h2>Como foi sua compra?</h2></div><button type="button" class="close-button" id="close-review" aria-label="Fechar">×</button></div>
+      <form id="review-form" class="review-form">
+        <label>Nota<select id="review-rating"><option value="5">★★★★★ — 5</option><option value="4">★★★★☆ — 4</option><option value="3">★★★☆☆ — 3</option><option value="2">★★☆☆☆ — 2</option><option value="1">★☆☆☆☆ — 1</option></select></label>
+        <label>Seu comentário<textarea id="review-text" rows="5" maxlength="600" placeholder="Conte como foi sua experiência..."></textarea></label>
+        <button type="submit" class="primary-button">Enviar avaliação</button>
+        <p id="review-form-message" class="checkout-message" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
 
   <!-- =====================================================
        PAINEL — PEDIDO / STATUS

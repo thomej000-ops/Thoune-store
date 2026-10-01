@@ -33,6 +33,7 @@ let storeSettings = {
   online: false,
   pix_key: "",
   delivery_bot_username: "",
+  delivery_bot_url: "",
   join_open: false,
   discount_percent: 0,
   discount_active: false
@@ -45,6 +46,10 @@ let currentReviewSort = "helpful";
 
 let currentOrderId =
   localStorage.getItem("thoune-current-order-id") || null;
+
+let paymentVerificationBusy = false;
+let orderMonitorTimer = null;
+let lastKnownOrderStatus = null;
 
 const CURRENT_ORDER_KEY = "thoune-current-order-id";
 
@@ -249,6 +254,7 @@ async function loadStoreSettings() {
       online,
       pix_key,
       delivery_bot_username,
+      delivery_bot_url,
       join_open,
       discount_percent,
       discount_active,
@@ -277,6 +283,7 @@ async function loadStoreSettings() {
       online: Boolean(data.online),
       pix_key: data.pix_key || "",
       delivery_bot_username: data.delivery_bot_username || "",
+      delivery_bot_url: data.delivery_bot_url || "",
       join_open: Boolean(data.join_open),
       discount_percent: Number(data.discount_percent) || 0,
       discount_active: Boolean(data.discount_active)
@@ -1260,57 +1267,19 @@ async function createOrder() {
 }
 
 async function requestPaymentVerification(orderId = currentOrderId) {
-  if (!orderId) {
-    toast("Nenhum pedido selecionado.");
-    return;
-  }
-
-  const button = $("#verify-payment-button");
-
-  if (button) {
-    button.disabled = true;
-  }
-
-  const { error } =
-    await supabaseClient.rpc(
-      "request_payment_verification",
-      {
-        p_order_id: orderId
-      }
-    );
-
-  if (button) {
-    button.disabled = false;
-  }
-
-  if (error) {
-    console.error(error);
-
-    setMessage(
-      $("#checkout-message"),
-      error.message || "Não foi possível solicitar a verificação.",
-      "error"
-    );
-
-    return;
-  }
-
-  // IMPORTANTE:
-  // NÃO apagamos currentOrderId aqui.
-  // O pedido ainda está ativo e precisa continuar sendo acompanhado.
-
-  saveCurrentOrderId(orderId);
-
-  setMessage(
-    $("#checkout-message"),
-    "Pagamento enviado para verificação. Agora aguarde a confirmação.",
-    "success"
-  );
-
-  await loadCurrentOrder();
-  await loadCustomerOrders();
-
-  toast("Pagamento enviado para verificação.");
+  if (!orderId || paymentVerificationBusy) return;
+  paymentVerificationBusy = true;
+  const button = document.querySelector(`[data-order-verify="${String(orderId).replaceAll('"','\"')}"]`);
+  if (button) { button.disabled = true; button.textContent = "Enviando para verificação…"; }
+  try {
+    const { error } = await supabaseClient.rpc("request_payment_verification", { p_order_id: orderId });
+    if (error) { console.error(error); toast(error.message || "Não foi possível solicitar a verificação.", "error"); return; }
+    saveCurrentOrderId(orderId);
+    toast("Pagamento enviado para verificação.");
+    await loadCurrentOrder();
+    await loadCustomerOrders();
+    await openOrderDetails(orderId);
+  } finally { paymentVerificationBusy = false; }
 }
 
 function copyPixKey() {
@@ -1415,39 +1384,33 @@ async function loadCurrentOrder() {
     return;
   }
 
+  lastKnownOrderStatus = order?.status || null;
   renderCurrentOrder(order);
 }
 
 function getDeliveryMessage(order) {
-  if (!order) return "";
-
-  if (order.status === "awaiting_delivery") {
-    if (storeSettings.delivery_bot_username) {
-      return `
-        <div class="delivery-message">
-          <strong>Seu pedido está aguardando entrega.</strong>
-          <p>
-            Entre em contato pelo bot
-            <strong>${escapeHtml(storeSettings.delivery_bot_username)}</strong>.
-          </p>
-
-          ${
-            storeSettings.join_open
-              ? "<p>O Join está aberto para a entrega.</p>"
-              : ""
-          }
-        </div>
-      `;
-    }
-
-    return `
-      <div class="delivery-message">
-        <strong>Seu pedido está aguardando entrega.</strong>
+  if (!order || order.status !== "awaiting_delivery") return "";
+  const botName = storeSettings.delivery_bot_username || "Bot de entrega";
+  const botUrl = storeSettings.delivery_bot_url || "";
+  return `
+    <div class="delivery-message delivery-message-rich">
+      <div class="delivery-message-title">🚚 Pagamento confirmado</div>
+      <p>Seu pedido está pronto para a entrega.</p>
+      <div class="delivery-info-grid">
+        <div><span>Pedido</span><strong>#${escapeHtml(String(order.id).slice(0,8))}</strong></div>
+        <div><span>Roblox</span><strong>${escapeHtml(order.delivery_username || "Não informado")}</strong></div>
+        <div><span>Quantidade</span><strong>${escapeHtml(String(order._itemCount || "—"))}</strong></div>
       </div>
-    `;
-  }
-
-  return "";
+      <div class="delivery-bot-box">
+        <span>🤖 Bot de entrega</span>
+        <strong>${escapeHtml(botName)}</strong>
+        ${storeSettings.join_open ? "<small>🟢 Join aberto</small>" : "<small>🔴 Join fechado</small>"}
+        ${botUrl ? `<a class="primary-button delivery-bot-link" href="${escapeHtml(botUrl)}" target="_blank" rel="noopener noreferrer">Abrir perfil do bot</a>` : ""}
+      </div>
+      <p class="delivery-note">Quando receber suas marretas, confirme abaixo para fechar esta etapa.</p>
+      <button type="button" class="secondary-button" data-delivery-read="${escapeHtml(order.id)}">Entendi, aguardar entrega</button>
+    </div>
+  `;
 }
 
 function renderCurrentOrder(order) {
@@ -1582,134 +1545,43 @@ async function loadCustomerOrders() {
 
 async function openOrderDetails(orderId) {
   const order = await fetchOrder(orderId);
-
-  if (!order) {
-    toast("Não foi possível encontrar esse pedido.");
-    return;
-  }
-
-  const modal = $("#order-details-modal");
-  const title = $("#order-details-title");
-  const content = $("#order-details-content");
-
+  if (!order) { toast("Não foi possível encontrar esse pedido."); return; }
+  const modal = $("#order-details-modal"), title = $("#order-details-title"), content = $("#order-details-content");
   if (!modal || !content) return;
-
-  if (title) {
-    title.textContent =
-      `Pedido #${String(order.id).slice(0, 8)}`;
-  }
-
-  const { data: items } = await supabaseClient
-    .from("order_items")
-    .select("*")
-    .eq("order_id", order.id);
-
-  const itemList = Array.isArray(items)
-    ? items
-    : [];
-
+  if (title) title.textContent = `Pedido #${String(order.id).slice(0,8)}`;
+  const { data: items } = await supabaseClient.from("order_items").select("*").eq("order_id", order.id);
+  const itemList = Array.isArray(items) ? items : [];
+  order._itemCount = itemList.reduce((sum,item)=>sum+Number(item.quantity||1),0);
   content.innerHTML = `
-    <div class="order-detail-status">
-      <span class="order-status ${getStatusClass(order.status)}">
-        ${escapeHtml(getStatusLabel(order.status))}
-      </span>
-
-      ${
-        order.created_at
-          ? `<small>${formatDate(order.created_at)}</small>`
-          : ""
-      }
-    </div>
-
-    <div class="order-detail-items">
-      ${
-        itemList.length
-          ? itemList.map(item => {
-              const name =
-                item.product_name ||
-                item.name ||
-                "Produto";
-
-              const quantity =
-                Number(item.quantity || item.qty || 1);
-
-              const price =
-                Number(
-                  item.product_price ??
-                  item.price ??
-                  0
-                );
-
-              return `
-                <div class="order-detail-item">
-                  <span>
-                    ${escapeHtml(name)} ×${quantity}
-                  </span>
-
-                  <strong>
-                    ${money(price * quantity)}
-                  </strong>
-                </div>
-              `;
-            }).join("")
-          : `
-            <p>Itens do pedido não disponíveis.</p>
-          `
-      }
-    </div>
-
-    ${
-      order.total != null
-        ? `
-          <div class="order-detail-total">
-            <span>Total</span>
-            <strong>${money(order.total)}</strong>
-          </div>
-        `
-        : ""
-    }
-
-    ${getDeliveryMessage(order)}
-
-    ${
-      order.status === "awaiting_payment"
-        ? `
-          <div class="order-detail-actions">
-            <button
-              type="button"
-              class="primary-button"
-              data-order-verify="${escapeHtml(order.id)}"
-            >
-              Já paguei — verificar pagamento
-            </button>
-          </div>
-        `
-        : ""
-    }
-
-    ${
-      order.status === "awaiting_verification"
-        ? `
-          <p class="order-help-text">
-            Seu pagamento foi enviado para verificação.
-            Aguarde a confirmação.
-          </p>
-        `
-        : ""
-    }
-
-    ${
-      order.status === "payment_confirmed"
-        ? `
-          <div class="order-confirmed-message">
-            Pagamento confirmado! Seu pedido está aguardando entrega.
-          </div>
-        `
-        : ""
-    }
+    <div class="order-detail-status"><span class="order-status ${getStatusClass(order.status)}">${escapeHtml(getStatusLabel(order.status))}</span>${order.created_at ? `<small>${formatDate(order.created_at)}</small>` : ""}</div>
+    <div class="order-detail-items"><div class="order-detail-items-title">Suas marretas</div>${itemList.length ? itemList.map(item=>{ const name=item.product_name||item.name||"Produto"; const quantity=Number(item.quantity||item.qty||1); const price=Number(item.product_price??item.price??0); return `<div class="order-detail-item"><span>${escapeHtml(name)} ×${quantity}</span><strong>${money(price*quantity)}</strong></div>`; }).join("") : "<p>Itens do pedido não disponíveis.</p>"}</div>
+    ${order.total!=null ? `<div class="order-detail-total"><span>Total</span><strong>${money(order.total)}</strong></div>` : ""}
+    ${order.status==="awaiting_payment" ? `<div class="order-flow-box payment-waiting-box"><strong>💳 Aguardando pagamento</strong><p>Faça o Pix e depois toque no botão abaixo.</p><button type="button" class="primary-button" data-order-verify="${escapeHtml(order.id)}">Já paguei — verificar pagamento</button></div>` : ""}
+    ${order.status==="awaiting_verification" ? `<div class="order-flow-box verification-box"><strong>⏳ Aguardando verificação</strong><p>Recebemos sua solicitação. O pagamento será conferido no painel administrativo.</p></div>` : ""}
+    ${order.status==="awaiting_delivery" ? getDeliveryMessage(order) : ""}
+    ${order.status==="payment_confirmed" ? `<div class="order-flow-box confirmed-box"><strong>✅ Pagamento confirmado</strong><p>Seu pagamento foi confirmado. Abrindo as informações de entrega…</p></div>` : ""}
+    ${order.status==="delivered" ? `<div class="order-flow-box delivered-box"><strong>🎉 Pedido entregue</strong><p>Parabéns! Obrigado pela compra. Esperamos ver você novamente na Thoune Store.</p><button type="button" class="primary-button" id="open-review-after-delivery">Deixar avaliação</button></div>` : ""}
   `;
-
   openPanel(modal);
+  content.querySelector("[data-order-verify]")?.addEventListener("click", ()=>requestPaymentVerification(order.id));
+  content.querySelector("[data-delivery-read]")?.addEventListener("click", ()=>{ localStorage.setItem(`thoune-delivery-read-${order.id}`,"1"); toast("Tudo certo. A entrega continuará sendo acompanhada."); });
+  content.querySelector("#open-review-after-delivery")?.addEventListener("click", ()=>openReviewPanel(order));
+}
+
+async function openReviewPanel(order) {
+  const modal=$("#review-modal"); if(!modal) return; const form=$("#review-form"); if(form) form.dataset.orderId=order?.id||""; openPanel(modal);
+}
+
+function startOrderMonitor() {
+  if(orderMonitorTimer) clearInterval(orderMonitorTimer);
+  orderMonitorTimer=window.setInterval(async()=>{
+    if(!currentUser) return;
+    const before=lastKnownOrderStatus; await loadCurrentOrder(); const after=lastKnownOrderStatus;
+    if(after && before && after!==before && (after==="awaiting_delivery" || after==="delivered")){
+      await openOrderDetails(currentOrderId);
+      if(after==="delivered") await openReviewPanel(await fetchOrder(currentOrderId));
+    }
+  },5000);
 }
 
 // ============================================================
@@ -2000,6 +1872,7 @@ function closeAllPanels() {
   closePanel($("#checkout-section"));
   closePanel($("#order-details-modal"));
   closePanel($("#terms-modal"));
+  closePanel($("#review-modal"));
 
   closeCurrentOrderPanel();
 }
@@ -2398,6 +2271,21 @@ function setupEvents() {
     }
   });
 
+  $("#close-review")?.addEventListener("click", () => closePanel($("#review-modal")));
+  $$('[data-close-review]').forEach(b => b.addEventListener("click", () => closePanel($("#review-modal"))));
+  $("#review-form")?.addEventListener("submit", async event => {
+    event.preventDefault();
+    if(!currentUser) return toast("Entre na sua conta para avaliar.","error");
+    const message=$("#review-form-message"), form=event.currentTarget, rating=Number($("#review-rating")?.value||5), textValue=normalizeText($("#review-text")?.value||"");
+    if(!textValue) return setMessage(message,"Escreva um comentário antes de enviar.","error");
+    const submit=form.querySelector('button[type="submit"]'); if(submit){submit.disabled=true;submit.textContent="Enviando…";}
+    const {error}=await supabaseClient.rpc("submit_customer_review",{p_rating:rating,p_text:textValue});
+    if(submit){submit.disabled=false;submit.textContent="Enviar avaliação";}
+    if(error){console.error(error);return setMessage(message,error.message||"Não foi possível enviar a avaliação.","error");}
+    setMessage(message,"Avaliação enviada para análise. Obrigado!","success");
+    setTimeout(()=>closePanel($("#review-modal")),1200);
+  });
+
   // ESC
   document.addEventListener("keydown", event => {
     if (event.key === "Escape") {
@@ -2440,6 +2328,7 @@ async function initialize() {
   renderAccountFavorites();
 
   await loadCurrentOrder();
+  startOrderMonitor();
 
   await loadPublicReviews();
 }
