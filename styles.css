@@ -6031,3 +6031,9 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
   line-height: 1 !important; white-space: nowrap !important;
 }
 #open-cart .cart-count[hidden], #open-cart .cart-count.is-empty { display: none !important; }
+
+/* v1029 — cópia do bot e fluxo de entrega */
+.delivery-copy-bot{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 4px;padding:12px 16px;border:1px solid rgba(95,205,219,.28);border-radius:13px;background:rgba(24,151,169,.18);color:var(--text);font-weight:850;cursor:pointer;}
+.delivery-copy-bot:active{transform:scale(.985)}
+.delivery-bot-username{overflow-wrap:anywhere;user-select:text;-webkit-user-select:text}
+.delivered-box .primary-button{margin-top:14px}

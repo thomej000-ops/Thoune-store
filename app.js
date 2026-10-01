@@ -663,7 +663,10 @@ async function loadProducts() {
 
   const { data, error } = await supabaseClient
     .from("products")
-    .select("*");
+    .select("*")
+    .eq("active", true)
+    .order("sort_order", { ascending: true })
+    .order("name", { ascending: true });
 
   setHidden($("#catalog-loading"), true);
 
@@ -1361,7 +1364,8 @@ async function loadCurrentOrder() {
           "awaiting_payment",
           "awaiting_verification",
           "payment_confirmed",
-          "awaiting_delivery"
+          "awaiting_delivery",
+          "delivered"
         ].includes(item.status)
       );
 
@@ -1372,12 +1376,12 @@ async function loadCurrentOrder() {
     }
   }
 
-  if (
-    order &&
-    ["delivered", "cancelled"].includes(order.status)
-  ) {
+  // Mantém o pedido entregue acessível para o cliente ver o agradecimento
+  // e abrir a avaliação. Apenas pedidos cancelados são removidos do acompanhamento.
+  if (order && order.status === "cancelled") {
     clearCurrentOrderStorage();
     closeCurrentOrderPanel();
+    lastKnownOrderStatus = null;
     return;
   }
 
@@ -1400,7 +1404,8 @@ function getDeliveryMessage(order) {
       </div>
       <div class="delivery-bot-box">
         <span>🤖 Bot de entrega</span>
-        <strong>${escapeHtml(botName)}</strong>
+        <strong class="delivery-bot-username">${escapeHtml(botName)}</strong>
+        <button type="button" class="secondary-button delivery-copy-bot" data-copy-bot="${escapeHtml(botName)}">📋 Copiar nome</button>
         ${storeSettings.join_open ? "<small>🟢 Join aberto</small>" : "<small>🔴 Join fechado</small>"}
         ${botUrl ? `<a class="primary-button delivery-bot-link" href="${escapeHtml(botUrl)}" target="_blank" rel="noopener noreferrer">Abrir perfil do bot</a>` : ""}
       </div>
@@ -1557,11 +1562,46 @@ async function openOrderDetails(orderId) {
     ${order.status==="awaiting_verification" ? `<div class="order-flow-box verification-box"><strong>⏳ Aguardando verificação</strong><p>Recebemos sua solicitação. O pagamento será conferido no painel administrativo.</p></div>` : ""}
     ${order.status==="awaiting_delivery" ? getDeliveryMessage(order) : ""}
     ${order.status==="payment_confirmed" ? `<div class="order-flow-box confirmed-box"><strong>✅ Pagamento confirmado</strong><p>Seu pagamento foi confirmado. Abrindo as informações de entrega…</p></div>` : ""}
-    ${order.status==="delivered" ? `<div class="order-flow-box delivered-box"><strong>🎉 Pedido entregue</strong><p>Parabéns! Obrigado pela compra. Esperamos ver você novamente na Thoune Store.</p><button type="button" class="primary-button" id="open-review-after-delivery">Deixar avaliação</button></div>` : ""}
+    ${order.status==="delivered" ? `<div class="order-flow-box delivered-box"><strong>🎉 Parabéns! Sua entrega foi concluída!</strong><p>Obrigado por comprar na Thoune Store e por confiar no nosso trabalho. Esperamos que tenha gostado das suas marretas e será um prazer receber você novamente.</p><p>💙 Sua opinião é importante para nós. Conte como foi sua experiência.</p><button type="button" class="primary-button" id="open-review-after-delivery">⭐ Avaliar minha compra</button></div>` : ""}
   `;
   openPanel(modal);
   content.querySelector("[data-order-verify]")?.addEventListener("click", ()=>requestPaymentVerification(order.id));
-  content.querySelector("[data-delivery-read]")?.addEventListener("click", ()=>{ localStorage.setItem(`thoune-delivery-read-${order.id}`,"1"); toast("Tudo certo. A entrega continuará sendo acompanhada."); });
+  content.querySelector("[data-delivery-read]")?.addEventListener("click", () => {
+    localStorage.setItem(`thoune-delivery-read-${order.id}`, "1");
+    closePanel(modal);
+    toast("Tudo certo! Vamos acompanhar seu pedido até a entrega.");
+  });
+  content.querySelector("[data-copy-bot]")?.addEventListener("click", async (event) => {
+    const button = event.currentTarget;
+    const botUsername = button.dataset.copyBot || "";
+    if (!botUsername) {
+      toast("O nome do bot não está configurado.", "error");
+      return;
+    }
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(botUsername);
+      } else {
+        const helper = document.createElement("textarea");
+        helper.value = botUsername;
+        helper.setAttribute("readonly", "");
+        helper.style.position = "fixed";
+        helper.style.opacity = "0";
+        document.body.appendChild(helper);
+        helper.select();
+        const copied = document.execCommand("copy");
+        helper.remove();
+        if (!copied) throw new Error("Cópia não permitida pelo navegador");
+      }
+      const originalText = button.textContent;
+      button.textContent = "✅ Nome copiado!";
+      toast("Nome do bot copiado. Agora é só colar no Roblox.");
+      window.setTimeout(() => { if (button.isConnected) button.textContent = originalText; }, 1800);
+    } catch (error) {
+      console.error("Não foi possível copiar o nome do bot:", error);
+      toast("Não foi possível copiar automaticamente. Pressione e segure o nome do bot para copiá-lo.", "error");
+    }
+  });
   content.querySelector("#open-review-after-delivery")?.addEventListener("click", ()=>openReviewPanel(order));
 }
 
