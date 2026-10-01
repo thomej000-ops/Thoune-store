@@ -182,23 +182,6 @@ function escapeHtml(value) {
 // TEMA
 // ============================================================
 
-function applyTheme(theme) {
-  const light = theme === "light";
-  document.body.classList.toggle("theme-light", light);
-
-  const icon = $("#theme-icon");
-  const button = $("#theme-toggle");
-
-  if (icon) icon.textContent = light ? "☀️" : "🌙";
-  if (button) {
-    button.setAttribute(
-      "aria-label",
-      light ? "Ativar modo escuro" : "Ativar modo claro"
-    );
-    button.title = light ? "Modo escuro" : "Modo claro";
-  }
-}
-
 
 function playOpeningEffect() {
   if (sessionStorage.getItem("thoune-opening-effect-v1016")) return;
@@ -211,17 +194,9 @@ function playOpeningEffect() {
 }
 
 function initializeTheme() {
-  const saved = localStorage.getItem("thoune-theme");
-  applyTheme(saved === "light" ? "light" : "dark");
-}
-
-function toggleTheme() {
-  const next = document.body.classList.contains("theme-light")
-    ? "dark"
-    : "light";
-
-  localStorage.setItem("thoune-theme", next);
-  applyTheme(next);
+  // A Thoune Store usa exclusivamente o tema escuro.
+  document.body.classList.remove("theme-light");
+  localStorage.removeItem("thoune-theme");
 }
 
 // ============================================================
@@ -1928,8 +1903,6 @@ function closeMobileMenu() {
 // ============================================================
 
 function setupEvents() {
-  $("#theme-toggle")?.addEventListener("click", toggleTheme);
-
   $("#open-terms-button")?.addEventListener("click", openTerms);
   $("#close-terms")?.addEventListener("click", closeTerms);
   $("#terms-backdrop")?.addEventListener("click", closeTerms);

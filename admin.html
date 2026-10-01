@@ -526,7 +526,24 @@
         Esta área é exclusiva para administradores da Thoune Store.
       </p>
 
-      <a class="primary-button" href="index.html">
+      <form id="admin-login-form" class="admin-login-form" novalidate>
+        <label>
+          E-mail do administrador
+          <input id="admin-login-email" type="email" autocomplete="username" placeholder="seu@email.com" required>
+        </label>
+
+        <label>
+          Senha
+          <input id="admin-login-password" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+        </label>
+
+        <button type="submit" class="primary-button" id="admin-login-button">Entrar no painel</button>
+        <p id="admin-login-message" class="admin-login-message" aria-live="polite"></p>
+      </form>
+
+      <p class="admin-login-note">Use a mesma conta de administrador cadastrada no Supabase Auth. A senha não é armazenada pelo site.</p>
+
+      <a class="secondary-button" href="index.html">
         Voltar para a loja
       </a>
 
@@ -1435,6 +1452,21 @@ const adminPanel =
 const logoutButton =
   document.querySelector("#admin-logout");
 
+const adminLoginForm =
+  document.querySelector("#admin-login-form");
+
+const adminLoginEmail =
+  document.querySelector("#admin-login-email");
+
+const adminLoginPassword =
+  document.querySelector("#admin-login-password");
+
+const adminLoginButton =
+  document.querySelector("#admin-login-button");
+
+const adminLoginMessage =
+  document.querySelector("#admin-login-message");
+
 
 const sections = {
   dashboard:
@@ -1469,61 +1501,99 @@ const sections = {
 
 async function checkAdminAccess(){
 
+  loadingScreen.classList.remove("hidden");
+  accessDenied.classList.add("hidden");
+  adminPanel.classList.add("hidden");
+
   const {
     data: { session }
-  } =
-    await supabaseClient.auth.getSession();
-
+  } = await supabaseClient.auth.getSession();
 
   if(!session?.user){
-
     loadingScreen.classList.add("hidden");
-
     accessDenied.classList.remove("hidden");
-
     return false;
   }
 
+  const user = session.user;
+  const metadataRole =
+    user.app_metadata?.role || user.user_metadata?.role || "";
+
+  if(metadataRole === "admin"){
+    loadingScreen.classList.add("hidden");
+    adminPanel.classList.remove("hidden");
+    return true;
+  }
+
+  const { data: rpcIsAdmin, error: rpcAdminError } =
+    await supabaseClient.rpc("is_admin");
+
+  if(!rpcAdminError && rpcIsAdmin === true){
+    loadingScreen.classList.add("hidden");
+    adminPanel.classList.remove("hidden");
+    return true;
+  }
 
   const {
     data: profile,
     error
-  } =
-    await supabaseClient
-      .from("profiles")
-      .select("role")
-      .eq(
-        "id",
-        session.user.id
-      )
-      .maybeSingle();
+  } = await supabaseClient
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
 
-
-  if(
-    error ||
-    !profile ||
-    profile.role !== "admin"
-  ){
-
-    console.error(
-      "Acesso administrativo negado:",
-      error
-    );
-
+  if(!error && profile?.role === "admin"){
     loadingScreen.classList.add("hidden");
-
-    accessDenied.classList.remove("hidden");
-
-    return false;
+    adminPanel.classList.remove("hidden");
+    return true;
   }
 
-
+  console.error("Acesso administrativo negado:", error || "role diferente de admin");
   loadingScreen.classList.add("hidden");
-
-  adminPanel.classList.remove("hidden");
-
-  return true;
+  accessDenied.classList.remove("hidden");
+  return false;
 }
+
+
+adminLoginForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const email = String(adminLoginEmail?.value || "").trim();
+  const password = String(adminLoginPassword?.value || "");
+
+  if(!email || !password){
+    if(adminLoginMessage) adminLoginMessage.textContent = "Informe e-mail e senha.";
+    return;
+  }
+
+  if(adminLoginButton){
+    adminLoginButton.disabled = true;
+    adminLoginButton.textContent = "Entrando...";
+  }
+  if(adminLoginMessage) adminLoginMessage.textContent = "";
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if(error){
+    console.error("Login administrativo:", error);
+    if(adminLoginMessage){
+      adminLoginMessage.textContent = error.message || "Não foi possível entrar.";
+    }
+  }else{
+    if(adminLoginMessage) adminLoginMessage.textContent = "Verificando permissão...";
+    await checkAdminAccess();
+  }
+
+  if(adminLoginButton){
+    adminLoginButton.disabled = false;
+    adminLoginButton.textContent = "Entrar no painel";
+  }
+});
+
 
 
 /* =========================================================
