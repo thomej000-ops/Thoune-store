@@ -473,15 +473,24 @@
         </label>
 
 
-        <label class="sort-box">
-          <span class="sort-icon" aria-hidden="true"><span class="ui-icon ui-icon-box"></span></span>
-          <select id="sort-select" aria-label="Ordenar produtos">
+        <div class="sort-box" id="sort-control">
+          <span class="sort-icon" aria-hidden="true"><span class="ui-icon ui-icon-sort"></span></span>
+          <div class="sort-main">
+            <span class="sort-eyebrow">ORDENAR POR</span>
+            <button type="button" id="sort-trigger" class="sort-trigger" aria-expanded="false" aria-controls="sort-options">Mais populares</button>
+          </div>
+          <span class="sort-arrow" aria-hidden="true">⌄</span>
+          <select id="sort-select" class="sort-native-select" aria-label="Ordenar produtos" tabindex="-1" aria-hidden="true">
             <option value="popular">Mais populares</option>
             <option value="low">Menor preço</option>
             <option value="high">Maior preço</option>
           </select>
-          <span class="sort-arrow" aria-hidden="true">⌄</span>
-        </label>
+          <div id="sort-options" class="sort-options" hidden>
+            <button type="button" data-sort-value="popular" class="sort-option active"><span>✦</span><span><strong>Mais populares</strong><small>Em destaque na loja</small></span></button>
+            <button type="button" data-sort-value="low" class="sort-option"><span>↓</span><span><strong>Menor preço</strong><small>Do menor para o maior</small></span></button>
+            <button type="button" data-sort-value="high" class="sort-option"><span>↑</span><span><strong>Maior preço</strong><small>Do maior para o menor</small></span></button>
+          </div>
+        </div>
 
 
         <button

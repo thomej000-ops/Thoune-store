@@ -772,6 +772,9 @@ function resetCatalogFilters() {
 
   if (search) search.value = "";
   if (sort) sort.value = "popular";
+  const sortTrigger = $("#sort-trigger");
+  if (sortTrigger) sortTrigger.textContent = "Mais populares";
+  $("#sort-options")?.querySelectorAll("[data-sort-value]").forEach(item => item.classList.toggle("active", item.dataset.sortValue === "popular"));
 
   $$(".category").forEach(button => {
     button.classList.toggle(
@@ -2104,6 +2107,42 @@ function setupEvents() {
       currentSort = event.target.value;
       renderCatalog();
     });
+
+  // Ordenação personalizada: evita o seletor nativo do Android, que
+  // aparecia como uma janela do sistema sobre o catálogo.
+  const sortControl = $("#sort-control");
+  const sortTrigger = $("#sort-trigger");
+  const sortOptions = $("#sort-options");
+  const sortSelect = $("#sort-select");
+  const sortLabels = { popular: "Mais populares", low: "Menor preço", high: "Maior preço" };
+  const closeSortOptions = () => {
+    if (!sortOptions || !sortTrigger) return;
+    sortOptions.hidden = true;
+    sortTrigger.setAttribute("aria-expanded", "false");
+    sortControl?.classList.remove("is-open");
+  };
+  sortTrigger?.addEventListener("click", event => {
+    event.preventDefault();
+    const opening = sortOptions?.hidden;
+    if (!sortOptions) return;
+    sortOptions.hidden = !opening;
+    sortTrigger.setAttribute("aria-expanded", String(Boolean(opening)));
+    sortControl?.classList.toggle("is-open", Boolean(opening));
+  });
+  sortOptions?.querySelectorAll("[data-sort-value]").forEach(option => {
+    option.addEventListener("click", () => {
+      const value = option.dataset.sortValue || "popular";
+      if (sortSelect) sortSelect.value = value;
+      currentSort = value;
+      if (sortTrigger) sortTrigger.textContent = sortLabels[value] || sortLabels.popular;
+      sortOptions.querySelectorAll("[data-sort-value]").forEach(item => item.classList.toggle("active", item === option));
+      closeSortOptions();
+      renderCatalog();
+    });
+  });
+  document.addEventListener("click", event => {
+    if (sortControl && !sortControl.contains(event.target)) closeSortOptions();
+  });
 
   $("#clear-search-button")
     ?.addEventListener(
