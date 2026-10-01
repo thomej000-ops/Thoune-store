@@ -5829,3 +5829,26 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
 .ui-icon-spark::before{content:"✦" !important;font:800 24px/24px system-ui,sans-serif !important;inset:0;text-align:center;}
 .ui-icon-wave::before{content:"〰" !important;font:800 24px/22px system-ui,sans-serif !important;inset:0;text-align:center;}
 .ui-icon-like::before{content:"👍" !important;font:18px/24px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif !important;inset:0;text-align:center;}
+
+
+/* v1021: restaura emojis reais e remove pseudo-ícones que viravam pontos/riscos */
+.ui-icon{position:relative!important;display:inline-grid!important;place-items:center!important;width:1.35em!important;height:1.35em!important;min-width:1.35em!important;line-height:1!important;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;font-size:1.12em!important;font-weight:400!important;transform:none!important;overflow:visible!important}
+.ui-icon::before,.ui-icon::after{content:none!important;display:none!important;border:0!important;box-shadow:none!important;background:none!important;transform:none!important}
+.ui-icon-user::after{content:"👤"!important;display:block!important}
+.ui-icon-cart::after{content:"🛒"!important;display:block!important}
+.ui-icon-menu::after{content:"☰"!important;display:block!important;font-family:system-ui,sans-serif!important;font-size:1.35em!important}
+.ui-icon-heart::after{content:"♡"!important;display:block!important;font-family:system-ui,sans-serif!important;font-size:1.5em!important}
+.ui-icon-search::after{content:"🔎"!important;display:block!important}
+.ui-icon-box::after{content:"📦"!important;display:block!important}
+.ui-icon-card::after{content:"💳"!important;display:block!important}
+.ui-icon-lock::after{content:"🔒"!important;display:block!important}
+.ui-icon-clipboard::after{content:"📋"!important;display:block!important}
+.ui-icon-check::after{content:"✅"!important;display:block!important}
+.ui-icon-at::after{content:"@"!important;display:block!important;font-family:system-ui,sans-serif!important;font-weight:800!important}
+.ui-icon-game::after{content:"🎮"!important;display:block!important}
+.ui-icon-spark::after{content:"✨"!important;display:block!important}
+.ui-icon-wave::after{content:"〰️"!important;display:block!important}
+.ui-icon-bag::after{content:"🛍️"!important;display:block!important}
+.ui-icon-receipt::after{content:"🧾"!important;display:block!important}
+.ui-icon-headset::after{content:"🎧"!important;display:block!important}
+.ui-icon-like::after{content:"👍"!important;display:block!important}

@@ -1505,9 +1505,18 @@ async function checkAdminAccess(){
   accessDenied.classList.add("hidden");
   adminPanel.classList.add("hidden");
 
-  const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
+  let session = null;
+  try {
+    const result = await supabaseClient.auth.getSession();
+    session = result?.data?.session || null;
+    if (result?.error) throw result.error;
+  } catch (err) {
+    console.error("Falha ao recuperar sessão ADM:", err);
+    loadingScreen.classList.add("hidden");
+    accessDenied.classList.remove("hidden");
+    if (adminLoginMessage) adminLoginMessage.textContent = "Não foi possível verificar sua sessão. Atualize a página e tente novamente.";
+    return false;
+  }
 
   if(!session?.user){
     loadingScreen.classList.add("hidden");
@@ -1573,10 +1582,13 @@ adminLoginForm?.addEventListener("submit", async (event) => {
   }
   if(adminLoginMessage) adminLoginMessage.textContent = "";
 
-  const { error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
+  let error = null;
+  try {
+    const result = await supabaseClient.auth.signInWithPassword({ email, password });
+    error = result?.error || null;
+  } catch (err) {
+    error = err;
+  }
 
   if(error){
     console.error("Login administrativo:", error);
@@ -1585,7 +1597,19 @@ adminLoginForm?.addEventListener("submit", async (event) => {
     }
   }else{
     if(adminLoginMessage) adminLoginMessage.textContent = "Verificando permissão...";
-    await checkAdminAccess();
+    try {
+      await checkAdminAccess().catch((err) => {
+  console.error("Erro ao iniciar painel ADM:", err);
+  loadingScreen.classList.add("hidden");
+  accessDenied.classList.remove("hidden");
+  if (adminLoginMessage) adminLoginMessage.textContent = "O painel não conseguiu carregar. Confira a conexão e tente entrar novamente.";
+});
+    } catch (err) {
+      console.error("Falha ao verificar acesso ADM:", err);
+      loadingScreen.classList.add("hidden");
+      accessDenied.classList.remove("hidden");
+      if (adminLoginMessage) adminLoginMessage.textContent = "Não foi possível verificar sua permissão. Confira a conexão e a configuração do Supabase.";
+    }
   }
 
   if(adminLoginButton){
@@ -3982,7 +4006,12 @@ logoutButton.addEventListener(
    INICIAR
 ========================================================= */
 
-checkAdminAccess();
+checkAdminAccess().catch((err) => {
+  console.error("Erro ao iniciar painel ADM:", err);
+  loadingScreen.classList.add("hidden");
+  accessDenied.classList.remove("hidden");
+  if (adminLoginMessage) adminLoginMessage.textContent = "O painel não conseguiu carregar. Confira a conexão e tente entrar novamente.";
+});
 
 </script>
 

@@ -25,3 +25,9 @@ Antes de publicar, mantenha as alterações SQL da v1016 e v1018 aplicadas no Su
 - Checkout reorganizado em blocos, com formulário de entrega espaçado e QR Code redimensionado.
 - Painel ADM recebeu entrada por e-mail/senha e verificação segura de cargo.
 - Aplicar `supabase_v1020_admin_access.sql` no Supabase SQL Editor antes de usar o novo acesso ADM.
+
+
+## v1021
+- Restaurados emojis nos ícones; removidos traços/pontos desenhados por pseudo-elementos CSS.
+- Tratamento de erros no carregamento e login do painel ADM, com mensagem clara em vez de tela presa carregando.
+- O acesso ADM continua exigindo autenticação e cargo de administrador configurado no Supabase.
