@@ -5960,3 +5960,21 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
 #empty-state .ui-icon-wave::before{content:"⌕"!important;font-size:36px!important;font-weight:500!important;line-height:1!important;color:#7bcbd5!important;}
 #empty-state .ui-icon-wave::after{content:none!important;}
 @media(max-width:760px){#sort-control{height:74px!important;}#sort-control .sort-trigger{font-size:15px!important;}#sort-control .sort-options{left:0!important;right:0!important;}}
+
+
+/* THOUNE v1025 — ícones alinhados e controles consistentes */
+.cart-button .ui-icon-cart, .cart-emoji { display:none !important; }
+.cart-button .cart-emoji { display:inline-block !important; font-family:"Noto Color Emoji","Apple Color Emoji",sans-serif !important; font-size:25px !important; line-height:1 !important; font-style:normal !important; transform:none !important; filter:none !important; }
+.sort-icon { display:grid !important; place-items:center !important; width:48px !important; height:48px !important; flex:0 0 48px !important; border-radius:16px !important; background:rgba(67,198,216,.12) !important; font-family:"Noto Color Emoji","Apple Color Emoji",sans-serif !important; font-size:25px !important; line-height:1 !important; transform:none !important; }
+.sort-icon .ui-icon { display:none !important; }
+#clear-search-button { display:inline-flex !important; align-items:center !important; justify-content:center !important; gap:9px !important; min-height:48px !important; padding:12px 22px !important; border-radius:15px !important; line-height:1.2 !important; white-space:nowrap !important; transform:none !important; }
+.clear-filter-symbol { display:inline-grid !important; place-items:center !important; font-size:23px !important; line-height:1 !important; font-family:system-ui,sans-serif !important; transform:none !important; }
+#no-products .ui-icon-wave { display:none !important; }
+.tiktok-mini-logo { display:inline-grid !important; place-items:center !important; width:20px !important; height:20px !important; margin-right:5px !important; border-radius:6px !important; background:#07151a !important; color:#fff !important; font:900 19px/1 system-ui,sans-serif !important; text-shadow:-1.5px 1px #25f4ee,1.5px -1px #fe2c55 !important; vertical-align:middle !important; transform:none !important; }
+.roblox-mini-logo { display:inline-grid !important; place-items:center !important; width:20px !important; height:20px !important; margin-right:5px !important; border-radius:5px !important; background:#f4f8fa !important; color:#111820 !important; font:900 18px/1 system-ui,sans-serif !important; transform:rotate(-12deg) !important; vertical-align:middle !important; }
+.field-label-icon .tiktok-mini-logo,.field-label-icon .roblox-mini-logo { flex:0 0 20px !important; }
+.product-image-preview { display:flex; align-items:center; gap:10px; margin-top:10px; color:#a8c5cc; font-size:13px; }
+.product-image-preview[hidden] { display:none !important; }
+.product-image-preview img { width:76px; height:76px; object-fit:contain; border-radius:12px; padding:6px; background:#062029; border:1px solid rgba(95,205,219,.2); }
+.image-upload-help { display:block; margin:7px 0 12px; color:#9dbbc3; font-size:12px; line-height:1.5; }
+#product-image-file { width:100%; padding:12px; border:1px dashed rgba(95,205,219,.35); border-radius:12px; background:#071e26; color:#dff4f7; }

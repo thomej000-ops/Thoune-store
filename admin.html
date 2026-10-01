@@ -835,15 +835,12 @@
 
           <div class="form-field full">
 
-            <label for="product-image">
-              URL da imagem
-            </label>
-
-            <input
-              id="product-image"
-              type="url"
-              placeholder="https://..."
-            >
+            <label for="product-image-file">Foto do produto</label>
+            <input id="product-image-file" type="file" accept="image/*">
+            <small class="image-upload-help">Escolha uma foto da galeria. A imagem será otimizada automaticamente. Você também pode colar uma URL abaixo.</small>
+            <label for="product-image">URL da imagem (opcional)</label>
+            <input id="product-image" type="text" placeholder="https://..." autocomplete="off">
+            <div id="product-image-preview" class="product-image-preview" hidden><img alt="Prévia da foto do produto"><span>Prévia da imagem</span></div>
 
           </div>
 
@@ -1803,6 +1800,55 @@ const productOrder =
 
 const productImage =
   document.querySelector("#product-image");
+const productImageFile = document.querySelector("#product-image-file");
+const productImagePreview = document.querySelector("#product-image-preview");
+let selectedProductImageData = "";
+
+productImageFile?.addEventListener("change", async () => {
+  const file = productImageFile.files?.[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    productFormMessage.textContent = "Escolha um arquivo de imagem.";
+    productImageFile.value = "";
+    return;
+  }
+  try {
+    const source = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+    const image = await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = source;
+    });
+    const maxSide = 900;
+    const scale = Math.min(1, maxSide / Math.max(image.width, image.height));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(image.width * scale));
+    canvas.height = Math.max(1, Math.round(image.height * scale));
+    canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+    selectedProductImageData = canvas.toDataURL("image/webp", 0.78);
+    productImage.value = selectedProductImageData;
+    const previewImg = productImagePreview?.querySelector("img");
+    if (previewImg) previewImg.src = selectedProductImageData;
+    if (productImagePreview) productImagePreview.hidden = false;
+    productFormMessage.textContent = "Foto selecionada e otimizada.";
+  } catch (error) {
+    productFormMessage.textContent = "Não consegui abrir essa foto. Tente outra imagem.";
+  }
+});
+
+productImage?.addEventListener("input", () => {
+  if (productImage.value.trim() !== selectedProductImageData) selectedProductImageData = "";
+  const value = productImage.value.trim();
+  const previewImg = productImagePreview?.querySelector("img");
+  if (previewImg && value) previewImg.src = value;
+  if (productImagePreview) productImagePreview.hidden = !value;
+});
 
 const productDescription =
   document.querySelector("#product-description");
@@ -1873,6 +1919,13 @@ function openProductForm(product=null){
 
     productImage.value =
       product.image || "";
+    selectedProductImageData = String(product.image || "").startsWith("data:image/") ? product.image : "";
+    if (productImageFile) productImageFile.value = "";
+    if (productImagePreview) {
+      productImagePreview.hidden = !product.image;
+      const previewImg = productImagePreview.querySelector("img");
+      if (previewImg) previewImg.src = product.image || "";
+    }
 
     productDescription.value =
       product.description || "";
@@ -1905,6 +1958,9 @@ function openProductForm(product=null){
     productOrder.value = 0;
 
     productImage.value = "";
+    selectedProductImageData = "";
+    if (productImageFile) productImageFile.value = "";
+    if (productImagePreview) productImagePreview.hidden = true;
 
     productDescription.value = "";
 

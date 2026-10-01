@@ -37,3 +37,10 @@ Antes de publicar, mantenha as alterações SQL da v1016 e v1018 aplicadas no Su
 - O acesso administrativo agora tem limite de tempo nas verificações de sessão, RPC e perfil; falhas mostram uma mensagem em vez de deixar a tela carregando indefinidamente.
 - Ícones ajustados para centralizar os glifos e emojis e remover posicionamento absoluto que os deslocava.
 - Se a conta não estiver marcada como admin no banco, o painel informa isso claramente; não contorna a autorização.
+
+## v1025 — ajustes solicitados nas imagens e ícones
+- Resumo de dados da conta usa marcas TikTok e Roblox estilizadas, sem depender dos emojis do sistema.
+- Ícone do carrinho usa o emoji 🛒 diretamente, sem sobreposição de pseudo-ícones.
+- Ordenação recebe um ícone de caixa alinhado e com fundo integrado ao botão.
+- Estado vazio do catálogo usa um símbolo de redefinir simples e o botão Limpar filtros fica alinhado.
+- Cadastro/edição de marretas permite selecionar foto do aparelho; a imagem é reduzida para até 900 px e otimizada em WebP automaticamente. A URL manual continua disponível.
