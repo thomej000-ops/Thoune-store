@@ -1,10 +1,16 @@
-Thoune Store v1018
+# Thoune Store v1019
 
-- Corrige o retorno visual da verificação de pagamento.
-- Aumenta e reorganiza os painéis de pagamento/pedido.
-- Monitora a mudança para entrega e abre o pedido automaticamente.
-- Mostra itens, Roblox, Join e link do bot no painel de entrega.
-- Adiciona avaliação pós-entrega.
-- Adiciona link do bot nas configurações de entrega do ADM.
+Versão de correção e refinamento geral.
 
-Execute supabase_v1018_delivery_review.sql antes de usar o link do bot e o envio de avaliações.
+Principais focos:
+- fluxo de pagamento/verificação mais claro;
+- painéis de pedido e entrega maiores e mais legíveis;
+- favoritos e imagens sem fundo branco;
+- modo claro/escuro e menu corrigidos;
+- notificações e FAQ com melhor contraste;
+- catálogo com sombra/animação suave nas marretas;
+- painel administrativo com contraste corrigido;
+- descontos individuais por produto preservados;
+- link do perfil do bot de entrega disponível nas configurações ADM.
+
+Antes de publicar, mantenha as alterações SQL da v1016 e v1018 aplicadas no Supabase.

@@ -569,7 +569,7 @@
         <button class="admin-option" id="products-option">
           <strong>📦 Produtos</strong>
           <p>
-            Adicionar, editar, remover produtos e controlar estoque.
+            Adicionar, editar, estoque e desconto individual por marreta.
           </p>
         </button>
 
@@ -599,9 +599,9 @@
 
 
         <button class="admin-option" id="promotion-option">
-          <strong>🏷️ Promoção</strong>
+          <strong>🏷️ Promoções</strong>
           <p>
-            Definir e ativar o desconto global da loja.
+            Desconto global e descontos individuais por marreta.
           </p>
         </button>
 
@@ -2525,7 +2525,7 @@ async function loadOrders(){
       document.createElement("p");
 
     customer.innerHTML =
-      `<strong>Cliente:</strong> ${escapeHtml(order.customer_id)}`;
+      `<strong>Cliente:</strong> Cliente autenticado`;
 
 
     const privateInfo =

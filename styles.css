@@ -5471,3 +5471,105 @@ body.theme-light .theme-icon-img::after{content:'';position:absolute;width:10px;
 
 /* v1018 — fluxo de pagamento, entrega e avaliação */
 .order-details-card{width:min(760px,calc(100vw - 28px))!important;max-height:min(88vh,820px)!important;overflow:auto!important;padding:30px!important}.order-details-content{display:grid;gap:18px}.order-detail-items{display:grid;gap:10px;padding:18px;border:1px solid rgba(95,205,219,.15);border-radius:18px;background:rgba(7,35,44,.62)}.order-detail-items-title{font-weight:900;font-size:16px}.order-detail-item{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 0;border-top:1px solid rgba(255,255,255,.07);font-size:15px}.order-detail-total{display:flex;justify-content:space-between;align-items:center;padding:17px 2px;font-size:17px;border-top:1px solid rgba(95,205,219,.12)}.order-detail-total strong{font-size:27px}.order-flow-box,.delivery-message{padding:20px;border-radius:20px;border:1px solid rgba(95,205,219,.18);background:linear-gradient(180deg,rgba(10,53,66,.88),rgba(6,29,37,.92))}.order-flow-box strong,.delivery-message-title{font-size:18px}.order-flow-box p,.delivery-message p{margin:8px 0 14px;color:var(--muted);line-height:1.65}.order-flow-box .primary-button,.delivery-message .primary-button{width:100%;margin-top:10px}.verification-box{border-color:rgba(255,190,75,.28)}.confirmed-box{border-color:rgba(89,220,163,.28)}.delivered-box{border-color:rgba(95,205,219,.25)}.delivery-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0}.delivery-info-grid>div{padding:12px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.06)}.delivery-info-grid span{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}.delivery-info-grid strong{font-size:14px;word-break:break-word}.delivery-bot-box{display:grid;gap:6px;padding:16px;border-radius:16px;background:rgba(0,0,0,.14)}.delivery-bot-box span,.delivery-bot-box small{color:var(--muted)}.delivery-bot-link{text-align:center;text-decoration:none;display:block}.review-modal-card{width:min(620px,calc(100vw - 28px))!important}.review-form{display:grid;gap:16px}.review-form label{display:grid;gap:8px;font-weight:800}.review-form select,.review-form textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px;background:rgba(255,255,255,.05);color:inherit;font:inherit}.review-form textarea{resize:vertical;min-height:130px}body.theme-light .order-detail-items,body.theme-light .order-flow-box,body.theme-light .delivery-message{background:#f4fbfc;color:#183b45;border-color:#c9e0e4}body.theme-light .order-flow-box p,body.theme-light .delivery-message p{color:#56727a}@media(max-width:600px){.order-details-card{padding:20px!important;width:calc(100vw - 18px)!important;max-height:92vh!important}.delivery-info-grid{grid-template-columns:1fr}.order-detail-total strong{font-size:23px}.order-detail-item{font-size:14px}}
+
+
+/* ============================================================
+   v1019 — refinamento geral / Halloween-ready
+   ============================================================ */
+
+/* Topo: controles simples e consistentes */
+.theme-button, .menu-button, .icon-button{
+  overflow:hidden !important;
+  display:grid !important;
+  place-items:center !important;
+  flex:0 0 auto !important;
+}
+#theme-icon{font-family:system-ui,sans-serif !important;font-size:21px !important;line-height:1 !important;display:block !important;transform:none !important;background:none !important;}
+.menu-button .ui-icon-menu,
+.menu-button .ui-icon-menu::before,
+.menu-button .ui-icon-menu::after{transform:none !important;}
+.menu-button .ui-icon-menu::before{content:"☰" !important;display:block !important;width:auto !important;height:auto !important;box-shadow:none !important;background:none !important;font:inherit !important;font-size:23px !important;line-height:1 !important;}
+
+/* Catálogo: destaque suave nas marretas */
+.product-card, .catalog-card, .product-item, .product-image-wrap{overflow:visible !important;}
+.product-card img, .catalog-card img, .product-image-wrap img{
+  filter:drop-shadow(0 12px 16px rgba(0,0,0,.28)) !important;
+  transition:transform .28s ease, filter .28s ease !important;
+}
+.product-card:hover img, .catalog-card:hover img, .product-image-wrap:hover img{
+  transform:translateY(-5px) scale(1.035) !important;
+  filter:drop-shadow(0 17px 22px rgba(67,210,224,.18)) !important;
+}
+
+/* Favoritos */
+.favorite-item{grid-template-columns:76px minmax(0,1fr) 38px !important;min-height:84px !important;}
+.favorite-item-image,.account-favorite-thumb{background:rgba(6,27,35,.7) !important;box-shadow:inset 0 0 0 1px rgba(103,183,197,.08),0 8px 20px rgba(0,0,0,.18) !important;}
+.favorite-item-image img,.account-favorite-thumb img{object-fit:contain !important;mix-blend-mode:normal !important;}
+.favorite-remove{width:38px !important;height:38px !important;min-width:38px !important;background:rgba(9,42,51,.9) !important;}
+.favorite-remove .ui-icon-heart{font-size:21px !important;}
+
+/* Carrinho / imagens */
+.cart-item-image{background:rgba(6,27,35,.72) !important;border:1px solid rgba(103,183,197,.1) !important;}
+.cart-item-image img{object-fit:contain !important;background:transparent !important;}
+
+/* Checkout mais respirado */
+.checkout-card{width:min(760px,calc(100vw - 24px)) !important;padding:30px !important;}
+.checkout-form{gap:16px !important;}
+.checkout-form label{font-size:13px !important;}
+.checkout-form input{min-height:48px !important;font-size:15px !important;}
+.checkout-total{padding:16px !important;border-radius:16px !important;}
+.checkout-actions{margin-top:18px !important;}
+
+/* Pedido/verificação: painel grande, legível e com uma hierarquia clara */
+.order-details-card{width:min(820px,calc(100vw - 22px)) !important;max-height:92vh !important;padding:32px !important;}
+.order-details-content{gap:20px !important;}
+.order-detail-status{display:flex !important;align-items:center !important;justify-content:space-between !important;gap:12px !important;flex-wrap:wrap !important;}
+.order-detail-items{padding:20px !important;gap:8px !important;}
+.order-detail-item{min-height:46px !important;font-size:15px !important;}
+.order-flow-box,.delivery-message{padding:24px !important;border-radius:22px !important;}
+.order-flow-box strong,.delivery-message-title{font-size:19px !important;line-height:1.25 !important;}
+.order-flow-box p,.delivery-message p{font-size:14px !important;line-height:1.6 !important;}
+.order-flow-box .primary-button,.order-flow-box .secondary-button,.delivery-message .primary-button,.delivery-message .secondary-button{min-height:50px !important;font-size:14px !important;}
+.payment-waiting-box{border-color:rgba(95,205,219,.28) !important;}
+.verification-box{background:linear-gradient(180deg,rgba(73,58,19,.25),rgba(10,40,47,.88)) !important;}
+.confirmed-box{background:linear-gradient(180deg,rgba(25,77,60,.25),rgba(7,39,44,.9)) !important;}
+.delivery-message-rich{margin-top:0 !important;}
+.delivery-info-grid{gap:12px !important;}
+.delivery-bot-box{padding:18px !important;}
+
+/* Notificações */
+.notification-item{padding:15px !important;min-height:72px !important;}
+.notification-item p{color:#d9eef1 !important;line-height:1.55 !important;margin:6px 0 !important;}
+.notification-item small{color:#8fb5bd !important;}
+
+/* Termos e FAQ */
+.terms-card{width:min(820px,calc(100vw - 22px)) !important;max-height:90vh !important;}
+.terms-content{line-height:1.7 !important;font-size:14px !important;}
+.faq-list details{border-radius:16px !important;overflow:hidden !important;}
+.faq-list summary{min-height:52px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;gap:12px !important;}
+
+/* Modo claro */
+body.theme-light .product-card,body.theme-light .catalog-card{background:linear-gradient(180deg,#ffffff,#edf7f8) !important;border-color:#c7e0e4 !important;box-shadow:0 14px 34px rgba(28,83,94,.10) !important;}
+body.theme-light .favorite-item,body.theme-light .account-favorite-row,body.theme-light .notification-item{background:#f7fcfd !important;color:#183b45 !important;border-color:#c9e0e4 !important;}
+body.theme-light .favorite-item-info span,body.theme-light .account-favorite-row small{color:#66818a !important;}
+body.theme-light .cart-item-image,body.theme-light .favorite-item-image,body.theme-light .account-favorite-thumb{background:#eaf4f5 !important;}
+body.theme-light .order-details-card,body.theme-light .checkout-card{background:linear-gradient(180deg,#ffffff,#edf7f8) !important;color:#183b45 !important;}
+body.theme-light .verification-box{background:#fff9e8 !important;color:#4d411d !important;}
+body.theme-light .notification-item p{color:#31535c !important;}
+
+/* ADM: nenhum cartão branco perdido no meio do painel escuro */
+.admin .order-items,.admin .private-info,.admin .payment-card,.admin .order-card,.admin .review-card,.admin .settings-box,.admin .product-form{background:linear-gradient(180deg,#0a2d39,#061b23) !important;color:#eaf8fa !important;border-color:rgba(103,183,197,.14) !important;}
+.admin .order-items strong,.admin .private-info strong,.admin .order-card p,.admin .order-item,.admin .order-total{color:#dceff2 !important;}
+.admin .private-info{background:rgba(87,68,25,.20) !important;border-color:rgba(240,223,177,.16) !important;}
+.admin .private-info strong{color:#f0d995 !important;}
+.admin .order-item{border-color:rgba(255,255,255,.08) !important;}
+.admin .admin-option p,.admin .setting-description{color:#9ab7bd !important;}
+.admin .admin-discount-badge{font-size:12px !important;padding:5px 8px !important;}
+
+@media(max-width:600px){
+  .order-details-card{width:calc(100vw - 14px) !important;padding:22px !important;max-height:94vh !important;}
+  .order-detail-item{font-size:13px !important;}
+  .order-flow-box,.delivery-message{padding:19px !important;}
+  .checkout-card{padding:22px !important;}
+  .favorite-item{grid-template-columns:64px minmax(0,1fr) 38px !important;}
+}

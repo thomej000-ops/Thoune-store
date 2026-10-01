@@ -1270,16 +1270,35 @@ async function requestPaymentVerification(orderId = currentOrderId) {
   if (!orderId || paymentVerificationBusy) return;
   paymentVerificationBusy = true;
   const button = document.querySelector(`[data-order-verify="${String(orderId).replaceAll('"','\"')}"]`);
-  if (button) { button.disabled = true; button.textContent = "Enviando para verificação…"; }
+  const originalText = button?.textContent || "Já paguei — verificar pagamento";
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Enviando…";
+    button.setAttribute("aria-busy", "true");
+  }
   try {
     const { error } = await supabaseClient.rpc("request_payment_verification", { p_order_id: orderId });
-    if (error) { console.error(error); toast(error.message || "Não foi possível solicitar a verificação.", "error"); return; }
+    if (error) {
+      console.error(error);
+      toast(error.message || "Não foi possível solicitar a verificação.", "error");
+      return;
+    }
     saveCurrentOrderId(orderId);
+    lastKnownOrderStatus = "awaiting_verification";
     toast("Pagamento enviado para verificação.");
-    await loadCurrentOrder();
-    await loadCustomerOrders();
+    // Atualização imediata da interface, sem exigir vários cliques.
     await openOrderDetails(orderId);
-  } finally { paymentVerificationBusy = false; }
+    await loadCustomerOrders();
+    await loadCurrentOrder();
+  } finally {
+    paymentVerificationBusy = false;
+    const refreshed = document.querySelector(`[data-order-verify="${String(orderId).replaceAll('"','\"')}"]`);
+    if (refreshed) {
+      refreshed.disabled = false;
+      refreshed.removeAttribute("aria-busy");
+      refreshed.textContent = originalText;
+    }
+  }
 }
 
 function copyPixKey() {
@@ -1577,7 +1596,7 @@ function startOrderMonitor() {
   orderMonitorTimer=window.setInterval(async()=>{
     if(!currentUser) return;
     const before=lastKnownOrderStatus; await loadCurrentOrder(); const after=lastKnownOrderStatus;
-    if(after && before && after!==before && (after==="awaiting_delivery" || after==="delivered")){
+    if(after && before && after!==before && (after==="payment_confirmed" || after==="awaiting_delivery" || after==="delivered")){
       await openOrderDetails(currentOrderId);
       if(after==="delivered") await openReviewPanel(await fetchOrder(currentOrderId));
     }
