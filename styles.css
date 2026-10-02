@@ -6037,3 +6037,44 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
 .delivery-copy-bot:active{transform:scale(.985)}
 .delivery-bot-username{overflow-wrap:anywhere;user-select:text;-webkit-user-select:text}
 .delivered-box .primary-button{margin-top:14px}
+
+
+/* v1030 — logos oficiais fornecidos pela loja, sem desenhos improvisados */
+.tiktok-mini-logo,.roblox-mini-logo{
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+  width:25px !important;height:25px !important;flex:0 0 25px !important;
+  margin-right:7px !important;border-radius:7px !important;overflow:hidden !important;
+  background:transparent !important;box-shadow:none !important;transform:none !important;
+}
+.tiktok-mini-logo img,.roblox-mini-logo img{
+  display:block !important;width:100% !important;height:100% !important;object-fit:contain !important;
+  max-width:100% !important;max-height:100% !important;filter:none !important;
+}
+.account-summary-label .tiktok-mini-logo,.account-summary-label .roblox-mini-logo{
+  width:25px !important;height:25px !important;flex-basis:25px !important;margin-right:8px !important;
+}
+.field-label-icon{display:flex !important;align-items:center !important;gap:7px !important;}
+.field-label-icon .tiktok-mini-logo,.field-label-icon .roblox-mini-logo{margin:0 !important;}
+
+/* v1030 — cards com altura e botões alinhados mesmo quando só alguns têm desconto */
+#product-grid{align-items:stretch !important;}
+.product-card{display:flex !important;flex-direction:column !important;height:100% !important;min-width:0 !important;}
+.product-card .product-image{flex:0 0 auto !important;}
+.product-card .product-info{display:flex !important;flex:1 1 auto !important;flex-direction:column !important;min-height:0 !important;}
+.product-card .product-name{min-height:2.5em !important;line-height:1.25 !important;display:-webkit-box !important;-webkit-line-clamp:2 !important;-webkit-box-orient:vertical !important;white-space:normal !important;overflow:hidden !important;}
+.product-card .product-bottom{display:flex !important;flex-direction:column !important;align-items:stretch !important;gap:10px !important;margin-top:auto !important;padding-top:12px !important;}
+.product-card .price-block{display:grid !important;grid-template-rows:16px 25px 18px 16px !important;align-content:start !important;gap:2px !important;min-height:81px !important;width:100% !important;}
+.product-card .price-original{display:block !important;min-height:16px !important;line-height:16px !important;}
+.product-card .price-block:not(:has(.price-original))::before{content:" ";display:block;line-height:16px;}
+.product-card .price{display:block !important;min-height:25px !important;line-height:25px !important;}
+.product-card .price-discount-label{display:flex !important;align-items:center !important;min-height:18px !important;width:max-content !important;margin:0 !important;line-height:16px !important;}
+.product-card .price-block:not(:has(.price-discount-label))::after{content:" ";display:block;line-height:18px;}
+.product-card .stock{display:block !important;min-height:16px !important;line-height:16px !important;margin:0 !important;}
+.product-card .add-button{display:flex !important;align-items:center !important;justify-content:center !important;width:100% !important;min-height:48px !important;height:48px !important;margin-top:0 !important;white-space:nowrap !important;}
+@media(max-width:760px){
+  .product-card .product-info{padding:12px !important;}
+  .product-card .product-bottom{flex-direction:column !important;align-items:stretch !important;}
+  .product-card .price-block{grid-template-rows:15px 23px 18px 15px !important;min-height:75px !important;}
+  .product-card .price{font-size:15px !important;line-height:23px !important;}
+  .product-card .add-button{height:44px !important;min-height:44px !important;}
+}
