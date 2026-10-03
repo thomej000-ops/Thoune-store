@@ -3808,15 +3808,8 @@ async function loadReviews(){
         )}
       </p>
 
-      <div class="review-author">
-        Status:
-        <strong>
-          ${escapeHtml(
-            review.status ||
-            "pending"
-          )}
-        </strong>
-      </div>
+      <div class="review-author">Status: <strong>${escapeHtml(review.status || "pending")}</strong></div>
+      ${review.moderation_reason ? `<p class="review-moderation-reason"><strong>Motivo:</strong> ${escapeHtml(review.moderation_reason)}</p>` : ""}
     `;
 
 
@@ -3904,38 +3897,43 @@ async function loadReviews(){
 }
 
 
-async function updateReviewStatus(
-  reviewId,
-  status
-){
+async function updateReviewStatus(reviewId, status){
+  let moderationReason = null;
+  if (status === "rejected") {
+    moderationReason = window.prompt("Informe o motivo da retirada/rejeição. Esse motivo será mostrado ao cliente:");
+    if (moderationReason === null) return;
+    moderationReason = moderationReason.trim();
+    if (moderationReason.length < 3) {
+      alert("Informe um motivo com pelo menos 3 caracteres.");
+      return;
+    }
+  }
 
-  const {
-    error
-  } =
-    await supabaseClient
-      .from("reviews")
-      .update({
-        status
-      })
-      .eq(
-        "id",
-        reviewId
-      );
-
-
-  if(error){
-
-    alert(
-      "Não foi possível atualizar a avaliação:\n" +
-      error.message
-    );
-
+  const { data: review, error: fetchError } = await supabaseClient
+    .from("reviews").select("id, customer_id, tiktok_username").eq("id", reviewId).maybeSingle();
+  if (fetchError || !review) {
+    alert("Não foi possível localizar a avaliação: " + (fetchError?.message || "registro não encontrado"));
     return;
   }
 
+  const update = { status, moderation_reason: moderationReason,
+    moderated_at: new Date().toISOString() };
+  const { error } = await supabaseClient.from("reviews").update(update).eq("id", reviewId);
+  if (error) {
+    alert("Não foi possível atualizar a avaliação:\n" + error.message + "\n\nConfirme se a migração SQL de avaliações foi executada.");
+    return;
+  }
 
+  if (status === "rejected" && review.customer_id) {
+    const { error: notificationError } = await supabaseClient.from("notifications").insert({
+      customer_id: review.customer_id,
+      title: "Sua avaliação foi retirada",
+      message: "Sua avaliação foi retirada pela equipe da Thoune Store. Motivo: " + moderationReason + " Se precisar de esclarecimentos, entre em contato com o suporte.",
+      type: "review_rejected"
+    });
+    if (notificationError) console.error("Não foi possível notificar o cliente sobre a avaliação:", notificationError);
+  }
   await loadReviews();
-
 }
 
 

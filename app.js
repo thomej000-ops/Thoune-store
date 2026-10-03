@@ -2377,7 +2377,12 @@ function setupEvents() {
     const message=$("#review-form-message"), form=event.currentTarget, rating=Number($("#review-rating")?.value||5), textValue=normalizeText($("#review-text")?.value||"");
     if(!textValue) return setMessage(message,"Escreva um comentário antes de enviar.","error");
     const submit=form.querySelector('button[type="submit"]'); if(submit){submit.disabled=true;submit.textContent="Enviando…";}
-    const {error}=await supabaseClient.rpc("submit_customer_review",{p_rating:rating,p_text:textValue});
+    const orderId = form.dataset.orderId || "";
+    if (!orderId) {
+      if(submit){submit.disabled=false;submit.textContent="Enviar avaliação";}
+      return setMessage(message,"Não encontramos o pedido desta avaliação. Abra novamente o pedido entregue e tente outra vez.","error");
+    }
+    const {error}=await supabaseClient.rpc("submit_customer_review",{p_rating:rating,p_text:textValue,p_order_id:orderId});
     if(submit){submit.disabled=false;submit.textContent="Enviar avaliação";}
     if(error){console.error(error);return setMessage(message,error.message||"Não foi possível enviar a avaliação.","error");}
     setMessage(message,"Avaliação enviada para análise. Obrigado!","success");

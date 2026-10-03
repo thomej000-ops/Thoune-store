@@ -10,3 +10,9 @@ Mantenha os scripts SQL das versões anteriores já aplicados no Supabase. Esta 
 
 
 v1032: padroniza somente os ícones dos botões da barra superior com CSS, sem emojis/SVG nesses três controles, para aparência consistente em iPhone, Android e desktop.
+
+
+## v1036 — avaliações
+1. Antes de publicar, execute `supabase_v1036_reviews_customer_and_moderation.sql` no SQL Editor do Supabase.
+2. Publique os arquivos deste ZIP mantendo a estrutura de pastas.
+3. Teste com uma conta cliente e um pedido entregue. O envio fica pendente até aprovação administrativa. A rejeição exige motivo e tenta notificar o cliente.
