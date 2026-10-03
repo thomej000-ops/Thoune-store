@@ -6130,3 +6130,93 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
   .site-header .header-actions .icon-button,
   .site-header .header-actions .menu-button { min-width: 42px !important; min-height: 42px !important; }
 }
+
+
+/* THOUNE v1033 — correção definitiva do ícone do carrinho na barra.
+   Usa um elemento real de texto, evitando pseudo-elementos e máscaras CSS conflitantes. */
+.site-header .header-actions #open-cart {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+}
+.site-header .header-actions #open-cart .ui-icon-cart { display: none !important; }
+.site-header .header-actions #open-cart .cart-emoji {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  visibility: visible !important; opacity: 1 !important;
+  width: 26px !important; height: 26px !important; flex: 0 0 26px !important;
+  margin: 0 !important; padding: 0 !important;
+  font-family: "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", sans-serif !important;
+  font-size: 23px !important; line-height: 1 !important; font-style: normal !important;
+  white-space: nowrap !important; text-align: center !important;
+  transform: none !important; filter: none !important;
+}
+.site-header .header-actions #open-cart .cart-count {
+  position: absolute !important; z-index: 5 !important;
+  top: -4px !important; right: -4px !important;
+}
+@media (max-width: 760px) {
+  .site-header .header-actions #open-cart .cart-emoji {
+    width: 24px !important; height: 24px !important; flex-basis: 24px !important; font-size: 22px !important;
+  }
+}
+
+/* THOUNE v1034 — favoritos dos cards: centralização consistente em iOS/Android */
+.product-image > .favorite {
+  box-sizing: border-box !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  transform: none !important;
+}
+.product-image > .favorite .ui-icon-heart {
+  display: grid !important;
+  place-items: center !important;
+  position: relative !important;
+  width: 24px !important;
+  height: 24px !important;
+  flex: 0 0 24px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  -webkit-mask: none !important;
+  mask: none !important;
+  font-size: 0 !important;
+  line-height: 1 !important;
+  transform: none !important;
+}
+.product-image > .favorite .ui-icon-heart::before {
+  content: "♡" !important;
+  display: block !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 27px !important;
+  font-weight: 400 !important;
+  line-height: 24px !important;
+  text-align: center !important;
+  transform: none !important;
+}
+.product-image > .favorite.active .ui-icon-heart::before {
+  content: "♥" !important;
+  color: #76dce7 !important;
+}
+@media (max-width: 480px) {
+  .product-image > .favorite { width: 40px !important; height: 40px !important; }
+  .product-image > .favorite .ui-icon-heart::before { font-size: 27px !important; line-height: 24px !important; }
+}
