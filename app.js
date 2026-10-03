@@ -611,14 +611,29 @@ async function signup() {
 }
 
 async function logout() {
-  await supabaseClient.auth.signOut();
+  const logoutButton = $("#logout-button");
+  if (logoutButton) logoutButton.disabled = true;
 
-  currentUser = null;
-  currentProfile = null;
+  try {
+    const { error } = await supabaseClient.auth.signOut();
 
-  closeAllPanels();
+    if (error) {
+      console.error("Erro ao sair da conta:", error);
+      toast("Não foi possível sair da conta. Tente novamente.");
+      return;
+    }
 
-  toast("Você saiu da conta.");
+    currentUser = null;
+    currentProfile = null;
+    updateAccountUI();
+    closeAllPanels();
+    toast("Você saiu da conta.");
+  } catch (error) {
+    console.error("Erro inesperado ao sair da conta:", error);
+    toast("Ocorreu um erro ao sair da conta. Tente novamente.");
+  } finally {
+    if (logoutButton) logoutButton.disabled = false;
+  }
 }
 
 async function initializeAuth() {
