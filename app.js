@@ -1617,7 +1617,19 @@ async function openOrderDetails(orderId) {
       toast("Não foi possível copiar automaticamente. Pressione e segure o nome do bot para copiá-lo.", "error");
     }
   });
-  content.querySelector("#open-review-after-delivery")?.addEventListener("click", ()=>openReviewPanel(order));
+  content.querySelector("#open-review-after-delivery")?.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const reviewModal = $("#review-modal");
+    const reviewForm = $("#review-form");
+    if (reviewForm) reviewForm.dataset.orderId = order?.id || "";
+    if (!reviewModal) {
+      toast("Não foi possível abrir a avaliação. Atualize a página e tente novamente.", "error");
+      return;
+    }
+    closePanel(modal);
+    openPanel(reviewModal);
+  });
 }
 
 async function openReviewPanel(order) {
