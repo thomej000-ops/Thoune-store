@@ -359,27 +359,31 @@ async function saveProfile(showToast = true) {
     return false;
   }
 
-  const { error } = await supabaseClient
+  // UPSERT cria o perfil caso ainda não exista; UPDATE sozinho podia
+  // retornar sucesso mesmo sem atualizar nenhuma linha.
+  const { data: savedProfile, error } = await supabaseClient
     .from("profiles")
-    .update({
+    .upsert({
+      id: currentUser.id,
       tiktok_username: tiktokUsername,
       roblox_username: robloxUsername
-    })
-    .eq("id", currentUser.id);
+    }, { onConflict: "id" })
+    .select("*")
+    .single();
 
-  if (error) {
-    console.error(error);
-
+  if (error || !savedProfile) {
+    console.error("Erro ao salvar perfil:", error);
     setMessage(
       $("#profile-message"),
-      error.message || "Não foi possível salvar seu perfil.",
+      error?.message || "Não foi possível confirmar o salvamento do perfil.",
       "error"
     );
-
     return false;
   }
 
+  currentProfile = savedProfile;
   await loadProfile();
+  updateAccountUI();
 
   setMessage(
     $("#profile-message"),
@@ -413,25 +417,29 @@ async function saveProfileFromProfilePanel() {
     return;
   }
 
-  const { error } = await supabaseClient
+  const { data: savedProfile, error } = await supabaseClient
     .from("profiles")
-    .update({
+    .upsert({
+      id: currentUser.id,
       tiktok_username: tiktokUsername,
       roblox_username: robloxUsername
-    })
-    .eq("id", currentUser.id);
+    }, { onConflict: "id" })
+    .select("*")
+    .single();
 
-  if (error) {
+  if (error || !savedProfile) {
+    console.error("Erro ao salvar perfil pelo painel:", error);
     setMessage(
       $("#profile-panel-message"),
-      error.message || "Erro ao salvar perfil.",
+      error?.message || "Não foi possível confirmar o salvamento do perfil.",
       "error"
     );
-
     return;
   }
 
+  currentProfile = savedProfile;
   await loadProfile();
+  updateAccountUI();
 
   setMessage(
     $("#profile-panel-message"),

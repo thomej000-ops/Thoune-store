@@ -1,0 +1,12 @@
+THOUNE STORE v1038 — correção de salvamento do perfil
+
+O que foi alterado:
+- O salvamento de TikTok e Roblox agora usa upsert pela coluna id, para criar o registro do perfil quando ele ainda não existe.
+- A interface só informa sucesso depois que o Supabase devolve o registro salvo.
+- O perfil e os dados exibidos na conta são atualizados após o salvamento.
+
+Importante:
+- Esta alteração depende de a tabela public.profiles ter as colunas id, tiktok_username e roblox_username, com id identificando o usuário autenticado.
+- A política RLS de profiles precisa permitir que cada usuário insira/atualize apenas a própria linha. Se aparecer erro de permissão, é necessário ajustar a política no Supabase.
+- Foto de perfil com upload para galeria e selo de verificação ainda não foram implementados nesta versão; não quero afirmar que estão prontos quando não estão.
+- A versão não foi publicada no GitHub Pages nem testada contra seu projeto Supabase ao vivo. Depois de substituir os arquivos, faça um teste salvando os dois nomes, saia da conta e entre novamente.
