@@ -1245,11 +1245,11 @@
           </p>
 
           <h2>
-            🤖 Configurações de entrega
+            🚚 Configurações de entrega manual
           </h2>
 
           <p>
-            Configure as informações utilizadas durante a entrega.
+            A Thoune Store não usa bot automático: as entregas são realizadas manualmente, por ordem dos pedidos pagos. Avise os clientes de que pode haver espera.
           </p>
 
         </div>
@@ -1291,27 +1291,28 @@
       <div class="settings-box">
 
         <h3>
-          Bot de entrega
+          Entrega manual e fila
         </h3>
+        <p class="setting-description">Mensagem exibida no checkout: “As entregas são feitas manualmente e seguem a ordem dos pedidos. Se a fila estiver grande, o cliente pode optar por voltar antes de confirmar o pedido.” A posição real da fila depende da configuração SQL e das permissões do banco.</p>
 
 
         <div class="form-field">
 
           <label for="delivery-bot-username">
-            Usuário do bot
+            Usuário Roblox para referência (opcional)
           </label>
 
           <input
             id="delivery-bot-username"
             type="text"
-            placeholder="Nome do usuário do bot"
+            placeholder="Seu usuário Roblox (opcional)"
           >
 
         </div>
 
 
         <div class="form-field" style="margin-top:14px;">
-          <label for="delivery-bot-url">Link do perfil do bot no Roblox</label>
+          <label for="delivery-bot-url">Link do perfil Roblox (opcional)</label>
           <input id="delivery-bot-url" type="url" placeholder="https://www.roblox.com/users/.../profile">
         </div>
 

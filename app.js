@@ -1171,6 +1171,11 @@ async function createOrder() {
     return;
   }
 
+  const acceptedManualDelivery = window.confirm(
+    "Atenção: a Thoune Store não usa bot automático. Eu mesmo faço as entregas, por ordem dos pedidos, e pode ser necessário aguardar. Deseja continuar com o pedido?"
+  );
+  if (!acceptedManualDelivery) return;
+
   const tiktokUsername =
     normalizeText($("#checkout-tiktok")?.value);
 
@@ -1414,26 +1419,17 @@ async function loadCurrentOrder() {
 
 function getDeliveryMessage(order) {
   if (!order || order.status !== "awaiting_delivery") return "";
-  const botName = storeSettings.delivery_bot_username || "Bot de entrega";
-  const botUrl = storeSettings.delivery_bot_url || "";
   return `
     <div class="delivery-message delivery-message-rich">
       <div class="delivery-message-title">🚚 Pagamento confirmado</div>
-      <p>Seu pedido está pronto para a entrega.</p>
+      <p>Seu pedido entrou na etapa de entrega. A entrega é feita manualmente por uma pessoa, não por um bot automático. Aguarde enquanto seu pedido é atendido.</p>
       <div class="delivery-info-grid">
         <div><span>Pedido</span><strong>#${escapeHtml(String(order.id).slice(0,8))}</strong></div>
-        <div><span>Roblox</span><strong>${escapeHtml(order.delivery_username || "Não informado")}</strong></div>
+        <div><span>Usuário Roblox</span><strong>${escapeHtml(order.delivery_username || "Não informado")}</strong></div>
         <div><span>Quantidade</span><strong>${escapeHtml(String(order._itemCount || "—"))}</strong></div>
       </div>
-      <div class="delivery-bot-box">
-        <span>🤖 Bot de entrega</span>
-        <strong class="delivery-bot-username">${escapeHtml(botName)}</strong>
-        <button type="button" class="secondary-button delivery-copy-bot" data-copy-bot="${escapeHtml(botName)}">📋 Copiar nome</button>
-        ${storeSettings.join_open ? "<small>🟢 Join aberto</small>" : "<small>🔴 Join fechado</small>"}
-        ${botUrl ? `<a class="primary-button delivery-bot-link" href="${escapeHtml(botUrl)}" target="_blank" rel="noopener noreferrer">Abrir perfil do bot</a>` : ""}
-      </div>
-      <p class="delivery-note">Quando receber suas marretas, confirme abaixo para fechar esta etapa.</p>
-      <button type="button" class="secondary-button" data-delivery-read="${escapeHtml(order.id)}">Entendi, aguardar entrega</button>
+      <p class="delivery-note">Você pode manter esta tela aberta para acompanhar as atualizações. Quando eu iniciar ou concluir a entrega, o status do pedido será atualizado.</p>
+      <button type="button" class="secondary-button" data-delivery-read="${escapeHtml(order.id)}">Entendi, vou aguardar</button>
     </div>
   `;
 }
@@ -1876,16 +1872,23 @@ async function toggleReviewHelpful(reviewId) {
     return;
   }
 
-  const { error } = await supabaseClient.rpc("toggle_review_helpful", {
+  const { data, error } = await supabaseClient.rpc("toggle_review_helpful", {
     p_review_id: reviewId
   });
 
   if (error) {
     console.error("Erro ao marcar avaliação como útil:", error);
-    toast("Não foi possível registrar seu voto. Verifique se a função foi criada no Supabase.", "error");
+    const detail = /function .*toggle_review_helpful|schema cache|does not exist/i.test(error.message || "")
+      ? "A função do botão ainda precisa ser instalada no Supabase. Execute o SQL incluído no ZIP."
+      : (error.message || "Tente novamente em instantes.");
+    toast(`Não foi possível registrar seu voto. ${detail}`, "error");
     return;
   }
 
+  if (data && data.success === false) {
+    toast(data.message || "Não foi possível registrar seu voto.", "error");
+    return;
+  }
   await loadPublicReviews();
 }
 

@@ -1,0 +1,16 @@
+Thoune Store v1039 — aviso de entrega manual e diagnóstico do botão “Achou útil?”
+
+Alterações neste pacote:
+- Aviso de entrega manual no checkout.
+- Confirmação antes de criar pedido explicando que a entrega é feita pela pessoa responsável, não por bot automático, e pode haver espera.
+- Painel de pedido usa texto de entrega manual em vez de orientar o cliente a procurar um bot.
+- Mensagem de erro do botão “Achou útil?” ficou mais clara quando a RPC não está instalada.
+- SQL supabase_v1037_reviews_and_helpful_fix.sql permanece incluído para instalar/recriar as funções esperadas pelo botão.
+
+IMPORTANTE:
+- Este pacote ainda NÃO implementa fila real com posição calculada pelo banco nem alerta dinâmico de fila cheia. Isso requer instalar e validar funções SQL contra o esquema atual de orders e revisar permissões/RLS do projeto. Não mostrar posição fictícia ao cliente.
+- O SQL de avaliações precisa ser executado no Supabase SQL Editor antes de publicar para que o botão funcione. Se o SQL retornar erro, não publicar até revisar o erro.
+- Não foi possível testar com o projeto Supabase real nesta sessão.
+- A foto de perfil foi deixada de fora conforme pedido.
+
+Publicação: faça backup da versão atual, substitua os arquivos do site pelos arquivos deste ZIP e publique no GitHub Pages. Não compartilhe SUPABASE_ANON_KEY com terceiros (ela é pública no front-end, mas as tabelas devem estar protegidas por RLS).
