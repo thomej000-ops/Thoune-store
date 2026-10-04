@@ -16,3 +16,9 @@ v1032: padroniza somente os ícones dos botões da barra superior com CSS, sem e
 1. Antes de publicar, execute `supabase_v1036_reviews_customer_and_moderation.sql` no SQL Editor do Supabase.
 2. Publique os arquivos deste ZIP mantendo a estrutura de pastas.
 3. Teste com uma conta cliente e um pedido entregue. O envio fica pendente até aprovação administrativa. A rejeição exige motivo e tenta notificar o cliente.
+
+
+## Atualização v1037 — avaliações
+- Inclui `supabase_v1037_reviews_and_helpful_fix.sql`, migração conjunta para votos úteis e envio/moderação de avaliações.
+- Execute esse SQL no Supabase SQL Editor antes de publicar os arquivos.
+- O ZIP não altera o banco automaticamente; a migração precisa ser executada no projeto Supabase correto.

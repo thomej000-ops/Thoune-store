@@ -6220,3 +6220,41 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
   .product-image > .favorite { width: 40px !important; height: 40px !important; }
   .product-image > .favorite .ui-icon-heart::before { font-size: 27px !important; line-height: 24px !important; }
 }
+
+
+
+/* v1037: ajustes de leitura e espaçamento dos cartões de avaliação */
+.review-card {
+  border-radius: 22px !important;
+  padding: clamp(16px, 2.2vw, 24px) !important;
+  min-width: 0;
+}
+.review-card .review-helpful {
+  border-radius: 999px !important;
+  min-height: 40px;
+}
+.review-card .review-rating {
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.review-card .review-text {
+  overflow-wrap: anywhere;
+  line-height: 1.65;
+}
+.reviews-grid {
+  gap: clamp(14px, 2vw, 22px) !important;
+}
+@media (max-width: 760px) {
+  .hero-content {
+    padding-block: 52px !important;
+  }
+  .section {
+    padding-inline: 16px;
+  }
+  .reviews-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .review-card {
+    padding: 16px !important;
+  }
+}
