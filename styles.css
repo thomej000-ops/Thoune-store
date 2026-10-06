@@ -6270,3 +6270,17 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
 .field-label-icon .roblox-mini-logo{background:transparent!important;}
 .field-label-icon .roblox-mini-logo img{width:100%!important;height:100%!important;object-fit:contain!important;}
 @media(max-width:760px){.checkout-queue-preview{grid-column:1/-1;margin-top:8px;padding:13px 14px;}}
+
+
+/* v1043 — fluxo de pagamento em etapas */
+.checkout-success-card.guest-status-panel{background:linear-gradient(180deg,#082b36,#061b23)!important;border:1px solid rgba(95,205,219,.14)!important;color:#eaf8fa!important;border-radius:22px!important;box-shadow:0 18px 50px rgba(0,0,0,.22)!important;}
+.proof-upload-box{margin:16px 0;padding:15px;border:1px solid rgba(95,205,219,.16);border-radius:16px;background:rgba(6,26,34,.62);text-align:left;}
+.proof-upload-box strong{display:block;color:#eaf8fa;margin-bottom:5px;}
+.proof-upload-box p{color:#8fb5bd;font-size:12px;margin:5px 0 10px;}
+.proof-file-input{display:block;width:100%;box-sizing:border-box;color:#dff7fa;background:#061a22;border:1px solid rgba(95,205,219,.16);border-radius:12px;padding:10px;margin-bottom:10px;}
+.proof-file-input::file-selector-button{border:0;border-radius:9px;padding:8px 10px;margin-right:8px;font-weight:800;background:#eaf8fa;color:#082c3a;cursor:pointer;}
+#empty-state{max-width:680px;margin:18px auto 0;padding:38px 22px!important;border:1px solid rgba(95,205,219,.13)!important;border-radius:24px!important;background:linear-gradient(180deg,rgba(8,40,51,.72),rgba(5,26,34,.92))!important;box-shadow:0 18px 45px rgba(0,0,0,.18)!important;}
+#empty-state h3{margin:10px 0 5px!important;color:#eaf8fa!important;font-size:22px!important;}
+#empty-state p{color:#8fb5bd!important;margin:0 auto 18px!important;max-width:440px;}
+#clear-search-button{min-width:150px!important;border-radius:14px!important;box-shadow:0 10px 25px rgba(0,0,0,.16)!important;}
+.clear-filter-symbol{display:grid!important;place-items:center!important;width:48px!important;height:48px!important;margin:0 auto 12px!important;border-radius:15px!important;background:rgba(76,205,221,.10)!important;color:#70d6e1!important;font-size:26px!important;}

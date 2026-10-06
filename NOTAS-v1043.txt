@@ -1,0 +1,15 @@
+THOUNE STORE v1043
+
+Mudanças:
+- Checkout em etapas: dados -> Pix -> verificando pagamento -> entrega/recusa.
+- Remove Pix duplicado da primeira tela.
+- Dados de entrega agora mostram o usuário de entrega configurado pela loja, não os dados do cliente.
+- Recusa de pagamento pelo ADM.
+- Cliente pode enviar foto do comprovante Pix.
+- Comprovantes ficam em bucket privado; ADM abre por link assinado.
+- Termos corrigidos.
+- Estado vazio/limpar filtros melhorado.
+- Painel ADM com estilos escuros mais fortes.
+- Avaliações permanecem públicas e continuam usando somente @TikTok.
+
+Execute supabase_v1043_guest_payment_flow.sql antes de publicar.

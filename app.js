@@ -18,7 +18,7 @@ let currentCategory = "Todas";
 let currentSearch = "";
 let currentSort = "popular";
 let currentReviewSort = "recent";
-const GUEST_VOTER_KEY = "thoune-review-voter-v1041";
+const GUEST_VOTER_KEY = "thoune-review-voter-v1043";
 let queuePreviewTimer = null;
 
 const $ = (selector) => document.querySelector(selector);
@@ -88,8 +88,8 @@ function formatDate(value) {
 }
 
 function playOpeningEffect() {
-  if (sessionStorage.getItem("thoune-opening-effect-v1040")) return;
-  sessionStorage.setItem("thoune-opening-effect-v1040", "1");
+  if (sessionStorage.getItem("thoune-opening-effect-v1043")) return;
+  sessionStorage.setItem("thoune-opening-effect-v1043", "1");
   const layer = document.createElement("div");
   layer.className = "opening-effect";
   layer.innerHTML = Array.from({ length: 10 }, (_, i) => `<span class="opening-bubble b${i + 1}"></span>`).join("");
@@ -388,9 +388,6 @@ async function createGuestOrder() {
   const cart = loadCart();
   if (!cart.length) return setMessage($("#checkout-message"), "Seu carrinho está vazio.", "error");
 
-  const accepted = window.confirm("Atenção: a Thoune Store não usa bot automático. Eu mesmo faço as entregas, seguindo a ordem dos pedidos, e pode ser necessário aguardar. Deseja continuar com o pedido?");
-  if (!accepted) return;
-
   const tiktokUsername = normalizeText($("#checkout-tiktok")?.value);
   const robloxUsername = normalizeText($("#checkout-roblox")?.value);
   const pixSenderName = normalizeText($("#checkout-pix-name")?.value);
@@ -398,10 +395,13 @@ async function createGuestOrder() {
     return setMessage($("#checkout-message"), "Preencha seu usuário do TikTok, seu usuário do Roblox e o nome do remetente do Pix.", "error");
   }
 
+  const accepted = window.confirm("Atenção: a entrega é manual e segue a ordem dos pedidos. Sua posição pode mudar conforme novos pedidos entram ou anteriores são concluídos. Deseja confirmar seus dados e continuar para o pagamento Pix?");
+  if (!accepted) return;
+
   const items = cart.map(item => ({ product_id: item.id, quantity: Math.max(1, Math.floor(Number(item.qty)||1)) }));
   const button = $("#confirm-order-button");
   if (button) { button.disabled = true; button.textContent = "Criando pedido..."; }
-  setMessage($("#checkout-message"), "Criando seu pedido...");
+  setMessage($("#checkout-message"), "Criando seu pedido...", "");
 
   const { data, error } = await supabaseClient.rpc("create_guest_order", {
     p_items: items,
@@ -410,13 +410,13 @@ async function createGuestOrder() {
     p_pix_name: pixSenderName
   });
 
-  if (button) { button.disabled = false; button.textContent = "Continuar para pagamento Pix"; }
+  if (button) { button.disabled = false; button.textContent = "Confirmar dados e continuar"; }
   if (error) {
     console.error("create_guest_order:", error);
     const raw = String(error.message || "");
     const missingFunction = error.code === "PGRST202" || /schema cache|Could not find the function/i.test(raw);
     if (missingFunction) {
-      return setMessage($("#checkout-message"), "O checkout público ainda não foi ativado no Supabase. Execute o arquivo supabase_v1041_no_login_queue.sql no SQL Editor e depois recarregue o site.", "error");
+      return setMessage($("#checkout-message"), "O checkout público ainda não foi ativado no Supabase. Execute o SQL da v1043 e recarregue o site.", "error");
     }
     return setMessage($("#checkout-message"), raw || "Não foi possível criar o pedido. Confira os dados e tente novamente.", "error");
   }
@@ -425,45 +425,47 @@ async function createGuestOrder() {
   const total = Number(data?.total);
   if (!orderId) return setMessage($("#checkout-message"), "Não foi possível identificar o pedido. Tente novamente.", "error");
 
-  stopQueuePreviewPolling();
   let queuePosition = null;
   try {
     const queueResult = await supabaseClient.rpc("get_guest_order_queue_position", { p_order_id: orderId });
     if (!queueResult.error) queuePosition = Number(queueResult.data);
-  } catch (queueError) {
-    console.error("get_guest_order_queue_position:", queueError);
-  }
+  } catch (queueError) { console.error("get_guest_order_queue_position:", queueError); }
 
   clearCart();
   syncCartUI();
   renderCart([]);
+  stopQueuePreviewPolling();
 
-  const orderShort = String(orderId).slice(0, 8).toUpperCase();
-  $("#checkout-content")?.scrollTo({ top: 0, behavior: "smooth" });
+  localStorage.setItem("thoune-pending-guest-order", orderId);
+  renderGuestPixPanel(orderId, Number.isFinite(total) ? total : 0, queuePosition);
+  toast(`Pedido #${String(orderId).slice(0,8).toUpperCase()} criado. Agora faça o Pix.`);
+}
+
+function renderGuestPixPanel(orderId, total, queuePosition = null) {
   const content = $("#checkout-section .checkout-content");
-  if (content) {
-    content.innerHTML = `
-      <div class="checkout-success-card" style="padding:24px;text-align:center;">
-        <div style="font-size:42px;margin-bottom:10px;">✓</div>
-        <p class="eyebrow">PEDIDO CRIADO</p>
-        <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
-        <p>O nome informado no Pix ficará vinculado ao pedido para a conferência do pagamento.</p>
-        ${Number.isFinite(queuePosition) && queuePosition > 0 ? `<div class="checkout-queue-preview confirmed"><strong>📋 Sua posição atual na fila: <span>#${queuePosition}</span></strong><small>A posição pode mudar conforme os pedidos anteriores forem sendo concluídos.</small></div>` : ""}
-        <div class="checkout-total" style="margin:18px 0;"><span>Total</span><strong>${money(Number.isFinite(total) ? total : cart.reduce((s,i)=>s+(Number(i.price)||0)*(Number(i.qty)||0),0))}</strong></div>
-        <div class="manual-delivery-notice" style="text-align:left;border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin:16px 0;">
-          <strong>🚚 Entrega manual</strong>
-          <p style="margin:8px 0 0;">Faça o Pix no valor exato acima. Depois clique em “Já fiz o Pix” para avisar a loja. O pagamento será conferido pela equipe.</p>
-        </div>
-        <div class="pix-key-box"><span class="pix-key-label">Chave Pix</span><div class="pix-key-row"><strong class="pix-key-value">${escapeHtml(storeSettings.pix_key || "Pix indisponível")}</strong><button type="button" class="secondary-button" id="copy-pix-key-success">▤ Copiar</button></div></div>
-        <button type="button" class="primary-button full" id="guest-payment-done" data-order-id="${escapeHtml(orderId)}" style="margin-top:16px;">Já fiz o Pix</button>
-        <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
-        <p class="checkout-message" id="guest-order-message" aria-live="polite"></p>
-      </div>`;
-    $("#copy-pix-key-success")?.addEventListener("click", copyPixKey);
-    $("#guest-payment-done")?.addEventListener("click", () => requestGuestPaymentVerification(orderId));
-    $("#guest-finish")?.addEventListener("click", () => { stopQueuePreviewPolling(); closePanel($("#checkout-section")); });
-  }
-  toast(`Pedido #${orderShort} criado.`);
+  if (!content) return;
+  const orderShort = String(orderId).slice(0, 8).toUpperCase();
+  content.innerHTML = `
+    <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
+      <div style="font-size:42px;margin-bottom:10px;">💳</div>
+      <p class="eyebrow">PAGAMENTO VIA PIX</p>
+      <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
+      <p>Seus dados foram confirmados. Agora faça <strong>um único Pix</strong> no valor exato abaixo.</p>
+      ${Number.isFinite(queuePosition) && queuePosition > 0 ? `<div class="checkout-queue-preview confirmed"><strong>📋 Sua posição atual na fila: <span>#${queuePosition}</span></strong><small>Esta é a posição do pedido neste momento e pode mudar enquanto você realiza o pagamento.</small></div>` : ""}
+      <div class="checkout-total" style="margin:18px 0;"><span>Total do pedido</span><strong>${money(total)}</strong></div>
+      <div class="pix-visual"><img src="pix-qr.png" alt="QR Code para pagamento via Pix" class="pix-qr" width="260" height="260"></div>
+      <div class="pix-key-box"><span class="pix-key-label">Chave Pix</span><div class="pix-key-row"><strong class="pix-key-value">${escapeHtml(storeSettings.pix_key || "Pix indisponível")}</strong><button type="button" class="secondary-button" id="copy-pix-key-success">▤ Copiar</button></div></div>
+      <div class="manual-delivery-notice" style="text-align:left;border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin:16px 0;">
+        <strong>🚚 Entrega manual</strong>
+        <p style="margin:8px 0 0;">Faça o Pix no valor exato acima. Depois confirme aqui que realizou o pagamento. A loja vai conferir o recebimento.</p>
+      </div>
+      <button type="button" class="primary-button full" id="guest-payment-done" data-order-id="${escapeHtml(orderId)}" style="margin-top:8px;">Já fiz o Pix</button>
+      <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
+      <p class="checkout-message" id="guest-order-message" aria-live="polite"></p>
+    </div>`;
+  $("#copy-pix-key-success")?.addEventListener("click", copyPixKey);
+  $("#guest-payment-done")?.addEventListener("click", () => requestGuestPaymentVerification(orderId));
+  $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
 }
 
 async function requestGuestPaymentVerification(orderId) {
@@ -490,24 +492,81 @@ function renderGuestWaitingPanel(orderId, queuePosition = null) {
   content.innerHTML = `
     <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
       <div style="font-size:42px;margin-bottom:10px;">⏳</div>
-      <p class="eyebrow">AGUARDANDO ATENDIMENTO</p>
-      <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
-      <p>Seu pagamento foi informado à loja. Agora aguardamos a conferência do Pix.</p>
+      <p class="eyebrow">VERIFICANDO PAGAMENTO</p>
+      <h2 style="margin:8px 0;">Aguardando atendimento</h2>
+      <p>Recebemos seu aviso. A loja vai conferir se o Pix entrou corretamente.</p>
       <div class="checkout-queue-preview confirmed" id="guest-waiting-queue">
         <strong>📋 Sua posição atual na fila: <span>#${Number.isFinite(queuePosition) && queuePosition > 0 ? queuePosition : "..."}</span></strong>
-        <small>A posição pode mudar conforme os pedidos anteriores forem sendo concluídos.</small>
+        <small>A posição muda conforme pedidos anteriores são concluídos e novos pedidos entram.</small>
       </div>
       <div class="manual-delivery-notice" style="text-align:left;border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin:16px 0;">
-        <strong>🚚 Atendimento manual</strong>
-        <p style="margin:8px 0 0;">Quando o pagamento for confirmado pela loja, esta tela será atualizada automaticamente com os dados da entrega.</p>
+        <strong>⏳ Agora é só aguardar</strong>
+        <p style="margin:8px 0 0;">Quando a loja confirmar o pagamento, esta aba será atualizada automaticamente.</p>
+      </div>
+      <div class="proof-upload-box">
+        <strong>📷 Quer enviar o comprovante?</strong>
+        <p>É opcional, mas pode ajudar caso a loja não localize o Pix.</p>
+        <input type="file" id="guest-proof-file" accept="image/png,image/jpeg,image/webp" class="proof-file-input">
+        <button type="button" class="secondary-button full" id="guest-proof-send">Enviar comprovante</button>
+        <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
       </div>
       <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
       <p class="checkout-message" id="guest-order-message" aria-live="polite"></p>
     </div>`;
-  $("#guest-finish")?.addEventListener("click", () => {
-    stopGuestOrderStatusPolling();
-    closePanel($("#checkout-section"));
-  });
+  $("#guest-proof-send")?.addEventListener("click", () => uploadGuestPaymentProof(orderId));
+  $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
+}
+
+function renderGuestPaymentRejectedPanel(orderId, reason = "O pagamento não foi localizado.") {
+  const content = $("#checkout-section .checkout-content");
+  if (!content) return;
+  content.innerHTML = `
+    <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
+      <div style="font-size:42px;margin-bottom:10px;">⚠️</div>
+      <p class="eyebrow">PAGAMENTO NÃO RECEBIDO</p>
+      <h2 style="margin:8px 0;">Precisamos do Pix para fazer a entrega</h2>
+      <p>${escapeHtml(reason)}</p>
+      <div class="manual-delivery-notice" style="text-align:left;border:1px solid rgba(240,140,80,.35);background:rgba(240,140,80,.08);border-radius:14px;padding:14px;margin:16px 0;">
+        <strong>💳 Faça o pagamento e envie o comprovante</strong>
+        <p style="margin:8px 0 0;">Se você já pagou, envie uma foto do comprovante abaixo para a loja conferir.</p>
+      </div>
+      <div class="proof-upload-box">
+        <input type="file" id="guest-proof-file" accept="image/png,image/jpeg,image/webp" class="proof-file-input">
+        <button type="button" class="primary-button full" id="guest-proof-send">Enviar comprovante</button>
+        <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
+      </div>
+      <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
+    </div>`;
+  $("#guest-proof-send")?.addEventListener("click", () => uploadGuestPaymentProof(orderId));
+  $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
+}
+
+async function uploadGuestPaymentProof(orderId) {
+  const input = $("#guest-proof-file");
+  const message = $("#guest-proof-message");
+  const button = $("#guest-proof-send");
+  const file = input?.files?.[0];
+  if (!file) return setMessage(message, "Escolha uma foto do comprovante primeiro.", "error");
+  if (!/^image\/(png|jpeg|webp)$/i.test(file.type)) return setMessage(message, "Envie uma imagem JPG, PNG ou WEBP.", "error");
+  if (file.size > 5 * 1024 * 1024) return setMessage(message, "A imagem precisa ter no máximo 5 MB.", "error");
+  if (button) { button.disabled = true; button.textContent = "Enviando..."; }
+  const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
+  const path = `${orderId}/${Date.now()}-${crypto.randomUUID?.() || Math.random().toString(36).slice(2)}.${ext}`;
+  const { error: uploadError } = await supabaseClient.storage.from("payment-proofs").upload(path, file, { contentType: file.type, upsert: false });
+  if (uploadError) {
+    if (button) { button.disabled = false; button.textContent = "Enviar comprovante"; }
+    return setMessage(message, "Não foi possível enviar o comprovante. Tente novamente.", "error");
+  }
+  const { error: saveError } = await supabaseClient.rpc("submit_guest_payment_proof", { p_order_id: orderId, p_proof_path: path });
+  if (saveError) {
+    console.error("submit_guest_payment_proof:", saveError);
+    await supabaseClient.storage.from("payment-proofs").remove([path]);
+    if (button) { button.disabled = false; button.textContent = "Enviar comprovante"; }
+    return setMessage(message, "O comprovante foi enviado, mas não conseguimos vinculá-lo ao pedido.", "error");
+  }
+  if (button) { button.disabled = true; button.textContent = "Comprovante enviado ✓"; }
+  if (input) input.disabled = true;
+  setMessage(message, "Comprovante enviado para a loja.", "success");
 }
 
 function renderGuestDeliveryPanel(order) {
@@ -516,22 +575,20 @@ function renderGuestDeliveryPanel(order) {
   const content = $("#checkout-section .checkout-content");
   if (!content) return;
   const orderShort = String(order.id).slice(0, 8).toUpperCase();
-  const roblox = order.delivery_username || "Não informado";
-  const tiktok = order.tiktok_username ? `@${String(order.tiktok_username).replace(/^@/, "")}` : "Não informado";
+  const deliveryUser = storeSettings.delivery_bot_username || "Usuário de entrega não configurado";
   content.innerHTML = `
     <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
       <div style="font-size:42px;margin-bottom:10px;">🚚</div>
       <p class="eyebrow">DADOS DE ENTREGA</p>
       <h2 style="margin:8px 0;">Pagamento confirmado ✓</h2>
-      <p>Seu pagamento foi confirmado pela loja. Confira os dados que serão usados na entrega:</p>
+      <p>A loja confirmou o pagamento. A entrega será realizada pelo usuário abaixo:</p>
       <div class="guest-delivery-data" style="text-align:left;margin:18px 0;padding:16px;border:1px solid rgba(95,205,219,.2);border-radius:16px;background:rgba(6,26,34,.7);">
-        <div><strong>🎮 Roblox:</strong> ${escapeHtml(roblox)}</div>
-        <div style="margin-top:10px;"><strong>🎵 TikTok:</strong> ${escapeHtml(tiktok)}</div>
+        <div><strong>👤 Usuário de entrega:</strong> ${escapeHtml(deliveryUser)}</div>
         <div style="margin-top:10px;"><strong>📦 Pedido:</strong> #${escapeHtml(orderShort)}</div>
       </div>
       <div class="manual-delivery-notice" style="text-align:left;border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin:16px 0;">
         <strong>🚚 Entrega manual</strong>
-        <p style="margin:8px 0 0;">A entrega segue a ordem dos pedidos pagos. Aguarde o atendimento da loja.</p>
+        <p style="margin:8px 0 0;">Aguarde o atendimento. Seus dados de TikTok e Roblox já estão vinculados ao pedido.</p>
       </div>
       <button type="button" class="primary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
     </div>`;
@@ -549,39 +606,26 @@ function stopGuestOrderStatusPolling() {
 
 async function pollGuestOrderStatus(orderId) {
   const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
-  if (error) {
-    console.error("get_guest_order_status:", error);
-    return;
-  }
-  if (!data?.found) {
-    localStorage.removeItem("thoune-pending-guest-order");
-    stopGuestOrderStatusPolling();
-    return;
-  }
+  if (error) { console.error("get_guest_order_status:", error); return; }
+  if (!data?.found) { localStorage.removeItem("thoune-pending-guest-order"); stopGuestOrderStatusPolling(); return; }
   const status = String(data.status || "");
   if (status === "payment_confirmed" || status === "awaiting_delivery") {
-    renderGuestDeliveryPanel({
-      id: orderId,
-      status,
-      delivery_username: data.delivery_username,
-      tiktok_username: data.tiktok_username
-    });
+    renderGuestDeliveryPanel({ id: orderId, status });
     toast("Pagamento confirmado! A entrega será iniciada pela loja.");
     return;
   }
+  if (status === "payment_rejected") {
+    renderGuestPaymentRejectedPanel(orderId, data.rejection_reason || "O Pix ainda não foi localizado pela loja.");
+    return;
+  }
   if (status === "delivered") {
-    renderGuestDeliveryPanel({
-      id: orderId,
-      status,
-      delivery_username: data.delivery_username,
-      tiktok_username: data.tiktok_username
-    });
+    renderGuestDeliveryPanel({ id: orderId, status });
     return;
   }
   const queue = Number(data.queue_position);
   const queueEl = $("#guest-waiting-queue");
   if (queueEl && Number.isFinite(queue) && queue > 0) {
-    queueEl.innerHTML = `<strong>📋 Sua posição atual na fila: <span>#${queue}</span></strong><small>A posição pode mudar conforme os pedidos anteriores forem sendo concluídos.</small>`;
+    queueEl.innerHTML = `<strong>📋 Sua posição atual na fila: <span>#${queue}</span></strong><small>A posição muda conforme pedidos anteriores são concluídos e novos pedidos entram.</small>`;
   }
 }
 
@@ -655,6 +699,7 @@ async function toggleReviewHelpful(reviewId) {
   if (error) { console.error(error); toast(error.message || "Não foi possível registrar o voto.", "error"); return; }
   if (data?.success === false) { toast(data.message || "Não foi possível registrar o voto.", "error"); return; }
   await loadPublicReviews();
+  restoreGuestOrderStatus();
 }
 
 function setupSortControl() {
@@ -734,9 +779,9 @@ async function initialize() {
   syncCartUI();
   await loadStoreSettings();
   await loadProducts();
+  restoreGuestOrderStatus();
   renderFavoritesPanel();
   await loadPublicReviews();
-  restoreGuestOrderStatus();
 }
 
 initialize().catch(error => console.error("Erro durante a inicialização da Thoune Store:", error));

@@ -9,7 +9,7 @@
   >
 
   <meta name="theme-color" content="#082c3a">
-  <meta name="thoune-version" content="v1040">
+  <meta name="thoune-version" content="v1043">
 
   <title>Thoune Store — Flee the Facility</title>
 
@@ -31,7 +31,7 @@
 
   <link
     rel="stylesheet"
-    href="./styles.css?v=1040"
+    href="./styles.css?v=1043"
   >
 </head>
 
@@ -518,7 +518,7 @@
         </h3>
 
         <p>
-          Tente outro nome ou categoria.
+          Tente outro nome, categoria ou limpe os filtros para ver todo o catálogo.
         </p>
 
         <button
@@ -1090,7 +1090,7 @@
 
         <div class="manual-delivery-notice" role="note" style="border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin-bottom:16px;">
           <strong>🚚 Entrega manual — Thoune Store</strong>
-          <p style="margin:8px 0 0;">Não usamos bot automático. Eu mesmo realizo as entregas, seguindo a ordem dos pedidos. Pode ser necessário aguardar um tempo; após o Pix, solicite a verificação do pagamento e acompanhe o andamento do pedido.</p>
+          <p style="margin:8px 0 0;">Não usamos bot automático. Eu mesmo realizo as entregas, seguindo a ordem dos pedidos. Antes de continuar, confira seus dados e veja a posição estimada da fila.</p>
         </div>
 
         <!-- ==============================================
@@ -1146,83 +1146,6 @@
 
 
         <!-- ==============================================
-             PAGAMENTO
-        =============================================== -->
-
-        <div class="pix-payment">
-
-          <div class="checkout-block-heading">
-
-            <span>
-              <span class="ui-icon ui-icon-card" aria-hidden="true"></span>
-            </span>
-
-            <div>
-
-              <h3>
-                Pagamento via Pix
-              </h3>
-
-              <p>
-                Use o QR Code ou copie a chave Pix.
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <div class="pix-visual">
-
-            <img
-              src="pix-qr.png"
-              alt="QR Code para pagamento via Pix"
-              class="pix-qr"
-              width="260"
-              height="260"
-            >
-
-          </div>
-
-
-          <div class="pix-key-box">
-
-            <span class="pix-key-label">
-              Chave Pix
-            </span>
-
-
-            <div class="pix-key-row">
-
-              <strong
-                id="checkout-pix-key"
-                class="pix-key-value"
-              >
-                Chave Pix não configurada.
-              </strong>
-
-
-              <button
-                type="button"
-                class="secondary-button"
-                id="copy-pix-key-button"
-              >
-                ▤ Copiar
-              </button>
-
-            </div>
-
-          </div>
-
-
-          <small class="pix-payment-note">
-            Confira o valor do pedido antes de realizar o pagamento.
-          </small>
-
-        </div>
-
-
-        <!-- ==============================================
              DADOS DA ENTREGA
         =============================================== -->
 
@@ -1236,11 +1159,11 @@
 
             <div>
 
-              <h3>Dados da entrega</h3>
+              <h3>Dados para o pedido</h3>
 
               <details class="checkout-help">
                 <summary>ⓘ Por que esses dados?</summary>
-                <p>Usamos seu TikTok e seu Roblox para identificar o pedido e realizar a entrega. Também pedimos o nome do remetente do Pix para conferir o pagamento.</p>
+                <p>Informe seu TikTok e seu Roblox para o pedido. O nome do remetente do Pix será usado somente para conferir o pagamento.</p>
               </details>
 
             </div>
@@ -1387,7 +1310,7 @@
         Suporte
       </a>
 
-      <button type="button" class="footer-action" id="open-terms-button">
+      <button type="button" class="footer-action" id="open-terms-button" data-open-terms>
         Termos
       </button>
 
@@ -1470,7 +1393,7 @@
 
   <script
     type="module"
-    src="./app.js?v=1041"
+    src="./app.js?v=1043"
   ></script>
 
 </body>
