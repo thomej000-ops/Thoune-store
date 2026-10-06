@@ -477,6 +477,28 @@
 .admin-page .back-admin{color:#7bdbe5!important;}
 .admin-page table,.admin-page th,.admin-page td{background:#071f29!important;color:#eaf8fa!important;border-color:rgba(95,205,219,.12)!important;}
 </style>
+
+<style id="thoune-admin-v1042-dark-inner">
+.admin-page .settings-status,
+.admin-page .order-items,
+.admin-page .private-info,
+.admin-page .small-button {
+  background: linear-gradient(180deg,#0b303b,#071d25)!important;
+  color:#eaf8fa!important;
+  border-color:rgba(95,205,219,.16)!important;
+}
+.admin-page .setting-description,
+.admin-page .review-author,
+.admin-page .order-item { color:#88aab2!important; }
+.admin-page .settings-status strong,
+.admin-page .order-items strong,
+.admin-page .private-info strong { color:#eaf8fa!important; }
+.admin-page .private-info {
+  background:linear-gradient(180deg,rgba(121,82,12,.20),rgba(67,45,8,.16))!important;
+  border-color:rgba(240,223,177,.22)!important;
+}
+.admin-page .small-button:hover { background:#123b47!important; }
+</style>
 </head>
 
 <body class="admin-page">
@@ -2759,7 +2781,9 @@ async function loadOrders(){
 
     if(
       order.status ===
-      "awaiting_delivery"
+      "awaiting_delivery" ||
+      order.status ===
+      "payment_confirmed"
     ){
 
       const delivered =
@@ -3881,7 +3905,9 @@ async function loadReviews(){
         review.status ===
         "approved"
           ? "✅ Aprovada"
-          : "❌ Rejeitada";
+          : review.status === "rejected"
+            ? "❌ Rejeitada"
+            : "⏳ Pendente";
 
       actions.appendChild(
         status
@@ -3889,6 +3915,11 @@ async function loadReviews(){
 
     }
 
+    const deleteReviewButton = document.createElement("button");
+    deleteReviewButton.className = "small-button danger";
+    deleteReviewButton.textContent = "🗑️ Excluir avaliação";
+    deleteReviewButton.onclick = () => deleteReview(review.id);
+    actions.appendChild(deleteReviewButton);
 
     card.appendChild(
       actions
@@ -3940,6 +3971,24 @@ async function updateReviewStatus(reviewId, status){
     });
     if (notificationError) console.error("Não foi possível notificar o cliente sobre a avaliação:", notificationError);
   }
+  await loadReviews();
+}
+
+
+async function deleteReview(reviewId){
+  const confirmed = window.confirm("Excluir esta avaliação definitivamente?\n\nEssa ação não pode ser desfeita.");
+  if (!confirmed) return;
+
+  const { error } = await supabaseClient
+    .from("reviews")
+    .delete()
+    .eq("id", reviewId);
+
+  if (error) {
+    alert("Não foi possível excluir a avaliação:\n" + error.message);
+    return;
+  }
+
   await loadReviews();
 }
 

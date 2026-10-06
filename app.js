@@ -410,7 +410,7 @@ async function createGuestOrder() {
     p_pix_name: pixSenderName
   });
 
-  if (button) { button.disabled = false; button.textContent = "Criar pedido e pagar via Pix"; }
+  if (button) { button.disabled = false; button.textContent = "Continuar para pagamento Pix"; }
   if (error) {
     console.error("create_guest_order:", error);
     const raw = String(error.message || "");
@@ -447,12 +447,12 @@ async function createGuestOrder() {
         <div style="font-size:42px;margin-bottom:10px;">✓</div>
         <p class="eyebrow">PEDIDO CRIADO</p>
         <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
-        <p>Seu pedido foi criado sem conta e sem e-mail. O nome informado no Pix ficará vinculado ao pedido para a conferência do pagamento.</p>
+        <p>O nome informado no Pix ficará vinculado ao pedido para a conferência do pagamento.</p>
         ${Number.isFinite(queuePosition) && queuePosition > 0 ? `<div class="checkout-queue-preview confirmed"><strong>📋 Sua posição atual na fila: <span>#${queuePosition}</span></strong><small>A posição pode mudar conforme os pedidos anteriores forem sendo concluídos.</small></div>` : ""}
         <div class="checkout-total" style="margin:18px 0;"><span>Total</span><strong>${money(Number.isFinite(total) ? total : cart.reduce((s,i)=>s+(Number(i.price)||0)*(Number(i.qty)||0),0))}</strong></div>
         <div class="manual-delivery-notice" style="text-align:left;border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin:16px 0;">
           <strong>🚚 Entrega manual</strong>
-          <p style="margin:8px 0 0;">Faça o Pix no valor exato acima. Depois clique em “Já fiz o Pix” para avisar a loja. Não precisa criar conta nem informar e-mail.</p>
+          <p style="margin:8px 0 0;">Faça o Pix no valor exato acima. Depois clique em “Já fiz o Pix” para avisar a loja. O pagamento será conferido pela equipe.</p>
         </div>
         <div class="pix-key-box"><span class="pix-key-label">Chave Pix</span><div class="pix-key-row"><strong class="pix-key-value">${escapeHtml(storeSettings.pix_key || "Pix indisponível")}</strong><button type="button" class="secondary-button" id="copy-pix-key-success">▤ Copiar</button></div></div>
         <button type="button" class="primary-button full" id="guest-payment-done" data-order-id="${escapeHtml(orderId)}" style="margin-top:16px;">Já fiz o Pix</button>
@@ -474,11 +474,131 @@ async function requestGuestPaymentVerification(orderId) {
   if (error) {
     console.error("request_guest_payment_verification:", error);
     if (button) { button.disabled = false; button.textContent = "Já fiz o Pix"; }
-    return setMessage(message, error.message || "Não foi possível avisar a loja.", "error");
+    return setMessage(message, "Não foi possível avisar a loja. Tente novamente.", "error");
   }
-  if (button) { button.disabled = true; button.textContent = "Pix avisado ✓"; }
-  setMessage(message, "Pronto! A loja foi avisada e vai conferir o pagamento. A entrega é manual e segue a ordem dos pedidos.", "success");
-  toast("Pagamento enviado para verificação.");
+
+  localStorage.setItem("thoune-pending-guest-order", orderId);
+  renderGuestWaitingPanel(orderId);
+  toast("Pagamento informado à loja.");
+  startGuestOrderStatusPolling(orderId);
+}
+
+function renderGuestWaitingPanel(orderId, queuePosition = null) {
+  const content = $("#checkout-section .checkout-content");
+  if (!content) return;
+  const orderShort = String(orderId).slice(0, 8).toUpperCase();
+  content.innerHTML = `
+    <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
+      <div style="font-size:42px;margin-bottom:10px;">⏳</div>
+      <p class="eyebrow">AGUARDANDO ATENDIMENTO</p>
+      <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
+      <p>Seu pagamento foi informado à loja. Agora aguardamos a conferência do Pix.</p>
+      <div class="checkout-queue-preview confirmed" id="guest-waiting-queue">
+        <strong>📋 Sua posição atual na fila: <span>#${Number.isFinite(queuePosition) && queuePosition > 0 ? queuePosition : "..."}</span></strong>
+        <small>A posição pode mudar conforme os pedidos anteriores forem sendo concluídos.</small>
+      </div>
+      <div class="manual-delivery-notice" style="text-align:left;border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin:16px 0;">
+        <strong>🚚 Atendimento manual</strong>
+        <p style="margin:8px 0 0;">Quando o pagamento for confirmado pela loja, esta tela será atualizada automaticamente com os dados da entrega.</p>
+      </div>
+      <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
+      <p class="checkout-message" id="guest-order-message" aria-live="polite"></p>
+    </div>`;
+  $("#guest-finish")?.addEventListener("click", () => {
+    stopGuestOrderStatusPolling();
+    closePanel($("#checkout-section"));
+  });
+}
+
+function renderGuestDeliveryPanel(order) {
+  stopGuestOrderStatusPolling();
+  localStorage.removeItem("thoune-pending-guest-order");
+  const content = $("#checkout-section .checkout-content");
+  if (!content) return;
+  const orderShort = String(order.id).slice(0, 8).toUpperCase();
+  const roblox = order.delivery_username || "Não informado";
+  const tiktok = order.tiktok_username ? `@${String(order.tiktok_username).replace(/^@/, "")}` : "Não informado";
+  content.innerHTML = `
+    <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
+      <div style="font-size:42px;margin-bottom:10px;">🚚</div>
+      <p class="eyebrow">DADOS DE ENTREGA</p>
+      <h2 style="margin:8px 0;">Pagamento confirmado ✓</h2>
+      <p>Seu pagamento foi confirmado pela loja. Confira os dados que serão usados na entrega:</p>
+      <div class="guest-delivery-data" style="text-align:left;margin:18px 0;padding:16px;border:1px solid rgba(95,205,219,.2);border-radius:16px;background:rgba(6,26,34,.7);">
+        <div><strong>🎮 Roblox:</strong> ${escapeHtml(roblox)}</div>
+        <div style="margin-top:10px;"><strong>🎵 TikTok:</strong> ${escapeHtml(tiktok)}</div>
+        <div style="margin-top:10px;"><strong>📦 Pedido:</strong> #${escapeHtml(orderShort)}</div>
+      </div>
+      <div class="manual-delivery-notice" style="text-align:left;border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin:16px 0;">
+        <strong>🚚 Entrega manual</strong>
+        <p style="margin:8px 0 0;">A entrega segue a ordem dos pedidos pagos. Aguarde o atendimento da loja.</p>
+      </div>
+      <button type="button" class="primary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
+    </div>`;
+  $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
+}
+
+let guestOrderStatusTimer = null;
+
+function stopGuestOrderStatusPolling() {
+  if (guestOrderStatusTimer) {
+    clearInterval(guestOrderStatusTimer);
+    guestOrderStatusTimer = null;
+  }
+}
+
+async function pollGuestOrderStatus(orderId) {
+  const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
+  if (error) {
+    console.error("get_guest_order_status:", error);
+    return;
+  }
+  if (!data?.found) {
+    localStorage.removeItem("thoune-pending-guest-order");
+    stopGuestOrderStatusPolling();
+    return;
+  }
+  const status = String(data.status || "");
+  if (status === "payment_confirmed" || status === "awaiting_delivery") {
+    renderGuestDeliveryPanel({
+      id: orderId,
+      status,
+      delivery_username: data.delivery_username,
+      tiktok_username: data.tiktok_username
+    });
+    toast("Pagamento confirmado! A entrega será iniciada pela loja.");
+    return;
+  }
+  if (status === "delivered") {
+    renderGuestDeliveryPanel({
+      id: orderId,
+      status,
+      delivery_username: data.delivery_username,
+      tiktok_username: data.tiktok_username
+    });
+    return;
+  }
+  const queue = Number(data.queue_position);
+  const queueEl = $("#guest-waiting-queue");
+  if (queueEl && Number.isFinite(queue) && queue > 0) {
+    queueEl.innerHTML = `<strong>📋 Sua posição atual na fila: <span>#${queue}</span></strong><small>A posição pode mudar conforme os pedidos anteriores forem sendo concluídos.</small>`;
+  }
+}
+
+function startGuestOrderStatusPolling(orderId) {
+  stopGuestOrderStatusPolling();
+  pollGuestOrderStatus(orderId);
+  guestOrderStatusTimer = window.setInterval(() => {
+    if (!$("#checkout-section")?.classList.contains("open")) return;
+    pollGuestOrderStatus(orderId);
+  }, 5000);
+}
+
+function restoreGuestOrderStatus() {
+  const orderId = localStorage.getItem("thoune-pending-guest-order");
+  if (!orderId) return;
+  renderGuestWaitingPanel(orderId);
+  startGuestOrderStatusPolling(orderId);
 }
 
 function copyPixKey() {
@@ -616,6 +736,7 @@ async function initialize() {
   await loadProducts();
   renderFavoritesPanel();
   await loadPublicReviews();
+  restoreGuestOrderStatus();
 }
 
 initialize().catch(error => console.error("Erro durante a inicialização da Thoune Store:", error));

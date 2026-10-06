@@ -1,0 +1,14 @@
+Thoune Store v1042
+
+Mudanças:
+- Checkout não menciona mais conta, login ou e-mail ao cliente.
+- Botão inicial do checkout virou “Continuar para pagamento Pix”.
+- Após “Já fiz o Pix”, o cliente entra automaticamente em “Aguardando atendimento”, com posição da fila atualizada.
+- O pedido pendente é salvo no navegador e continua sendo acompanhado mesmo se o cliente fechar e reabrir a página.
+- Quando o ADM confirma o pagamento (status payment_confirmed/awaiting_delivery), a tela muda automaticamente para “Dados de entrega”.
+- Dados exibidos na entrega: Roblox, TikTok e número do pedido.
+- Painel ADM: corrigidos cartões internos que apareciam brancos.
+- Painel ADM: adicionada exclusão definitiva de avaliação.
+- Avaliações públicas continuam mostrando somente o @ do TikTok.
+
+SQL: executar supabase_v1042_guest_flow.sql uma vez no Supabase.
