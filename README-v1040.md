@@ -1,4 +1,4 @@
-# Thoune Store v1040 — checkout sem login
+# Thoune Store v1041 — checkout sem login
 
 Esta versão remove a conta do cliente do site público.
 
@@ -16,10 +16,13 @@ Não existe mais no site público: login, criar conta, senha, e-mail, Minha cont
 ## Importante
 O login do `admin.html` continua existindo para proteger o painel administrativo.
 
-Antes de publicar, execute `supabase_v1040_no_login_checkout.sql` no SQL Editor do Supabase. Ele cria as RPCs públicas necessárias para pedidos sem autenticação e votos de avaliações sem login.
+Antes de publicar, execute `supabase_v1041_no_login_checkout.sql` no SQL Editor do Supabase. Ele cria as RPCs públicas necessárias para pedidos sem autenticação e votos de avaliações sem login.
 
 O pedido público guarda TikTok e Roblox em `orders`. O `customer_id` fica nulo.
 
 
 ### Nome do remetente do Pix
 O checkout público exige TikTok, Roblox e o nome do remetente do Pix. O nome é salvo no pedido/pagamento para conferência manual.
+
+
+v1041: checkout sem login/e-mail, nome do Pix mantido, posição estimada da fila atualizada a cada 5s, posição real após criação do pedido, logo Roblox no campo, avaliações públicas mantidas com @ do TikTok e voto útil sem conta. Execute supabase_v1041_no_login_queue.sql no Supabase antes de publicar.

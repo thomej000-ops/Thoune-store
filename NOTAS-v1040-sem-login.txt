@@ -1,4 +1,4 @@
-Thoune Store v1040 — mudança radical para checkout público
+Thoune Store v1041 — mudança radical para checkout público
 
 REMOVIDO DO SITE DO CLIENTE
 - Login e criação de conta
@@ -23,7 +23,10 @@ O ADMIN CONTINUA COM LOGIN
 O painel admin continua protegido pelo Supabase Auth e continua mostrando pedidos, pagamentos, estoque e avaliações.
 
 BANCO
-Execute supabase_v1040_no_login_checkout.sql antes de publicar.
+Execute supabase_v1041_no_login_checkout.sql antes de publicar.
 
 
 Atualização: checkout também exige o nome do remetente do Pix. O nome é salvo em orders.pix_name e payments.pix_name para conferência manual do pagamento.
+
+
+v1041: checkout sem login/e-mail, nome do Pix mantido, posição estimada da fila atualizada a cada 5s, posição real após criação do pedido, logo Roblox no campo, avaliações públicas mantidas com @ do TikTok e voto útil sem conta. Execute supabase_v1041_no_login_queue.sql no Supabase antes de publicar.

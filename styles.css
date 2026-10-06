@@ -6258,3 +6258,15 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
     padding: 16px !important;
   }
 }
+
+/* THOUNE v1041 — fila dinâmica no checkout + mensagens claras + logos de marca */
+.checkout-queue-preview{grid-column:1/-1;margin-top:10px;padding:14px 16px;border:1px solid rgba(67,198,216,.25);border-radius:16px;background:linear-gradient(180deg,rgba(19,83,96,.48),rgba(7,34,43,.72));color:#dff7fa;line-height:1.45;box-shadow:0 12px 30px rgba(0,0,0,.16);}
+.checkout-queue-preview strong{display:block;font-size:15px;}
+.checkout-queue-preview strong span{font-size:18px;}
+.checkout-queue-preview small{display:block;margin-top:5px;color:#9ec3ca;font-size:12px;}
+.checkout-queue-preview.confirmed{border-color:rgba(102,214,164,.32);background:linear-gradient(180deg,rgba(25,105,83,.35),rgba(7,40,37,.62));}
+.checkout-message.error{display:block!important;padding:13px 15px;border:1px solid rgba(255,103,103,.32);border-radius:14px;background:rgba(112,28,35,.28);color:#ffd7d9!important;line-height:1.45;}
+.checkout-message.success{display:block!important;padding:13px 15px;border:1px solid rgba(92,220,172,.28);border-radius:14px;background:rgba(25,105,83,.22);color:#d8fff1!important;}
+.field-label-icon .roblox-mini-logo{background:transparent!important;}
+.field-label-icon .roblox-mini-logo img{width:100%!important;height:100%!important;object-fit:contain!important;}
+@media(max-width:760px){.checkout-queue-preview{grid-column:1/-1;margin-top:8px;padding:13px 14px;}}

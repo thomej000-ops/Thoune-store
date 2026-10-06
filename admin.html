@@ -3052,6 +3052,13 @@ async function loadPayments(){
       </div>
 
       <div style="margin-top:5px">
+        <strong>TikTok:</strong>
+        ${escapeHtml(
+          order.tiktok_username ? `@${String(order.tiktok_username).replace(/^@/, "")}` : "Não informado"
+        )}
+      </div>
+
+      <div style="margin-top:5px">
         <strong>Roblox:</strong>
         ${escapeHtml(
           order.delivery_username ||
@@ -3770,8 +3777,9 @@ async function loadReviews(){
 
 
     const author =
-      review.tiktok_username ||
-      "Cliente";
+      review.tiktok_username
+        ? `@${String(review.tiktok_username).replace(/^@/, "")}`
+        : "Cliente";
 
 
     const rating =

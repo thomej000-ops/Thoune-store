@@ -18,7 +18,8 @@ let currentCategory = "Todas";
 let currentSearch = "";
 let currentSort = "popular";
 let currentReviewSort = "recent";
-const GUEST_VOTER_KEY = "thoune-review-voter-v1040";
+const GUEST_VOTER_KEY = "thoune-review-voter-v1041";
+let queuePreviewTimer = null;
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -322,7 +323,10 @@ function renderCheckout() {
   if ($("#checkout-pix-key")) $("#checkout-pix-key").textContent = storeSettings.pix_key || "Pix indisponível";
   if ($("#checkout-tiktok")) $("#checkout-tiktok").value = "";
   if ($("#checkout-roblox")) $("#checkout-roblox").value = "";
+  if ($("#checkout-pix-name")) $("#checkout-pix-name").value = "";
   setMessage($("#checkout-message"), "");
+  setQueuePreviewMessage("Consultando a fila...");
+  startQueuePreviewPolling();
 }
 
 async function openCheckout() {
@@ -331,6 +335,52 @@ async function openCheckout() {
   if (!storeSettings.online) return toast("O atendimento está offline no momento.");
   renderCheckout();
   openPanel($("#checkout-section"));
+}
+
+const GUEST_QUEUE_ACTIVE_STATUSES = [
+  "awaiting_payment",
+  "awaiting_verification",
+  "payment_confirmed",
+  "awaiting_delivery"
+];
+
+function setQueuePreviewMessage(message, type = "") {
+  const el = $("#checkout-queue-preview");
+  if (!el) return;
+  el.className = "checkout-queue-preview" + (type ? ` ${type}` : "");
+  el.innerHTML = message;
+}
+
+async function refreshQueuePreview() {
+  const { data, error } = await supabaseClient.rpc("get_guest_queue_preview");
+  if (error) {
+    console.error("get_guest_queue_preview:", error);
+    setQueuePreviewMessage("A posição da fila será calculada no momento da confirmação.");
+    return;
+  }
+  const position = Number(data);
+  if (!Number.isFinite(position) || position < 1) {
+    setQueuePreviewMessage("A posição da fila será calculada no momento da confirmação.");
+    return;
+  }
+  setQueuePreviewMessage(`<strong>📋 Se você confirmar o pedido agora, sua posição estimada será <span>#${position}</span>.</strong><small>A fila pode mudar enquanto você preenche os dados, porque novos pedidos podem entrar antes da sua confirmação.</small>`);
+}
+
+function startQueuePreviewPolling() {
+  if (queuePreviewTimer) clearInterval(queuePreviewTimer);
+  refreshQueuePreview();
+  queuePreviewTimer = window.setInterval(() => {
+    const panel = $("#checkout-section");
+    if (!panel?.classList.contains("open")) return;
+    refreshQueuePreview();
+  }, 5000);
+}
+
+function stopQueuePreviewPolling() {
+  if (queuePreviewTimer) {
+    clearInterval(queuePreviewTimer);
+    queuePreviewTimer = null;
+  }
 }
 
 async function createGuestOrder() {
@@ -363,12 +413,26 @@ async function createGuestOrder() {
   if (button) { button.disabled = false; button.textContent = "Criar pedido e pagar via Pix"; }
   if (error) {
     console.error("create_guest_order:", error);
-    return setMessage($("#checkout-message"), error.message || "Não foi possível criar o pedido.", "error");
+    const raw = String(error.message || "");
+    const missingFunction = error.code === "PGRST202" || /schema cache|Could not find the function/i.test(raw);
+    if (missingFunction) {
+      return setMessage($("#checkout-message"), "O checkout público ainda não foi ativado no Supabase. Execute o arquivo supabase_v1041_no_login_queue.sql no SQL Editor e depois recarregue o site.", "error");
+    }
+    return setMessage($("#checkout-message"), raw || "Não foi possível criar o pedido. Confira os dados e tente novamente.", "error");
   }
 
   const orderId = typeof data === "string" ? data : data?.order_id || data?.id;
   const total = Number(data?.total);
   if (!orderId) return setMessage($("#checkout-message"), "Não foi possível identificar o pedido. Tente novamente.", "error");
+
+  stopQueuePreviewPolling();
+  let queuePosition = null;
+  try {
+    const queueResult = await supabaseClient.rpc("get_guest_order_queue_position", { p_order_id: orderId });
+    if (!queueResult.error) queuePosition = Number(queueResult.data);
+  } catch (queueError) {
+    console.error("get_guest_order_queue_position:", queueError);
+  }
 
   clearCart();
   syncCartUI();
@@ -384,6 +448,7 @@ async function createGuestOrder() {
         <p class="eyebrow">PEDIDO CRIADO</p>
         <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
         <p>Seu pedido foi criado sem conta e sem e-mail. O nome informado no Pix ficará vinculado ao pedido para a conferência do pagamento.</p>
+        ${Number.isFinite(queuePosition) && queuePosition > 0 ? `<div class="checkout-queue-preview confirmed"><strong>📋 Sua posição atual na fila: <span>#${queuePosition}</span></strong><small>A posição pode mudar conforme os pedidos anteriores forem sendo concluídos.</small></div>` : ""}
         <div class="checkout-total" style="margin:18px 0;"><span>Total</span><strong>${money(Number.isFinite(total) ? total : cart.reduce((s,i)=>s+(Number(i.price)||0)*(Number(i.qty)||0),0))}</strong></div>
         <div class="manual-delivery-notice" style="text-align:left;border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin:16px 0;">
           <strong>🚚 Entrega manual</strong>
@@ -396,7 +461,7 @@ async function createGuestOrder() {
       </div>`;
     $("#copy-pix-key-success")?.addEventListener("click", copyPixKey);
     $("#guest-payment-done")?.addEventListener("click", () => requestGuestPaymentVerification(orderId));
-    $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
+    $("#guest-finish")?.addEventListener("click", () => { stopQueuePreviewPolling(); closePanel($("#checkout-section")); });
   }
   toast(`Pedido #${orderShort} criado.`);
 }
@@ -488,9 +553,9 @@ function setupEvents() {
   $("#copy-order-button")?.addEventListener("click", copyOrderText);
   $("#clear-cart-button")?.addEventListener("click", clearShoppingCart);
   $("#checkout-button")?.addEventListener("click", openCheckout);
-  $("#close-checkout")?.addEventListener("click", () => closePanel($("#checkout-section")));
-  $("#checkout-backdrop")?.addEventListener("click", () => closePanel($("#checkout-section")));
-  $("#checkout-back")?.addEventListener("click", () => { closePanel($("#checkout-section")); openCart(); });
+  $("#close-checkout")?.addEventListener("click", () => { stopQueuePreviewPolling(); closePanel($("#checkout-section")); });
+  $("#checkout-backdrop")?.addEventListener("click", () => { stopQueuePreviewPolling(); closePanel($("#checkout-section")); });
+  $("#checkout-back")?.addEventListener("click", () => { stopQueuePreviewPolling(); closePanel($("#checkout-section")); openCart(); });
   $("#copy-pix-key-button")?.addEventListener("click", copyPixKey);
   $("#confirm-order-button")?.addEventListener("click", createGuestOrder);
   $("#close-product-modal")?.addEventListener("click", () => closePanel($("#product-modal")));
