@@ -1,0 +1,11 @@
+THOUNE STORE v1044 — avaliação persistente após entrega
+
+- Pedido entregue mantém o ID no navegador.
+- Ao voltar ao site, o painel de agradecimento/avaliação abre novamente até a avaliação ser enviada.
+- Mostra data/hora da entrega.
+- Mostra apenas o @TikTok do cliente na avaliação.
+- Adicionado botão para copiar o usuário de entrega.
+- ADM grava delivered_at ao marcar entrega concluída.
+- SQL novo: supabase_v1044_persistent_guest_review.sql
+
+IMPORTANTE: executar o SQL antes de publicar os arquivos.

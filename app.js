@@ -571,7 +571,7 @@ async function uploadGuestPaymentProof(orderId) {
 
 function renderGuestDeliveryPanel(order) {
   stopGuestOrderStatusPolling();
-  localStorage.removeItem("thoune-pending-guest-order");
+  localStorage.setItem("thoune-pending-guest-order", String(order.id));
   const content = $("#checkout-section .checkout-content");
   if (!content) return;
   const orderShort = String(order.id).slice(0, 8).toUpperCase();
@@ -584,15 +584,39 @@ function renderGuestDeliveryPanel(order) {
       <p>A loja confirmou o pagamento. A entrega será realizada pelo usuário abaixo:</p>
       <div class="guest-delivery-data" style="text-align:left;margin:18px 0;padding:16px;border:1px solid rgba(95,205,219,.2);border-radius:16px;background:rgba(6,26,34,.7);">
         <div><strong>👤 Usuário de entrega:</strong> ${escapeHtml(deliveryUser)}</div>
+        <button type="button" class="secondary-button full" id="copy-delivery-user" style="margin-top:10px;">📋 Copiar usuário de entrega</button>
         <div style="margin-top:10px;"><strong>📦 Pedido:</strong> #${escapeHtml(orderShort)}</div>
       </div>
       <div class="manual-delivery-notice" style="text-align:left;border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin:16px 0;">
         <strong>🚚 Entrega manual</strong>
         <p style="margin:8px 0 0;">Aguarde o atendimento. Seus dados de TikTok e Roblox já estão vinculados ao pedido.</p>
       </div>
-      <button type="button" class="primary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
+      <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
+      <button type="button" class="primary-button full" id="open-review-after-delivery" style="margin-top:8px;">⭐ Deixar avaliação</button>
     </div>`;
+  $("#copy-delivery-user")?.addEventListener("click", async () => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(deliveryUser);
+      } else {
+        const helper=document.createElement("textarea");
+        helper.value=deliveryUser;
+        helper.setAttribute("readonly","");
+        helper.style.position="fixed";
+        helper.style.opacity="0";
+        document.body.appendChild(helper);
+        helper.select();
+        document.execCommand("copy");
+        helper.remove();
+      }
+      toast("Usuário de entrega copiado.");
+    } catch(error) {
+      console.error(error);
+      toast("Não foi possível copiar automaticamente.", "error");
+    }
+  });
   $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
+  $("#open-review-after-delivery")?.addEventListener("click", () => openGuestReviewPanel(order));
 }
 
 let guestOrderStatusTimer = null;
@@ -619,7 +643,7 @@ async function pollGuestOrderStatus(orderId) {
     return;
   }
   if (status === "delivered") {
-    renderGuestDeliveryPanel({ id: orderId, status });
+    renderGuestDeliveredPanel(data);
     return;
   }
   const queue = Number(data.queue_position);
@@ -638,10 +662,20 @@ function startGuestOrderStatusPolling(orderId) {
   }, 5000);
 }
 
-function restoreGuestOrderStatus() {
+async function restoreGuestOrderStatus() {
   const orderId = localStorage.getItem("thoune-pending-guest-order");
   if (!orderId) return;
-  renderGuestWaitingPanel(orderId);
+  const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
+  if (error || !data?.found) return;
+  if (String(data.status) === "delivered") {
+    renderGuestDeliveredPanel(data, true);
+    return;
+  }
+  if (String(data.status) === "payment_confirmed" || String(data.status) === "awaiting_delivery") {
+    renderGuestDeliveryPanel(data);
+    return;
+  }
+  renderGuestWaitingPanel(orderId, Number(data.queue_position));
   startGuestOrderStatusPolling(orderId);
 }
 
@@ -650,6 +684,130 @@ function copyPixKey() {
   if (!key) return toast("A chave Pix não está disponível.");
   navigator.clipboard?.writeText(key).then(() => toast("Chave Pix copiada.")).catch(() => toast("Não foi possível copiar."));
 }
+
+async function guestHasReview(orderId) {
+  const { data, error } = await supabaseClient.rpc("get_guest_review_status", { p_order_id: orderId });
+  if (error) {
+    console.error("get_guest_review_status:", error);
+    return false;
+  }
+  return Boolean(data?.has_review);
+}
+
+function ensureGuestReviewModal() {
+  let modal = $("#guest-review-modal");
+  if (modal) return modal;
+
+  modal = document.createElement("div");
+  modal.className = "modal-shell hidden";
+  modal.id = "guest-review-modal";
+  modal.setAttribute("aria-hidden", "true");
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+  modal.innerHTML = `
+    <div class="modal-backdrop" id="guest-review-backdrop"></div>
+    <div class="modal-card review-modal-card">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">THOUNE STORE</p>
+          <h2>⭐ Avalie sua compra</h2>
+        </div>
+        <button type="button" class="close-button" id="guest-review-close" aria-label="Fechar avaliação">×</button>
+      </div>
+      <div class="checkout-content">
+        <div style="padding:8px 0 18px;text-align:center">
+          <div style="font-size:42px">🎉</div>
+          <h3>Pedido entregue!</h3>
+          <p>Obrigado por confiar no nosso trabalho. Esperamos que você volte em breve!</p>
+          <small id="guest-review-delivered-at"></small>
+        </div>
+        <div id="guest-review-author-box" class="guest-delivery-data" style="margin-bottom:16px"></div>
+        <form id="guest-review-form">
+          <label><span class="field-label-icon">⭐ Sua nota</span>
+            <select id="guest-review-rating" required>
+              <option value="">Escolha de 1 a 5 estrelas</option>
+              <option value="5">★★★★★ — 5</option>
+              <option value="4">★★★★☆ — 4</option>
+              <option value="3">★★★☆☆ — 3</option>
+              <option value="2">★★☆☆☆ — 2</option>
+              <option value="1">★☆☆☆☆ — 1</option>
+            </select>
+          </label>
+          <label style="margin-top:14px"><span class="field-label-icon">💬 Sua experiência</span>
+            <textarea id="guest-review-text" rows="5" minlength="3" maxlength="1000" placeholder="Conte como foi sua experiência..." required></textarea>
+          </label>
+          <p class="checkout-message" id="guest-review-message" aria-live="polite"></p>
+          <button type="submit" class="primary-button full">Enviar avaliação</button>
+        </form>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  $("#guest-review-close")?.addEventListener("click", () => closePanel(modal));
+  $("#guest-review-backdrop")?.addEventListener("click", () => closePanel(modal));
+  $("#guest-review-form")?.addEventListener("submit", submitGuestReview);
+  return modal;
+}
+
+function renderGuestDeliveredPanel(order, autoOpen = false) {
+  localStorage.setItem("thoune-pending-guest-order", String(order.id));
+  const modal = ensureGuestReviewModal();
+  const when = $("#guest-review-delivered-at");
+  if (when) when.textContent = `Entrega concluída em ${order.delivered_at ? formatDate(order.delivered_at) : "data registrada"}`;
+  const username = order.tiktok_username ? `@${String(order.tiktok_username).replace(/^@/, "")}` : "@cliente";
+  const author = $("#guest-review-author-box");
+  if (author) author.innerHTML = `<strong>Seu TikTok:</strong> ${escapeHtml(username)}<br><small>A avaliação será publicada com este @.</small>`;
+  const form = $("#guest-review-form");
+  if (form) {
+    form.dataset.orderId = String(order.id);
+    form.dataset.tiktokUsername = order.tiktok_username || "";
+  }
+  if (autoOpen) openPanel(modal);
+}
+
+async function openGuestReviewPanel(order) {
+  if (await guestHasReview(order.id)) {
+    localStorage.removeItem("thoune-pending-guest-order");
+    toast("Você já avaliou este pedido.");
+    return;
+  }
+  renderGuestDeliveredPanel(order, true);
+}
+
+async function submitGuestReview(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const orderId = form.dataset.orderId || "";
+  const tiktokUsername = form.dataset.tiktokUsername || "";
+  const rating = Number($("#guest-review-rating")?.value || 0);
+  const textValue = normalizeText($("#guest-review-text")?.value);
+  const message = $("#guest-review-message");
+
+  if (!orderId || !tiktokUsername) return setMessage(message, "Não encontramos os dados deste pedido.", "error");
+  if (!rating || rating < 1 || rating > 5) return setMessage(message, "Escolha uma nota de 1 a 5.", "error");
+  if (textValue.length < 3) return setMessage(message, "Escreva pelo menos 3 caracteres.", "error");
+
+  const button = form.querySelector('button[type="submit"]');
+  if (button) { button.disabled = true; button.textContent = "Enviando..."; }
+
+  const { data, error } = await supabaseClient.rpc("submit_guest_review", {
+    p_order_id: orderId,
+    p_tiktok_username: tiktokUsername,
+    p_rating: rating,
+    p_text: textValue
+  });
+
+  if (error || !data?.success) {
+    console.error("submit_guest_review:", error || data);
+    if (button) { button.disabled = false; button.textContent = "Enviar avaliação"; }
+    return setMessage(message, error?.message || data?.message || "Não foi possível enviar a avaliação.", "error");
+  }
+
+  localStorage.removeItem("thoune-pending-guest-order");
+  setMessage(message, "Avaliação enviada para análise. Obrigado! 💙", "success");
+  if (button) { button.disabled = true; button.textContent = "Avaliação enviada ✓"; }
+  setTimeout(() => closePanel($("#guest-review-modal")), 1400);
+}
+
 
 // Reviews: public-only. Helpful votes use a browser token, not an account.
 function getGuestVoterToken() {
@@ -699,7 +857,7 @@ async function toggleReviewHelpful(reviewId) {
   if (error) { console.error(error); toast(error.message || "Não foi possível registrar o voto.", "error"); return; }
   if (data?.success === false) { toast(data.message || "Não foi possível registrar o voto.", "error"); return; }
   await loadPublicReviews();
-  restoreGuestOrderStatus();
+  await restoreGuestOrderStatus();
 }
 
 function setupSortControl() {
