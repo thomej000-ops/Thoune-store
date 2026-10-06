@@ -9,7 +9,7 @@
   >
 
   <meta name="theme-color" content="#082c3a">
-  <meta name="thoune-version" content="v1023">
+  <meta name="thoune-version" content="v1040">
 
   <title>Thoune Store — Flee the Facility</title>
 
@@ -31,7 +31,7 @@
 
   <link
     rel="stylesheet"
-    href="./styles.css?v=1034"
+    href="./styles.css?v=1040"
   >
 </head>
 
@@ -65,59 +65,7 @@
     aria-hidden="true"
   ></div>
 
-
-  <!-- =====================================================
-       PEDIDO ATUAL — PAINEL FLUTUANTE
-  ====================================================== -->
-
-  <aside
-    class="order-floating-panel hidden"
-    id="current-order-panel"
-    aria-label="Acompanhamento do pedido"
-    aria-hidden="true"
-  >
-
-    <div class="order-floating-header">
-
-      <div>
-        <span class="order-floating-eyebrow">
-          PEDIDO ATUAL
-        </span>
-
-        <h2><span class="ui-icon ui-icon-receipt" aria-hidden="true"></span> Acompanhamento</h2>
-      </div>
-
-      <button
-        type="button"
-        class="order-floating-close"
-        id="close-current-order-panel"
-        aria-label="Fechar acompanhamento do pedido"
-      >
-        ×
-      </button>
-
-    </div>
-
-
-    <div
-      class="order-floating-content"
-      id="current-order-content"
-    ></div>
-
-
-    <div class="order-floating-footer">
-
-      <button
-        type="button"
-        class="secondary-button"
-        id="open-orders-from-floating"
-      >
-        Ver meus pedidos
-      </button>
-
-    </div>
-
-  </aside>
+  
 
 
   <!-- =====================================================
@@ -175,19 +123,6 @@
     <!-- AÇÕES DO HEADER -->
 
     <div class="header-actions">
-
-      <!-- Conta -->
-
-      <button
-        type="button"
-        class="icon-button account-button"
-        id="open-account-button"
-        aria-label="Minha conta"
-        aria-controls="account-panel-modal"
-      >
-        <span class="ui-icon ui-icon-user" aria-hidden="true"></span>
-      </button>
-
 
       <!-- Carrinho -->
 
@@ -340,7 +275,7 @@
           </strong>
 
           <p>
-            Seu pedido é acompanhado do início ao fim.
+            Checkout simples, pagamento via Pix e entrega manual.
           </p>
         </div>
 
@@ -353,11 +288,11 @@
 
         <div>
           <strong>
-            Pedido acompanhado
+            Sem cadastro
           </strong>
 
           <p>
-            Você sabe em que etapa sua compra está.
+            Você compra sem criar conta e sem informar e-mail.
           </p>
         </div>
 
@@ -370,11 +305,11 @@
 
         <div>
           <strong>
-            Entrega garantida
+            Entrega manual
           </strong>
 
           <p>
-            Após a confirmação, você recebe as instruções.
+            Eu mesmo realizo as entregas, por ordem dos pedidos.
           </p>
         </div>
 
@@ -626,118 +561,17 @@
     >
 
       <div class="section-heading centered">
-
-        <p class="eyebrow">
-          COMO FUNCIONA
-        </p>
-
-        <h2>
-          Como comprar sem complicação?
-        </h2>
-
-        <p>
-          Um processo simples para você escolher, pagar e acompanhar sua compra.
-        </p>
-
+        <p class="eyebrow">COMO FUNCIONA</p>
+        <h2>Como comprar sem complicação?</h2>
+        <p>Sem login, sem cadastro e sem e-mail. Você escolhe, paga e informa apenas os dados necessários para a entrega.</p>
       </div>
 
-
       <div class="steps">
-
-        <article>
-
-          <b>01</b>
-
-          <span>
-            <span class="ui-icon ui-icon-user" aria-hidden="true"></span>
-          </span>
-
-          <h3>
-            Faça seu login
-          </h3>
-
-          <p>
-            Entre ou crie sua conta na Thoune Store.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <b>02</b>
-
-          <span>
-            <span class="ui-icon ui-icon-bag" aria-hidden="true"></span>
-          </span>
-
-          <h3>
-            Escolha
-          </h3>
-
-          <p>
-            Encontre suas marretas e adicione ao carrinho.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <b>03</b>
-
-          <span>
-            <span class="ui-icon ui-icon-receipt" aria-hidden="true"></span>
-          </span>
-
-          <h3>
-            Confira
-          </h3>
-
-          <p>
-            Revise quantidades e veja o total do pedido.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <b>04</b>
-
-          <span>
-            <span class="ui-icon ui-icon-card" aria-hidden="true"></span>
-          </span>
-
-          <h3>
-            Pague via Pix
-          </h3>
-
-          <p>
-            Realize o pagamento e solicite a verificação.
-          </p>
-
-        </article>
-
-
-        <article>
-
-          <b>05</b>
-
-          <span>
-            <span class="ui-icon ui-icon-box" aria-hidden="true"></span>
-          </span>
-
-          <h3>
-            Receba
-          </h3>
-
-          <p>
-            Após a confirmação, siga as instruções de entrega.
-          </p>
-
-        </article>
-
+        <article><b>01</b><span><span class="ui-icon ui-icon-bag" aria-hidden="true"></span></span><h3>Escolha</h3><p>Encontre suas marretas e adicione ao carrinho.</p></article>
+        <article><b>02</b><span><span class="ui-icon ui-icon-receipt" aria-hidden="true"></span></span><h3>Confira</h3><p>Revise as quantidades e veja o total do pedido.</p></article>
+        <article><b>03</b><span><span class="ui-icon ui-icon-user" aria-hidden="true"></span></span><h3>Informe os usuários</h3><p>Digite seu usuário do TikTok, seu usuário do Roblox e o nome do remetente do Pix.</p></article>
+        <article><b>04</b><span><span class="ui-icon ui-icon-card" aria-hidden="true"></span></span><h3>Pague via Pix</h3><p>Crie o pedido, confira o valor e faça o pagamento pelo Pix.</p></article>
+        <article><b>05</b><span><span class="ui-icon ui-icon-box" aria-hidden="true"></span></span><h3>Aguarde a entrega</h3><p>As entregas são manuais e seguem a ordem dos pedidos.</p></article>
       </div>
 
     </section>
@@ -912,19 +746,6 @@
 
         </details>
 
-
-        <details>
-
-          <summary>
-            Posso acompanhar meu pedido?
-          </summary>
-
-          <p>
-            Sim. Em “Minha conta”, você pode acessar “Meus pedidos” e acompanhar cada etapa da compra.
-          </p>
-
-        </details>
-
         <details>
           <summary>Posso alterar a quantidade depois de adicionar ao carrinho?</summary>
           <p>Sim. O carrinho permite aumentar ou diminuir a quantidade enquanto o pedido ainda não foi enviado.</p>
@@ -938,11 +759,6 @@
         <details>
           <summary>Preciso informar meu usuário do Roblox?</summary>
           <p>Sim. Ele é usado para identificar para qual usuário a entrega deve ser realizada.</p>
-        </details>
-
-        <details>
-          <summary>Onde vejo minhas notificações?</summary>
-          <p>Depois de entrar na conta, abra o botão de usuário e acesse Notificações para consultar avisos relacionados aos seus pedidos.</p>
         </details>
 
         <details>
@@ -985,516 +801,7 @@
 
   </main>
 
-
-  <!-- =====================================================
-       PAINEL — MINHA CONTA
-  ====================================================== -->
-
-  <aside
-    class="side-panel account-side-panel hidden"
-    id="account-panel-modal"
-    aria-hidden="true"
-    aria-label="Minha conta"
-  >
-
-    <div class="side-panel-inner">
-
-      <div class="side-panel-header">
-
-        <div>
-
-          <span class="eyebrow">
-            MINHA CONTA
-          </span>
-
-          <h2>
-            Seu espaço
-          </h2>
-
-        </div>
-
-
-        <button
-          type="button"
-          class="close-button"
-          id="close-account-panel"
-          aria-label="Fechar minha conta"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <div class="side-panel-content">
-
-        <!-- ESTADO DA CONTA -->
-
-        <div
-          class="account-card"
-          id="account-card"
-        >
-
-          <span class="account-icon">
-            <span class="ui-icon ui-icon-user" aria-hidden="true"></span>
-          </span>
-
-
-          <div class="account-content">
-
-            <p class="eyebrow">
-              CONTA
-            </p>
-
-            <h3>
-              Bem-vindo à Thoune Store
-            </h3>
-
-
-            <p id="account-message">
-              Entre ou crie sua conta para acompanhar seus pedidos.
-            </p>
-
-
-            <!-- ==========================================
-                 PERFIL INICIAL
-            =========================================== -->
-
-            <div
-              id="profile-fields"
-              class="profile-fields hidden"
-            >
-
-              <label>
-
-                <span class="field-label-icon"><span class="tiktok-mini-logo" aria-hidden="true"><img src="tiktok-logo.png" alt=""></span> Usuário do TikTok</span>
-
-                <input
-                  id="tiktok-username"
-                  type="text"
-                  placeholder="@seuusuario"
-                  autocomplete="off"
-                >
-
-              </label>
-
-
-              <label>
-
-                <span class="field-label-icon"><span class="roblox-mini-logo" aria-hidden="true"><img src="roblox-logo.png" alt=""></span> Usuário do Roblox</span>
-
-                <input
-                  id="roblox-username"
-                  type="text"
-                  placeholder="Seu usuário do Roblox"
-                  autocomplete="off"
-                >
-
-              </label>
-
-
-              <button
-                type="button"
-                class="secondary-button full"
-                id="save-profile-button"
-              >
-                <span class="ui-icon ui-icon-check" aria-hidden="true"></span> Salvar informações
-              </button>
-
-
-              <p
-                id="profile-message"
-                class="profile-message"
-                aria-live="polite"
-              ></p>
-
-            </div>
-
-
-            <!-- ==========================================
-                 ÁREA LOGADA
-            =========================================== -->
-
-            <div
-              id="account-details"
-              class="account-details hidden"
-            >
-
-              <!-- RESUMO -->
-
-              <div class="account-user-summary">
-
-                <div class="account-summary-item">
-                  <span class="account-summary-label"><span class="tiktok-mini-logo" aria-hidden="true"><img src="tiktok-logo.png" alt=""></span> TIKTOK</span>
-                  <strong id="account-email">—</strong>
-                </div>
-
-                <div class="account-summary-item">
-                  <span class="account-summary-label"><span class="roblox-mini-logo" aria-hidden="true"><img src="roblox-logo.png" alt=""></span> ROBLOX</span>
-                  <strong id="account-roblox">—</strong>
-                </div>
-
-              </div>
-
-
-              <!-- MENU PRINCIPAL -->
-
-              <div
-                class="account-menu"
-                id="account-menu"
-              >
-
-                <button
-                  type="button"
-                  class="account-menu-button"
-                  id="open-orders-panel"
-                >
-
-                  <span class="account-menu-icon">
-                    <span class="ui-icon ui-icon-box" aria-hidden="true"></span>
-                  </span>
-
-                  <span>
-
-                    <strong>
-                      Meus pedidos
-                    </strong>
-
-                    <small>
-                      Acompanhe suas compras
-                    </small>
-
-                  </span>
-
-                  <b>
-                    ›
-                  </b>
-
-                </button>
-
-
-                <button
-                  type="button"
-                  class="account-menu-button"
-                  id="open-notifications-panel"
-                >
-
-                  <span class="account-menu-icon" aria-hidden="true">
-                    <span class="ui-icon ui-icon-headset" aria-hidden="true"></span>
-                  </span>
-
-                  <span>
-
-                    <strong>
-                      Notificações
-                    </strong>
-
-                    <small>
-                      Avisos sobre seus pedidos
-                    </small>
-
-                  </span>
-
-                  <b>
-                    ›
-                  </b>
-
-                </button>
-
-
-
-
-
-                <button
-                  type="button"
-                  class="account-menu-button favorites-account-button"
-                  id="open-favorites-account"
-                >
-
-                  <span class="account-menu-icon">
-                    <span class="ui-icon ui-icon-heart" aria-hidden="true"></span>
-                  </span>
-
-                  <span>
-
-                    <strong>
-                      Favoritos
-                    </strong>
-
-                    <small>
-                      Marretas que você salvou
-                    </small>
-
-                  </span>
-
-                  <b>
-                    ›
-                  </b>
-
-                </button>
-
-              </div>
-
-
-              <!-- ========================================
-                   PAINEL DE PEDIDOS
-              ========================================= -->
-
-              <div
-                class="account-panel hidden"
-                id="orders-panel"
-              >
-
-                <div class="account-panel-header">
-
-                  <button
-                    type="button"
-                    class="account-panel-back"
-                    data-account-back
-                    aria-label="Voltar para o menu da conta"
-                  >
-                    ←
-                  </button>
-
-
-                  <div>
-
-                    <span>
-                      HISTÓRICO
-                    </span>
-
-                    <h3>
-                      Meus pedidos
-                    </h3>
-
-                  </div>
-
-                </div>
-
-
-                <div
-                  class="account-panel-content"
-                  id="orders-list"
-                >
-
-                  <p
-                    id="orders-message"
-                    class="panel-message"
-                  >
-                    Você ainda não possui pedidos.
-                  </p>
-
-                </div>
-
-              </div>
-
-
-              <!-- ========================================
-                   PAINEL DE NOTIFICAÇÕES
-              ========================================= -->
-
-              <div
-                class="account-panel hidden"
-                id="notifications-panel"
-              >
-
-                <div class="account-panel-header">
-
-                  <button
-                    type="button"
-                    class="account-panel-back"
-                    data-account-back
-                    aria-label="Voltar para o menu da conta"
-                  >
-                    ←
-                  </button>
-
-
-                  <div>
-
-                    <span>
-                      AVISOS
-                    </span>
-
-                    <h3>
-                      Notificações
-                    </h3>
-
-                  </div>
-
-                </div>
-
-
-                <div
-                  class="account-panel-content"
-                  id="notifications-list"
-                >
-
-                  <p
-                    id="notifications-message"
-                    class="panel-message"
-                  >
-                    Você não possui novas notificações.
-                  </p>
-
-                </div>
-
-              </div>
-
-
-              <!-- ========================================
-                   PAINEL DE FAVORITOS DA CONTA
-              ========================================= -->
-
-              <div
-                class="account-panel hidden"
-                id="favorites-account-panel"
-              >
-
-                <div class="account-panel-header">
-
-                  <button
-                    type="button"
-                    class="account-panel-back"
-                    data-account-back
-                    aria-label="Voltar para o menu da conta"
-                  >
-                    ←
-                  </button>
-
-
-                  <div>
-
-                    <span>
-                      SALVOS
-                    </span>
-
-                    <h3>
-                      Favoritos
-                    </h3>
-
-                  </div>
-
-                </div>
-
-
-                <div
-                  class="account-panel-content"
-                  id="account-favorites-list"
-                >
-
-                  <p class="panel-message">
-                    Você ainda não salvou nenhuma marreta.
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            <!-- ==========================================
-                 AUTENTICAÇÃO
-            =========================================== -->
-
-            <div
-              class="account-form"
-              id="account-form"
-            >
-
-              <div class="account-form-heading">
-
-                <span class="account-form-icon"><span class="ui-icon ui-icon-lock" aria-hidden="true"></span></span>
-
-                <div>
-
-                  <strong>
-                    Acesse sua conta
-                  </strong>
-
-                  <small>
-                    Necessário para realizar pedidos.
-                  </small>
-
-                </div>
-
-              </div>
-
-
-              <label class="account-input">
-
-                <span>
-                  E-mail
-                </span>
-
-                <input
-                  id="auth-email"
-                  type="email"
-                  placeholder="Seu e-mail"
-                  autocomplete="email"
-                >
-
-              </label>
-
-
-              <label class="account-input">
-
-                <span>
-                  Senha
-                </span>
-
-                <input
-                  id="auth-password"
-                  type="password"
-                  placeholder="Sua senha"
-                  autocomplete="current-password"
-                >
-
-              </label>
-
-
-              <div class="account-actions">
-
-                <button
-                  type="button"
-                  class="primary-button"
-                  id="login-button"
-                >
-                  Entrar
-                </button>
-
-
-                <button
-                  type="button"
-                  class="secondary-button"
-                  id="signup-button"
-                >
-                  Criar conta
-                </button>
-
-              </div>
-
-
-            </div>
-
-            <button
-              type="button"
-              class="secondary-button full hidden"
-              id="logout-button"
-            >
-              Sair da conta
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </aside>
+  
 
 
   <!-- =====================================================
@@ -1603,55 +910,7 @@
 
   </div>
 
-
-  <!-- =====================================================
-       PAINEL — NOTIFICAÇÕES GERAIS
-  ====================================================== -->
-
-  <aside
-    class="side-panel hidden"
-    id="notifications-global-panel"
-    aria-hidden="true"
-    aria-label="Notificações"
-  >
-
-    <div class="side-panel-inner">
-
-      <div class="side-panel-header">
-
-        <div>
-
-          <span class="eyebrow">
-            AVISOS
-          </span>
-
-          <h2>
-            Notificações
-          </h2>
-
-        </div>
-
-
-        <button
-          type="button"
-          class="close-button"
-          id="close-notifications-global-panel"
-          aria-label="Fechar notificações"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <div
-        class="side-panel-content"
-        id="global-notifications-list"
-      ></div>
-
-    </div>
-
-  </aside>
+  
 
 
   <!-- =====================================================
@@ -1769,7 +1028,7 @@
 
 
         <small class="checkout-note">
-          O pagamento é realizado via Pix quando o atendimento estiver online.
+          O pagamento é realizado via Pix quando o atendimento estiver online. Não pedimos e-mail.
         </small>
 
       </div>
@@ -1981,7 +1240,7 @@
 
               <details class="checkout-help">
                 <summary>ⓘ Por que esses dados?</summary>
-                <p>Usamos estas informações somente para identificar o pedido e realizar a entrega.</p>
+                <p>Usamos seu TikTok e seu Roblox para identificar o pedido e realizar a entrega. Também pedimos o nome do remetente do Pix para conferir se o pagamento foi realmente enviado por você. Não pedimos e-mail nem senha.</p>
               </details>
 
             </div>
@@ -1996,7 +1255,8 @@
             <input
               id="checkout-tiktok"
               type="text"
-              readonly
+              placeholder="@seuusuario"
+              autocomplete="off"
             >
 
           </label>
@@ -2018,31 +1278,32 @@
           </label>
 
 
-          <details class="checkout-field-help">
-            <summary>ⓘ Sobre o usuário do Roblox</summary>
-            <p>Ele é usado somente para realizar a entrega deste pedido.</p>
-          </details>
-
-
           <label>
 
             <span>
-              ▱ Nome do remetente do Pix
+              💳 Nome do remetente do Pix
             </span>
 
             <input
               id="checkout-pix-name"
               type="text"
               placeholder="Nome que aparecerá no Pix"
-              autocomplete="off"
+              autocomplete="name"
+              maxlength="120"
             >
 
           </label>
 
 
           <details class="checkout-field-help">
-            <summary>ⓘ Qual nome devo colocar?</summary>
-            <p>Use o nome exatamente como aparece na transação Pix.</p>
+            <summary>ⓘ Por que preciso informar meu nome do Pix?</summary>
+            <p>Informe o nome que aparecerá para a loja no comprovante/recebimento do Pix. Usaremos esse dado somente para conferir o pagamento e relacioná-lo ao seu pedido.</p>
+          </details>
+
+
+          <details class="checkout-field-help">
+            <summary>ⓘ Sobre o usuário do Roblox</summary>
+            <p>Ele é usado somente para realizar a entrega deste pedido.</p>
           </details>
 
         </div>
@@ -2068,16 +1329,7 @@
             class="primary-button"
             id="confirm-order-button"
           >
-            Confirmar pedido
-          </button>
-
-
-          <button
-            type="button"
-            class="secondary-button full hidden"
-            id="verify-payment-button"
-          >
-            ⌕ Verificar pagamento
+            Criar pedido e pagar via Pix
           </button>
 
         </div>
@@ -2096,75 +1348,6 @@
   </div>
 
 
-  <div class="modal-shell hidden" id="review-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Avaliar pedido">
-    <div class="modal-backdrop" data-close-review></div>
-    <div class="modal-card review-modal-card">
-      <div class="modal-header"><div><p class="eyebrow">SUA EXPERIÊNCIA</p><h2>Como foi sua compra?</h2></div><button type="button" class="close-button" id="close-review" aria-label="Fechar">×</button></div>
-      <form id="review-form" class="review-form">
-        <label>Nota<select id="review-rating"><option value="5">★★★★★ — 5</option><option value="4">★★★★☆ — 4</option><option value="3">★★★☆☆ — 3</option><option value="2">★★☆☆☆ — 2</option><option value="1">★☆☆☆☆ — 1</option></select></label>
-        <label>Seu comentário<textarea id="review-text" rows="5" maxlength="600" placeholder="Conte como foi sua experiência..."></textarea></label>
-        <button type="submit" class="primary-button">Enviar avaliação</button>
-        <p id="review-form-message" class="checkout-message" aria-live="polite"></p>
-      </form>
-    </div>
-  </div>
-
-  <!-- =====================================================
-       PAINEL — PEDIDO / STATUS
-  ====================================================== -->
-
-  <div
-    class="modal-shell hidden"
-    id="order-details-modal"
-    aria-hidden="true"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Detalhes do pedido"
-  >
-
-    <div
-      class="modal-backdrop"
-      data-close-order-details
-    ></div>
-
-
-    <div class="modal-card order-details-card">
-
-      <div class="modal-header">
-
-        <div>
-
-          <p class="eyebrow">
-            SEU PEDIDO
-          </p>
-
-          <h2 id="order-details-title">
-            Acompanhamento
-          </h2>
-
-        </div>
-
-
-        <button
-          type="button"
-          class="close-button"
-          id="close-order-details"
-          aria-label="Fechar detalhes do pedido"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <div
-        class="order-details-content"
-        id="order-details-content"
-      ></div>
-
-    </div>
-
-  </div>
 
 
   <!-- =====================================================
@@ -2268,11 +1451,11 @@
           <h3>Estoque</h3>
           <p>Adicionar um produto ao carrinho não reserva estoque. A baixa acontece na confirmação do pagamento.</p>
         </section>
-        <section><h3>Dados da conta</h3><p>Os dados usados para identificar a entrega devem ser informados corretamente pelo cliente. O site não exige que o e-mail seja exibido publicamente no perfil.</p></section>
+        <section><h3>Dados informados</h3><p>O checkout não exige conta, login ou e-mail. Informe corretamente seu usuário do TikTok, seu usuário do Roblox e o nome do remetente do Pix.</p></section>
         <section><h3>Entrega digital</h3><p>As marretas são itens digitais. Após a confirmação do pagamento, a loja utiliza os dados informados para realizar a entrega.</p></section>
         <section><h3>Disponibilidade da loja</h3><p>Quando o atendimento estiver offline, novas compras podem ficar temporariamente indisponíveis até a loja voltar a operar.</p></section>
         <section><h3>Preços e descontos</h3><p>O valor final mostrado no checkout é calculado com base no produto e nas configurações de desconto vigentes no momento do pedido.</p></section>
-        <section><h3>Avaliações</h3><p>As avaliações podem ser publicadas após aprovação. Outros clientes podem marcar uma avaliação como útil usando 👍.</p></section>
+        <section><h3>Avaliações</h3><p>As avaliações publicadas pela loja ficam disponíveis para consulta na página.</p></section>
         <section><h3>Contato</h3><p>Em caso de dúvida, correção de dados ou problema com um pedido, utilize o canal de atendimento informado no site.</p></section>
       </div>
     </div>
@@ -2287,7 +1470,7 @@
 
   <script
     type="module"
-    src="./app.js?v=1020"
+    src="./app.js?v=1040"
   ></script>
 
 </body>

@@ -2674,7 +2674,7 @@ async function loadOrders(){
       document.createElement("p");
 
     customer.innerHTML =
-      `<strong>Cliente:</strong> Cliente autenticado`;
+      `<strong>Cliente:</strong> Compra sem cadastro`;
 
 
     const privateInfo =
@@ -2684,9 +2684,14 @@ async function loadOrders(){
       "private-info";
 
     privateInfo.innerHTML = `
-      <strong>🔒 Dados privados da entrega</strong>
+      <strong>🔒 Dados informados no checkout</strong>
 
       <div style="margin-top:8px">
+        <strong>TikTok:</strong>
+        ${escapeHtml(order.tiktok_username || "Não informado")}
+      </div>
+
+      <div style="margin-top:5px">
         <strong>Roblox:</strong>
         ${escapeHtml(
           order.delivery_username ||
@@ -2694,13 +2699,6 @@ async function loadOrders(){
         )}
       </div>
 
-      <div style="margin-top:5px">
-        <strong>Pix:</strong>
-        ${escapeHtml(
-          order.pix_name ||
-          "Não informado"
-        )}
-      </div>
     `;
 
 

@@ -1,0 +1,29 @@
+Thoune Store v1040 — mudança radical para checkout público
+
+REMOVIDO DO SITE DO CLIENTE
+- Login e criação de conta
+- Coleta de e-mail
+- Senha
+- Minha conta
+- Meus pedidos
+- Acompanhamento por conta
+- Perfil do cliente
+- Nome do remetente do Pix no checkout
+
+NOVO FLUXO
+- Catálogo público
+- Carrinho
+- Checkout com somente TikTok + Roblox
+- Pedido público
+- Pix
+- Botão “Já fiz o Pix”
+- Entrega manual por ordem de pedidos
+
+O ADMIN CONTINUA COM LOGIN
+O painel admin continua protegido pelo Supabase Auth e continua mostrando pedidos, pagamentos, estoque e avaliações.
+
+BANCO
+Execute supabase_v1040_no_login_checkout.sql antes de publicar.
+
+
+Atualização: checkout também exige o nome do remetente do Pix. O nome é salvo em orders.pix_name e payments.pix_name para conferência manual do pagamento.
