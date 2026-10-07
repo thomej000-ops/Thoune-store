@@ -1,6 +1,13 @@
-THOUNE STORE v1047 — CORREÇÃO DOS PAINÉIS NO DESKTOP
+THOUNE STORE v1047 — CORREÇÃO DA AVALIAÇÃO GUEST
 
-- Corrigido o checkout na versão computador quando o conteúdo muda para o painel de Pix/aguardando pagamento/entrega/rejeição.
-- Os painéis dinâmicos agora ocupam a largura inteira do modal no desktop, em vez de ficarem presos na primeira coluna.
-- Corrigido também o layout do painel de avaliação para não herdar a grade de duas colunas do checkout.
-- Nenhuma regra mobile foi alterada nesta correção.
+Correção do erro:
+"null value in column customer_id of relation reviews violates not-null constraint"
+
+O fluxo atual da loja não possui conta/e-mail de cliente, portanto avaliações enviadas pelo cliente precisam aceitar customer_id = NULL.
+
+ANTES DE TESTAR A AVALIAÇÃO:
+1. Execute supabase_v1047_guest_review_customer_nullable.sql no SQL Editor do Supabase.
+2. Não é necessário alterar o visual nem o fluxo do site.
+3. Depois de executar o SQL, teste novamente o botão "Enviar avaliação".
+
+O SQL mantém a associação da avaliação com o pedido por order_id e conserva a aprovação pelo painel administrativo.
