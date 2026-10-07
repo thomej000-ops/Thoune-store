@@ -1,0 +1,6 @@
+THOUNE STORE v1047 — CORREÇÃO DOS PAINÉIS NO DESKTOP
+
+- Corrigido o checkout na versão computador quando o conteúdo muda para o painel de Pix/aguardando pagamento/entrega/rejeição.
+- Os painéis dinâmicos agora ocupam a largura inteira do modal no desktop, em vez de ficarem presos na primeira coluna.
+- Corrigido também o layout do painel de avaliação para não herdar a grade de duas colunas do checkout.
+- Nenhuma regra mobile foi alterada nesta correção.
