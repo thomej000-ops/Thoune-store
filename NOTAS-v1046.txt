@@ -1,0 +1,7 @@
+THOUNE STORE v1046
+
+- Removido o botão "Deixar avaliação" do painel exibido após a confirmação do pagamento.
+- O painel de pagamento/entrega agora tem somente o botão Fechar.
+- A avaliação continua persistente: depois que o administrador marca o pedido como entregue, ao voltar ao site o painel de avaliação é aberto.
+- Após enviar a avaliação, ela vai para moderação no painel administrativo e o cliente pode fechar o painel manualmente.
+- Refinado o visual do painel de avaliação para combinar com o restante do site.

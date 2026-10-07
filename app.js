@@ -592,7 +592,6 @@ function renderGuestDeliveryPanel(order) {
         <p style="margin:8px 0 0;">Aguarde o atendimento. Seus dados de TikTok e Roblox já estão vinculados ao pedido.</p>
       </div>
       <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
-      <button type="button" class="primary-button full" id="open-review-after-delivery" style="margin-top:8px;">⭐ Deixar avaliação</button>
     </div>`;
   $("#copy-delivery-user")?.addEventListener("click", async () => {
     try {
@@ -616,7 +615,6 @@ function renderGuestDeliveryPanel(order) {
     }
   });
   $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
-  $("#open-review-after-delivery")?.addEventListener("click", () => openGuestReviewPanel(order));
 }
 
 let guestOrderStatusTimer = null;
@@ -706,7 +704,7 @@ function ensureGuestReviewModal() {
   modal.setAttribute("aria-modal", "true");
   modal.innerHTML = `
     <div class="modal-backdrop" id="guest-review-backdrop"></div>
-    <div class="modal-card review-modal-card">
+    <div class="modal-card review-modal-card guest-review-modal-card">
       <div class="modal-header">
         <div>
           <p class="eyebrow">THOUNE STORE</p>
@@ -714,15 +712,16 @@ function ensureGuestReviewModal() {
         </div>
         <button type="button" class="close-button" id="guest-review-close" aria-label="Fechar avaliação">×</button>
       </div>
-      <div class="checkout-content">
-        <div style="padding:8px 0 18px;text-align:center">
-          <div style="font-size:42px">🎉</div>
+      <div class="checkout-content guest-review-content">
+        <div class="guest-review-hero">
+          <div class="guest-review-hero-icon">🎉</div>
+          <p class="eyebrow">ENTREGA CONCLUÍDA</p>
           <h3>Pedido entregue!</h3>
           <p>Obrigado por confiar no nosso trabalho. Esperamos que você volte em breve!</p>
           <small id="guest-review-delivered-at"></small>
         </div>
-        <div id="guest-review-author-box" class="guest-delivery-data" style="margin-bottom:16px"></div>
-        <form id="guest-review-form">
+        <div id="guest-review-author-box" class="guest-review-author-box"></div>
+        <form id="guest-review-form" class="guest-review-form">
           <label><span class="field-label-icon">⭐ Sua nota</span>
             <select id="guest-review-rating" required>
               <option value="">Escolha de 1 a 5 estrelas</option>
@@ -733,7 +732,7 @@ function ensureGuestReviewModal() {
               <option value="1">★☆☆☆☆ — 1</option>
             </select>
           </label>
-          <label style="margin-top:14px"><span class="field-label-icon">💬 Sua experiência</span>
+          <label><span class="field-label-icon">💬 Sua experiência</span>
             <textarea id="guest-review-text" rows="5" minlength="3" maxlength="1000" placeholder="Conte como foi sua experiência..." required></textarea>
           </label>
           <p class="checkout-message" id="guest-review-message" aria-live="polite"></p>
@@ -805,7 +804,8 @@ async function submitGuestReview(event) {
   localStorage.removeItem("thoune-pending-guest-order");
   setMessage(message, "Avaliação enviada para análise. Obrigado! 💙", "success");
   if (button) { button.disabled = true; button.textContent = "Avaliação enviada ✓"; }
-  setTimeout(() => closePanel($("#guest-review-modal")), 1400);
+  // O cliente decide quando fechar o painel usando o X. A avaliação já foi enviada para moderação.
+  
 }
 
 

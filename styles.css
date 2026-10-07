@@ -6342,3 +6342,119 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
     gap: 15px !important;
   }
 }
+
+
+/* ============================================================
+   v1046 — revisão pós-entrega: painel mais integrado ao site
+   ============================================================ */
+.guest-status-panel{
+  width:min(620px,100%);
+  margin:0 auto;
+  border:1px solid rgba(103,183,197,.18) !important;
+  border-radius:24px !important;
+  background:linear-gradient(180deg,rgba(8,43,54,.96),rgba(5,25,33,.98)) !important;
+  box-shadow:0 22px 70px rgba(0,0,0,.34) !important;
+  color:#eaf8fa;
+}
+.guest-status-panel > p:not(.eyebrow){
+  color:#9bbbc2;
+  line-height:1.65;
+}
+.guest-status-panel .guest-delivery-data{
+  background:linear-gradient(135deg,rgba(15,65,78,.78),rgba(6,30,39,.86)) !important;
+  border:1px solid rgba(103,183,197,.16) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+}
+.guest-status-panel .manual-delivery-notice{
+  border:1px solid rgba(132,96,224,.38) !important;
+  background:linear-gradient(135deg,rgba(111,76,180,.16),rgba(49,30,90,.18)) !important;
+}
+.guest-status-panel .manual-delivery-notice p{color:#aeb8cf !important;line-height:1.55;}
+.guest-status-panel #guest-finish{margin-top:14px !important;min-height:48px;}
+
+.guest-review-modal-card{
+  width:min(600px,calc(100vw - 28px)) !important;
+  max-height:min(90vh,780px) !important;
+  overflow:auto !important;
+  padding:0 !important;
+  border:1px solid rgba(103,183,197,.18) !important;
+  border-radius:26px !important;
+  background:linear-gradient(180deg,#092c38 0%,#061c25 100%) !important;
+  box-shadow:0 28px 90px rgba(0,0,0,.48) !important;
+}
+.guest-review-modal-card .modal-header{
+  padding:22px 24px 18px !important;
+  border-bottom:1px solid rgba(103,183,197,.12);
+  background:linear-gradient(180deg,rgba(12,55,67,.72),rgba(8,40,50,.28));
+}
+.guest-review-modal-card .modal-header h2{margin:4px 0 0 !important;font-size:22px;}
+.guest-review-modal-card .modal-header .eyebrow{margin:0 !important;color:#69d9e4;}
+.guest-review-modal-card .checkout-content{padding:22px 24px 26px !important;}
+.guest-review-hero{
+  text-align:center;
+  padding:4px 8px 20px;
+}
+.guest-review-hero-icon{
+  width:68px;height:68px;margin:0 auto 10px;
+  display:grid;place-items:center;
+  border-radius:22px;
+  background:linear-gradient(135deg,rgba(67,210,224,.15),rgba(121,80,216,.16));
+  border:1px solid rgba(103,183,197,.18);
+  font-size:34px;
+  box-shadow:0 12px 35px rgba(0,0,0,.18);
+}
+.guest-review-hero .eyebrow{margin:0 0 5px;color:#69d9e4;}
+.guest-review-hero h3{margin:0 0 8px;font-size:28px;}
+.guest-review-hero p:not(.eyebrow){margin:0 auto 8px;max-width:440px;color:#a8c5cc;line-height:1.6;}
+.guest-review-hero small{color:#71949e;}
+.guest-review-author-box{
+  padding:15px 16px;
+  margin-bottom:18px;
+  border:1px solid rgba(103,183,197,.14);
+  border-radius:17px;
+  background:rgba(255,255,255,.035);
+  color:#eaf8fa;
+}
+.guest-review-author-box strong{font-size:15px;}
+.guest-review-author-box small{display:block;margin-top:5px;color:#789aa3;}
+.guest-review-form{display:grid;gap:15px;}
+.guest-review-form label{display:grid;gap:8px;font-weight:800;}
+.guest-review-form .field-label-icon{font-size:14px;color:#dff7fa;}
+.guest-review-form select,
+.guest-review-form textarea{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid rgba(103,183,197,.18) !important;
+  border-radius:15px !important;
+  padding:13px 14px !important;
+  background:rgba(4,22,29,.82) !important;
+  color:#eaf8fa !important;
+  font:inherit;
+  outline:none;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.guest-review-form select:focus,
+.guest-review-form textarea:focus{
+  border-color:rgba(82,211,226,.52) !important;
+  box-shadow:0 0 0 3px rgba(82,211,226,.08);
+}
+.guest-review-form textarea{resize:vertical;min-height:125px;line-height:1.5;}
+.guest-review-form select option{background:#092c38;color:#eaf8fa;}
+.guest-review-form .checkout-message{margin:0;}
+.guest-review-form button[type="submit"]{min-height:48px;margin-top:2px;}
+body.theme-light .guest-status-panel,
+body.theme-light .guest-review-modal-card{background:linear-gradient(180deg,#f6fcfd,#eaf7f9) !important;color:#183b45;}
+body.theme-light .guest-status-panel > p:not(.eyebrow),
+body.theme-light .guest-review-hero p:not(.eyebrow){color:#56727a;}
+body.theme-light .guest-review-author-box{background:rgba(255,255,255,.72);color:#183b45;border-color:#c9e0e4;}
+body.theme-light .guest-review-author-box small,
+body.theme-light .guest-review-hero small{color:#64818a;}
+body.theme-light .guest-review-form select,
+body.theme-light .guest-review-form textarea{background:#fff !important;color:#183b45 !important;border-color:#c6e0e4 !important;}
+@media(max-width:600px){
+  .guest-status-panel{border-radius:20px !important;}
+  .guest-review-modal-card{width:calc(100vw - 18px) !important;max-height:92vh !important;border-radius:22px !important;}
+  .guest-review-modal-card .modal-header{padding:18px 18px 15px !important;}
+  .guest-review-modal-card .checkout-content{padding:18px 18px 22px !important;}
+  .guest-review-hero h3{font-size:24px;}
+}
