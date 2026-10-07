@@ -1,0 +1,11 @@
+THOUNE STORE v1049 — COMPROVANTE PIX OBRIGATÓRIO
+
+- O comprovante Pix agora é obrigatório antes de o cliente conseguir avisar a loja que realizou o pagamento.
+- O botão de aviso fica bloqueado até o comprovante ser enviado com sucesso.
+- O painel de espera não mostra mais o comprovante como opcional.
+- Depois de um pagamento recusado, o cliente pode enviar um novo comprovante para voltar à verificação.
+- O SQL também reforça o fluxo no Supabase: mesmo que alguém tente chamar a função diretamente, não consegue colocar o pedido em awaiting_verification sem comprovante.
+- O SQL mantém a correção da recusa payment_rejected.
+
+IMPORTANTE:
+Execute supabase_v1049_comprovante_obrigatorio.sql no Supabase antes de publicar esta versão.
