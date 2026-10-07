@@ -1,4 +1,4 @@
-THOUNE STORE v1044 — avaliação persistente após entrega
+THOUNE STORE v1045 — avaliação persistente após entrega
 
 - Pedido entregue mantém o ID no navegador.
 - Ao voltar ao site, o painel de agradecimento/avaliação abre novamente até a avaliação ser enviada.

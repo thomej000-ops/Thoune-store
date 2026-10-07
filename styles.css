@@ -6284,3 +6284,61 @@ body.admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c) !
 #empty-state p{color:#8fb5bd!important;margin:0 auto 18px!important;max-width:440px;}
 #clear-search-button{min-width:150px!important;border-radius:14px!important;box-shadow:0 10px 25px rgba(0,0,0,.16)!important;}
 .clear-filter-symbol{display:grid!important;place-items:center!important;width:48px!important;height:48px!important;margin:0 auto 12px!important;border-radius:15px!important;background:rgba(76,205,221,.10)!important;color:#70d6e1!important;font-size:26px!important;}
+
+/* THOUNE v1045 — ajuste da versão computador: menu e rodapé
+   No desktop a navegação já fica visível na barra, então o botão
+   de três linhas não deve aparecer nem disputar espaço com o carrinho.
+   O rodapé usa a mesma composição vertical da versão móvel. */
+@media (min-width: 761px) {
+  .site-header .menu-button {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  .site-header .desktop-nav {
+    display: flex !important;
+    align-items: center;
+  }
+
+  .site-footer {
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 15px !important;
+    padding: 42px clamp(18px, 6vw, 90px) !important;
+  }
+
+  .site-footer .footer-brand,
+  .site-footer .footer-links,
+  .site-footer > a,
+  .site-footer > small {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  .site-footer .footer-brand p {
+    margin-top: 4px;
+  }
+
+  .site-footer .footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .site-footer > a {
+    display: block;
+  }
+}
+
+@media (max-width: 760px) {
+  .site-footer {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+    gap: 15px !important;
+  }
+}
