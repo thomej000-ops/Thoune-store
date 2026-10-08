@@ -700,21 +700,58 @@ function startGuestOrderStatusPolling(orderId) {
   }, 5000);
 }
 
+function renderGuestPaymentRecoveryPanel(orderId) {
+  const content = $("#checkout-section .checkout-content");
+  if (!content) return;
+  const orderShort = String(orderId).slice(0, 8).toUpperCase();
+  content.innerHTML = `
+    <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
+      <div style="font-size:42px;margin-bottom:10px;">💳</div>
+      <p class="eyebrow">PAGAMENTO PENDENTE</p>
+      <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
+      <p>Este pedido ainda não foi enviado para conferência da loja.</p>
+      <div class="proof-upload-box" style="text-align:left;">
+        <strong>📷 Envie o comprovante do Pix</strong>
+        <p>Envie a foto do comprovante para liberar o aviso à loja.</p>
+        <input type="file" id="guest-proof-file" accept="image/png,image/jpeg,image/webp" class="proof-file-input">
+        <button type="button" class="secondary-button full" id="guest-proof-send">Enviar comprovante</button>
+        <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
+      </div>
+      <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
+    </div>`;
+  $("#guest-proof-send")?.addEventListener("click", () => uploadGuestPaymentProof(orderId));
+  $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
+}
+
 async function restoreGuestOrderStatus() {
   const orderId = localStorage.getItem("thoune-pending-guest-order");
   if (!orderId) return;
   const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
   if (error || !data?.found) return;
-  if (String(data.status) === "delivered") {
+  const status = String(data.status || "");
+  if (status === "delivered") {
     renderGuestDeliveredPanel(data, true);
     return;
   }
-  if (String(data.status) === "payment_confirmed" || String(data.status) === "awaiting_delivery") {
+  if (status === "payment_confirmed" || status === "awaiting_delivery") {
     renderGuestDeliveryPanel(data);
     return;
   }
-  renderGuestWaitingPanel(orderId, Number(data.queue_position));
-  startGuestOrderStatusPolling(orderId);
+  if (status === "payment_rejected") {
+    renderGuestPaymentRejectedPanel(orderId, data.rejection_reason || "O Pix ainda não foi localizado pela loja.");
+    startGuestOrderStatusPolling(orderId);
+    return;
+  }
+  if (status === "awaiting_verification") {
+    renderGuestWaitingPanel(orderId, Number(data.queue_position));
+    startGuestOrderStatusPolling(orderId);
+    return;
+  }
+  if (status === "awaiting_payment") {
+    renderGuestPaymentRecoveryPanel(orderId);
+    return;
+  }
+  renderGuestPaymentRecoveryPanel(orderId);
 }
 
 function copyPixKey() {
