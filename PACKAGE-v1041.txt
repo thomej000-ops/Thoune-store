@@ -1,2 +1,16 @@
-THOUNE STORE v1049
-Comprovante Pix obrigatório + fluxo de recusa/reenvio reforçado.
+Thoune Store v1041 — SEM LOGIN PARA CLIENTES
+
+Mudanças principais:
+- Cliente não cria conta e não informa e-mail.
+- Checkout exige TikTok, Roblox e nome do remetente do Pix.
+- Nome do Pix continua salvo no pedido e no pagamento.
+- Posição estimada da fila aparece antes da confirmação e atualiza a cada 5 segundos.
+- Após criar o pedido, posição atual é exibida.
+- Logo do Roblox aparece corretamente no campo.
+- Erros do Supabase relacionados à função ausente são apresentados de forma amigável.
+- Avaliações continuam públicas; identificação exibida é somente o @ do TikTok.
+- Voto "Achou útil" continua funcionando sem conta, por token anônimo do navegador.
+- Painel administrativo continua protegido por login.
+
+IMPORTANTE:
+Execute supabase_v1041_no_login_queue.sql no SQL Editor do Supabase antes de publicar a versão.
