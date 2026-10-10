@@ -7029,3 +7029,37 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
   content: none !important;
   display: none !important;
 }
+
+
+/* v1068 — catálogo em carrossel horizontal, sem botão “Carregar mais” */
+#product-grid.product-grid{
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(230px, 25%);
+  grid-template-columns: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 2px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 2px 14px;
+  gap: 16px;
+}
+#product-grid.product-grid > .product-card{
+  min-width: 0;
+  scroll-snap-align: start;
+}
+#product-grid.product-grid::-webkit-scrollbar{height:6px}
+#product-grid.product-grid::-webkit-scrollbar-thumb{background:rgba(73,177,220,.55);border-radius:99px}
+@media(max-width:760px){
+  #product-grid.product-grid{
+    grid-auto-columns: minmax(68%, 68%);
+    gap: 12px;
+    padding-bottom: 12px;
+  }
+}
+@media(min-width:761px) and (max-width:1100px){
+  #product-grid.product-grid{grid-auto-columns:minmax(30%,30%)}
+}

@@ -217,26 +217,15 @@ function getFilteredProducts() {
 function renderCatalog() {
   const filtered = getFilteredProducts();
   if ($("#catalog-count")) $("#catalog-count").textContent = `${filtered.length} ${filtered.length === 1 ? "item" : "itens"}`;
-  const visible = filtered.slice(0, catalogVisibleCount);
-  const display = visible.map(product => ({
+  // Mostra todos os resultados numa faixa horizontal deslizável; sem paginação/botão.
+  const display = filtered.map(product => ({
     ...product,
     price: getProductPrice(product),
     original_price: Number(product.price) || 0,
     discount_percent: getDiscountPercent(product)
   }));
   renderProducts(display);
-  let more = $("#catalog-load-more");
-  if (!more) {
-    more = document.createElement("button");
-    more.id = "catalog-load-more";
-    more.type = "button";
-    more.className = "primary-button catalog-load-more";
-    more.textContent = "Carregar mais marretas";
-    $("#product-grid")?.insertAdjacentElement("afterend", more);
-    more.addEventListener("click", () => { catalogVisibleCount += CATALOG_PAGE_SIZE; renderCatalog(); });
-  }
-  more.hidden = filtered.length <= visible.length;
-  more.textContent = `Carregar mais marretas (${Math.min(CATALOG_PAGE_SIZE, filtered.length - visible.length)} de ${filtered.length - visible.length})`;
+  $("#catalog-load-more")?.remove();
   setHidden($("#empty-state"), filtered.length !== 0);
 }
 
