@@ -6660,3 +6660,98 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
     display: none !important;
   }
 }
+
+
+/* THOUNE v1061 — refinamentos visuais pontuais, mantendo o restante do tema */
+/* Brilho metálico que percorre discretamente a borda dos cards. */
+#product-grid .product-card{
+  position:relative !important;
+  isolation:isolate;
+  border:1px solid rgba(46,166,224,.42) !important;
+  box-shadow:0 0 0 1px rgba(28,126,190,.08), 0 0 13px rgba(20,126,205,.10) !important;
+}
+#product-grid .product-card::after{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  padding:1px;
+  pointer-events:none;
+  z-index:5;
+  background:conic-gradient(from 0deg, transparent 0deg, transparent 245deg, rgba(97,218,255,.04) 270deg, rgba(205,249,255,.92) 292deg, rgba(61,173,255,.52) 307deg, transparent 330deg, transparent 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask-composite:exclude;
+  opacity:.72;
+  animation:thouneMetalSweep 5.5s linear infinite;
+}
+@keyframes thouneMetalSweep{to{transform:rotate(360deg)}}
+
+/* Favoritos translúcidos, mas sempre visíveis sobre a imagem. */
+#product-grid .product-image > .favorite{
+  background:rgba(8,29,39,.48) !important;
+  border:1px solid rgba(135,219,241,.20) !important;
+  box-shadow:0 3px 12px rgba(0,0,0,.13) !important;
+  -webkit-backdrop-filter:blur(5px) !important;
+  backdrop-filter:blur(5px) !important;
+}
+#product-grid .product-image > .favorite .ui-icon-heart::before{
+  text-shadow:0 1px 5px rgba(0,0,0,.25);
+}
+
+/* Cabeçalho: tamanhos moderados e ícones centralizados, sem aumentar o emoji. */
+.site-header .header-actions #open-cart,
+.site-header .header-actions .menu-button{
+  width:44px !important;height:44px !important;min-width:44px !important;min-height:44px !important;
+  padding:0 !important;box-sizing:border-box !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+}
+.site-header .header-actions #open-cart .cart-emoji{
+  width:20px !important;height:20px !important;flex:0 0 20px !important;
+  font-size:19px !important;line-height:20px !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+  margin:0 !important;padding:0 !important;transform:none !important;
+}
+.site-header .header-actions #open-cart .ui-icon-cart{display:none !important;}
+.site-header .header-actions .menu-button .ui-icon-menu{
+  width:20px !important;height:16px !important;flex:0 0 20px !important;
+  margin:0 !important;position:relative !important;display:block !important;
+}
+.site-header .header-actions .menu-button .ui-icon-menu::before{
+  content:"" !important;position:absolute !important;display:block !important;
+  width:20px !important;height:2px !important;left:0 !important;top:1px !important;
+  border:0 !important;border-radius:2px !important;background:currentColor !important;
+  box-shadow:0 6px 0 currentColor,0 12px 0 currentColor !important;
+}
+.site-header .header-actions .menu-button .ui-icon-menu::after{content:none !important;display:none !important;}
+
+/* O painel do carrinho não deve dominar a tela; mantém scroll interno. */
+#cart-drawer{padding:clamp(10px,2.5vw,20px) !important;}
+#cart-drawer .drawer-panel{
+  width:min(480px, calc(100vw - 28px)) !important;
+  height:auto !important;
+  max-height:min(78dvh, 720px) !important;
+  overflow:hidden !important;
+  display:flex !important;flex-direction:column !important;
+  padding:clamp(16px,3vw,24px) !important;
+  border-radius:22px !important;
+}
+#cart-drawer .drawer-header{flex:0 0 auto !important;}
+#cart-drawer .cart-items{
+  flex:1 1 auto !important;min-height:0 !important;
+  max-height:min(42dvh,360px) !important;overflow-y:auto !important;
+  overscroll-behavior:contain;
+}
+@media(max-width:600px){
+  #cart-drawer{padding:12px !important;}
+  #cart-drawer .drawer-panel{
+    width:min(420px, calc(100vw - 24px)) !important;
+    max-height:76dvh !important;
+    padding:16px !important;border-radius:20px !important;
+  }
+  #cart-drawer .cart-items{max-height:38dvh !important;}
+  .site-header .header-actions #open-cart,
+  .site-header .header-actions .menu-button{width:42px !important;height:42px !important;min-width:42px !important;min-height:42px !important;}
+  .site-header .header-actions #open-cart .cart-emoji{font-size:18px !important;width:19px !important;height:19px !important;flex-basis:19px !important;}
+}
+@media(prefers-reduced-motion:reduce){#product-grid .product-card::after{animation:none !important;}}
