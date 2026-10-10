@@ -6853,3 +6853,41 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
 #product-grid .product-image img { animation: hammerFloat 5.2s ease-in-out infinite !important; }
 #product-grid .product-card:hover .product-image img, #product-grid .product-card:focus-within .product-image img { animation: hammerFloat 5.2s ease-in-out infinite !important; }
 @media (prefers-reduced-motion: reduce) { #product-grid .product-image img, #product-grid .product-card::after { animation: none !important; } }
+
+
+/* THOUNE v1064 — pedido pontual: remover risco animado e alinhar menu */
+#product-grid .product-card::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+  background: none !important;
+}
+.site-header .header-actions .menu-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+}
+.site-header .header-actions .menu-button .ui-icon-menu {
+  display: block !important;
+  position: relative !important;
+  width: 20px !important;
+  height: 14px !important;
+  min-width: 20px !important;
+  min-height: 14px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: linear-gradient(to bottom, currentColor 0 2px, transparent 2px 6px, currentColor 6px 8px, transparent 8px 12px, currentColor 12px 14px) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  flex: 0 0 20px !important;
+}
+.site-header .header-actions .menu-button .ui-icon-menu::before,
+.site-header .header-actions .menu-button .ui-icon-menu::after {
+  content: none !important;
+  display: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
