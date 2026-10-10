@@ -6467,3 +6467,21 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
 #reviews-grid .review-card .review-helpful{display:none!important}
 @media(min-width:760px){#reviews-grid .review-card{flex-basis:min(360px,42%);width:min(360px,42%)}}
 @media(prefers-reduced-motion:reduce){#reviews-grid.reviews-grid{scroll-behavior:auto}}
+
+/* Catálogo otimizado: paginação progressiva e cards confortáveis no celular */
+.catalog-load-more{display:block;min-width:min(100%,280px);margin:24px auto 8px;padding:14px 22px;border-radius:14px;font-weight:800;}
+#product-grid{content-visibility:auto;contain-intrinsic-size:1px 900px;}
+#product-grid .product-card{min-width:0;}
+#product-grid .product-image img{loading:lazy;}
+@media(max-width:600px){
+  #product-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:12px !important;}
+  #product-grid .product-card{border-radius:16px !important;}
+  #product-grid .product-info{padding:10px !important;}
+  #product-grid .product-name{font-size:clamp(12px,3.4vw,15px) !important;}
+  #product-grid .product-info p{display:none !important;}
+  #product-grid .product-image{aspect-ratio:1/1;}
+  #product-grid .product-image img{width:100%;height:100%;object-fit:contain;}
+  #product-grid .add-button{min-height:42px !important;height:42px !important;font-size:12px !important;padding:8px 4px !important;}
+  #product-grid .product-bottom{gap:7px !important;padding-top:8px !important;}
+  .catalog-load-more{width:100%;}
+}
