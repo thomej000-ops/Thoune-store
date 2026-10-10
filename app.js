@@ -920,6 +920,17 @@ function setupEvents() {
     if (add) {
       const product = products.find(p => String(p.id) === String(add.dataset.productAdd));
       if (!product) return;
+      // Efeito de impacto ao adicionar: cor inferida pelo nome/categoria da marreta.
+      const visualText = `${product.name || ""} ${product.category || ""}`.toLowerCase();
+      const impactColor = /pink|rosa|magenta/.test(visualText) ? "#ff4fd8" : /red|vermelh|ruby|blood/.test(visualText) ? "#ff4545" : /gold|dourad|yellow|amarel/.test(visualText) ? "#ffd447" : /green|verde|emerald|lime/.test(visualText) ? "#5dff91" : /purple|roxo|violet|lilac/.test(visualText) ? "#b56bff" : /orange|laranja|fire|flame/.test(visualText) ? "#ff8a35" : /black|preta|dark|shadow/.test(visualText) ? "#a5b4c8" : /white|branca|ice|frost|snow/.test(visualText) ? "#e8fbff" : "#35bfff";
+      const card = add.closest(".product-card, .product-detail");
+      if (card) {
+        card.style.setProperty("--hammer-impact", impactColor);
+        card.classList.remove("hammer-impact-active");
+        void card.offsetWidth;
+        card.classList.add("hammer-impact-active");
+        window.setTimeout(() => card.classList.remove("hammer-impact-active"), 650);
+      }
       const cart=loadCart(); const found=cart.find(i=>String(i.id)===String(product.id));
       if(found) found.qty+=1;
       else cart.push({id:product.id,name:product.name,price:getProductPrice(product),original_price:Number(product.price)||0,discount_percent:getDiscountPercent(product),image:product.image||"",qty:1});

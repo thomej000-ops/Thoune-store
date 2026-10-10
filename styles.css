@@ -6485,3 +6485,17 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
   #product-grid .product-bottom{gap:7px !important;padding-top:8px !important;}
   .catalog-load-more{width:100%;}
 }
+
+
+/* v1057 — bordas azuis e impacto colorido ao adicionar marreta */
+#product-grid .product-card{position:relative!important;isolation:isolate;overflow:visible!important;border-color:rgba(45,166,255,.55)!important;box-shadow:0 0 0 1px rgba(45,166,255,.18),0 10px 28px rgba(0,0,0,.22),0 0 18px rgba(35,145,255,.09)!important;transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease!important;}
+#product-grid .product-card:active{transform:translateY(-3px) scale(1.012)!important;}
+#product-grid .product-image{overflow:visible!important;}
+#product-grid .product-image img{object-fit:contain!important;image-rendering:auto;filter:drop-shadow(0 12px 10px rgba(0,0,0,.35)) drop-shadow(0 0 9px rgba(40,160,255,.12))!important;}
+.hammer-impact-active{animation:hammerCardHit .48s cubic-bezier(.2,.8,.2,1)!important;}
+.hammer-impact-active::after{content:"";position:absolute;z-index:5;pointer-events:none;inset:8% 5%;border-radius:inherit;background:repeating-conic-gradient(from -12deg at 50% 48%,transparent 0deg 8deg,color-mix(in srgb,var(--hammer-impact,#35bfff) 90%,transparent) 8.5deg 9.5deg,transparent 10deg 18deg);opacity:0;animation:hammerImpactRays .58s ease-out both;mix-blend-mode:screen;}
+.hammer-impact-active .product-image img{animation:hammerImpactPop .5s cubic-bezier(.15,.8,.25,1)!important;filter:drop-shadow(0 0 9px var(--hammer-impact,#35bfff)) drop-shadow(0 0 22px var(--hammer-impact,#35bfff))!important;}
+@keyframes hammerImpactRays{0%{opacity:0;transform:scale(.2) rotate(-12deg)}18%{opacity:.95}65%{opacity:.55;transform:scale(1.1) rotate(5deg)}100%{opacity:0;transform:scale(1.28) rotate(12deg)}}
+@keyframes hammerImpactPop{0%{transform:scale(.88) translateY(4px)}28%{transform:scale(1.12) translateY(-8px) rotate(-2deg)}58%{transform:scale(.98) translateY(1px) rotate(1deg)}100%{transform:scale(1) translateY(0) rotate(0)}}
+@keyframes hammerCardHit{0%,100%{transform:translateY(0)}25%{transform:translateY(-4px)}45%{transform:translateY(1px)}65%{transform:translateY(-1px)}}
+@media(prefers-reduced-motion:reduce){.hammer-impact-active,.hammer-impact-active::after,.hammer-impact-active .product-image img{animation:none!important}}
