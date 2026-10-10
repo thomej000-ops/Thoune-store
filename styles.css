@@ -6458,3 +6458,12 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
   .guest-review-modal-card .checkout-content{padding:18px 18px 22px !important;}
   .guest-review-hero h3{font-size:24px;}
 }
+
+
+/* v1055 — carrossel automático de avaliações sem curtidas nem filtros */
+.reviews-carousel-note{margin:0 0 16px;color:var(--muted,#8daeb5);font-size:.92rem}
+#reviews-grid.reviews-grid{display:flex!important;grid-template-columns:none!important;overflow-x:auto;overflow-y:hidden;gap:18px;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-inline:contain;padding:4px 2px 18px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+#reviews-grid .review-card{flex:0 0 min(360px,84%);width:min(360px,84%);scroll-snap-align:start;}
+#reviews-grid .review-card .review-helpful{display:none!important}
+@media(min-width:760px){#reviews-grid .review-card{flex-basis:min(360px,42%);width:min(360px,42%)}}
+@media(prefers-reduced-motion:reduce){#reviews-grid.reviews-grid{scroll-behavior:auto}}

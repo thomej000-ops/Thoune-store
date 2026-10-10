@@ -819,16 +819,7 @@ async function submitGuestReview(event) {
 }
 
 
-// Reviews: public-only. Helpful votes use a browser token, not an account.
-function getGuestVoterToken() {
-  let token = localStorage.getItem(GUEST_VOTER_KEY);
-  if (!token) {
-    token = (crypto?.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`).toString();
-    localStorage.setItem(GUEST_VOTER_KEY, token);
-  }
-  return token;
-}
-
+// Avaliações públicas: somente aprovadas, mais recentes primeiro.
 async function loadPublicReviews() {
   const container = $("#reviews-grid");
   const empty = $("#reviews-empty");
@@ -842,32 +833,35 @@ async function loadPublicReviews() {
   if (error) { console.error("Erro ao carregar avaliações:", error); return; }
   if (!data?.length) { container.innerHTML = ""; setHidden(empty, false); return; }
   setHidden(empty, true);
-  let helpfulMap = {};
-  try {
-    const ids = data.map(r => r.id);
-    const { data: helpfulData, error: helpfulError } = await supabaseClient.rpc("get_guest_review_helpfulness", { p_review_ids: ids, p_voter_token: getGuestVoterToken() });
-    if (!helpfulError && Array.isArray(helpfulData)) {
-      helpfulMap = Object.fromEntries(helpfulData.map(row => [String(row.review_id), { count: Number(row.helpful_count)||0, voted: Boolean(row.user_voted) }]));
-    }
-  } catch (e) { console.warn("Votos públicos indisponíveis:", e); }
-  const enriched = data.map(r => ({...r, helpfulCount: helpfulMap[String(r.id)]?.count || 0, userVoted: helpfulMap[String(r.id)]?.voted || false}));
-  if (currentReviewSort === "rating") enriched.sort((a,b) => Number(b.rating)-Number(a.rating) || b.helpfulCount-a.helpfulCount);
-  else if (currentReviewSort === "helpful") enriched.sort((a,b) => b.helpfulCount-a.helpfulCount || new Date(b.created_at)-new Date(a.created_at));
-  else enriched.sort((a,b) => new Date(b.created_at)-new Date(a.created_at));
-  container.innerHTML = enriched.map(review => {
+  container.innerHTML = data.map(review => {
     const rating = Math.min(5, Math.max(1, Number(review.rating)||0));
     const username = review.tiktok_username ? `@${String(review.tiktok_username).replace(/^@/, "")}` : "Cliente Thoune Store";
     const avatar = review.tiktok_avatar ? `<img src="${escapeHtml(review.tiktok_avatar)}" alt="" loading="lazy">` : `<span class="review-avatar-fallback"><span class="ui-icon ui-icon-user" aria-hidden="true"></span></span>`;
-    return `<article class="review-card"><div class="review-card-top"><div class="review-author"><span class="review-avatar">${avatar}</span><div><strong>${escapeHtml(username)}</strong><small>${formatDate(review.created_at)}</small></div></div><div class="review-rating" aria-label="${rating} de 5 estrelas">${"★".repeat(rating)}${"☆".repeat(5-rating)}</div></div><p class="review-text">${escapeHtml(review.text || "Sem comentário.")}</p><button type="button" class="review-helpful ${review.userVoted ? "active" : ""}" data-review-helpful="${escapeHtml(review.id)}" aria-pressed="${review.userVoted ? "true" : "false"}><span class="review-helpful-icon"><span class="ui-icon ui-icon-like" aria-hidden="true"></span></span><span>Achou útil</span><b>${review.helpfulCount}</b></button></article>`;
+    return `<article class="review-card"><div class="review-card-top"><div class="review-author"><span class="review-avatar">${avatar}</span><div><strong>${escapeHtml(username)}</strong><small>${formatDate(review.created_at)}</small></div></div><div class="review-rating" aria-label="${rating} de 5 estrelas">${"★".repeat(rating)}${"☆".repeat(5-rating)}</div></div><p class="review-text">${escapeHtml(review.text || "Sem comentário.")}</p></article>`;
   }).join("");
+  setupReviewCarousel();
 }
 
-async function toggleReviewHelpful(reviewId) {
-  const { data, error } = await supabaseClient.rpc("toggle_guest_review_helpful", { p_review_id: reviewId, p_voter_token: getGuestVoterToken() });
-  if (error) { console.error(error); toast(error.message || "Não foi possível registrar o voto.", "error"); return; }
-  if (data?.success === false) { toast(data.message || "Não foi possível registrar o voto.", "error"); return; }
-  await loadPublicReviews();
-  await restoreGuestOrderStatus();
+function setupReviewCarousel() {
+  const container = $("#reviews-grid");
+  if (!container) return;
+  if (reviewCarouselTimer) window.clearInterval(reviewCarouselTimer);
+  reviewCarouselTimer = null;
+  reviewCarouselPaused = false;
+  container.onmouseenter = () => { reviewCarouselPaused = true; };
+  container.onmouseleave = () => { reviewCarouselPaused = false; };
+  container.ontouchstart = () => { reviewCarouselPaused = true; };
+  container.ontouchend = () => { window.setTimeout(() => { reviewCarouselPaused = false; }, 1800); };
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+  reviewCarouselTimer = window.setInterval(() => {
+    if (reviewCarouselPaused || container.children.length < 2) return;
+    const card = container.querySelector(".review-card");
+    if (!card) return;
+    const step = card.getBoundingClientRect().width + parseFloat(getComputedStyle(container).columnGap || getComputedStyle(container).gap || "16");
+    const max = container.scrollWidth - container.clientWidth;
+    if (container.scrollLeft + step >= max - 8) container.scrollTo({ left: 0, behavior: "smooth" });
+    else container.scrollBy({ left: step, behavior: "smooth" });
+  }, 7000);
 }
 
 function setupSortControl() {
@@ -924,14 +918,6 @@ function setupEvents() {
     if (removeFav) { localStorage.removeItem(favoriteKey(removeFav.dataset.favoriteRemove)); renderFavoritesPanel(); renderCatalog(); return; }
   });
 
-  $("#reviews-grid")?.addEventListener("click", async event => {
-    const button=event.target.closest("[data-review-helpful]");
-    if(!button) return;
-    button.disabled=true;
-    try { await toggleReviewHelpful(button.dataset.reviewHelpful); }
-    finally { button.disabled=false; }
-  });
-  $$('[data-review-sort]').forEach(button => button.addEventListener("click", async () => { currentReviewSort=button.dataset.reviewSort||"recent"; $$('[data-review-sort]').forEach(b=>b.classList.toggle("active", b===button)); await loadPublicReviews(); }));
 
   document.addEventListener("keydown", e => { if(e.key === "Escape") { closeAllPanels(); $("#mobile-nav")?.classList.remove("open"); } });
   $("#global-panel-backdrop")?.addEventListener("click", closeAllPanels);
