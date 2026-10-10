@@ -462,7 +462,7 @@ function renderGuestPixPanel(orderId, total, queuePosition = null) {
       <div class="proof-upload-box" style="text-align:left;">
         <strong>📷 Envie o comprovante do Pix</strong>
         <p>O comprovante é obrigatório para avisar a loja que o pagamento foi realizado.</p>
-        <input type="file" id="guest-proof-file" accept="image/png,image/jpeg,image/webp" class="proof-file-input">
+        <input type="file" id="guest-proof-file" accept="image/*" class="proof-file-input">
         <button type="button" class="secondary-button full" id="guest-proof-send">Enviar comprovante</button>
         <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
       </div>
@@ -520,7 +520,7 @@ function renderGuestWaitingPanel(orderId, queuePosition = null) {
       <div class="proof-upload-box">
         <strong>📷 Quer enviar o comprovante?</strong>
         <p>É opcional, mas pode ajudar caso a loja não localize o Pix.</p>
-        <input type="file" id="guest-proof-file" accept="image/png,image/jpeg,image/webp" class="proof-file-input">
+        <input type="file" id="guest-proof-file" accept="image/*" class="proof-file-input">
         <button type="button" class="secondary-button full" id="guest-proof-send">Enviar comprovante</button>
         <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
       </div>
@@ -545,7 +545,7 @@ function renderGuestPaymentRejectedPanel(orderId, reason = "O pagamento não foi
         <p style="margin:8px 0 0;">Se você já pagou, envie uma foto do comprovante abaixo para a loja conferir.</p>
       </div>
       <div class="proof-upload-box">
-        <input type="file" id="guest-proof-file" accept="image/png,image/jpeg,image/webp" class="proof-file-input">
+        <input type="file" id="guest-proof-file" accept="image/*" class="proof-file-input">
         <button type="button" class="primary-button full" id="guest-proof-send">Enviar comprovante</button>
         <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
       </div>
@@ -561,16 +561,17 @@ async function uploadGuestPaymentProof(orderId) {
   const button = $("#guest-proof-send");
   const file = input?.files?.[0];
   if (!file) { setMessage(message, "Escolha uma foto do comprovante primeiro.", "error"); return false; }
-  if (!/^image\/(png|jpeg|webp)$/i.test(file.type)) { setMessage(message, "Envie uma imagem JPG, PNG ou WEBP.", "error"); return false; }
-  if (file.size > 5 * 1024 * 1024) { setMessage(message, "A imagem precisa ter no máximo 5 MB.", "error"); return false; }
+  if (file.type && !file.type.toLowerCase().startsWith("image/")) { setMessage(message, "Escolha um arquivo de imagem.", "error"); return false; }
+  if (file.size > 10 * 1024 * 1024) { setMessage(message, "A imagem precisa ter no máximo 10 MB.", "error"); return false; }
   if (button) { button.disabled = true; button.textContent = "Enviando..."; }
-  const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
+  const originalExt = (file.name.split(".").pop() || "img").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 8);
+  const ext = originalExt || "img";
   const path = `${orderId}/${Date.now()}-${crypto.randomUUID?.() || Math.random().toString(36).slice(2)}.${ext}`;
-  const { error: uploadError } = await supabaseClient.storage.from("payment-proofs").upload(path, file, { contentType: file.type, upsert: false });
+  const { error: uploadError } = await supabaseClient.storage.from("payment-proofs").upload(path, file, { contentType: file.type || "application/octet-stream", upsert: false });
   if (uploadError) {
     console.error("payment-proofs upload:", uploadError);
     if (button) { button.disabled = false; button.textContent = "Enviar comprovante"; }
-    setMessage(message, "Não foi possível enviar o comprovante. Tente novamente.", "error");
+    setMessage(message, `Falha no envio: ${uploadError.message || uploadError.error || "erro desconhecido"}. Confira as permissões e o limite do bucket payment-proofs no Supabase.`, "error");
     return false;
   }
   const { error: saveError } = await supabaseClient.rpc("submit_guest_payment_proof", { p_order_id: orderId, p_proof_path: path });
@@ -578,7 +579,7 @@ async function uploadGuestPaymentProof(orderId) {
     console.error("submit_guest_payment_proof:", saveError);
     await supabaseClient.storage.from("payment-proofs").remove([path]);
     if (button) { button.disabled = false; button.textContent = "Enviar comprovante"; }
-    setMessage(message, "O comprovante foi enviado, mas não conseguimos vinculá-lo ao pedido.", "error");
+    setMessage(message, `Arquivo enviado, mas falhou ao vincular ao pedido: ${saveError.message || saveError.details || "erro desconhecido"}.`, "error");
     return false;
   }
   if (button) { button.disabled = true; button.textContent = "Comprovante enviado ✓"; }
@@ -713,7 +714,7 @@ function renderGuestPaymentRecoveryPanel(orderId) {
       <div class="proof-upload-box" style="text-align:left;">
         <strong>📷 Envie o comprovante do Pix</strong>
         <p>Envie a foto do comprovante para liberar o aviso à loja.</p>
-        <input type="file" id="guest-proof-file" accept="image/png,image/jpeg,image/webp" class="proof-file-input">
+        <input type="file" id="guest-proof-file" accept="image/*" class="proof-file-input">
         <button type="button" class="secondary-button full" id="guest-proof-send">Enviar comprovante</button>
         <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
       </div>
