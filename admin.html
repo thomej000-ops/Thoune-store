@@ -2970,17 +2970,17 @@ async function loadPayments(){
 
 
     /*
-      O pagamento só aparece no ADM
-      depois que o cliente informou
-      que realizou o Pix.
+      O ADM também precisa mostrar pedidos em awaiting_payment:
+      a função confirm_payment permite confirmar tanto
+      awaiting_payment quanto awaiting_verification.
+      O administrador deve conferir no Pix se o dinheiro entrou
+      antes de usar o botão de confirmação.
     */
 
     if(
       !order ||
-      order.status !==
-        "awaiting_verification"
+      !["awaiting_payment", "awaiting_verification"].includes(order.status)
     ){
-
       continue;
     }
 
@@ -3074,7 +3074,9 @@ async function loadPayments(){
       "payment-status";
 
     status.textContent =
-      "⏳ Cliente informou o pagamento";
+      order.status === "awaiting_verification"
+        ? "⏳ Cliente informou o pagamento — aguardando conferência"
+        : "⚠️ Pagamento ainda não informado pelo cliente — confira o Pix manualmente antes de confirmar";
 
 
     const privateInfo =
