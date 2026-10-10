@@ -6891,3 +6891,98 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
   box-shadow: none !important;
   transform: none !important;
 }
+
+/* THOUNE v1066 — ajustes pontuais solicitados: favorito compacto, menu visível e painéis menores */
+/* Menu: desenhar as três linhas diretamente no span, sem depender de glifos herdados. */
+.site-header .header-actions #menu-toggle.menu-button .ui-icon-menu {
+  display:block !important;
+  position:relative !important;
+  width:20px !important;
+  height:16px !important;
+  min-width:20px !important;
+  min-height:16px !important;
+  flex:0 0 20px !important;
+  font-size:0 !important;
+  line-height:0 !important;
+  color:inherit !important;
+  background:linear-gradient(currentColor,currentColor) 0 1px/20px 2px no-repeat,
+             linear-gradient(currentColor,currentColor) 0 7px/20px 2px no-repeat,
+             linear-gradient(currentColor,currentColor) 0 13px/20px 2px no-repeat !important;
+  border:0 !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+.site-header .header-actions #menu-toggle.menu-button .ui-icon-menu::before,
+.site-header .header-actions #menu-toggle.menu-button .ui-icon-menu::after {
+  content:none !important;
+  display:none !important;
+  box-shadow:none !important;
+}
+.site-header .header-actions #menu-toggle.menu-button {
+  align-items:center !important;
+  justify-content:center !important;
+  line-height:1 !important;
+}
+/* Favorito menor e menos invasivo sobre a imagem da marreta. */
+#product-grid .product-image > .favorite {
+  width:32px !important;
+  height:32px !important;
+  min-width:32px !important;
+  min-height:32px !important;
+  padding:0 !important;
+  border-radius:11px !important;
+  background:rgba(8,29,39,.16) !important;
+  border-color:rgba(180,235,248,.13) !important;
+  box-shadow:none !important;
+  backdrop-filter:blur(2px) !important;
+  -webkit-backdrop-filter:blur(2px) !important;
+}
+#product-grid .product-image > .favorite .ui-icon-heart {
+  width:20px !important;
+  height:20px !important;
+  flex-basis:20px !important;
+}
+#product-grid .product-image > .favorite .ui-icon-heart::before {
+  font-size:22px !important;
+  line-height:20px !important;
+}
+/* Painéis secundários: limitar área ocupada, mantendo conteúdo rolável. */
+#favorites-panel .side-panel-inner,
+.side-panel .side-panel-inner {
+  width:min(460px, calc(100vw - 36px)) !important;
+  max-height:min(78dvh, 680px) !important;
+  overflow:auto !important;
+  padding:clamp(16px, 3vw, 22px) !important;
+  border-radius:22px !important;
+}
+.modal-shell .modal-card {
+  width:min(620px, calc(100vw - 32px)) !important;
+  max-height:min(82dvh, 760px) !important;
+  overflow:auto !important;
+}
+@media (max-width:600px) {
+  #product-grid .product-image > .favorite {
+    width:30px !important;
+    height:30px !important;
+    min-width:30px !important;
+    min-height:30px !important;
+    border-radius:10px !important;
+  }
+  #product-grid .product-image > .favorite .ui-icon-heart::before {
+    font-size:21px !important;
+    line-height:19px !important;
+  }
+  #favorites-panel .side-panel-inner,
+  .side-panel .side-panel-inner {
+    width:calc(100vw - 28px) !important;
+    max-height:76dvh !important;
+    padding:16px !important;
+    border-radius:19px !important;
+  }
+  .modal-shell { padding:12px !important; }
+  .modal-shell .modal-card {
+    width:calc(100vw - 24px) !important;
+    max-height:78dvh !important;
+    border-radius:19px !important;
+  }
+}
