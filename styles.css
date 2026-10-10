@@ -7062,3 +7062,88 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
 @media (prefers-reduced-motion: reduce) {
   #product-grid .product-card { opacity: 1; transform: none; transition: none; }
 }
+
+
+/* THOUNE v1072 — economia de espaço no catálogo mobile */
+/* Painel discreto ao redor da grade, sem criar uma segunda rolagem. */
+#product-grid {
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:14px !important;
+  padding:12px !important;
+  border:1px solid rgba(75,175,205,.10) !important;
+  border-radius:20px !important;
+  background:rgba(4,20,29,.16) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.018) !important;
+  overflow:visible !important;
+}
+#product-grid .product-card {
+  min-width:0 !important;
+  height:fit-content !important;
+  border-radius:14px !important;
+  overflow:hidden !important;
+  transform:translateY(0);
+  transition:transform .35s ease, box-shadow .25s ease, border-color .25s ease !important;
+}
+#product-grid .product-card .product-image {
+  aspect-ratio:1 / .82 !important;
+  min-height:0 !important;
+  max-height:190px !important;
+  overflow:hidden !important;
+}
+#product-grid .product-card .product-image img {
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+}
+#product-grid .product-card .product-info {
+  padding:9px 10px 10px !important;
+  gap:6px !important;
+}
+#product-grid .product-card .product-name {
+  font-size:clamp(12px,1.3vw,15px) !important;
+  line-height:1.3 !important;
+  margin:0 !important;
+  display:-webkit-box !important;
+  -webkit-line-clamp:2 !important;
+  -webkit-box-orient:vertical !important;
+  overflow:hidden !important;
+  min-height:2.6em !important;
+}
+#product-grid .product-card .price { font-size:clamp(13px,1.35vw,16px) !important; line-height:1.2 !important; margin:2px 0 !important; }
+#product-grid .product-card .stock,
+#product-grid .product-card .product-stock { font-size:11px !important; line-height:1.25 !important; }
+#product-grid .product-card .add-button {
+  min-height:34px !important;
+  padding:8px 7px !important;
+  border-radius:9px !important;
+  font-size:12px !important;
+  line-height:1.15 !important;
+}
+#product-grid .product-card.card-visible { animation:thoune-card-reveal .42s ease both; }
+@keyframes thoune-card-reveal { from { opacity:.55; transform:translateY(9px); } to { opacity:1; transform:translateY(0); } }
+@media (max-width:760px) {
+  #product-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:9px !important;
+    padding:8px !important;
+    margin-top:10px !important;
+    border-radius:16px !important;
+  }
+  #product-grid .product-card { border-radius:12px !important; }
+  #product-grid .product-card .product-image { aspect-ratio:1 / .78 !important; max-height:145px !important; }
+  #product-grid .product-card .product-info { padding:8px !important; gap:5px !important; }
+  #product-grid .product-card .product-name { font-size:12px !important; min-height:2.55em !important; }
+  #product-grid .product-card .price { font-size:13px !important; }
+  #product-grid .product-card .stock,
+  #product-grid .product-card .product-stock { font-size:10px !important; }
+  #product-grid .product-card .add-button { min-height:32px !important; padding:7px 5px !important; font-size:11px !important; }
+}
+@media (max-width:360px) {
+  #product-grid { gap:7px !important; padding:6px !important; }
+  #product-grid .product-card .product-info { padding:7px !important; }
+  #product-grid .product-card .product-name { font-size:11px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #product-grid .product-card, #product-grid .product-card.card-visible { animation:none !important; transition:none !important; }
+}
