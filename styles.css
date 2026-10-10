@@ -7030,22 +7030,26 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
   display: none !important;
 }
 
-
-/* v1069 — Catálogo vertical no celular: cards empilhados, sem faixa horizontal */
+/* v1070 — grade original de duas colunas no celular e revelação suave dos cards */
 @media (max-width: 600px) {
-  #product-grid,
-  .product-grid {
+  #product-grid {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    grid-auto-flow: row !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    column-gap: 12px !important;
+    row-gap: 18px !important;
+    overflow: visible !important;
     overflow-x: visible !important;
-    overflow-y: visible !important;
-    width: 100% !important;
-    max-width: 100% !important;
   }
   #product-grid .product-card {
-    width: 100% !important;
+    width: auto !important;
     min-width: 0 !important;
-    max-width: 100% !important;
+    animation: thouneCardReveal .42s ease-out both;
   }
+}
+@keyframes thouneCardReveal {
+  from { opacity: 0; translate: 0 8px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #product-grid .product-card { animation: none !important; }
 }
