@@ -450,34 +450,34 @@ function renderGuestPixPanel(orderId, total, queuePosition = null) {
       <div style="font-size:42px;margin-bottom:10px;">💳</div>
       <p class="eyebrow">PAGAMENTO VIA PIX</p>
       <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
-      <p>Seus dados foram confirmados. Agora faça <strong>um único Pix</strong> no valor exato abaixo.</p>
-      ${Number.isFinite(queuePosition) && queuePosition > 0 ? `<div class="checkout-queue-preview confirmed"><strong>📋 Sua posição atual na fila: <span>#${queuePosition}</span></strong><small>Esta é a posição do pedido neste momento e pode mudar enquanto você realiza o pagamento.</small></div>` : ""}
+      <p>Faça <strong>um único Pix</strong> no valor exato abaixo. Envie o comprovante e depois toque em “Já fiz o Pix”.</p>
+      ${Number.isFinite(queuePosition) && queuePosition > 0 ? `<div class="checkout-queue-preview confirmed"><strong>📋 Sua posição atual na fila: <span>#${queuePosition}</span></strong><small>Esta posição pode mudar enquanto você realiza o pagamento.</small></div>` : ""}
       <div class="checkout-total" style="margin:18px 0;"><span>Total do pedido</span><strong>${money(total)}</strong></div>
       <div class="pix-visual"><img src="pix-qr.png" alt="QR Code para pagamento via Pix" class="pix-qr" width="260" height="260"></div>
       <div class="pix-key-box"><span class="pix-key-label">Chave Pix</span><div class="pix-key-row"><strong class="pix-key-value">${escapeHtml(storeSettings.pix_key || "Pix indisponível")}</strong><button type="button" class="secondary-button" id="copy-pix-key-success">▤ Copiar</button></div></div>
-      <div class="manual-delivery-notice" style="text-align:left;border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin:16px 0;">
-        <strong>🚚 Entrega manual</strong>
-        <p style="margin:8px 0 0;">Faça o Pix no valor exato acima. Depois envie a foto do comprovante e avise a loja. A conferência é feita manualmente.</p>
-      </div>
-      <div class="proof-upload-box" style="text-align:left;">
+      <div class="proof-upload-box" style="text-align:left;margin:16px 0;">
         <strong>📷 Envie o comprovante do Pix</strong>
-        <p>O comprovante é obrigatório para avisar a loja que o pagamento foi realizado.</p>
+        <p>Selecione a imagem. Ela será enviada uma única vez antes de avisar a loja.</p>
         <input type="file" id="guest-proof-file" accept="image/*" class="proof-file-input">
-        <button type="button" class="secondary-button full" id="guest-proof-send">Enviar comprovante</button>
+        <div id="guest-proof-preview" style="margin-top:10px;"></div>
+        <button type="button" class="secondary-button full" id="guest-proof-send" style="margin-top:10px;">Enviar comprovante</button>
         <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
       </div>
-      <button type="button" class="primary-button full" id="guest-payment-done" data-order-id="${escapeHtml(orderId)}" style="margin-top:8px;" disabled>Já fiz o Pix — avisar a loja</button>
+      <button type="button" class="primary-button full" id="guest-payment-done" data-order-id="${escapeHtml(orderId)}" disabled style="margin-top:8px;opacity:.55;">Já fiz o Pix</button>
       <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
       <p class="checkout-message" id="guest-order-message" aria-live="polite"></p>
     </div>`;
   $("#copy-pix-key-success")?.addEventListener("click", copyPixKey);
-  $("#guest-proof-send")?.addEventListener("click", async () => {
-    const ok = await uploadGuestPaymentProof(orderId);
-    if (ok) {
-      const doneButton = $("#guest-payment-done");
-      if (doneButton) doneButton.disabled = false;
-    }
+  $("#guest-proof-file")?.addEventListener("change", () => {
+    const file = $("#guest-proof-file")?.files?.[0];
+    const preview = $("#guest-proof-preview");
+    if (!preview) return;
+    if (!file) { preview.innerHTML = ""; return; }
+    if (!file.type.startsWith("image/")) { preview.textContent = "Escolha um arquivo de imagem."; $("#guest-proof-file").value = ""; return; }
+    const url = URL.createObjectURL(file);
+    preview.innerHTML = `<img src="${url}" alt="Prévia do comprovante" style="display:block;max-width:100%;max-height:240px;margin:auto;border-radius:12px;object-fit:contain;"><p style="text-align:center;">${escapeHtml(file.name)} (${(file.size / 1024 / 1024).toFixed(2)} MB)</p>`;
   });
+  $("#guest-proof-send")?.addEventListener("click", () => uploadGuestPaymentProof(orderId));
   $("#guest-payment-done")?.addEventListener("click", () => requestGuestPaymentVerification(orderId));
   $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
 }
@@ -517,17 +517,9 @@ function renderGuestWaitingPanel(orderId, queuePosition = null) {
         <strong>⏳ Agora é só aguardar</strong>
         <p style="margin:8px 0 0;">Quando a loja confirmar o pagamento, esta aba será atualizada automaticamente.</p>
       </div>
-      <div class="proof-upload-box">
-        <strong>📷 Quer enviar o comprovante?</strong>
-        <p>É opcional, mas pode ajudar caso a loja não localize o Pix.</p>
-        <input type="file" id="guest-proof-file" accept="image/*" class="proof-file-input">
-        <button type="button" class="secondary-button full" id="guest-proof-send">Enviar comprovante</button>
-        <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
-      </div>
       <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
       <p class="checkout-message" id="guest-order-message" aria-live="polite"></p>
     </div>`;
-  $("#guest-proof-send")?.addEventListener("click", () => uploadGuestPaymentProof(orderId));
   $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
 }
 
@@ -545,7 +537,7 @@ function renderGuestPaymentRejectedPanel(orderId, reason = "O pagamento não foi
         <p style="margin:8px 0 0;">Se você já pagou, envie uma foto do comprovante abaixo para a loja conferir.</p>
       </div>
       <div class="proof-upload-box">
-        <input type="file" id="guest-proof-file" accept="image/*" class="proof-file-input">
+        <input type="file" id="guest-proof-file" accept="image/png,image/jpeg,image/webp" class="proof-file-input">
         <button type="button" class="primary-button full" id="guest-proof-send">Enviar comprovante</button>
         <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
       </div>
@@ -560,54 +552,31 @@ async function uploadGuestPaymentProof(orderId) {
   const message = $("#guest-proof-message");
   const button = $("#guest-proof-send");
   const file = input?.files?.[0];
-  if (!file) { setMessage(message, "Escolha uma foto do comprovante primeiro.", "error"); return false; }
-  if (file.type && !file.type.toLowerCase().startsWith("image/")) { setMessage(message, "Escolha um arquivo de imagem.", "error"); return false; }
-  if (file.size > 10 * 1024 * 1024) { setMessage(message, "A imagem precisa ter no máximo 10 MB.", "error"); return false; }
+  if (!file) return setMessage(message, "Escolha uma imagem primeiro.", "error");
+  if (!file.type.startsWith("image/")) return setMessage(message, "Escolha um arquivo de imagem.", "error");
+  if (file.size > 10 * 1024 * 1024) return setMessage(message, "A imagem precisa ter no máximo 10 MB.", "error");
   if (button) { button.disabled = true; button.textContent = "Enviando..."; }
-  const originalExt = (file.name.split(".").pop() || "img").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 8);
-  const ext = originalExt || "img";
+  const extByType = { "image/jpeg":"jpg", "image/png":"png", "image/webp":"webp", "image/gif":"gif", "image/heic":"heic", "image/heif":"heif" };
+  const ext = extByType[file.type] || (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0,8) || "jpg";
   const path = `${orderId}/${Date.now()}-${crypto.randomUUID?.() || Math.random().toString(36).slice(2)}.${ext}`;
-  const { error: uploadError } = await supabaseClient.storage.from("payment-proofs").upload(path, file, { contentType: file.type || "application/octet-stream", upsert: false });
+  const { error: uploadError } = await supabaseClient.storage.from("payment-proofs").upload(path, file, { contentType: file.type, upsert: false });
   if (uploadError) {
     console.error("payment-proofs upload:", uploadError);
     if (button) { button.disabled = false; button.textContent = "Enviar comprovante"; }
-    setMessage(message, `Falha no envio: ${uploadError.message || uploadError.error || "erro desconhecido"}. Confira as permissões e o limite do bucket payment-proofs no Supabase.`, "error");
-    return false;
+    return setMessage(message, `Falha no envio: ${uploadError.message}`, "error");
   }
   const { error: saveError } = await supabaseClient.rpc("submit_guest_payment_proof", { p_order_id: orderId, p_proof_path: path });
   if (saveError) {
     console.error("submit_guest_payment_proof:", saveError);
     await supabaseClient.storage.from("payment-proofs").remove([path]);
     if (button) { button.disabled = false; button.textContent = "Enviar comprovante"; }
-    setMessage(message, `Arquivo enviado, mas falhou ao vincular ao pedido: ${saveError.message || saveError.details || "erro desconhecido"}.`, "error");
-    return false;
+    return setMessage(message, `Arquivo enviado, mas não foi vinculado: ${saveError.message}`, "error");
   }
   if (button) { button.disabled = true; button.textContent = "Comprovante enviado ✓"; }
   if (input) input.disabled = true;
-  setMessage(message, "Comprovante enviado para a loja.", "success");
-
-  // Em um pedido ainda aguardando o Pix, o comprovante apenas salva a prova.
-  // Agora enviamos o aviso em uma segunda etapa, porque o RPC exige o comprovante.
-  const { data: order, error: orderError } = await supabaseClient
-    .from("orders")
-    .select("status")
-    .eq("id", orderId)
-    .maybeSingle();
-
-  if (!orderError && order?.status === "awaiting_payment") {
-    const { error: verifyError } = await supabaseClient.rpc("request_guest_payment_verification", { p_order_id: orderId });
-    if (verifyError) {
-      console.error("request_guest_payment_verification after proof:", verifyError);
-      setMessage(message, "Comprovante enviado, mas não conseguimos avisar a loja. Toque em 'Já fiz o Pix — avisar a loja'.", "error");
-      return true;
-    }
-  }
-
-  localStorage.setItem("thoune-pending-guest-order", orderId);
-  renderGuestWaitingPanel(orderId);
-  toast("Comprovante enviado e pagamento informado à loja.");
-  startGuestOrderStatusPolling(orderId);
-  return true;
+  const done = $("#guest-payment-done");
+  if (done) { done.disabled = false; done.style.opacity = "1"; }
+  setMessage(message, "Comprovante enviado e imagem salva. Agora toque em “Já fiz o Pix” para avisar a loja.", "success");
 }
 
 function renderGuestDeliveryPanel(order) {
@@ -701,58 +670,21 @@ function startGuestOrderStatusPolling(orderId) {
   }, 5000);
 }
 
-function renderGuestPaymentRecoveryPanel(orderId) {
-  const content = $("#checkout-section .checkout-content");
-  if (!content) return;
-  const orderShort = String(orderId).slice(0, 8).toUpperCase();
-  content.innerHTML = `
-    <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
-      <div style="font-size:42px;margin-bottom:10px;">💳</div>
-      <p class="eyebrow">PAGAMENTO PENDENTE</p>
-      <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
-      <p>Este pedido ainda não foi enviado para conferência da loja.</p>
-      <div class="proof-upload-box" style="text-align:left;">
-        <strong>📷 Envie o comprovante do Pix</strong>
-        <p>Envie a foto do comprovante para liberar o aviso à loja.</p>
-        <input type="file" id="guest-proof-file" accept="image/*" class="proof-file-input">
-        <button type="button" class="secondary-button full" id="guest-proof-send">Enviar comprovante</button>
-        <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
-      </div>
-      <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
-    </div>`;
-  $("#guest-proof-send")?.addEventListener("click", () => uploadGuestPaymentProof(orderId));
-  $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
-}
-
 async function restoreGuestOrderStatus() {
   const orderId = localStorage.getItem("thoune-pending-guest-order");
   if (!orderId) return;
   const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
   if (error || !data?.found) return;
-  const status = String(data.status || "");
-  if (status === "delivered") {
+  if (String(data.status) === "delivered") {
     renderGuestDeliveredPanel(data, true);
     return;
   }
-  if (status === "payment_confirmed" || status === "awaiting_delivery") {
+  if (String(data.status) === "payment_confirmed" || String(data.status) === "awaiting_delivery") {
     renderGuestDeliveryPanel(data);
     return;
   }
-  if (status === "payment_rejected") {
-    renderGuestPaymentRejectedPanel(orderId, data.rejection_reason || "O Pix ainda não foi localizado pela loja.");
-    startGuestOrderStatusPolling(orderId);
-    return;
-  }
-  if (status === "awaiting_verification") {
-    renderGuestWaitingPanel(orderId, Number(data.queue_position));
-    startGuestOrderStatusPolling(orderId);
-    return;
-  }
-  if (status === "awaiting_payment") {
-    renderGuestPaymentRecoveryPanel(orderId);
-    return;
-  }
-  renderGuestPaymentRecoveryPanel(orderId);
+  renderGuestWaitingPanel(orderId, Number(data.queue_position));
+  startGuestOrderStatusPolling(orderId);
 }
 
 function copyPixKey() {
