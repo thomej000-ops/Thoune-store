@@ -6533,3 +6533,61 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
   #product-grid .product-image{padding:6px !important;}
   #product-grid .product-info{padding:11px 10px 12px !important;}
 }
+
+/* v1059 — refinamentos mobile: carrinho alinhado, controles consistentes e seção Como Comprar mais luminosa */
+.site-header .header-actions #open-cart{
+  display:flex !important; align-items:center !important; justify-content:center !important;
+  gap:0 !important; line-height:1 !important; text-align:center !important;
+  padding:0 !important; box-sizing:border-box !important; vertical-align:middle !important;
+}
+.site-header .header-actions #open-cart .cart-emoji{
+  display:block !important; position:static !important; margin:0 !important; padding:0 !important;
+  line-height:1 !important; width:1.25em !important; height:1.25em !important;
+  font-size:25px !important; text-align:center !important; transform:none !important;
+  translate:0 0 !important; align-self:center !important;
+}
+.site-header .header-actions #open-cart .cart-count{position:absolute !important;}
+.cart-qty-button{
+  display:inline-grid !important; place-items:center !important; flex:0 0 34px !important;
+  width:34px !important; height:34px !important; min-width:34px !important; min-height:34px !important;
+  padding:0 !important; line-height:1 !important; font-size:20px !important;
+  color:#d9fbff !important; border:1px solid rgba(63,190,255,.42) !important;
+  background:linear-gradient(145deg,#103b50,#071f2c) !important;
+  box-shadow:0 0 0 1px rgba(44,159,255,.08),0 0 12px rgba(36,151,255,.12) !important;
+}
+.cart-qty-button:active{transform:scale(.96) !important;}
+.how-section .steps{gap:18px !important;}
+.how-section .steps article{
+  border:1px solid rgba(57,180,226,.24) !important;
+  background:linear-gradient(145deg,rgba(8,43,59,.94),rgba(4,23,36,.96)) !important;
+  box-shadow:inset 0 1px 0 rgba(190,240,255,.045),0 8px 26px rgba(0,0,0,.16),0 0 18px rgba(24,141,202,.06) !important;
+  padding:26px !important; border-radius:24px !important;
+}
+.how-section .steps article:hover{
+  border-color:rgba(65,199,255,.48) !important;
+  box-shadow:inset 0 1px 0 rgba(190,240,255,.07),0 10px 30px rgba(0,0,0,.2),0 0 22px rgba(24,141,202,.13) !important;
+}
+.how-section .steps article > span{
+  border:1px solid rgba(68,194,255,.3) !important;
+  background:linear-gradient(145deg,rgba(13,82,107,.72),rgba(5,34,49,.96)) !important;
+  box-shadow:inset 0 1px 0 rgba(220,250,255,.09),0 0 22px rgba(25,153,213,.13) !important;
+}
+.how-section .steps article > b{color:#8ddff0 !important;}
+.how-section .steps article p{color:#a9c6d1 !important;}
+/* Retoma a flutuação suave das marretas sem deslocar os cards. */
+#product-grid .product-image img{
+  animation:hammerFloat 4.8s ease-in-out infinite !important;
+  will-change:transform;
+}
+#product-grid .product-card:hover .product-image img,
+#product-grid .product-card:focus-within .product-image img{
+  animation-play-state:paused !important;
+  transform:translateY(-4px) rotate(-.5deg) scale(1.025) !important;
+}
+@media(max-width:600px){
+  .how-section .steps{gap:18px !important;}
+  .how-section .steps article{padding:24px !important;}
+  .site-header .header-actions #open-cart{width:54px !important;height:54px !important;}
+  .site-header .header-actions #open-cart .cart-emoji{font-size:24px !important;}
+}
+@media(prefers-reduced-motion:reduce){#product-grid .product-image img{animation:none !important;will-change:auto !important;}}
