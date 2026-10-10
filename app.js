@@ -18,6 +18,9 @@ let currentCategory = "Todas";
 let currentSearch = "";
 let currentSort = "popular";
 let currentReviewSort = "recent";
+let catalogDisplayProducts = [];
+let catalogVisibleLimit = 10;
+let catalogScrollBound = false;
 const GUEST_VOTER_KEY = "thoune-review-voter-v1043";
 let queuePreviewTimer = null;
 
@@ -215,14 +218,34 @@ function getFilteredProducts() {
 function renderCatalog() {
   const filtered = getFilteredProducts();
   if ($("#catalog-count")) $("#catalog-count").textContent = `${filtered.length} ${filtered.length === 1 ? "item" : "itens"}`;
-  const visible = filtered;
-  const display = visible.map(product => ({
+  catalogDisplayProducts = filtered.map(product => ({
     ...product,
     price: getProductPrice(product),
     original_price: Number(product.price) || 0,
     discount_percent: getDiscountPercent(product)
   }));
-  renderProducts(display);
+  catalogVisibleLimit = Math.min(10, catalogDisplayProducts.length);
+  renderProducts(catalogDisplayProducts.slice(0, catalogVisibleLimit));
+  const grid = $("#product-grid");
+  // Carrega mais 10 marretas quando o cliente rola dentro do painel do catálogo.
+  if (grid && !catalogScrollBound) {
+    grid.addEventListener("scroll", () => {
+      if (catalogVisibleLimit >= catalogDisplayProducts.length) return;
+      if (grid.scrollTop + grid.clientHeight >= grid.scrollHeight - 140) {
+        const oldTop = grid.scrollTop;
+        catalogVisibleLimit = Math.min(catalogVisibleLimit + 10, catalogDisplayProducts.length);
+        renderProducts(catalogDisplayProducts.slice(0, catalogVisibleLimit));
+        grid.scrollTop = oldTop;
+        animateCatalogCards();
+      }
+    }, { passive: true });
+    catalogScrollBound = true;
+  }
+  animateCatalogCards();
+  setHidden($("#empty-state"), filtered.length !== 0);
+}
+
+function animateCatalogCards() {
   // Entrada suave dos cards conforme aparecem na rolagem vertical
   const cards = $$("#product-grid .product-card");
   if ("IntersectionObserver" in window) {
@@ -241,7 +264,6 @@ function renderCatalog() {
   } else {
     cards.forEach(card => card.classList.add("card-visible"));
   }
-  setHidden($("#empty-state"), filtered.length !== 0);
 }
 
 function resetCatalogFilters() {

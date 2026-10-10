@@ -7147,3 +7147,22 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
 @media (prefers-reduced-motion: reduce) {
   #product-grid .product-card, #product-grid .product-card.card-visible { animation:none !important; transition:none !important; }
 }
+
+
+/* Painel de catálogo com carregamento progressivo em lotes de 10 marretas. */
+#product-grid{
+  max-height: min(78vh, 920px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(73, 194, 220, .55) rgba(8, 28, 36, .22);
+  padding: 12px !important;
+  border: 1px solid rgba(86, 191, 215, .13);
+  border-radius: 20px;
+  background: rgba(5, 20, 28, .12);
+  align-content: start;
+}
+#product-grid::-webkit-scrollbar{width:7px}
+#product-grid::-webkit-scrollbar-thumb{background:rgba(73,194,220,.48);border-radius:10px}
+@media(max-width:760px){#product-grid{max-height:72vh !important;padding:8px !important;gap:10px !important}}
