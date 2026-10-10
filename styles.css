@@ -6833,3 +6833,23 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
   #product-grid .product-card::after{animation:none !important;}
   #product-grid .product-image img{animation:none !important;will-change:auto !important;}
 }
+
+
+/* THOUNE v1063 — correções efetivas: animação de imagem e cache CSS */
+@keyframes hammerFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+#product-grid .product-card { position: relative !important; isolation: isolate !important; }
+#product-grid .product-card::after {
+  content: "" !important; position: absolute !important; inset: 0 !important;
+  border-radius: inherit !important; padding: 1.5px !important; pointer-events: none !important;
+  z-index: 8 !important;
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 255deg, rgba(255,255,255,.98) 282deg, rgba(110,220,255,.9) 294deg, transparent 320deg, transparent 360deg) !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0) !important;
+  -webkit-mask-composite: xor !important; mask-composite: exclude !important;
+  animation: thouneMetalSweep 5.8s linear infinite !important; opacity: .95 !important;
+}
+#product-grid .product-image img { animation: hammerFloat 5.2s ease-in-out infinite !important; }
+#product-grid .product-card:hover .product-image img, #product-grid .product-card:focus-within .product-image img { animation: hammerFloat 5.2s ease-in-out infinite !important; }
+@media (prefers-reduced-motion: reduce) { #product-grid .product-image img, #product-grid .product-card::after { animation: none !important; } }
