@@ -7029,3 +7029,23 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
   content: none !important;
   display: none !important;
 }
+
+
+/* v1069 — Catálogo vertical no celular: cards empilhados, sem faixa horizontal */
+@media (max-width: 600px) {
+  #product-grid,
+  .product-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-auto-flow: row !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  #product-grid .product-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+}
