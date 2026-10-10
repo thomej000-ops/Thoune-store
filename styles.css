@@ -6755,3 +6755,81 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
   .site-header .header-actions #open-cart .cart-emoji{font-size:18px !important;width:19px !important;height:19px !important;flex-basis:19px !important;}
 }
 @media(prefers-reduced-motion:reduce){#product-grid .product-card::after{animation:none !important;}}
+
+/* THOUNE v1062 — ajuste solicitado: luz apenas no contorno, flutuação suave e ícones compactos */
+#product-grid .product-card::after{
+  inset:0 !important;
+  padding:1px !important;
+  border-radius:inherit !important;
+  background:conic-gradient(from 0deg,
+    rgba(48,166,255,.04) 0deg,
+    rgba(48,166,255,.04) 245deg,
+    rgba(130,225,255,.20) 268deg,
+    rgba(255,255,255,.98) 286deg,
+    rgba(130,225,255,.78) 299deg,
+    rgba(48,166,255,.10) 318deg,
+    rgba(48,166,255,.04) 360deg) !important;
+  opacity:.88 !important;
+  animation:thouneMetalSweep 6.5s linear infinite !important;
+  pointer-events:none !important;
+}
+/* A animação é só na imagem da marreta e continua mesmo quando o card recebe foco/hover. */
+#product-grid .product-image img{
+  animation:hammerFloat 5.2s ease-in-out infinite !important;
+  will-change:transform;
+}
+#product-grid .product-card:hover .product-image img,
+#product-grid .product-card:focus-within .product-image img{
+  animation:hammerFloat 5.2s ease-in-out infinite !important;
+  transform:none !important;
+}
+/* Favorito mais translúcido, sem perder contraste do coração. */
+#product-grid .product-image > .favorite{
+  background:rgba(8,29,39,.22) !important;
+  border-color:rgba(180,235,248,.16) !important;
+  box-shadow:0 2px 8px rgba(0,0,0,.08) !important;
+  -webkit-backdrop-filter:blur(3px) !important;
+  backdrop-filter:blur(3px) !important;
+}
+/* Cabeçalho: tamanhos fixos e menores para os dois ícones em celular e computador. */
+.site-header .header-actions #open-cart,
+.site-header .header-actions .menu-button{
+  width:42px !important;height:42px !important;
+  min-width:42px !important;min-height:42px !important;
+  padding:0 !important;margin:0 !important;box-sizing:border-box !important;
+  display:inline-flex !important;align-items:center !important;justify-content:center !important;
+  vertical-align:middle !important;line-height:1 !important;
+}
+.site-header .header-actions #open-cart .cart-emoji{
+  width:18px !important;height:18px !important;flex:0 0 18px !important;
+  font-size:17px !important;line-height:18px !important;
+  display:flex !important;align-items:center !important;justify-content:center !important;
+  margin:0 !important;padding:0 !important;transform:none !important;
+}
+.site-header .header-actions #open-cart .ui-icon-cart{display:none !important;}
+.site-header .header-actions .menu-button .ui-icon-menu{
+  display:block !important;position:relative !important;
+  width:18px !important;height:14px !important;flex:0 0 18px !important;
+  margin:0 !important;padding:0 !important;border:0 !important;
+  background:transparent !important;transform:none !important;
+}
+.site-header .header-actions .menu-button .ui-icon-menu::before{
+  content:"" !important;position:absolute !important;display:block !important;
+  width:18px !important;height:2px !important;left:0 !important;top:0 !important;
+  border:0 !important;border-radius:2px !important;background:currentColor !important;
+  box-shadow:0 6px 0 currentColor,0 12px 0 currentColor !important;
+  transform:none !important;
+}
+.site-header .header-actions .menu-button .ui-icon-menu::after{content:none !important;display:none !important;}
+@media(max-width:600px){
+  .site-header .header-actions #open-cart,
+  .site-header .header-actions .menu-button{
+    width:42px !important;height:42px !important;
+    min-width:42px !important;min-height:42px !important;
+  }
+  .site-header .header-actions #open-cart .cart-emoji{font-size:17px !important;width:18px !important;height:18px !important;flex-basis:18px !important;}
+}
+@media(prefers-reduced-motion:reduce){
+  #product-grid .product-card::after{animation:none !important;}
+  #product-grid .product-image img{animation:none !important;will-change:auto !important;}
+}
