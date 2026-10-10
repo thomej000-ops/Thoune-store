@@ -18,7 +18,6 @@ let currentCategory = "Todas";
 let currentSearch = "";
 let currentSort = "popular";
 let currentReviewSort = "recent";
-const CATALOG_PAGE_SIZE = 12;
 const GUEST_VOTER_KEY = "thoune-review-voter-v1043";
 let queuePreviewTimer = null;
 
@@ -224,6 +223,24 @@ function renderCatalog() {
     discount_percent: getDiscountPercent(product)
   }));
   renderProducts(display);
+  // Entrada suave dos cards conforme aparecem na rolagem vertical
+  const cards = $$("#product-grid .product-card");
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("card-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: "0px 0px 60px 0px" });
+    cards.forEach(card => {
+      card.classList.remove("card-visible");
+      observer.observe(card);
+    });
+  } else {
+    cards.forEach(card => card.classList.add("card-visible"));
+  }
   setHidden($("#empty-state"), filtered.length !== 0);
 }
 
