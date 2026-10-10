@@ -18,7 +18,6 @@ let currentCategory = "Todas";
 let currentSearch = "";
 let currentSort = "popular";
 let currentReviewSort = "recent";
-let catalogVisibleCount = 12;
 const CATALOG_PAGE_SIZE = 12;
 const GUEST_VOTER_KEY = "thoune-review-voter-v1043";
 let queuePreviewTimer = null;
@@ -217,20 +216,18 @@ function getFilteredProducts() {
 function renderCatalog() {
   const filtered = getFilteredProducts();
   if ($("#catalog-count")) $("#catalog-count").textContent = `${filtered.length} ${filtered.length === 1 ? "item" : "itens"}`;
-  // Mostra todos os resultados numa faixa horizontal deslizável; sem paginação/botão.
-  const display = filtered.map(product => ({
+  const visible = filtered;
+  const display = visible.map(product => ({
     ...product,
     price: getProductPrice(product),
     original_price: Number(product.price) || 0,
     discount_percent: getDiscountPercent(product)
   }));
   renderProducts(display);
-  $("#catalog-load-more")?.remove();
   setHidden($("#empty-state"), filtered.length !== 0);
 }
 
 function resetCatalogFilters() {
-  catalogVisibleCount = CATALOG_PAGE_SIZE;
   currentCategory = "Todas";
   currentSearch = "";
   currentSort = "popular";
@@ -898,10 +895,10 @@ function setupEvents() {
   $("#terms-backdrop")?.addEventListener("click", () => closePanel($("#terms-modal")));
   $$('[data-open-terms]').forEach(b => b.addEventListener("click", openTerms));
   $("#menu-toggle")?.addEventListener("click", () => { const nav=$("#mobile-nav"); const open=nav?.classList.toggle("open"); $("#menu-toggle")?.setAttribute("aria-expanded", String(Boolean(open))); });
-  $("#search-input")?.addEventListener("input", e => { catalogVisibleCount = CATALOG_PAGE_SIZE; currentSearch=normalizeText(e.target.value); renderCatalog(); });
-  $("#sort-select")?.addEventListener("change", e => { catalogVisibleCount = CATALOG_PAGE_SIZE; currentSort=e.target.value; renderCatalog(); });
+  $("#search-input")?.addEventListener("input", e => { currentSearch=normalizeText(e.target.value); renderCatalog(); });
+  $("#sort-select")?.addEventListener("change", e => { currentSort=e.target.value; renderCatalog(); });
   $("#clear-search-button")?.addEventListener("click", resetCatalogFilters);
-  $$(".category").forEach(button => button.addEventListener("click", () => { catalogVisibleCount = CATALOG_PAGE_SIZE; currentCategory=button.dataset.category||"Todas"; $$(".category").forEach(b=>b.classList.toggle("active", b===button)); renderCatalog(); }));
+  $$(".category").forEach(button => button.addEventListener("click", () => { currentCategory=button.dataset.category||"Todas"; $$(".category").forEach(b=>b.classList.toggle("active", b===button)); renderCatalog(); }));
   setupSortControl();
 
   document.addEventListener("click", async event => {
