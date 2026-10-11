@@ -7370,3 +7370,49 @@ main, .main-content, .page-content, .section-shell, .community-section,
   border-color: rgba(255, 139, 56, .7) !important;
   box-shadow: 0 0 0 1px rgba(255,139,56,.13), 0 0 12px rgba(255,100,20,.13) !important;
 }
+
+
+/* v1086 — aplicação consistente da paleta publicada */
+body {
+  background: linear-gradient(180deg, var(--blue-bg-2, #07151b), var(--blue-bg, #020a11)) !important;
+  color: var(--ink, #f3f7f5);
+}
+.site-header, .mobile-menu, .site-footer, .support-card, .community-section,
+.faq-section, .reviews-section, .section-panel, .modal-content, .cart-drawer,
+#cart-modal, #checkout-modal, .review-card, .faq-item {
+  background-color: var(--deep, #07151b);
+  border-color: var(--line, #27414a);
+}
+.product-card, #product-grid .product-card, .review-card, .faq-item,
+.category-chip, .filter-chip, .category-filter button, .sort-control,
+.search-box, .form-card, .support-card {
+  border-color: color-mix(in srgb, var(--teal, #17677a) 48%, var(--line, #27414a)) !important;
+}
+.product-card, #product-grid .product-card, .review-card, .faq-item,
+.form-card, .support-card, .modal-content, .cart-drawer {
+  background-color: var(--deep, #07151b) !important;
+  color: var(--ink, #f3f7f5) !important;
+}
+.product-card :is(h1,h2,h3,h4,p,span,label,strong,small),
+.review-card :is(h1,h2,h3,h4,p,span,label,strong,small),
+.faq-item :is(h1,h2,h3,h4,p,span,label,strong,small),
+.support-card :is(h1,h2,h3,h4,p,span,label,strong,small) {
+  color: inherit;
+}
+.product-card .price, #product-grid .price, .review-card .rating,
+.section-kicker, .text-accent {
+  color: var(--teal-light, #72c5a0) !important;
+}
+#product-grid .product-card {
+  position: relative;
+  border: 1px solid rgba(255, 133, 47, .60) !important;
+  box-shadow: 0 0 0 1px rgba(255,133,47,.10), 0 0 12px rgba(255,105,24,.12) !important;
+  animation: thouneCardGlow1086 4s ease-in-out infinite alternate;
+}
+@keyframes thouneCardGlow1086 {
+  from { box-shadow: 0 0 0 1px rgba(255,133,47,.08), 0 0 7px rgba(255,105,24,.08); border-color: rgba(255,133,47,.40); }
+  to { box-shadow: 0 0 0 1px rgba(255,133,47,.18), 0 0 15px rgba(255,105,24,.22); border-color: rgba(255,153,70,.85); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #product-grid .product-card { animation: none !important; }
+}

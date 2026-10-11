@@ -14,38 +14,35 @@ async function loadPublishedTheme() {
     if (error || !data) return;
     const root = document.documentElement;
     const palette = data.palette || {};
-    // A cor principal escolhida no painel também colore as superfícies escuras,
-    // mantendo contraste alto para textos e conteúdo.
-    const primary = /^#[0-9a-f]{6}$/i.test(data.primary_color || "") ? data.primary_color : (palette.primary || "#17677a");
-    const tint = (hex, amount, base = "#020a11") => {
-      const a = hex.match(/[0-9a-f]{2}/gi).map(v => parseInt(v, 16));
-      const b = base.match(/[0-9a-f]{2}/gi).map(v => parseInt(v, 16));
-      return "#" + a.map((v, i) => Math.round(b[i] * (1 - amount) + v * amount).toString(16).padStart(2, "0")).join("");
+    const validHex = (v) => typeof v === "string" && /^#[0-9a-f]{6}$/i.test(v);
+    const primary = validHex(data.primary_color) ? data.primary_color : (validHex(palette.primary) ? palette.primary : "#17677a");
+    const mix = (hex, base, amount) => {
+      const a = hex.slice(1).match(/.{2}/g).map(v => parseInt(v, 16));
+      const b = base.slice(1).match(/.{2}/g).map(v => parseInt(v, 16));
+      return "#" + a.map((v, i) => Math.round(v * amount + b[i] * (1 - amount)).toString(16).padStart(2, "0")).join("");
     };
+    // Use the exact published palette when valid; only derive fallbacks when absent.
     const vars = {
-      "--deep": tint(primary, .30),
-      "--deep-2": tint(primary, .20),
+      "--deep": validHex(palette.deep) ? palette.deep : mix(primary, "#020a11", .30),
+      "--deep-2": validHex(palette.deep2) ? palette.deep2 : mix(primary, "#020a11", .22),
       "--teal": primary,
-      "--teal-light": tint(primary, .75, "#ffffff"),
-      "--mist": tint(primary, .10),
-      "--mist-2": "#f3f7f5",
-      "--line": tint(primary, .48, "#52605c"),
-      "--blue-bg": tint(primary, .13),
-      "--blue-bg-2": tint(primary, .19),
-      "--ink": "#f3f7f5",
-      "--muted": "#a9b8b5",
-      "--card": tint(primary, .16),
-      "--surface": tint(primary, .16),
-      "--surface-2": tint(primary, .22),
-      "--text": "#f3f7f5",
-      "--text-muted": "#a9b8b5",
-      "--border": tint(primary, .48, "#52605c"),
-      "--accent": primary,
-      "--primary": primary
+      "--teal-light": validHex(palette.accent) ? palette.accent : mix(primary, "#ffffff", .28),
+      "--mist": validHex(palette.mist) ? palette.mist : mix(primary, "#020a11", .12),
+      "--mist-2": validHex(palette.mist2) ? palette.mist2 : mix(primary, "#020a11", .16),
+      "--line": validHex(palette.line) ? palette.line : mix(primary, "#ffffff", .48),
+      "--blue-bg": validHex(palette.bg) ? palette.bg : mix(primary, "#020a11", .12),
+      "--blue-bg-2": validHex(palette.bg2) ? palette.bg2 : mix(primary, "#020a11", .18),
+      "--ink": "#f3f7f5", "--muted": "#b6c4c1",
+      "--card": validHex(palette.mist) ? palette.mist : mix(primary, "#020a11", .12),
+      "--surface": validHex(palette.mist) ? palette.mist : mix(primary, "#020a11", .12),
+      "--surface-2": validHex(palette.mist2) ? palette.mist2 : mix(primary, "#020a11", .16),
+      "--text": "#f3f7f5", "--text-muted": "#b6c4c1",
+      "--border": validHex(palette.line) ? palette.line : mix(primary, "#ffffff", .48),
+      "--accent": primary, "--primary": primary
     };
-    Object.entries(vars).forEach(([k,v])=>{if(typeof v==="string" && /^#[0-9a-f]{6}$/i.test(v)) root.style.setProperty(k,v)});
+    Object.entries(vars).forEach(([k, v]) => { if (validHex(v)) root.style.setProperty(k, v); });
     document.body.classList.remove("theme-banner-glow");
-    document.body.classList.toggle("theme-banner-particles", data.banner_effect === "particles");
+    document.body.classList.toggle("theme-banner-particles", data.banner_effect === "particles" || data.banner_effect === "glow_particles");
     const hero = document.querySelector(".hero");
     if (hero && typeof data.banner_image_url === "string" && data.banner_image_url.trim()) {
       try { const banner = new URL(data.banner_image_url); if (banner.protocol === "https:") hero.style.backgroundImage = `url("${banner.href.replace(/["\\]/g, "")}")`; } catch (_) {}
