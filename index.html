@@ -31,7 +31,7 @@
 
   <link
     rel="stylesheet"
-    href="./styles.css?v=1089"
+    href="./styles.css?v=1091"
   >
 </head>
 
@@ -1461,6 +1461,29 @@
     type="module"
     src="./app.js?v=1090"
   ></script>
+
+  <script>
+  (() => {
+    const subtitle = document.getElementById('welcome-subtitle');
+    if (!subtitle) return;
+    const messages = [
+      'Sua coleção se completa aqui.',
+      'Encontre a marreta que combina com você.',
+      'Sua próxima raridade pode estar aqui.',
+      'Seu inventário dos sonhos começa aqui.',
+      'Sua nova loja favorita.'
+    ];
+    let index = 0;
+    window.setInterval(() => {
+      index = (index + 1) % messages.length;
+      subtitle.classList.add('welcome-subtitle-changing');
+      window.setTimeout(() => {
+        subtitle.textContent = messages[index];
+        subtitle.classList.remove('welcome-subtitle-changing');
+      }, 240);
+    }, 7000);
+  })();
+  </script>
 
 </body>
         </html>

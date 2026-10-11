@@ -7286,3 +7286,33 @@ body.theme-banner-glow .hero-content{z-index:2}
 @media(max-width:600px){
  .welcome-content{padding:22px 18px;border-radius:26px}
 }
+
+
+/* THOUNE v1091 — fundo de abertura opaco e animação responsiva dos cards */
+.thoune-welcome{
+  background-color:#031a2d !important;
+  background-image:linear-gradient(180deg,rgba(1,14,29,.80),rgba(2,35,61,.84)),url('./snoopy-welcome.jpg') !important;
+  background-position:center,center 48% !important;
+  background-size:cover,cover !important;
+  isolation:isolate !important;
+}
+.thoune-welcome::before,.thoune-welcome::after,.welcome-bubbles,.welcome-content{
+  pointer-events:none;
+}
+#welcome-skip{pointer-events:auto;position:relative;z-index:5}
+.welcome-content{background:linear-gradient(145deg,rgba(2,28,49,.92),rgba(3,49,76,.88)) !important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#product-grid .product-image img{
+  animation:thouneHammerFloat1091 4.6s ease-in-out infinite !important;
+  will-change:transform;
+}
+@keyframes thouneHammerFloat1091{
+  0%,100%{translate:0 0;filter:drop-shadow(0 3px 5px rgba(26,146,220,.08))}
+  50%{translate:0 -7px;filter:drop-shadow(0 8px 10px rgba(26,146,220,.2))}
+}
+#product-grid .product-card:hover .product-image img,
+#product-grid .product-card:focus-within .product-image img{
+  animation:thouneHammerFloat1091 4.6s ease-in-out infinite !important;
+}
+@media(prefers-reduced-motion:reduce){
+ #product-grid .product-image img{animation:none !important;translate:none !important;will-change:auto !important}
+}
