@@ -9,7 +9,7 @@
   >
 
   <meta name="theme-color" content="#082c3a">
-  <meta name="thoune-version" content="v1078">
+  <meta name="thoune-version" content="v1088">
 
   <title>Thoune Store — Flee the Facility</title>
 
@@ -31,11 +31,27 @@
 
   <link
     rel="stylesheet"
-    href="./styles.css?v=1087"
+    href="./styles.css?v=1088"
   >
 </head>
 
 <body>
+
+  <!-- Abertura de boas-vindas Thoune Store -->
+  <div id="thoune-welcome" class="thoune-welcome" role="status" aria-label="Bem-vindo à Thoune Store">
+    <div class="welcome-bubbles" aria-hidden="true">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+    <div class="welcome-content">
+      <div class="welcome-mark">TS</div>
+      <p class="welcome-kicker">FLEE THE FACILITY</p>
+      <h1>Thoune <span>Store</span></h1>
+      <p class="welcome-subtitle">Sua próxima marreta começa aqui.</p>
+      <div class="welcome-loader"><span></span></div>
+      <button id="welcome-skip" type="button">Entrar na loja <span aria-hidden="true">→</span></button>
+    </div>
+  </div>
+
 
   <!-- =====================================================
        EFEITO DE ABERTURA
@@ -1393,11 +1409,35 @@
        SCRIPTS
   ====================================================== -->
 
+
+
+  <script>
+  (() => {
+    const screen = document.getElementById('thoune-welcome');
+    if (!screen) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let closed = false;
+    const close = () => {
+      if (closed) return;
+      closed = true;
+      screen.classList.add('welcome-exit');
+      window.setTimeout(() => screen.remove(), 650);
+      try { sessionStorage.setItem('thoune-welcome-v1088', '1'); } catch (_) {}
+    };
+    let seen = false;
+    try { seen = sessionStorage.getItem('thoune-welcome-v1088') === '1'; } catch (_) {}
+    if (seen) { screen.remove(); return; }
+    const skip = document.getElementById('welcome-skip');
+    if (skip) skip.addEventListener('click', close);
+    window.setTimeout(close, reduce ? 1100 : 3000);
+  })();
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script
     type="module"
-    src="./app.js?v=1087"
+    src="./app.js?v=1088"
   ></script>
 
 </body>
