@@ -31,7 +31,7 @@
 
   <link
     rel="stylesheet"
-    href="./styles.css?v=1088"
+    href="./styles.css?v=1089"
   >
 </head>
 
@@ -44,6 +44,7 @@
     </div>
     <div class="welcome-content">
       <div class="welcome-mark">TS</div>
+      <img class="welcome-snoopy" src="snoopy-welcome.jpg" alt="Snoopy acenando à beira-mar">
       <p class="welcome-kicker">FLEE THE FACILITY</p>
       <h1>Thoune <span>Store</span></h1>
       <p class="welcome-subtitle">Sua próxima marreta começa aqui.</p>
@@ -1422,14 +1423,14 @@
       closed = true;
       screen.classList.add('welcome-exit');
       window.setTimeout(() => screen.remove(), 650);
-      try { sessionStorage.setItem('thoune-welcome-v1088', '1'); } catch (_) {}
+      try { sessionStorage.setItem('thoune-welcome-v1089', '1'); } catch (_) {}
     };
     let seen = false;
-    try { seen = sessionStorage.getItem('thoune-welcome-v1088') === '1'; } catch (_) {}
+    try { seen = sessionStorage.getItem('thoune-welcome-v1089') === '1'; } catch (_) {}
     if (seen) { screen.remove(); return; }
     const skip = document.getElementById('welcome-skip');
     if (skip) skip.addEventListener('click', close);
-    window.setTimeout(close, reduce ? 1100 : 3000);
+    /* A abertura fica visível até o cliente tocar em “Entrar na loja”. */
   })();
   </script>
 
@@ -1437,7 +1438,7 @@
 
   <script
     type="module"
-    src="./app.js?v=1088"
+    src="./app.js?v=1089"
   ></script>
 
 </body>

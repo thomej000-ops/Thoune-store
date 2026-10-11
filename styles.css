@@ -7254,3 +7254,12 @@ body.theme-banner-glow .hero-content{z-index:2}
  .welcome-bubbles i,.thoune-welcome::before,.thoune-welcome::after,.welcome-content,.welcome-loader span{animation:none !important}
  .welcome-bubbles i{opacity:.25}
 }
+
+
+/* THOUNE v1089 — Snoopy na abertura, com entrada manual */
+.welcome-snoopy{display:block;width:clamp(112px,22vw,164px);height:clamp(142px,27vw,204px);object-fit:cover;object-position:center 48%;margin:0 auto 16px;border-radius:22px;border:1px solid rgba(126,231,241,.28);box-shadow:0 12px 38px rgba(0,0,0,.28),0 0 32px rgba(59,223,217,.12);animation:welcomeSnoopyFloat 3.8s ease-in-out infinite;}
+#welcome-skip{min-width:190px;padding:14px 24px;font-size:14px;box-shadow:0 8px 28px rgba(35,182,173,.18);transition:transform .2s ease,background .2s ease,border-color .2s ease;}
+#welcome-skip:hover,#welcome-skip:focus-visible{transform:translateY(-2px);background:rgba(14,72,79,.9);border-color:rgba(116,215,219,.65);outline:none;}
+@keyframes welcomeSnoopyFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-6px) rotate(1deg)}}
+@media(max-width:600px){.welcome-content{width:min(100%,420px)}.welcome-snoopy{width:112px;height:142px;margin-bottom:12px}.welcome-mark{width:54px;height:54px;margin-bottom:14px;border-radius:18px}.welcome-subtitle{margin:12px 0 22px}}
+@media(prefers-reduced-motion:reduce){.welcome-snoopy{animation:none}}
