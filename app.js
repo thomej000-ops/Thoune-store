@@ -14,26 +14,34 @@ async function loadPublishedTheme() {
     if (error || !data) return;
     const root = document.documentElement;
     const palette = data.palette || {};
+    // A cor principal escolhida no painel também colore as superfícies escuras,
+    // mantendo contraste alto para textos e conteúdo.
+    const primary = /^#[0-9a-f]{6}$/i.test(data.primary_color || "") ? data.primary_color : (palette.primary || "#17677a");
+    const tint = (hex, amount, base = "#020a11") => {
+      const a = hex.match(/[0-9a-f]{2}/gi).map(v => parseInt(v, 16));
+      const b = base.match(/[0-9a-f]{2}/gi).map(v => parseInt(v, 16));
+      return "#" + a.map((v, i) => Math.round(b[i] * (1 - amount) + v * amount).toString(16).padStart(2, "0")).join("");
+    };
     const vars = {
-      "--deep": palette.deep,
-      "--deep-2": palette.deep2,
-      "--teal": data.primary_color || palette.primary,
-      "--teal-light": palette.accent,
-      "--mist": palette.mist,
-      "--mist-2": palette.mist2,
-      "--line": palette.line,
-      "--blue-bg": palette.bg,
-      "--blue-bg-2": palette.bg2,
-      "--ink": palette.deep,
-      "--muted": palette.deep2,
-      "--card": palette.mist,
-      "--surface": palette.mist,
-      "--surface-2": palette.mist2,
-      "--text": palette.deep,
-      "--text-muted": palette.deep2,
-      "--border": palette.line,
-      "--accent": data.primary_color || palette.primary,
-      "--primary": data.primary_color || palette.primary
+      "--deep": tint(primary, .30),
+      "--deep-2": tint(primary, .20),
+      "--teal": primary,
+      "--teal-light": tint(primary, .75, "#ffffff"),
+      "--mist": tint(primary, .10),
+      "--mist-2": "#f3f7f5",
+      "--line": tint(primary, .48, "#52605c"),
+      "--blue-bg": tint(primary, .13),
+      "--blue-bg-2": tint(primary, .19),
+      "--ink": "#f3f7f5",
+      "--muted": "#a9b8b5",
+      "--card": tint(primary, .16),
+      "--surface": tint(primary, .16),
+      "--surface-2": tint(primary, .22),
+      "--text": "#f3f7f5",
+      "--text-muted": "#a9b8b5",
+      "--border": tint(primary, .48, "#52605c"),
+      "--accent": primary,
+      "--primary": primary
     };
     Object.entries(vars).forEach(([k,v])=>{if(typeof v==="string" && /^#[0-9a-f]{6}$/i.test(v)) root.style.setProperty(k,v)});
     document.body.classList.remove("theme-banner-glow");
