@@ -1,0 +1,12 @@
+THOUNE STORE v1074 — AVISO DE COMPROVANTE OBRIGATÓRIO
+
+Base: v1073 (catálogo compacto com painel de rolagem e revelação de 10 marretas por vez).
+
+Alterações:
+- Adicionado aviso destacado antes do pagamento Pix: o cliente deve salvar/baixar e enviar o comprovante; sem envio bem-sucedido, não poderá solicitar verificação e a entrega não será realizada.
+- Texto do envio orienta o cliente a escolher a imagem da galeria do celular e aguardar a confirmação do upload.
+- O cliente agora também recebe a mensagem retornada pelo Supabase quando a função de verificação informa que o comprovante está ausente, em vez de avançar indevidamente.
+- Incluído SQL de backend para exigir o comprovante e manter as funções de envio/recusa. Execute no SQL Editor do Supabase se a versão v1049 ainda não tiver sido aplicada.
+
+Validação realizada: node --check app.js.
+Não foi possível testar uma compra real nem confirmar a visibilidade de pedidos no painel conectado ao Supabase neste ambiente.

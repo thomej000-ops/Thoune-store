@@ -491,14 +491,18 @@ function renderGuestPixPanel(orderId, total, queuePosition = null) {
       <div style="font-size:42px;margin-bottom:10px;">💳</div>
       <p class="eyebrow">PAGAMENTO VIA PIX</p>
       <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
-      <p>Faça <strong>um único Pix</strong> no valor exato abaixo. Envie o comprovante e depois toque em “Já fiz o Pix”.</p>
+      <div class="manual-delivery-notice" role="alert" style="text-align:left;border:1px solid rgba(255,170,65,.55);background:rgba(255,145,35,.12);border-radius:14px;padding:14px;margin:14px 0;">
+        <strong>⚠️ IMPORTANTE: COMPROVANTE OBRIGATÓRIO</strong>
+        <p style="margin:8px 0 0;">Depois de pagar, salve ou baixe o comprovante do Pix e envie a imagem aqui no site. <strong>Sem o comprovante enviado com sucesso, você não conseguirá solicitar a verificação e a entrega não será realizada.</strong> Não feche esta tela antes de enviar o arquivo.</p>
+      </div>
+      <p>Faça <strong>um único Pix</strong> no valor exato abaixo. Depois, envie o comprovante e toque em “Já fiz o Pix”.</p>
       ${Number.isFinite(queuePosition) && queuePosition > 0 ? `<div class="checkout-queue-preview confirmed"><strong>📋 Sua posição atual na fila: <span>#${queuePosition}</span></strong><small>Esta posição pode mudar enquanto você realiza o pagamento.</small></div>` : ""}
       <div class="checkout-total" style="margin:18px 0;"><span>Total do pedido</span><strong>${money(total)}</strong></div>
       <div class="pix-visual"><img src="pix-qr.png" alt="QR Code para pagamento via Pix" class="pix-qr" width="260" height="260"></div>
       <div class="pix-key-box"><span class="pix-key-label">Chave Pix</span><div class="pix-key-row"><strong class="pix-key-value">${escapeHtml(storeSettings.pix_key || "Pix indisponível")}</strong><button type="button" class="secondary-button" id="copy-pix-key-success">▤ Copiar</button></div></div>
       <div class="proof-upload-box" style="text-align:left;margin:16px 0;">
         <strong>📷 Envie o comprovante do Pix</strong>
-        <p>Selecione a imagem. Ela será enviada uma única vez antes de avisar a loja.</p>
+        <p>Escolha na galeria do celular a imagem do comprovante que você salvou após pagar. Aguarde aparecer “Comprovante enviado ✓” antes de continuar.</p>
         <input type="file" id="guest-proof-file" accept="image/*" class="proof-file-input">
         <div id="guest-proof-preview" style="margin-top:10px;"></div>
         <button type="button" class="secondary-button full" id="guest-proof-send" style="margin-top:10px;">Enviar comprovante</button>
@@ -527,11 +531,11 @@ async function requestGuestPaymentVerification(orderId) {
   const button = $("#guest-payment-done");
   const message = $("#guest-order-message");
   if (button) { button.disabled = true; button.textContent = "Enviando aviso..."; }
-  const { error } = await supabaseClient.rpc("request_guest_payment_verification", { p_order_id: orderId });
-  if (error) {
+  const { data, error } = await supabaseClient.rpc("request_guest_payment_verification", { p_order_id: orderId });
+  if (error || data?.success === false) {
     console.error("request_guest_payment_verification:", error);
     if (button) { button.disabled = false; button.textContent = "Já fiz o Pix"; }
-    return setMessage(message, "Não foi possível avisar a loja. Tente novamente.", "error");
+    return setMessage(message, data?.message || "Não foi possível avisar a loja. Confirme se o comprovante foi enviado com sucesso e tente novamente.", "error");
   }
 
   localStorage.setItem("thoune-pending-guest-order", orderId);
