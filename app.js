@@ -281,12 +281,7 @@ function resetCatalogFilters() {
 function favoriteKey(id) { return `thoune-fav-${id}`; }
 function isFavorite(id) { return localStorage.getItem(favoriteKey(id)) === "1"; }
 
-function toggleFavorite(id) {
-  const key = favoriteKey(id);
-  if (isFavorite(id)) localStorage.removeItem(key); else localStorage.setItem(key, "1");
-  renderCatalog();
-  renderFavoritesPanel();
-}
+function toggleFavorite(id) { return; }
 
 function renderFavoritesPanel() {
   const container = $("#favorites-list");
@@ -1015,10 +1010,7 @@ function setupEvents() {
       if (add.closest("#product-modal")) closePanel($("#product-modal"));
       return;
     }
-    const favorite = event.target.closest("[data-favorite]");
-    if (favorite) { toggleFavorite(favorite.dataset.favorite); return; }
-    const removeFav = event.target.closest("[data-favorite-remove]");
-    if (removeFav) { localStorage.removeItem(favoriteKey(removeFav.dataset.favoriteRemove)); renderFavoritesPanel(); renderCatalog(); return; }
+    
   });
 
 

@@ -7373,3 +7373,105 @@ button[title*="favorite" i],
   visibility: hidden !important;
   pointer-events: none !important;
 }
+
+
+/* THOUNE v1094 — correções definitivas: favoritos, abertura, animação e painéis desktop */
+/* Remove os controles de favorito pelos seletores reais usados no projeto. */
+#product-grid .favorite,
+#product-grid [data-favorite],
+#product-grid button[aria-label*="favorit" i],
+#product-grid button[title*="favorit" i],
+#favorites-panel,
+#favorites-panel *,
+#open-favorites,
+#favorites-button,
+[data-open-favorites],
+[data-panel="favorites"] {
+  display:none !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+
+/* Abertura cobre a janela inteira e bloqueia interações/rolagem com a loja por trás. */
+html:has(#thoune-welcome:not(.welcome-exit)),
+body:has(#thoune-welcome:not(.welcome-exit)) {
+  overflow:hidden !important;
+  height:100% !important;
+  overscroll-behavior:none !important;
+  touch-action:none !important;
+}
+#thoune-welcome:not(.welcome-exit) {
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  max-width:none !important;
+  height:100vh !important;
+  height:100dvh !important;
+  min-height:100vh !important;
+  min-height:100dvh !important;
+  margin:0 !important;
+  z-index:2147483647 !important;
+  overflow:hidden !important;
+  overscroll-behavior:contain !important;
+  touch-action:pan-x pan-y !important;
+  pointer-events:auto !important;
+  background-color:#03182d !important;
+  background-image:linear-gradient(180deg,rgba(1,12,27,.90),rgba(1,27,48,.91)),url('./snoopy-welcome.jpg') !important;
+  background-position:center,center 48% !important;
+  background-size:cover,cover !important;
+}
+#thoune-welcome:not(.welcome-exit) ~ * { pointer-events:none !important; }
+#thoune-welcome .welcome-content { position:relative !important; z-index:2 !important; }
+
+/* Movimento contínuo nas imagens reais dos cards; prioridade sobre regras antigas. */
+#product-grid .product-card .product-image img {
+  animation-name:thouneHammerFloat1094 !important;
+  animation-duration:3.6s !important;
+  animation-timing-function:ease-in-out !important;
+  animation-iteration-count:infinite !important;
+  animation-fill-mode:both !important;
+  transform-origin:50% 55% !important;
+  will-change:transform !important;
+}
+#product-grid .product-card:nth-child(3n + 1) .product-image img { animation-delay:-1.2s !important; }
+#product-grid .product-card:nth-child(3n + 2) .product-image img { animation-delay:-2.4s !important; }
+@keyframes thouneHammerFloat1094 {
+  0%,100% { transform:translateY(0) rotate(0deg); }
+  50% { transform:translateY(-11px) rotate(1deg); }
+}
+
+/* No desktop, painéis e modais usam o espaço horizontal e alinham os conteúdos. */
+@media (min-width: 768px) {
+  .modal-shell {
+    padding:28px !important;
+    place-items:center !important;
+  }
+  .modal-shell .modal-card {
+    width:min( min(94vw, 1040px), calc(100vw - 56px)) !important;
+    max-width:1040px !important;
+    max-height:calc(100vh - 56px) !important;
+    margin-inline:auto !important;
+    box-sizing:border-box !important;
+  }
+  #terms-modal .terms-card,
+  .terms-card {
+    width:min(900px, calc(100vw - 56px)) !important;
+  }
+  .terms-content {
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:14px !important;
+    align-items:stretch !important;
+  }
+  .terms-content > section { min-width:0 !important; width:auto !important; }
+  #checkout-section .checkout-modal-card,
+  .checkout-modal-card {
+    width:min(960px, calc(100vw - 56px)) !important;
+  }
+  #checkout-section .checkout-modal-card > *,
+  .checkout-modal-card > * { min-width:0; }
+  #product-modal .product-modal-card { width:min(900px, calc(100vw - 56px)) !important; }
+}
+@media (max-width:767px) {
+  .terms-content { grid-template-columns:minmax(0,1fr) !important; }
+}
