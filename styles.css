@@ -7513,3 +7513,258 @@ body:has(#thoune-welcome:not(.welcome-exit)) {
     will-change: auto !important;
   }
 }
+
+
+
+/* =========================================================
+   V1096 — REFINO DE DESKTOP
+   Escopo exclusivo para telas largas; o layout mobile é mantido.
+   ========================================================= */
+@media screen and (min-width: 1024px) {
+  :root {
+    --desktop-content-width: 1280px;
+  }
+
+  html {
+    scroll-padding-top: 96px;
+  }
+
+  body {
+    overflow-x: clip;
+  }
+
+  .site-header {
+    height: 82px !important;
+    padding-inline: max(32px, calc((100vw - var(--desktop-content-width)) / 2)) !important;
+    gap: 28px !important;
+  }
+
+  .brand {
+    flex: 0 0 auto;
+    gap: 12px !important;
+  }
+
+  .desktop-nav {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: clamp(18px, 2vw, 32px) !important;
+    margin-inline: auto !important;
+    white-space: nowrap;
+  }
+
+  .desktop-nav a {
+    padding: 10px 2px !important;
+    transition: color .2s ease, opacity .2s ease;
+  }
+
+  .desktop-nav a:hover {
+    opacity: .78;
+  }
+
+  .header-actions {
+    flex: 0 0 auto;
+    gap: 12px !important;
+  }
+
+  .menu-button,
+  #menu-toggle {
+    display: none !important;
+  }
+
+  .hero {
+    min-height: clamp(430px, 38vw, 560px) !important;
+    padding: clamp(64px, 7vw, 104px) max(48px, calc((100vw - var(--desktop-content-width)) / 2)) !important;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-content {
+    width: min(100%, 760px) !important;
+    max-width: 760px !important;
+    padding: 0 !important;
+  }
+
+  .hero h1,
+  .hero .hero-title {
+    max-width: 780px;
+    font-size: clamp(44px, 4.2vw, 68px) !important;
+    line-height: 1.06 !important;
+    letter-spacing: -.035em;
+    text-wrap: balance;
+  }
+
+  .hero-subtitle {
+    max-width: 620px;
+    font-size: clamp(16px, 1.25vw, 19px) !important;
+    line-height: 1.7 !important;
+  }
+
+  .hero-actions {
+    gap: 14px !important;
+    flex-wrap: wrap;
+  }
+
+  .section {
+    width: 100%;
+    max-width: calc(var(--desktop-content-width) + 64px);
+    margin-inline: auto !important;
+    padding: 76px 32px !important;
+  }
+
+  .benefits {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+    max-width: var(--desktop-content-width);
+    margin: 0 auto !important;
+    padding: 28px 32px !important;
+  }
+
+  .benefits > * {
+    min-width: 0;
+  }
+
+  .section-heading {
+    align-items: end !important;
+    gap: 28px !important;
+    margin-bottom: 32px !important;
+  }
+
+  .section-heading h2 {
+    font-size: clamp(30px, 2.7vw, 42px) !important;
+    line-height: 1.12 !important;
+    letter-spacing: -.025em;
+  }
+
+  .catalog-tools {
+    display: grid !important;
+    grid-template-columns: minmax(280px, 1fr) minmax(230px, 290px) !important;
+    gap: 16px !important;
+    align-items: stretch;
+    max-width: 880px;
+    margin-bottom: 22px !important;
+  }
+
+  .search-box,
+  .sort-box {
+    min-width: 0;
+  }
+
+  .category-row {
+    flex-wrap: wrap !important;
+    overflow: visible !important;
+    gap: 10px !important;
+    padding: 6px 0 18px !important;
+  }
+
+  .category {
+    flex: 0 0 auto;
+  }
+
+  #product-grid,
+  .product-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 24px !important;
+    align-items: stretch;
+  }
+
+  .product-card {
+    min-width: 0 !important;
+    height: 100% !important;
+    border-radius: 20px !important;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 26px rgba(20, 38, 54, .07);
+    transition: transform .24s ease, box-shadow .24s ease, border-color .24s ease !important;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 16px 36px rgba(20, 38, 54, .13) !important;
+  }
+
+  .product-image {
+    aspect-ratio: 1 / .88 !important;
+    max-height: none !important;
+    min-height: 220px !important;
+    overflow: hidden !important;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .product-card .product-info,
+  .product-card .product-details,
+  .product-card .product-body {
+    flex: 1 1 auto;
+  }
+
+  .steps {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 20px !important;
+    align-items: stretch;
+  }
+
+  .steps > * {
+    min-width: 0;
+  }
+
+  #reviews-grid,
+  .reviews-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    overflow: visible !important;
+    gap: 22px !important;
+    padding: 4px 0 12px !important;
+    scroll-snap-type: none !important;
+  }
+
+  .review-placeholder,
+  .reviews-grid > * {
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  .support-card {
+    max-width: var(--desktop-content-width);
+    margin-inline: auto;
+    padding: clamp(32px, 4vw, 56px) !important;
+    border-radius: 24px !important;
+  }
+
+  .faq-list {
+    max-width: 920px !important;
+  }
+
+  .modal-card,
+  .modal-shell .modal-card {
+    max-width: min(760px, calc(100vw - 64px));
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  #product-grid,
+  .product-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 26px !important;
+  }
+
+  .section {
+    padding-inline: 40px !important;
+  }
+}
+
+@media screen and (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .product-card,
+  .product-card:hover,
+  .desktop-nav a {
+    transition: none !important;
+  }
+}
