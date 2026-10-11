@@ -16,10 +16,11 @@ async function loadPublishedTheme() {
     const palette = data.palette || {};
     const vars = {"--deep":palette.deep,"--deep-2":palette.deep2,"--teal":data.primary_color || palette.primary,
       "--teal-light":palette.accent,"--mist":palette.mist,"--mist-2":palette.mist2,"--line":palette.line,
-      "--blue-bg":palette.bg,"--blue-bg-2":palette.bg2};
+      "--blue-bg":palette.bg,"--blue-bg-2":palette.bg2,
+      "--ink":palette.deep,"--muted":palette.accent,"--card":palette.mist};
     Object.entries(vars).forEach(([k,v])=>{if(typeof v==="string" && /^#[0-9a-f]{6}$/i.test(v)) root.style.setProperty(k,v)});
-    document.body.classList.toggle("theme-banner-glow", data.banner_effect === "glow" || data.banner_effect === "glow_particles");
-    document.body.classList.toggle("theme-banner-particles", data.banner_effect === "particles" || data.banner_effect === "glow_particles");
+    document.body.classList.remove("theme-banner-glow");
+    document.body.classList.toggle("theme-banner-particles", data.banner_effect === "particles");
     const hero = document.querySelector(".hero");
     if (hero && typeof data.banner_image_url === "string" && data.banner_image_url.trim()) {
       try { const banner = new URL(data.banner_image_url); if (banner.protocol === "https:") hero.style.backgroundImage = `url("${banner.href.replace(/["\\]/g, "")}")`; } catch (_) {}
@@ -273,7 +274,7 @@ function renderCatalog() {
 function animateCatalogCards() {
   // Entrada suave dos cards conforme aparecem na rolagem vertical
   const cards = $$("#product-grid .product-card");
-  if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {

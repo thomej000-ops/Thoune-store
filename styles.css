@@ -7179,83 +7179,102 @@ body.theme-banner-glow .hero-content{z-index:2}
 @media(prefers-reduced-motion:reduce){body.theme-banner-glow .hero::before{animation:none;transform:none;opacity:.15}}
 
 
-/* v1082 — tema global, contorno neon permanente e efeitos opcionais do banner */
+/* v1083 — tema global com contraste e borda neon fixa nos cards */
+:root {
+  color-scheme: dark;
+}
 body {
-  background:
-    radial-gradient(circle at 8% 8%, color-mix(in srgb, var(--teal-light) 9%, transparent), transparent 28%),
-    radial-gradient(circle at 92% 34%, color-mix(in srgb, var(--teal) 7%, transparent), transparent 25%),
-    linear-gradient(180deg, var(--mist-2) 0%, var(--blue-bg) 48%, var(--mist-2) 100%) !important;
+  background: linear-gradient(180deg, var(--blue-bg-2, #07131d), var(--blue-bg, #020a11)) !important;
+  color: var(--mist-2, #f3fafb);
 }
-.site-header {
-  background: color-mix(in srgb, var(--mist-2) 90%, transparent) !important;
-  border-bottom-color: var(--line) !important;
+.site-header,
+.site-footer,
+.section-shell,
+.community-section,
+.support-section,
+.faq-section {
+  background-color: var(--blue-bg, #020a11);
+  color: var(--mist-2, #f3fafb);
 }
-.site-footer, .support-card, .review-card, .faq-item, .modal-card,
-.side-panel-inner, .product-card, #product-grid .product-card {
-  border-color: color-mix(in srgb, var(--teal) 28%, var(--line)) !important;
-}
-.product-card, #product-grid .product-card, .review-card, .faq-item,
-.support-card, .modal-card, .side-panel-inner {
-  background-color: var(--mist) !important;
-  color: var(--deep) !important;
-}
-.product-name, .section-title, .hero h1, .support-card h2,
-.review-card .review-author, .faq-item summary {
-  color: var(--deep) !important;
-}
-.price, .product-price, .text-accent, .review-stars {
-  color: var(--teal) !important;
+.product-card,
+#product-grid .product-card,
+.review-card,
+.faq-item,
+.modal-card,
+.side-panel-inner {
+  background: linear-gradient(160deg, var(--deep-2, #0d1d2b), var(--deep, #061019)) !important;
+  color: var(--mist-2, #f3fafb) !important;
+  border: 1px solid rgba(255, 125, 42, .56) !important;
 }
 #product-grid .product-card {
   position: relative !important;
   isolation: isolate;
-  border: 1px solid rgba(255,119,35,.58) !important;
-  box-shadow: 0 0 0 1px rgba(255,119,35,.10), 0 0 9px rgba(255,92,18,.10) !important;
-  animation: thouneCardNeon 3.8s ease-in-out infinite alternate;
+  animation: thouneCardNeon1083 3.8s ease-in-out infinite alternate;
+  box-shadow: 0 0 8px rgba(255, 105, 30, .12) !important;
 }
 #product-grid .product-card::before {
   content: "";
   position: absolute;
   inset: 0;
-  border: 1px solid rgba(255,145,58,.60);
+  border: 1px solid rgba(255, 150, 70, .55);
   border-radius: inherit;
   pointer-events: none;
   z-index: 5;
-  opacity: .3;
-  animation: thouneCardNeonLine 3.8s ease-in-out infinite alternate;
+  opacity: .25;
+  animation: thouneCardNeonLine1083 3.8s ease-in-out infinite alternate;
 }
-@keyframes thouneCardNeon {
-  from { border-color: rgba(255,119,35,.38); box-shadow: 0 0 0 1px rgba(255,119,35,.08), 0 0 7px rgba(255,92,18,.08); }
-  to { border-color: rgba(255,145,58,.88); box-shadow: 0 0 0 1px rgba(255,119,35,.18), 0 0 15px rgba(255,92,18,.22); }
+@keyframes thouneCardNeon1083 {
+  from { border-color: rgba(255,125,42,.36); box-shadow: 0 0 5px rgba(255,105,30,.08); }
+  to { border-color: rgba(255,150,70,.88); box-shadow: 0 0 14px rgba(255,105,30,.20); }
 }
-@keyframes thouneCardNeonLine { from { opacity: .22; } to { opacity: .72; } }
-body.theme-banner-glow .hero::before {
-  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.02) 45%, rgba(255,255,255,.12) 50%, rgba(255,255,255,.02) 55%, transparent 62%) !important;
-  animation: thouneBannerGlint 12s ease-in-out infinite !important;
+@keyframes thouneCardNeonLine1083 { from { opacity:.18; } to { opacity:.62; } }
+.product-name,
+.review-card,
+.review-card *,
+.faq-item,
+.faq-item *,
+.modal-card,
+.modal-card *,
+.side-panel-inner,
+.side-panel-inner * {
+  color: var(--mist-2, #f3fafb);
 }
+.price,
+.product-price,
+.section-kicker,
+.rating-stars {
+  color: var(--teal-light, #a6532d);
+}
+button:focus-visible,
+a:focus-visible,
+.product-card:focus-visible {
+  outline: 2px solid var(--teal-light, #ff9a52) !important;
+  outline-offset: 3px;
+}
+/* O brilho que atravessava o banner foi removido; faíscas são opcionais no painel. */
+body.theme-banner-glow .hero::before { content: none !important; animation: none !important; }
+body.theme-banner-particles .hero { position: relative; overflow: hidden; }
 body.theme-banner-particles .hero::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: .65;
+  opacity: .7;
   background-image:
     radial-gradient(circle, rgba(255,174,82,.95) 0 1px, transparent 2px),
-    radial-gradient(circle, rgba(255,103,29,.8) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle, rgba(255,211,135,.75) 0 1px, transparent 2px);
+    radial-gradient(circle, rgba(255,103,29,.85) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle, rgba(255,211,135,.8) 0 1px, transparent 2px);
   background-size: 83px 97px, 127px 139px, 181px 163px;
   background-position: 0 0, 37px 52px, 82px 21px;
-  animation: thouneBannerEmbers 10s linear infinite;
+  animation: thouneEmbers1083 10s linear infinite;
 }
 body.theme-banner-particles .hero-content { position: relative; z-index: 2; }
-@keyframes thouneBannerEmbers {
+@keyframes thouneEmbers1083 {
   from { background-position: 0 90px, 37px 142px, 82px 111px; }
   to { background-position: 0 -20px, 37px 12px, 82px 1px; }
 }
 @media (prefers-reduced-motion: reduce) {
   #product-grid .product-card, #product-grid .product-card::before,
-  body.theme-banner-glow .hero::before, body.theme-banner-particles .hero::after {
-    animation: none !important;
-  }
+  body.theme-banner-particles .hero::after { animation: none !important; }
 }
