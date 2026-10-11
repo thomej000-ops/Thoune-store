@@ -1,0 +1,15 @@
+THOUNE STORE — v1076
+
+Base: v1075 cancelamento Pix.
+
+Alterações:
+- Aviso sobre política de reembolso na tela de pagamento Pix.
+- Após o envio bem-sucedido do comprovante, o botão de cancelar fica desabilitado e o botão de verificação fica disponível.
+- Sair/fechar o painel depois do envio do comprovante não dispara cancelamento automático pelo botão bloqueado.
+- FAQ atualizado sobre Pix, comprovante obrigatório, cancelamento, reembolso, entrega manual e saída do site.
+
+IMPORTANTE:
+- O texto informa que a política não elimina direitos garantidos por lei. Revise a política com orientação jurídica antes de publicar, pois regras de defesa do consumidor podem limitar cláusulas de não reembolso.
+- JavaScript verificado com `node --check`.
+- Não foi realizado teste de compra real no Supabase nem teste visual em dispositivos móveis.
+- A lógica de cancelamento automático depende de o navegador conseguir executar o código; fechar à força, perder conexão ou desligar o aparelho pode impedir o cancelamento imediato. Um cancelamento garantido nesses casos exige uma rotina no backend (por exemplo, expiração por tempo).

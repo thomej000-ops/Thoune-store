@@ -495,6 +495,10 @@ function renderGuestPixPanel(orderId, total, queuePosition = null) {
         <strong>⚠️ IMPORTANTE: COMPROVANTE OBRIGATÓRIO</strong>
         <p style="margin:8px 0 0;">Depois de pagar, salve ou baixe o comprovante do Pix e envie a imagem aqui no site. <strong>Sem o comprovante enviado com sucesso, você não conseguirá solicitar a verificação e a entrega não será realizada.</strong> Não feche esta tela antes de enviar o arquivo.</p>
       </div>
+      <div class="manual-delivery-notice" role="note" style="text-align:left;border:1px solid rgba(255,100,100,.5);background:rgba(220,50,50,.09);border-radius:14px;padding:14px;margin:14px 0;">
+        <strong>💸 ATENÇÃO À POLÍTICA DE REEMBOLSO</strong>
+        <p style="margin:8px 0 0;">Confira os dados e o valor antes de pagar. A loja não oferece reembolso por desistência após o pagamento. Se houver falha técnica ou erro da loja que impeça a entrega, o caso será analisado para solução ou reembolso, conforme a legislação aplicável. Esta política não elimina direitos garantidos por lei.</p>
+      </div>
       <p>Faça <strong>um único Pix</strong> no valor exato abaixo. Depois, envie o comprovante e toque em “Já fiz o Pix”.</p>
       ${Number.isFinite(queuePosition) && queuePosition > 0 ? `<div class="checkout-queue-preview confirmed"><strong>📋 Sua posição atual na fila: <span>#${queuePosition}</span></strong><small>Esta posição pode mudar enquanto você realiza o pagamento.</small></div>` : ""}
       <div class="checkout-total" style="margin:18px 0;"><span>Total do pedido</span><strong>${money(total)}</strong></div>
@@ -509,6 +513,7 @@ function renderGuestPixPanel(orderId, total, queuePosition = null) {
         <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
       </div>
       <button type="button" class="primary-button full" id="guest-payment-done" data-order-id="${escapeHtml(orderId)}" disabled style="margin-top:8px;opacity:.55;">Já fiz o Pix</button>
+      <button type="button" class="secondary-button full" id="guest-cancel-order" style="margin-top:10px;border-color:#d9534f;color:#d9534f;">Não fiz o Pix e desejo cancelar este pedido</button>
       <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
       <p class="checkout-message" id="guest-order-message" aria-live="polite"></p>
     </div>`;
@@ -524,7 +529,39 @@ function renderGuestPixPanel(orderId, total, queuePosition = null) {
   });
   $("#guest-proof-send")?.addEventListener("click", () => uploadGuestPaymentProof(orderId));
   $("#guest-payment-done")?.addEventListener("click", () => requestGuestPaymentVerification(orderId));
-  $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
+  $("#guest-cancel-order")?.addEventListener("click", () => cancelGuestOrder(orderId));
+  $("#guest-finish")?.addEventListener("click", () => handleGuestPixExit());
+}
+
+async function handleGuestPixExit({ openCartAfter = false } = {}) {
+  const orderId = localStorage.getItem("thoune-pending-guest-order");
+  // Só o painel do Pix (antes de pedir verificação) deve ser cancelado ao sair.
+  const cancelButton = $("#guest-cancel-order");
+  if (orderId && cancelButton && !cancelButton.disabled) {
+    const cancelled = await cancelGuestOrder(orderId, { silent: true });
+    if (!cancelled) return;
+  } else {
+    closePanel($("#checkout-section"));
+  }
+  if (openCartAfter) openCart();
+}
+
+async function cancelGuestOrder(orderId, { silent = false } = {}) {
+  if (!silent && !window.confirm("Deseja cancelar este pedido? Ele sairá da fila e você poderá fazer uma nova compra. Se você já pagou o Pix, não cancele: envie o comprovante e solicite a verificação.")) return false;
+  const button = $("#guest-cancel-order");
+  if (button) { button.disabled = true; button.textContent = "Cancelando pedido..."; }
+  const { data, error } = await supabaseClient.rpc("cancel_guest_order", { p_order_id: orderId });
+  if (error || data?.success === false) {
+    console.error("cancel_guest_order:", error || data);
+    if (button) { button.disabled = false; button.textContent = "Não fiz o Pix e desejo cancelar este pedido"; }
+    if (!silent) setMessage($("#guest-order-message") || $("#guest-proof-message"), data?.message || error?.message || "Não foi possível cancelar o pedido. Tente novamente.", "error");
+    return false;
+  }
+  localStorage.removeItem("thoune-pending-guest-order");
+  stopGuestOrderStatusPolling();
+  closePanel($("#checkout-section"));
+  if (!silent) toast("Pedido cancelado. Você já pode fazer uma nova compra.");
+  return true;
 }
 
 async function requestGuestPaymentVerification(orderId) {
@@ -620,8 +657,16 @@ async function uploadGuestPaymentProof(orderId) {
   if (button) { button.disabled = true; button.textContent = "Comprovante enviado ✓"; }
   if (input) input.disabled = true;
   const done = $("#guest-payment-done");
-  if (done) { done.disabled = false; done.style.opacity = "1"; }
-  setMessage(message, "Comprovante enviado e imagem salva. Agora toque em “Já fiz o Pix” para avisar a loja.", "success");
+  if (done) { done.disabled = false; done.style.opacity = "1"; done.textContent = "Já fiz o Pix — verificar pagamento"; }
+  const cancel = $("#guest-cancel-order");
+  if (cancel) {
+    cancel.disabled = true;
+    cancel.textContent = "Cancelamento indisponível após envio do comprovante";
+    cancel.style.opacity = ".55";
+    cancel.style.cursor = "not-allowed";
+    cancel.title = "Depois de enviar o comprovante, solicite a verificação do pagamento.";
+  }
+  setMessage(message, "Comprovante enviado e imagem salva. Agora toque em “Já fiz o Pix — verificar pagamento”. O cancelamento foi bloqueado nesta etapa.", "success");
 }
 
 function renderGuestDeliveryPanel(order) {
@@ -720,16 +765,29 @@ async function restoreGuestOrderStatus() {
   if (!orderId) return;
   const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
   if (error || !data?.found) return;
-  if (String(data.status) === "delivered") {
+  const status = String(data.status || "");
+  if (status === "awaiting_payment") {
+    // Se a página foi reaberta com um checkout Pix pendente, tratamos como abandono.
+    await cancelGuestOrder(orderId, { silent: true });
+    return;
+  }
+  if (["cancelled", "canceled", "payment_cancelled"].includes(status)) {
+    localStorage.removeItem("thoune-pending-guest-order");
+    return;
+  }
+  if (status === "delivered") {
     renderGuestDeliveredPanel(data, true);
     return;
   }
-  if (String(data.status) === "payment_confirmed" || String(data.status) === "awaiting_delivery") {
+  if (status === "payment_confirmed" || status === "awaiting_delivery") {
     renderGuestDeliveryPanel(data);
     return;
   }
-  renderGuestWaitingPanel(orderId, Number(data.queue_position));
-  startGuestOrderStatusPolling(orderId);
+  if (status === "awaiting_verification" || status === "payment_rejected") {
+    if (status === "payment_rejected") renderGuestPaymentRejectedPanel(orderId, data.rejection_reason || "O Pix ainda não foi localizado pela loja.");
+    else renderGuestWaitingPanel(orderId, Number(data.queue_position));
+    startGuestOrderStatusPolling(orderId);
+  }
 }
 
 function copyPixKey() {
@@ -925,9 +983,9 @@ function setupEvents() {
   $("#copy-order-button")?.addEventListener("click", copyOrderText);
   $("#clear-cart-button")?.addEventListener("click", clearShoppingCart);
   $("#checkout-button")?.addEventListener("click", openCheckout);
-  $("#close-checkout")?.addEventListener("click", () => { stopQueuePreviewPolling(); closePanel($("#checkout-section")); });
-  $("#checkout-backdrop")?.addEventListener("click", () => { stopQueuePreviewPolling(); closePanel($("#checkout-section")); });
-  $("#checkout-back")?.addEventListener("click", () => { stopQueuePreviewPolling(); closePanel($("#checkout-section")); openCart(); });
+  $("#close-checkout")?.addEventListener("click", () => { stopQueuePreviewPolling(); handleGuestPixExit(); });
+  $("#checkout-backdrop")?.addEventListener("click", () => { stopQueuePreviewPolling(); handleGuestPixExit(); });
+  $("#checkout-back")?.addEventListener("click", () => { stopQueuePreviewPolling(); handleGuestPixExit({ openCartAfter: true }); });
   $("#copy-pix-key-button")?.addEventListener("click", copyPixKey);
   $("#confirm-order-button")?.addEventListener("click", createGuestOrder);
   $("#close-product-modal")?.addEventListener("click", () => closePanel($("#product-modal")));
@@ -964,7 +1022,7 @@ function setupEvents() {
   });
 
 
-  document.addEventListener("keydown", e => { if(e.key === "Escape") { closeAllPanels(); $("#mobile-nav")?.classList.remove("open"); } });
+  document.addEventListener("keydown", e => { if(e.key === "Escape") { if ($("#checkout-section")?.classList.contains("open") && $("#guest-cancel-order")) { handleGuestPixExit(); } else { closeAllPanels(); } $("#mobile-nav")?.classList.remove("open"); } });
   $("#global-panel-backdrop")?.addEventListener("click", closeAllPanels);
 }
 

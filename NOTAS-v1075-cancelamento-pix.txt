@@ -1,0 +1,14 @@
+THOUNE STORE v1075 — CANCELAMENTO DE PEDIDO PIX NÃO PAGO
+
+Mudanças:
+- A tela do Pix mantém o aviso destacado de comprovante obrigatório.
+- Adiciona o botão “Não fiz o Pix e desejo cancelar este pedido”.
+- O botão chama a função SQL cancel_guest_order e só cancela pedidos em awaiting_payment.
+- Sair/fechar o painel do Pix ou pressionar Esc tenta cancelar o pedido ainda não enviado para verificação.
+- Ao reabrir o site, um pedido que ainda esteja em awaiting_payment é tratado como abandonado e cancelado, em vez de aparecer como “Aguardando atendimento”.
+- A restauração só mostra “Aguardando atendimento” para awaiting_verification; pedidos confirmados/entregues mantêm seus fluxos.
+
+IMPORTANTE:
+1. Execute supabase_v1075_cancel_guest_order.sql no SQL Editor do Supabase antes de publicar o site.
+2. Fechar totalmente o navegador/desligar a conexão pode impedir qualquer pedido de cancelamento enviado pelo navegador. A rotina ao reabrir e o botão explícito cobrem esses casos; não é possível garantir cancelamento instantâneo offline sem uma rotina de expiração no banco.
+3. JavaScript verificado com node --check e integridade do ZIP verificada. Não foi feito teste real com Supabase nem teste visual em celular. O aviso já está no código da tela Pix; se não aparecer após publicar esta versão, verificar cache/Deploy do GitHub Pages e confirmar que app.js novo foi publicado.
