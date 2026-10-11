@@ -18,8 +18,12 @@ async function loadPublishedTheme() {
       "--teal-light":palette.accent,"--mist":palette.mist,"--mist-2":palette.mist2,"--line":palette.line,
       "--blue-bg":palette.bg,"--blue-bg-2":palette.bg2};
     Object.entries(vars).forEach(([k,v])=>{if(typeof v==="string" && /^#[0-9a-f]{6}$/i.test(v)) root.style.setProperty(k,v)});
-    if (data.banner_effect === "glow") document.body.classList.add("theme-banner-glow");
-    if (data.effect_emoji) root.dataset.themeEmoji = data.effect_emoji;
+    document.body.classList.toggle("theme-banner-glow", data.banner_effect === "glow");
+    const hero = document.querySelector(".hero");
+    if (hero && typeof data.banner_image_url === "string" && data.banner_image_url.trim()) {
+      try { const banner = new URL(data.banner_image_url); if (banner.protocol === "https:") hero.style.backgroundImage = `url("${banner.href.replace(/["\\]/g, "")}")`; } catch (_) {}
+    }
+    if (data.effect_emoji) root.dataset.themeEmoji = data.effect_emoji; else delete root.dataset.themeEmoji;
   } catch (e) { console.warn("Tema publicado indisponível; usando tema padrão.", e); }
 }
 loadPublishedTheme();

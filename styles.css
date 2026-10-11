@@ -7166,3 +7166,14 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
 #product-grid::-webkit-scrollbar{width:7px}
 #product-grid::-webkit-scrollbar-thumb{background:rgba(73,194,220,.48);border-radius:10px}
 @media(max-width:760px){#product-grid{max-height:72vh !important;padding:8px !important;gap:10px !important}}
+
+
+/* v1079 — brilho branco percorre horizontalmente o contorno visual do banner, sem deslocamento vertical */
+body.theme-banner-glow .hero::before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(105deg,transparent 34%,rgba(255,255,255,.035) 43%,rgba(255,255,255,.20) 49%,rgba(255,255,255,.035) 55%,transparent 64%);
+  transform:translateX(-120%);animation:thouneBannerGlint 8s ease-in-out infinite;
+}
+body.theme-banner-glow .hero-content{z-index:2}
+@keyframes thouneBannerGlint{0%,12%{transform:translateX(-120%)}78%,100%{transform:translateX(120%)}}
+@media(prefers-reduced-motion:reduce){body.theme-banner-glow .hero::before{animation:none;transform:none;opacity:.15}}

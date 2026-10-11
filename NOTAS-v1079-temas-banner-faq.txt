@@ -1,0 +1,8 @@
+THOUNE STORE v1079 — alterações
+- Editor de temas com upload de banner por galeria (JPG/PNG/WebP até 8 MB).
+- Prévia do banner, opção para remover e publicação da imagem no site.
+- Combinações nomeadas salvas na tabela store_theme_presets.
+- Tema público aplica a imagem de banner e o efeito de brilho horizontal.
+- FAQ corrigido: removida a pergunta obsoleta sobre “avaliação popular” e removida a mecânica de curtidas úteis.
+
+IMPORTANTE: antes de publicar esta versão, execute uma vez o arquivo supabase_v1079_temas_banner.sql no Supabase SQL Editor. Ele configura políticas que restringem alterações a administradores via public.is_admin().
