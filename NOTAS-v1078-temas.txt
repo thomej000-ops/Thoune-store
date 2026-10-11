@@ -1,0 +1,10 @@
+THOUNE STORE v1078 — SISTEMA INICIAL DE TEMAS
+
+1. Execute no Supabase o conteúdo de supabase_v1078_temas.sql (também enviado em texto na conversa).
+2. Publique TODOS os arquivos do ZIP na raiz do repositório GitHub Pages, mantendo a estrutura de arquivos.
+3. Entre no painel ADM e abra “Temas e aparência”.
+4. Escolha um dos 25 estilos/cores, ajuste a cor principal, configure emoji/efeito e salve ou publique.
+
+Inclui painel de tema com validação de acesso, prévia, paleta complementar automática, 25 opções de cor/estilo e publicação via Supabase. O tema público aplica as variáveis de cor principal e complementares que já existem no CSS.
+
+Limitações desta primeira versão: não implementa ainda upload de imagem de banner para Storage nem biblioteca de presets múltiplos; “Salvar combinação” salva a configuração no banco como não publicada, então não é uma biblioteca de vários presets. Emoji é guardado mas o efeito visual de partículas ainda não foi ligado. A política SQL de escrita permite usuários autenticados; como o site não oferece conta de cliente, normalmente só a conta administrativa entra, mas para segurança reforçada deve-se restringir a escrita via função is_admin/RLS específica antes de uso público. Testes reais no Supabase/GitHub Pages não foram realizados.

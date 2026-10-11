@@ -4,6 +4,26 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// Carrega o tema publicado para todos os visitantes. Se a tabela ainda não existir,
+// a loja continua usando as cores padrão sem interromper o carregamento.
+async function loadPublishedTheme() {
+  try {
+    const { data, error } = await supabaseClient.from("store_theme_settings")
+      .select("primary_color, palette, effect_emoji, banner_image_url, banner_effect")
+      .eq("id", true).maybeSingle();
+    if (error || !data) return;
+    const root = document.documentElement;
+    const palette = data.palette || {};
+    const vars = {"--deep":palette.deep,"--deep-2":palette.deep2,"--teal":data.primary_color || palette.primary,
+      "--teal-light":palette.accent,"--mist":palette.mist,"--mist-2":palette.mist2,"--line":palette.line,
+      "--blue-bg":palette.bg,"--blue-bg-2":palette.bg2};
+    Object.entries(vars).forEach(([k,v])=>{if(typeof v==="string" && /^#[0-9a-f]{6}$/i.test(v)) root.style.setProperty(k,v)});
+    if (data.banner_effect === "glow") document.body.classList.add("theme-banner-glow");
+    if (data.effect_emoji) root.dataset.themeEmoji = data.effect_emoji;
+  } catch (e) { console.warn("Tema publicado indisponível; usando tema padrão.", e); }
+}
+loadPublishedTheme();
+
 let products = [];
 let storeSettings = {
   online: false,
