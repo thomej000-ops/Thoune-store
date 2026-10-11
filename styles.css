@@ -7177,3 +7177,25 @@ body.theme-banner-glow .hero::before{
 body.theme-banner-glow .hero-content{z-index:2}
 @keyframes thouneBannerGlint{0%,12%{transform:translateX(-120%)}78%,100%{transform:translateX(120%)}}
 @media(prefers-reduced-motion:reduce){body.theme-banner-glow .hero::before{animation:none;transform:none;opacity:.15}}
+
+/* Thoune Store — brilho do banner mais suave */
+body.theme-banner-glow .hero::before {
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.015) 45%,
+    rgba(255, 255, 255, 0.075) 50%,
+    rgba(255, 255, 255, 0.015) 55%,
+    transparent 62%
+  ) !important;
+
+  animation: thouneBannerGlint 12s ease-in-out infinite !important;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.theme-banner-glow .hero::before {
+    animation: none !important;
+    opacity: 0.08 !important;
+  }
+}
