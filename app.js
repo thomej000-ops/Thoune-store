@@ -4,54 +4,6 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Carrega o tema publicado para todos os visitantes. Se a tabela ainda não existir,
-// a loja continua usando as cores padrão sem interromper o carregamento.
-async function loadPublishedTheme() {
-  try {
-    const { data, error } = await supabaseClient.from("store_theme_settings")
-      .select("primary_color, palette, effect_emoji, banner_image_url, banner_effect")
-      .eq("id", true).maybeSingle();
-    if (error || !data) return;
-    const root = document.documentElement;
-    const palette = data.palette || {};
-    const validHex = (v) => typeof v === "string" && /^#[0-9a-f]{6}$/i.test(v);
-    const primary = validHex(data.primary_color) ? data.primary_color : (validHex(palette.primary) ? palette.primary : "#17677a");
-    const mix = (hex, base, amount) => {
-      const a = hex.slice(1).match(/.{2}/g).map(v => parseInt(v, 16));
-      const b = base.slice(1).match(/.{2}/g).map(v => parseInt(v, 16));
-      return "#" + a.map((v, i) => Math.round(v * amount + b[i] * (1 - amount)).toString(16).padStart(2, "0")).join("");
-    };
-    // Use the exact published palette when valid; only derive fallbacks when absent.
-    const vars = {
-      "--deep": validHex(palette.deep) ? palette.deep : mix(primary, "#020a11", .30),
-      "--deep-2": validHex(palette.deep2) ? palette.deep2 : mix(primary, "#020a11", .22),
-      "--teal": primary,
-      "--teal-light": validHex(palette.accent) ? palette.accent : mix(primary, "#ffffff", .28),
-      "--mist": validHex(palette.mist) ? palette.mist : mix(primary, "#020a11", .12),
-      "--mist-2": validHex(palette.mist2) ? palette.mist2 : mix(primary, "#020a11", .16),
-      "--line": validHex(palette.line) ? palette.line : mix(primary, "#ffffff", .48),
-      "--blue-bg": validHex(palette.bg) ? palette.bg : mix(primary, "#020a11", .12),
-      "--blue-bg-2": validHex(palette.bg2) ? palette.bg2 : mix(primary, "#020a11", .18),
-      "--ink": "#f3f7f5", "--muted": "#b6c4c1",
-      "--card": validHex(palette.mist) ? palette.mist : mix(primary, "#020a11", .12),
-      "--surface": validHex(palette.mist) ? palette.mist : mix(primary, "#020a11", .12),
-      "--surface-2": validHex(palette.mist2) ? palette.mist2 : mix(primary, "#020a11", .16),
-      "--text": "#f3f7f5", "--text-muted": "#b6c4c1",
-      "--border": validHex(palette.line) ? palette.line : mix(primary, "#ffffff", .48),
-      "--accent": primary, "--primary": primary
-    };
-    Object.entries(vars).forEach(([k, v]) => { if (validHex(v)) root.style.setProperty(k, v); });
-    document.body.classList.remove("theme-banner-glow");
-    document.body.classList.toggle("theme-banner-particles", data.banner_effect === "particles" || data.banner_effect === "glow_particles");
-    const hero = document.querySelector(".hero");
-    if (hero && typeof data.banner_image_url === "string" && data.banner_image_url.trim()) {
-      try { const banner = new URL(data.banner_image_url); if (banner.protocol === "https:") hero.style.backgroundImage = `url("${banner.href.replace(/["\\]/g, "")}")`; } catch (_) {}
-    }
-    if (data.effect_emoji) root.dataset.themeEmoji = data.effect_emoji; else delete root.dataset.themeEmoji;
-  } catch (e) { console.warn("Tema publicado indisponível; usando tema padrão.", e); }
-}
-loadPublishedTheme();
-
 let products = [];
 let storeSettings = {
   online: false,
