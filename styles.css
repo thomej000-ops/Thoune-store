@@ -7475,3 +7475,41 @@ body:has(#thoune-welcome:not(.welcome-exit)) {
 @media (max-width:767px) {
   .terms-content { grid-template-columns:minmax(0,1fr) !important; }
 }
+
+
+
+/* ===== v1095: reforço da animação contínua das marretas ===== */
+@keyframes thouneHammerFloat1095 {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  25% { transform: translate3d(0, -3px, 0) rotate(.45deg); }
+  50% { transform: translate3d(0, -7px, 0) rotate(0deg); }
+  75% { transform: translate3d(0, -3px, 0) rotate(-.45deg); }
+}
+
+/* Aplica somente às imagens de produto do catálogo. */
+#product-grid .product-card .product-image img {
+  animation: thouneHammerFloat1095 4.2s ease-in-out infinite !important;
+  transform-origin: center center !important;
+  will-change: transform !important;
+}
+
+#product-grid .product-card:nth-child(3n + 1) .product-image img {
+  animation-delay: -1.4s !important;
+}
+#product-grid .product-card:nth-child(3n + 2) .product-image img {
+  animation-delay: -2.8s !important;
+}
+
+/* Não interrompe o movimento quando o cursor passa sobre a marreta. */
+#product-grid .product-card:hover .product-image img,
+#product-grid .product-card:focus-within .product-image img {
+  animation: thouneHammerFloat1095 4.2s ease-in-out infinite !important;
+}
+
+/* Respeita a preferência de acessibilidade para reduzir movimentos. */
+@media (prefers-reduced-motion: reduce) {
+  #product-grid .product-card .product-image img {
+    animation: none !important;
+    will-change: auto !important;
+  }
+}
