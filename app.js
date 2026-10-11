@@ -14,10 +14,27 @@ async function loadPublishedTheme() {
     if (error || !data) return;
     const root = document.documentElement;
     const palette = data.palette || {};
-    const vars = {"--deep":palette.deep,"--deep-2":palette.deep2,"--teal":data.primary_color || palette.primary,
-      "--teal-light":palette.accent,"--mist":palette.mist,"--mist-2":palette.mist2,"--line":palette.line,
-      "--blue-bg":palette.bg,"--blue-bg-2":palette.bg2,
-      "--ink":palette.deep,"--muted":palette.accent,"--card":palette.mist};
+    const vars = {
+      "--deep": palette.deep,
+      "--deep-2": palette.deep2,
+      "--teal": data.primary_color || palette.primary,
+      "--teal-light": palette.accent,
+      "--mist": palette.mist,
+      "--mist-2": palette.mist2,
+      "--line": palette.line,
+      "--blue-bg": palette.bg,
+      "--blue-bg-2": palette.bg2,
+      "--ink": palette.deep,
+      "--muted": palette.deep2,
+      "--card": palette.mist,
+      "--surface": palette.mist,
+      "--surface-2": palette.mist2,
+      "--text": palette.deep,
+      "--text-muted": palette.deep2,
+      "--border": palette.line,
+      "--accent": data.primary_color || palette.primary,
+      "--primary": data.primary_color || palette.primary
+    };
     Object.entries(vars).forEach(([k,v])=>{if(typeof v==="string" && /^#[0-9a-f]{6}$/i.test(v)) root.style.setProperty(k,v)});
     document.body.classList.remove("theme-banner-glow");
     document.body.classList.toggle("theme-banner-particles", data.banner_effect === "particles");

@@ -7278,3 +7278,57 @@ body.theme-banner-particles .hero-content { position: relative; z-index: 2; }
   #product-grid .product-card, #product-grid .product-card::before,
   body.theme-banner-particles .hero::after { animation: none !important; }
 }
+
+
+/* v1084 — camada global do tema: preservar legibilidade em todas as superfícies */
+:root {
+  color-scheme: dark;
+}
+body {
+  background: var(--blue-bg, #edf7f9) !important;
+  color: var(--deep, #201b1c);
+}
+.site-header, .site-footer {
+  background-color: var(--deep-2, #433229);
+  color: var(--mist-2, #f3fafb);
+}
+.product-card, #product-grid .product-card,
+.review-card, .faq-item, .modal-card, .side-panel-inner,
+.community-card, .support-card, .theme-preview {
+  background-color: var(--deep-2, #433229);
+  color: var(--mist-2, #f3fafb);
+  border-color: color-mix(in srgb, var(--teal, #a6532d) 45%, var(--line, #c7b8af));
+}
+.product-card :is(h1,h2,h3,h4,p,span,small,strong,label),
+#product-grid .product-card :is(h1,h2,h3,h4,p,span,small,strong,label),
+.review-card :is(h1,h2,h3,h4,p,span,small,strong,label),
+.faq-item :is(h1,h2,h3,h4,p,span,small,strong,label) {
+  color: inherit;
+}
+.product-card :is(.price,.product-price,.price-value),
+#product-grid .product-card :is(.price,.product-price,.price-value) {
+  color: var(--teal, #a6532d) !important;
+}
+.review-card p, .review-card .review-text,
+.community-card p, .support-card p {
+  color: var(--mist-2, #f3fafb) !important;
+}
+button, .button, .add-button, .primary-button {
+  border-color: transparent;
+}
+:where(input,select,textarea):focus,
+:where(button,a,[role="button"]):focus-visible {
+  outline-color: var(--teal, #a6532d) !important;
+}
+/* Contorno neon discreto e consistente nos cards, inclusive em foco/seleção. */
+#product-grid .product-card,
+#product-grid .product-card:focus-within,
+#product-grid .product-card.selected {
+  border-color: rgba(255, 132, 47, .65) !important;
+  box-shadow: 0 0 0 1px rgba(255, 132, 47, .12), 0 0 10px rgba(255, 100, 20, .12);
+}
+#product-grid .product-card::before {
+  border-color: rgba(255, 145, 58, .55) !important;
+}
+/* O brilho que atravessava o banner fica desativado; partículas seguem opcionais. */
+body .hero::before { animation: none !important; }
