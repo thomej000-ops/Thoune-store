@@ -60,9 +60,7 @@ export function renderProducts(products = []) {
         <div class="product-image">
           ${image}
           ${hasDiscount ? `<span class="discount-badge">-${discountPercent}%</span>` : ""}
-          <button type="button" class="favorite" data-favorite="${escape(product.id)}" aria-label="Adicionar aos favoritos">
-            <span class="ui-icon ui-icon-heart" aria-hidden="true"></span>
-          </button>
+          
         </div>
 
         <div class="product-info">

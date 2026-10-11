@@ -7351,3 +7351,25 @@ body:has(.thoune-welcome:not(.welcome-exit)){
   .welcome-bubbles i,.thoune-welcome::before,.thoune-welcome::after,.welcome-content,.welcome-loader span,.welcome-snoopy{animation:none !important}
   #product-grid .product-image img{animation:none !important;will-change:auto !important}
 }
+
+
+/* THOUNE v1093 — remove opção de favoritos da interface */
+.favorite-button,
+.favorites-button,
+.favorito-btn,
+.favoritar-btn,
+[data-action="favorite"],
+[data-action="toggle-favorite"],
+button[aria-label*="favorit" i],
+button[title*="favorit" i],
+button[aria-label*="favorite" i],
+button[title*="favorite" i],
+#favorites,
+#favoritos,
+.favorites-panel,
+.favorites-section,
+.favoritos-section {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

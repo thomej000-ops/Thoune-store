@@ -300,7 +300,7 @@ function renderFavoritesPanel() {
     <article class="favorite-item">
       <div class="favorite-item-image">${product.image ? `<img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}">` : ""}</div>
       <div class="favorite-item-info"><strong>${escapeHtml(product.name)}</strong><span>${escapeHtml(product.category || "")}</span><b>${money(getProductPrice(product))}</b></div>
-      <button type="button" class="favorite-remove" data-favorite-remove="${escapeHtml(product.id)}" aria-label="Remover dos favoritos"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span></button>
+      
     </article>`).join("");
 }
 
