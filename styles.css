@@ -7179,35 +7179,112 @@ body.theme-banner-glow .hero-content{z-index:2}
 @media(prefers-reduced-motion:reduce){body.theme-banner-glow .hero::before{animation:none;transform:none;opacity:.15}}
 
 
-/* v1080 — consistência visual do tema publicado e brilho suave do banner */
-.add-button,
-.primary-button,
-.checkout-actions .primary-button,
-#product-grid .product-card .add-button {
-  background: linear-gradient(135deg, var(--teal), var(--teal-light)) !important;
-  border-color: transparent !important;
-  color: #fff !important;
+/* v1081 — cards neon pulsante, partículas opcionais e tema aplicado de forma ampla */
+#product-grid .product-card {
+  position: relative !important;
+  isolation: isolate;
+  border: 1px solid rgba(255, 119, 35, .52) !important;
+  box-shadow: 0 0 0 1px rgba(255, 119, 35, .10), 0 0 10px rgba(255, 92, 18, .10) !important;
+  animation: thouneCardNeon 3.8s ease-in-out infinite alternate;
 }
-.add-button:hover,
-.primary-button:hover,
-.checkout-actions .primary-button:hover {
-  filter: brightness(1.06);
-}
-body.theme-banner-glow .hero::before {
-  background: linear-gradient(
-    105deg,
-    transparent 38%,
-    rgba(255,255,255,.015) 45%,
-    rgba(255,255,255,.075) 50%,
-    rgba(255,255,255,.015) 55%,
-    transparent 62%
-  ) !important;
-  animation: thouneBannerGlint 12s ease-in-out infinite !important;
+#product-grid .product-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255, 145, 58, .58);
+  border-radius: inherit;
   pointer-events: none;
+  z-index: 5;
+  opacity: .35;
+  animation: thouneCardNeonLine 3.8s ease-in-out infinite alternate;
+}
+@keyframes thouneCardNeon {
+  from { border-color: rgba(255,119,35,.38); box-shadow: 0 0 0 1px rgba(255,119,35,.08), 0 0 7px rgba(255,92,18,.08); }
+  to { border-color: rgba(255,145,58,.88); box-shadow: 0 0 0 1px rgba(255,119,35,.18), 0 0 15px rgba(255,92,18,.22); }
+}
+@keyframes thouneCardNeonLine {
+  from { opacity: .22; }
+  to { opacity: .72; }
+}
+/* As cores publicadas devem alcançar superfícies comuns, não apenas os botões. */
+body {
+  background-color: var(--blue-bg, #edf7f9);
+}
+.site-header,
+.site-footer,
+.section-title,
+.category-filter,
+.search-box,
+.sort-control,
+#product-grid {
+  border-color: var(--line, #c7b8af);
+}
+.product-card,
+#product-grid .product-card,
+.modal-card,
+.side-panel-inner,
+.review-card,
+.faq-item,
+.category-chip,
+.filter-chip {
+  border-color: color-mix(in srgb, var(--teal, #a6532d) 35%, var(--line, #c7b8af)) !important;
+}
+.product-card,
+#product-grid .product-card,
+.modal-card,
+.side-panel-inner,
+.review-card,
+.faq-item {
+  background-color: var(--mist, #eaf5f7);
+  color: var(--deep, #201b1c);
+}
+.product-name,
+.section-title,
+.price,
+.hero h1,
+.modal-card h2,
+.side-panel-inner h2 {
+  color: var(--deep, #201b1c);
+}
+.rarity,
+.price-discount-label,
+a:hover,
+.text-accent {
+  color: var(--teal, #a6532d);
+}
+.site-header {
+  background-color: var(--mist-2, #f3fafb);
+}
+/* Brilho do banner: a opção "none" remove a animação; partículas usam um pseudo-elemento independente. */
+body.theme-banner-glow .hero::before {
+  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.02) 45%, rgba(255,255,255,.11) 50%, rgba(255,255,255,.02) 55%, transparent 62%) !important;
+  animation: thouneBannerGlint 12s ease-in-out infinite !important;
+}
+body.theme-banner-particles .hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .65;
+  background-image:
+    radial-gradient(circle, rgba(255,174,82,.95) 0 1px, transparent 2px),
+    radial-gradient(circle, rgba(255,103,29,.8) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle, rgba(255,211,135,.75) 0 1px, transparent 2px);
+  background-size: 83px 97px, 127px 139px, 181px 163px;
+  background-position: 0 0, 37px 52px, 82px 21px;
+  animation: thouneBannerEmbers 10s linear infinite;
+}
+body.theme-banner-particles .hero-content { position: relative; z-index: 2; }
+@keyframes thouneBannerEmbers {
+  from { background-position: 0 90px, 37px 142px, 82px 111px; }
+  to { background-position: 0 -20px, 37px 12px, 82px 1px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  body.theme-banner-glow .hero::before {
+  #product-grid .product-card,
+  #product-grid .product-card::before,
+  body.theme-banner-glow .hero::before,
+  body.theme-banner-particles .hero::after {
     animation: none !important;
-    opacity: .08 !important;
   }
 }
