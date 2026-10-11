@@ -7178,24 +7178,36 @@ body.theme-banner-glow .hero-content{z-index:2}
 @keyframes thouneBannerGlint{0%,12%{transform:translateX(-120%)}78%,100%{transform:translateX(120%)}}
 @media(prefers-reduced-motion:reduce){body.theme-banner-glow .hero::before{animation:none;transform:none;opacity:.15}}
 
-/* Thoune Store — brilho do banner mais suave */
+
+/* v1080 — consistência visual do tema publicado e brilho suave do banner */
+.add-button,
+.primary-button,
+.checkout-actions .primary-button,
+#product-grid .product-card .add-button {
+  background: linear-gradient(135deg, var(--teal), var(--teal-light)) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+.add-button:hover,
+.primary-button:hover,
+.checkout-actions .primary-button:hover {
+  filter: brightness(1.06);
+}
 body.theme-banner-glow .hero::before {
   background: linear-gradient(
     105deg,
     transparent 38%,
-    rgba(255, 255, 255, 0.015) 45%,
-    rgba(255, 255, 255, 0.075) 50%,
-    rgba(255, 255, 255, 0.015) 55%,
+    rgba(255,255,255,.015) 45%,
+    rgba(255,255,255,.075) 50%,
+    rgba(255,255,255,.015) 55%,
     transparent 62%
   ) !important;
-
   animation: thouneBannerGlint 12s ease-in-out infinite !important;
   pointer-events: none;
 }
-
 @media (prefers-reduced-motion: reduce) {
   body.theme-banner-glow .hero::before {
     animation: none !important;
-    opacity: 0.08 !important;
+    opacity: .08 !important;
   }
 }
