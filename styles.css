@@ -7182,27 +7182,37 @@ body.theme-banner-glow .hero-content{z-index:2}
 /* THOUNE v1088 — boas-vindas e correções responsivas dos painéis */
 .thoune-welcome{
   position:fixed;inset:0;z-index:10000;display:grid;place-items:center;overflow:hidden;
-  padding:24px;background:radial-gradient(ellipse at 50% 45%,rgba(20,103,112,.38),transparent 44%),#020a11;
-  color:#eafcff;opacity:1;visibility:visible;transition:opacity .6s ease,visibility .6s ease;
+  padding:24px;
+  background:linear-gradient(180deg,rgba(2,24,48,.68),rgba(2,35,61,.78)),url('./snoopy-welcome.jpg') center 48%/cover no-repeat,#031a2d;
+  color:#eef9ff;opacity:1;visibility:visible;transition:opacity .6s ease,visibility .6s ease;
+}
+.thoune-welcome::marker{content:none}
+.thoune-welcome{isolation:isolate}
+.thoune-welcome > .welcome-bubbles{z-index:0}
+.thoune-welcome::before,.thoune-welcome::after{z-index:0}
+.welcome-content{
+  padding:clamp(22px,4vw,36px);border:1px solid rgba(145,210,255,.22);
+  border-radius:30px;background:linear-gradient(145deg,rgba(2,28,49,.76),rgba(3,49,76,.66));
+  box-shadow:0 22px 70px rgba(0,10,25,.3);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
 }
 .thoune-welcome::before,.thoune-welcome::after{
-  content:"";position:absolute;width:min(76vw,680px);aspect-ratio:1;border:1px solid rgba(107,228,226,.14);
-  border-radius:50%;box-shadow:0 0 70px rgba(35,182,173,.08),inset 0 0 60px rgba(35,182,173,.04);
+  content:"";position:absolute;width:min(76vw,680px);aspect-ratio:1;border:1px solid rgba(112,190,255,.22);
+  border-radius:50%;box-shadow:0 0 70px rgba(35,133,220,.16),inset 0 0 60px rgba(35,133,220,.08);
   animation:welcomeOrbit 9s ease-in-out infinite alternate;pointer-events:none;
 }
-.thoune-welcome::after{width:min(58vw,500px);animation-delay:-4s;border-color:rgba(140,235,255,.12)}
+.thoune-welcome::after{width:min(58vw,500px);animation-delay:-4s;border-color:rgba(140,205,255,.2)}
 .welcome-content{position:relative;z-index:2;width:min(100%,520px);text-align:center;animation:welcomeRise .9s cubic-bezier(.2,.75,.2,1) both}
-.welcome-mark{display:grid;place-items:center;width:70px;height:70px;margin:0 auto 22px;border:1px solid rgba(116,232,220,.55);border-radius:23px;background:linear-gradient(145deg,rgba(30,130,130,.35),rgba(3,22,32,.8));box-shadow:0 0 38px rgba(35,182,173,.22);font:800 23px Manrope,sans-serif;letter-spacing:-2px}
-.welcome-kicker{font-size:10px;letter-spacing:.34em;color:#85d9d6;font-weight:800;margin:0 0 12px}
+.welcome-mark{display:grid;place-items:center;width:70px;height:70px;margin:0 auto 22px;border:1px solid rgba(116,190,255,.6);border-radius:23px;background:linear-gradient(145deg,rgba(25,105,175,.42),rgba(3,22,32,.8));box-shadow:0 0 38px rgba(35,133,220,.28);font:800 23px Manrope,sans-serif;letter-spacing:-2px}
+.welcome-kicker{font-size:10px;letter-spacing:.34em;color:#9bd6ff;font-weight:800;margin:0 0 12px}
 .welcome-content h1{font:800 clamp(34px,7vw,58px)/1.05 Manrope,sans-serif;letter-spacing:-.055em;margin:0}
-.welcome-content h1 span{color:#68d8ca}
-.welcome-subtitle{margin:16px 0 26px;color:#a4c2ca;font-size:14px;letter-spacing:.02em}
-.welcome-loader{height:3px;width:min(220px,70%);margin:0 auto 22px;background:rgba(150,220,230,.12);border-radius:9px;overflow:hidden}
-.welcome-loader span{display:block;width:38%;height:100%;border-radius:9px;background:linear-gradient(90deg,#23b6ad,#a1fff1);box-shadow:0 0 14px rgba(91,241,220,.8);animation:welcomeLoad 2.5s ease-in-out forwards}
-#welcome-skip{border:1px solid rgba(116,215,219,.24);border-radius:999px;background:rgba(8,38,49,.72);color:#e8ffff;padding:11px 18px;font:700 12px inherit;cursor:pointer}
-#welcome-skip span{color:#75e5d5;margin-left:8px}
+.welcome-content h1 span{color:#63baff}
+.welcome-subtitle{margin:16px 0 26px;color:#c0d9ec;font-size:14px;letter-spacing:.02em}
+.welcome-loader{height:3px;width:min(220px,70%);margin:0 auto 22px;background:rgba(150,205,240,.2);border-radius:9px;overflow:hidden}
+.welcome-loader span{display:block;width:38%;height:100%;border-radius:9px;background:linear-gradient(90deg,#258bdc,#a8e0ff);box-shadow:0 0 14px rgba(91,180,255,.8);animation:welcomeLoad 2.5s ease-in-out forwards}
+#welcome-skip{border:1px solid rgba(116,190,255,.4);border-radius:999px;background:rgba(5,43,72,.88);color:#e8ffff;padding:11px 18px;font:700 12px inherit;cursor:pointer}
+#welcome-skip span{color:#8bcfff;margin-left:8px}
 .welcome-bubbles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.welcome-bubbles i{position:absolute;bottom:-70px;left:8%;width:12px;height:12px;border:1px solid rgba(115,239,235,.55);border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(225,255,255,.7),rgba(57,199,196,.12) 65%);box-shadow:0 0 18px rgba(59,223,217,.18);animation:welcomeBubble 5.8s linear infinite}
+.welcome-bubbles i{position:absolute;bottom:-70px;left:8%;width:12px;height:12px;border:1px solid rgba(135,208,255,.62);border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(235,249,255,.78),rgba(57,145,225,.16) 65%);box-shadow:0 0 18px rgba(59,163,255,.22);animation:welcomeBubble 5.8s linear infinite}
 .welcome-bubbles i:nth-child(2n){left:19%;width:7px;height:7px;animation-delay:-2s;animation-duration:4.6s}
 .welcome-bubbles i:nth-child(3n){left:31%;width:18px;height:18px;animation-delay:-3.7s;animation-duration:6.5s}
 .welcome-bubbles i:nth-child(4n){left:45%;width:9px;height:9px;animation-delay:-1.1s}
@@ -7263,3 +7273,16 @@ body.theme-banner-glow .hero-content{z-index:2}
 @keyframes welcomeSnoopyFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-6px) rotate(1deg)}}
 @media(max-width:600px){.welcome-content{width:min(100%,420px)}.welcome-snoopy{width:112px;height:142px;margin-bottom:12px}.welcome-mark{width:54px;height:54px;margin-bottom:14px;border-radius:18px}.welcome-subtitle{margin:12px 0 22px}}
 @media(prefers-reduced-motion:reduce){.welcome-snoopy{animation:none}}
+
+/* THOUNE v1090 — abertura oceânica com Snoopy de fundo e frases rotativas */
+.welcome-subtitle{min-height:1.5em;transition:opacity .22s ease,transform .22s ease;color:#c5e2f7 !important}
+.welcome-subtitle.welcome-subtitle-changing{opacity:0;transform:translateY(5px)}
+.welcome-content h1 span{color:#69bdff !important}
+.welcome-kicker{color:#9ed8ff !important}
+.welcome-mark{border-color:rgba(116,190,255,.6) !important;box-shadow:0 0 38px rgba(35,133,220,.22) !important}
+#welcome-skip{background:rgba(5,53,87,.9) !important;border-color:rgba(116,190,255,.48) !important}
+#welcome-skip span{color:#8bcfff !important}
+.welcome-loader span{background:linear-gradient(90deg,#258bdc,#a8e0ff) !important}
+@media(max-width:600px){
+ .welcome-content{padding:22px 18px;border-radius:26px}
+}

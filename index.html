@@ -9,7 +9,7 @@
   >
 
   <meta name="theme-color" content="#082c3a">
-  <meta name="thoune-version" content="v1088">
+  <meta name="thoune-version" content="v1090">
 
   <title>Thoune Store — Flee the Facility</title>
 
@@ -47,7 +47,7 @@
       <img class="welcome-snoopy" src="snoopy-welcome.jpg" alt="Snoopy acenando à beira-mar">
       <p class="welcome-kicker">FLEE THE FACILITY</p>
       <h1>Thoune <span>Store</span></h1>
-      <p class="welcome-subtitle">Sua próxima marreta começa aqui.</p>
+      <p class="welcome-subtitle" id="welcome-subtitle" aria-live="polite">Sua coleção se completa aqui.</p>
       <div class="welcome-loader"><span></span></div>
       <button id="welcome-skip" type="button">Entrar na loja <span aria-hidden="true">→</span></button>
     </div>
@@ -1423,13 +1423,34 @@
       closed = true;
       screen.classList.add('welcome-exit');
       window.setTimeout(() => screen.remove(), 650);
-      try { sessionStorage.setItem('thoune-welcome-v1089', '1'); } catch (_) {}
+      try { sessionStorage.setItem('thoune-welcome-v1090', '1'); } catch (_) {}
     };
     let seen = false;
-    try { seen = sessionStorage.getItem('thoune-welcome-v1089') === '1'; } catch (_) {}
+    try { seen = sessionStorage.getItem('thoune-welcome-v1090') === '1'; } catch (_) {}
     if (seen) { screen.remove(); return; }
     const skip = document.getElementById('welcome-skip');
     if (skip) skip.addEventListener('click', close);
+    const subtitle = document.getElementById('welcome-subtitle');
+    const phrases = [
+      'Sua coleção se completa aqui.',
+      'Encontre a marreta que combina com você.',
+      'Sua próxima raridade pode estar aqui.',
+      'Seu estilo. Sua coleção. Sua Thoune Store.',
+      'Cada marreta conta uma história.'
+    ];
+    if (subtitle) {
+      let phraseIndex = 0;
+      window.setInterval(() => {
+        if (closed || !subtitle.isConnected) return;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        subtitle.classList.add('welcome-subtitle-changing');
+        window.setTimeout(() => {
+          if (!subtitle.isConnected) return;
+          subtitle.textContent = phrases[phraseIndex];
+          subtitle.classList.remove('welcome-subtitle-changing');
+        }, 220);
+      }, 7000);
+    }
     /* A abertura fica visível até o cliente tocar em “Entrar na loja”. */
   })();
   </script>
@@ -1438,7 +1459,7 @@
 
   <script
     type="module"
-    src="./app.js?v=1089"
+    src="./app.js?v=1090"
   ></script>
 
 </body>
