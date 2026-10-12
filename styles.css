@@ -8109,3 +8109,162 @@ body:has(#thoune-welcome:not(.welcome-exit)) {
   filter: none !important; background: transparent !important;
 }
 @media(max-width:600px) { .welcome-logo-mark { width: 112px !important; height: 112px !important; border-radius: 23px !important; padding: 4px !important; } .welcome-logo-mark img { border-radius: 17px !important; } }
+
+
+/* THOUNE v1111 — responsividade transversal sem alterar o fluxo funcional */
+html { max-width:100%; overflow-x:clip; }
+body { min-width:0; max-width:100%; overflow-x:clip; }
+img, video, canvas, svg { max-width:100%; }
+button, input, select, textarea { max-width:100%; }
+:where(.container, .section-inner, .hero-content, .catalog-layout, .catalog-toolbar,
+       .checkout-content, .checkout-data, .checkout-items, .checkout-items-list,
+       .terms-content, .side-panel-inner, .modal-card, .product-modal-card) {
+  min-width:0;
+}
+:where(.checkout-content, .checkout-data, .checkout-items, .terms-content,
+       .side-panel-inner, .modal-card, .product-modal-card) :where(p, h1, h2, h3, label, a, span) {
+  overflow-wrap:anywhere;
+}
+
+/* Modais: área rolável por dentro, sem sair da altura visível do aparelho. */
+.modal-shell {
+  box-sizing:border-box !important;
+  overflow-y:auto !important;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.modal-shell .modal-card,
+#checkout-section .checkout-modal-card,
+#product-modal .product-modal-card,
+#terms-modal .terms-card,
+#favorites-panel .side-panel-inner {
+  box-sizing:border-box !important;
+  min-width:0 !important;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+#checkout-section .checkout-content,
+#terms-modal .terms-content {
+  min-width:0 !important;
+}
+#checkout-section .checkout-content > *,
+#terms-modal .terms-content > *,
+#terms-modal .terms-content section {
+  min-width:0 !important;
+  max-width:100%;
+}
+#checkout-section input,
+#checkout-section select,
+#checkout-section textarea,
+#checkout-section button {
+  min-width:0;
+}
+
+/* Telas médias: não deixar navegação, cards e formulários disputarem espaço. */
+@media (min-width:761px) and (max-width:1100px) {
+  .site-header { gap:16px; padding-inline:clamp(16px,2.5vw,28px); }
+  .desktop-nav { gap:14px; font-size:13px; }
+  .brand-text strong { font-size:14px; }
+  .brand-mark { width:40px; height:40px; }
+  .hero { min-height:480px; }
+  #checkout-section .checkout-modal-card,
+  .checkout-modal-card { width:min(94vw,900px) !important; }
+  #checkout-section .checkout-content { gap:14px !important; }
+}
+
+/* Celular e tablet vertical: uma coluna nos formulários e modais confortáveis. */
+@media (max-width:760px) {
+  .modal-shell {
+    align-items:flex-start !important;
+    justify-content:center !important;
+    padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom)) !important;
+  }
+  .modal-shell .modal-card,
+  #checkout-section .checkout-modal-card,
+  #product-modal .product-modal-card,
+  #terms-modal .terms-card {
+    width:100% !important;
+    max-width:620px !important;
+    max-height:calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    margin:0 auto !important;
+    border-radius:18px !important;
+  }
+  #checkout-section .checkout-content {
+    display:flex !important;
+    flex-direction:column !important;
+    gap:12px !important;
+  }
+  #checkout-section .checkout-content > *,
+  #checkout-section .checkout-content > .manual-delivery-notice,
+  #checkout-section .checkout-content > .checkout-items,
+  #checkout-section .checkout-content > .checkout-total,
+  #checkout-section .checkout-content > .checkout-data,
+  #checkout-section .checkout-content > .checkout-actions,
+  #checkout-section .checkout-content > .checkout-message {
+    grid-column:auto !important;
+    grid-row:auto !important;
+    width:100% !important;
+    max-width:100% !important;
+  }
+  #terms-modal .terms-content,
+  .terms-content {
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:10px !important;
+  }
+  #favorites-panel .side-panel-inner,
+  .side-panel .side-panel-inner {
+    width:calc(100vw - 24px) !important;
+    max-width:520px !important;
+    max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+    padding:clamp(14px,4vw,18px) !important;
+  }
+  .site-header { gap:8px; padding-inline:12px; }
+  .brand { gap:8px; }
+  .brand-text strong { font-size:14px; }
+  .brand-text small { font-size:9px; }
+  .brand-mark { width:38px; height:38px; border-radius:12px; }
+  .header-actions { gap:4px; }
+  .icon-button, .menu-button { width:38px; height:38px; }
+  .hero { min-height:clamp(360px,68svh,500px); }
+  #product-grid { min-width:0; grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  #product-grid .product-card { min-width:0 !important; }
+  #product-grid .product-card .product-name { overflow-wrap:anywhere; }
+  #product-grid .product-card .add-button,
+  #product-grid .product-card button { white-space:normal; overflow-wrap:anywhere; }
+}
+
+/* Celulares estreitos: reduzir espaçamentos, nunca a área útil dos botões. */
+@media (max-width:380px) {
+  .site-header { padding-inline:8px; }
+  .brand { gap:6px; }
+  .brand-mark { width:34px; height:34px; }
+  .brand-text strong { font-size:12px; }
+  .brand-text small { font-size:8px; }
+  .icon-button, .menu-button { width:34px; height:34px; }
+  #product-grid { gap:8px !important; padding-inline:6px !important; }
+  #product-grid .product-card .product-info { padding:8px !important; }
+  #product-grid .product-card .product-name { font-size:11px !important; }
+  #product-grid .product-card .price { font-size:13px !important; }
+  #product-grid .product-card .add-button,
+  #product-grid .product-card button { min-height:38px !important; font-size:11px !important; }
+}
+
+/* Desktop amplo: dar espaço aos painéis sem esticar textos e controles indefinidamente. */
+@media (min-width:1101px) {
+  .modal-shell { padding:clamp(24px,3vw,48px) !important; }
+  #checkout-section .checkout-modal-card { width:min(1100px,calc(100vw - 80px)) !important; }
+  #checkout-section .checkout-content { gap:20px 24px !important; }
+}
+
+/* Respeita preferência de movimento reduzido sem desativar a animação normal das marretas. */
+@media (prefers-reduced-motion:reduce) {
+  .opening-effect *, .thoune-welcome *,
+  #product-grid .product-card .product-image img,
+  .product-grid .product-card .product-image img {
+    animation:none !important;
+    transition:none !important;
+  }
+}
