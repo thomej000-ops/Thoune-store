@@ -1,0 +1,7 @@
+THOUNE STORE — v1112
+
+- Corrigido o fechamento ausente do bloco <style> no painel administrativo.
+- O botão de salvar desconto agora mostra “Salvando…”, evita cliques duplicados e mostra erros inesperados em vez de falhar silenciosamente.
+- Mantidos os ajustes responsivos da versão v1111 e atualizado o cache CSS para v1112.
+
+Importante: o cancelamento de pedidos não foi alterado nesta versão porque a função que atualiza o status não foi localizada com segurança. O arquivo ZIP passou na verificação de integridade, mas não foi possível testar com Supabase real ou em navegador conectado.

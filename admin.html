@@ -488,6 +488,8 @@
   border-color:rgba(240,223,177,.22)!important;
 }
 .admin-page .small-button:hover { background:#123b47!important; }
+</style>
+
 <style id="thoune-admin-v1043-dark-fix">
 .admin-page .settings-box,
 .admin-page .settings-status,
@@ -3504,8 +3506,13 @@ document
   )
   .addEventListener(
     "click",
-    async ()=>{
-
+    async (event)=>{
+      const button = event.currentTarget;
+      if (button.disabled) return;
+      button.disabled = true;
+      const originalText = button.textContent;
+      button.textContent = "Salvando…";
+      try {
       const percent =
         Number(
           discountPercent.value
@@ -3575,7 +3582,13 @@ document
 
 
       updateDiscountPreview();
-
+      } catch (err) {
+        discountMessage.textContent = "Não foi possível salvar a promoção: " + (err?.message || "erro inesperado");
+        discountMessage.className = "message error-message";
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText || "Salvar desconto";
+      }
     }
   );
 
