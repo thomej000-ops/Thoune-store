@@ -517,6 +517,15 @@
 .admin-page .proof-preview { display:block; width:min(100%,360px); max-height:420px; object-fit:contain; border-radius:14px; border:1px solid rgba(95,205,219,.16); margin:12px 0; background:#061a22; }
 .admin-page .danger-button { background:linear-gradient(180deg,#6b2730,#4d1820)!important; color:#fff!important; border-color:rgba(255,120,130,.22)!important; }
 </style>
+
+<style id="thoune-v1101-hide-stock-admin">
+/* A opção de estoque deixa de aparecer no formulário administrativo.
+   O campo fica no DOM, oculto, para preservar compatibilidade com o JS existente. */
+#product-stock { display: none !important; }
+#product-stock { visibility: hidden !important; }
+.form-field:has(> label[for="product-stock"]) { display: none !important; }
+</style>
+
 </head>
 
 <body class="admin-page">
@@ -626,7 +635,7 @@
         <button class="admin-option" id="products-option">
           <strong>📦 Produtos</strong>
           <p>
-            Adicionar, editar, estoque e desconto individual por marreta.
+            Adicionar, editar e configurar descontos individuais por marreta.
           </p>
         </button>
 

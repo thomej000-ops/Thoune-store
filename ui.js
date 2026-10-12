@@ -73,7 +73,6 @@ export function renderProducts(products = []) {
               ${hasDiscount ? `<span class="price-original">${money(originalPrice)}</span>` : ""}
               <strong class="price">${money(price)}</strong>
               ${hasDiscount ? `<span class="price-discount-label">${discountPercent}% OFF</span>` : ""}
-              <div class="stock">${out ? "Esgotado" : `${Number.isFinite(stock) ? stock : 0} em estoque`}</div>
             </div>
 
             <button type="button" class="primary-button small add-button" data-product-add="${escape(product.id)}" ${out ? "disabled" : ""}>
