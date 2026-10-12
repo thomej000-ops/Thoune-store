@@ -8086,3 +8086,26 @@ body:has(#thoune-welcome:not(.welcome-exit)) {
 .welcome-logo-mark::before, .welcome-logo-mark::after { content:none !important; display:none !important; }
 @keyframes welcomeLogoFloat { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-7px); } }
 @media (prefers-reduced-motion: reduce) { .welcome-logo-mark { animation:none; } }
+
+
+/* THOUNE v1110 — foto correta do Snoopy em moldura quadrada arredondada e brilhante */
+.welcome-logo-mark {
+  width: clamp(118px, 22vw, 170px) !important;
+  height: clamp(118px, 22vw, 170px) !important;
+  margin: 0 auto 20px !important;
+  padding: 5px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  border-radius: 28px !important;
+  border: 2px solid rgba(100, 220, 255, .95) !important;
+  background: linear-gradient(145deg, rgba(16, 93, 139, .7), rgba(2, 20, 37, .92)) !important;
+  box-shadow: 0 0 10px rgba(83, 218, 255, .95), 0 0 28px rgba(0, 145, 255, .55), inset 0 0 12px rgba(127, 230, 255, .35) !important;
+  animation: welcomeLogoFloat 4.2s ease-in-out infinite !important;
+}
+.welcome-logo-mark img {
+  width: 100% !important; height: 100% !important;
+  object-fit: cover !important; object-position: center 43% !important;
+  border-radius: 21px !important; display: block !important;
+  filter: none !important; background: transparent !important;
+}
+@media(max-width:600px) { .welcome-logo-mark { width: 112px !important; height: 112px !important; border-radius: 23px !important; padding: 4px !important; } .welcome-logo-mark img { border-radius: 17px !important; } }
