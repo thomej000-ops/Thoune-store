@@ -536,6 +536,89 @@
   .admin-page .admin-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 </style>
+
+<style id="thoune-admin-desktop-v1098">
+/* Correção exclusiva para desktop: evita painéis estreitos, campos espremidos e ações quebradas. */
+@media (min-width: 900px) {
+  .admin-page { overflow-x: hidden; }
+  .admin-page .admin {
+    width: min(100% - 64px, 1480px) !important;
+    max-width: 1480px !important;
+    margin-inline: auto !important;
+    padding: 30px 0 56px !important;
+    box-sizing: border-box !important;
+  }
+  .admin-page .admin-header { margin-bottom: 28px !important; }
+  .admin-page .admin-header h1 { font-size: clamp(30px, 2.2vw, 40px) !important; line-height: 1.15 !important; }
+  .admin-page .admin-card {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box !important;
+    padding: 30px 32px !important;
+    border-radius: 22px !important;
+  }
+  .admin-page .admin-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+    gap: 20px !important;
+  }
+  .admin-page .admin-option {
+    min-width: 0 !important;
+    min-height: 112px !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+    padding: 22px 24px !important;
+    overflow-wrap: anywhere !important;
+  }
+  .admin-page .settings-box {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    padding: 24px 26px !important;
+    margin-block: 18px !important;
+  }
+  .admin-page .form-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: start !important;
+    gap: 20px 24px !important;
+  }
+  .admin-page .form-field { min-width: 0 !important; width: 100% !important; }
+  .admin-page .form-field input,
+  .admin-page .form-field select,
+  .admin-page .form-field textarea,
+  .admin-page input,
+  .admin-page select,
+  .admin-page textarea {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .admin-page .form-field textarea { min-height: 110px; resize: vertical; }
+  .admin-page .form-actions,
+  .admin-page .product-admin-actions,
+  .admin-page .order-actions {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+  .admin-page table { width: 100% !important; table-layout: auto !important; }
+  .admin-page th, .admin-page td { overflow-wrap: anywhere; }
+}
+@media (min-width: 900px) and (max-width: 1150px) {
+  .admin-page .admin { width: calc(100% - 40px) !important; }
+  .admin-page .admin-card { padding: 24px !important; }
+  .admin-page .admin-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .admin-page .settings-box { padding: 20px !important; }
+}
+@media (min-width: 900px) and (max-width: 1050px) {
+  .admin-page .form-grid { grid-template-columns: minmax(0, 1fr) !important; }
+}
+</style>
+
 </head>
 
 <body class="admin-page">
