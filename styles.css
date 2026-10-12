@@ -7869,3 +7869,117 @@ body:has(#thoune-welcome:not(.welcome-exit)) {
 #product-grid .product-card .stock,
 #product-grid .product-card .product-stock,
 .product-card .stock { display: none !important; }
+
+
+/* =========================================================
+   V1103 — CARDS DE PRODUTOS: melhor hierarquia + animação
+   Escopo apenas na vitrine pública. Sem mudanças de banco/API.
+   ========================================================= */
+#product-grid .product-card,
+.product-grid .product-card {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 100% !important;
+  border-radius: 22px !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  border: 1px solid rgba(91, 211, 226, .24) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255,255,255,.035) !important;
+  transition: transform .32s cubic-bezier(.2,.75,.25,1), box-shadow .32s ease, border-color .32s ease !important;
+  animation: thouneCardReveal1103 .52s cubic-bezier(.2,.7,.25,1) both;
+}
+#product-grid .product-card::before,
+.product-grid .product-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(66,204,220,.075), transparent 42%, rgba(66,204,220,.025));
+  opacity: .75;
+  transition: opacity .3s ease;
+}
+#product-grid .product-card:nth-child(4n+2), .product-grid .product-card:nth-child(4n+2) { animation-delay: .05s; }
+#product-grid .product-card:nth-child(4n+3), .product-grid .product-card:nth-child(4n+3) { animation-delay: .1s; }
+#product-grid .product-card:nth-child(4n+4), .product-grid .product-card:nth-child(4n+4) { animation-delay: .15s; }
+#product-grid .product-card:hover, .product-grid .product-card:hover {
+  transform: translateY(-7px) scale(1.012) !important;
+  border-color: rgba(93, 224, 238, .58) !important;
+  box-shadow: 0 24px 48px rgba(0,0,0,.32), 0 0 0 1px rgba(64,196,213,.08), 0 0 28px rgba(40,190,210,.12) !important;
+}
+#product-grid .product-card:hover::before, .product-grid .product-card:hover::before { opacity: 1; }
+#product-grid .product-card .product-image, .product-grid .product-card .product-image {
+  flex: 0 0 auto;
+  aspect-ratio: 1 / .88 !important;
+  min-height: 190px !important;
+  max-height: 310px !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+}
+#product-grid .product-card .product-image img, .product-grid .product-card .product-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  padding: 12px !important;
+  box-sizing: border-box !important;
+  transform: scale(.96);
+  transition: transform .45s cubic-bezier(.2,.75,.25,1), filter .35s ease !important;
+}
+#product-grid .product-card:hover .product-image img, .product-grid .product-card:hover .product-image img {
+  transform: scale(1.045) rotate(-1deg) !important;
+  filter: drop-shadow(0 9px 12px rgba(49,193,211,.16));
+}
+#product-grid .product-card .product-info, .product-grid .product-card .product-info {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  padding: clamp(15px, 1.4vw, 22px) !important;
+}
+#product-grid .product-card .product-name, .product-grid .product-card .product-name {
+  font-size: clamp(17px, 1.2vw, 21px) !important;
+  line-height: 1.28 !important;
+  font-weight: 750 !important;
+  letter-spacing: .01em;
+  margin: 3px 0 2px !important;
+}
+#product-grid .product-card .product-info p, .product-grid .product-card .product-info p {
+  font-size: clamp(13px, .9vw, 15px) !important;
+  line-height: 1.5 !important;
+}
+#product-grid .product-card .price, .product-grid .product-card .price {
+  display: block;
+  font-size: clamp(21px, 1.5vw, 26px) !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+  margin-top: 4px !important;
+}
+#product-grid .product-card .add-button, .product-grid .product-card .add-button,
+#product-grid .product-card button, .product-grid .product-card button {
+  min-height: 46px !important;
+  font-size: 14px !important;
+  font-weight: 750 !important;
+  border-radius: 13px !important;
+  margin-top: auto !important;
+  transition: transform .2s ease, filter .2s ease, box-shadow .2s ease !important;
+}
+#product-grid .product-card .add-button:hover, .product-grid .product-card .add-button:hover { filter: brightness(1.08); }
+@keyframes thouneCardReveal1103 {
+  from { opacity: 0; transform: translateY(15px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (max-width: 767px) {
+  #product-grid .product-card .product-image, .product-grid .product-card .product-image { min-height: 130px !important; aspect-ratio: 1 / .82 !important; }
+  #product-grid .product-card .product-image img, .product-grid .product-card .product-image img { padding: 7px !important; }
+  #product-grid .product-card .product-info, .product-grid .product-card .product-info { padding: 12px !important; gap: 6px !important; }
+  #product-grid .product-card .product-name, .product-grid .product-card .product-name { font-size: 16px !important; }
+  #product-grid .product-card .price, .product-grid .product-card .price { font-size: 20px !important; }
+  #product-grid .product-card .add-button, .product-grid .product-card .add-button, #product-grid .product-card button, .product-grid .product-card button { min-height: 42px !important; font-size: 13px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #product-grid .product-card, .product-grid .product-card { animation: none !important; transition: none !important; }
+  #product-grid .product-card:hover, .product-grid .product-card:hover { transform: none !important; }
+  #product-grid .product-card .product-image img, .product-grid .product-card .product-image img { transition: none !important; }
+}
