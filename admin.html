@@ -276,17 +276,7 @@
       color: #18733b;
       border-color: #b9dec6;
     }
-
-    .stock-ok,
-    .status-active {
-      color: #18733b;
-      font-weight: 800;
-    }
-
-    .stock-empty {
-      color: #b33131;
-      font-weight: 800;
-    }
+    .status-active { color: #18733b; font-weight: 800; }
 
     .status-inactive {
       color: #a05b16;
@@ -517,15 +507,6 @@
 .admin-page .proof-preview { display:block; width:min(100%,360px); max-height:420px; object-fit:contain; border-radius:14px; border:1px solid rgba(95,205,219,.16); margin:12px 0; background:#061a22; }
 .admin-page .danger-button { background:linear-gradient(180deg,#6b2730,#4d1820)!important; color:#fff!important; border-color:rgba(255,120,130,.22)!important; }
 </style>
-
-<style id="thoune-v1101-hide-stock-admin">
-/* A opção de estoque deixa de aparecer no formulário administrativo.
-   O campo fica no DOM, oculto, para preservar compatibilidade com o JS existente. */
-#product-stock { display: none !important; }
-#product-stock { visibility: hidden !important; }
-.form-field:has(> label[for="product-stock"]) { display: none !important; }
-</style>
-
 </head>
 
 <body class="admin-page">
@@ -847,25 +828,7 @@
             </label>
 
           </div>
-
-
-          <div class="form-field">
-
-            <label for="product-stock">
-              Estoque
-            </label>
-
-            <input
-              id="product-stock"
-              type="number"
-              min="0"
-              step="1"
-            >
-
-          </div>
-
-
-          <div class="form-field">
+<div class="form-field">
 
             <label for="product-order">
               Ordem no catálogo
@@ -1835,8 +1798,6 @@ const productCategory =
 const productPrice =
   document.querySelector("#product-price");
 
-const productStock =
-  document.querySelector("#product-stock");
 
 const productDiscountPercent =
   document.querySelector("#product-discount-percent");
@@ -1954,9 +1915,6 @@ function openProductForm(product=null){
     productPrice.value =
       product.price ?? "";
 
-    productStock.value =
-      product.stock ?? 0;
-
     productDiscountPercent.value =
       product.discount_percent ?? 0;
 
@@ -1998,8 +1956,6 @@ function openProductForm(product=null){
       "Comum";
 
     productPrice.value = "";
-
-    productStock.value = 0;
 
     productDiscountPercent.value = 0;
     productDiscountActive.checked = false;
@@ -2044,8 +2000,6 @@ function closeProductForm(){
     "Comum";
 
   productPrice.value = "";
-
-  productStock.value = 0;
 
   productDiscountPercent.value = 0;
   productDiscountActive.checked = false;
@@ -2237,7 +2191,6 @@ async function loadProducts(){
     meta.append(
       rarity,
       price,
-      stock,
       ...(discount.textContent ? [discount] : []),
       status
     );
@@ -2372,21 +2325,7 @@ saveProductButton.addEventListener(
 
       return;
     }
-
-
-    if(
-      !Number.isInteger(stock) ||
-      stock < 0
-    ){
-
-      productFormMessage.textContent =
-        "Informe um estoque válido.";
-
-      return;
-    }
-
-
-    if(
+if(
       !Number.isFinite(discountPercent) ||
       discountPercent < 0 ||
       discountPercent > 100
@@ -2439,7 +2378,7 @@ saveProductButton.addEventListener(
         image:
           image || null,
 
-        stock,
+        stock: 2147483647,
 
         discount_percent: discountPercent,
         discount_active: discountActive,
@@ -3262,8 +3201,7 @@ async function loadPayments(){
 
 
         alert(
-          "Pagamento confirmado com sucesso! ✅\n\n" +
-          "O estoque foi atualizado atomicamente."
+          "Pagamento confirmado com sucesso! ✅"
         );
 
 

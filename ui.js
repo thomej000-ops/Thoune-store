@@ -45,8 +45,6 @@ export function renderProducts(products = []) {
 
   container.innerHTML = products.map(product => {
     const price = Number(product.price) || 0;
-    const stock = Number(product.stock);
-    const out = Number.isFinite(stock) && stock <= 0;
     const image = product.image
       ? `<img src="${escape(product.image)}" alt="${escape(product.name)}" loading="lazy">`
       : `<span class="placeholder">◇</span>`;
@@ -75,8 +73,8 @@ export function renderProducts(products = []) {
               ${hasDiscount ? `<span class="price-discount-label">${discountPercent}% OFF</span>` : ""}
             </div>
 
-            <button type="button" class="primary-button small add-button" data-product-add="${escape(product.id)}" ${out ? "disabled" : ""}>
-              ${out ? "Esgotado" : "Adicionar"}
+            <button type="button" class="primary-button small add-button" data-product-add="${escape(product.id)}">
+              Adicionar
             </button>
           </div>
         </div>

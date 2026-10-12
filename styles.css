@@ -7863,3 +7863,9 @@ body:has(#thoune-welcome:not(.welcome-exit)) {
   .benefits { max-width: 1560px !important; }
   #product-grid, .product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
 }
+
+
+/* Thoune Store v1102: não exibir informações de estoque nos cards. */
+#product-grid .product-card .stock,
+#product-grid .product-card .product-stock,
+.product-card .stock { display: none !important; }
