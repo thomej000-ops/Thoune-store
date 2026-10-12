@@ -7770,22 +7770,96 @@ body:has(#thoune-welcome:not(.welcome-exit)) {
 }
 
 
-/* v1097: cards de produto com animação própria, independente da abertura */
-@keyframes thouneProductHammerFloat1097 {
-  0%, 100% { transform: translateY(0) rotate(-0.25deg); }
-  50% { transform: translateY(-6px) rotate(0.7deg); }
+/* =========================================================
+   V1100 — AJUSTE REAL DO LAYOUT DA LOJA EM DESKTOP
+   Escopo: somente a vitrine pública; não altera admin nem Supabase.
+   ========================================================= */
+@media screen and (min-width: 1024px) {
+  :root { --desktop-content-width: 1380px; }
+  body { overflow-x: hidden; }
+  main, .main-content, #main-content { min-width: 0; }
+  .section {
+    width: min(100%, 1452px) !important;
+    max-width: 1452px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: clamp(28px, 3vw, 48px) !important;
+    padding-right: clamp(28px, 3vw, 48px) !important;
+  }
+  .hero {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: max(48px, calc((100vw - 1380px) / 2)) !important;
+    padding-right: max(48px, calc((100vw - 1380px) / 2)) !important;
+  }
+  .benefits {
+    width: min(100%, 1452px) !important;
+    box-sizing: border-box;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: clamp(28px, 3vw, 48px) !important;
+    padding-right: clamp(28px, 3vw, 48px) !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: clamp(14px, 1.5vw, 24px) !important;
+  }
+  .catalog-tools {
+    width: min(100%, 920px) !important;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 280px) !important;
+    gap: 18px !important;
+  }
+  #product-grid, .product-grid {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: clamp(18px, 1.7vw, 26px) !important;
+    align-items: stretch !important;
+    overflow: visible !important;
+  }
+  .product-card {
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+  .product-image {
+    width: 100% !important;
+    min-width: 0 !important;
+    aspect-ratio: 1 / .82 !important;
+    min-height: 200px !important;
+    max-height: 300px !important;
+  }
+  .product-card .product-info,
+  .product-card .product-details,
+  .product-card .product-body {
+    min-width: 0 !important;
+    overflow-wrap: anywhere;
+  }
+  .product-card button, .product-card .button, .product-card .btn {
+    max-width: 100%;
+    white-space: normal;
+  }
+  .section-heading {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: clamp(24px, 2.4vw, 36px) !important;
+  }
+  #reviews-grid, .reviews-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: clamp(18px, 1.7vw, 26px) !important;
+  }
+  .steps { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
+  .modal-card, .modal-shell .modal-card {
+    width: min(760px, calc(100vw - 80px)) !important;
+    max-width: min(760px, calc(100vw - 80px)) !important;
+  }
 }
-#product-grid .product-card .product-image img {
-  animation: thouneProductHammerFloat1097 4.6s ease-in-out infinite !important;
-  transform-origin: 50% 55%;
-  will-change: transform;
+@media screen and (min-width: 1280px) {
+  #product-grid, .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
 }
-#product-grid .product-card:nth-child(3n + 1) .product-image img { animation-delay: -1.5s !important; }
-#product-grid .product-card:nth-child(3n + 2) .product-image img { animation-delay: -3s !important; }
-#product-grid .product-card:hover .product-image img,
-#product-grid .product-card:focus-within .product-image img {
-  animation: thouneProductHammerFloat1097 4.6s ease-in-out infinite !important;
-}
-@media (prefers-reduced-motion: reduce) {
-  #product-grid .product-card .product-image img { animation: none !important; will-change: auto !important; }
+@media screen and (min-width: 1600px) {
+  .section { max-width: 1560px !important; }
+  .benefits { max-width: 1560px !important; }
+  #product-grid, .product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
 }
