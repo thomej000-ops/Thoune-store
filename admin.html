@@ -498,6 +498,7 @@
   border-color:rgba(240,223,177,.22)!important;
 }
 .admin-page .small-button:hover { background:#123b47!important; }
+</style>
 <style id="thoune-admin-v1043-dark-fix">
 .admin-page .settings-box,
 .admin-page .settings-status,
@@ -516,6 +517,24 @@
 .admin-page .settings-status strong { color:#eaf8fa!important; }
 .admin-page .proof-preview { display:block; width:min(100%,360px); max-height:420px; object-fit:contain; border-radius:14px; border:1px solid rgba(95,205,219,.16); margin:12px 0; background:#061a22; }
 .admin-page .danger-button { background:linear-gradient(180deg,#6b2730,#4d1820)!important; color:#fff!important; border-color:rgba(255,120,130,.22)!important; }
+</style>
+<style id="thoune-admin-desktop-v1097">
+@media (min-width: 1024px) {
+  .admin { max-width: 1440px !important; padding: 32px 36px 56px !important; }
+  .admin-page .admin-card { padding: 30px 34px; }
+  .admin-page .admin-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .admin-page .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 22px; }
+  .admin-page .product-form, .admin-page .settings-box, .admin-page .review-card,
+  .admin-page .order-card, .admin-page .payment-card { min-width: 0; }
+  .admin-page .product-admin-item { grid-template-columns: 76px minmax(0, 1fr) auto; }
+  .admin-page .product-admin-info, .admin-page .order-card > *, .admin-page .payment-card > * { min-width: 0; }
+  .admin-page .product-admin-actions, .admin-page .order-actions, .admin-page .form-actions { gap: 10px; }
+  .admin-page input, .admin-page select, .admin-page textarea, .admin-page button { max-width: 100%; }
+}
+@media (min-width: 1440px) {
+  .admin { max-width: 1560px !important; }
+  .admin-page .admin-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 </style>
 </head>
 

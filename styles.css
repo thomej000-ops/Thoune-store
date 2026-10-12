@@ -7768,3 +7768,24 @@ body:has(#thoune-welcome:not(.welcome-exit)) {
     transition: none !important;
   }
 }
+
+
+/* v1097: cards de produto com animação própria, independente da abertura */
+@keyframes thouneProductHammerFloat1097 {
+  0%, 100% { transform: translateY(0) rotate(-0.25deg); }
+  50% { transform: translateY(-6px) rotate(0.7deg); }
+}
+#product-grid .product-card .product-image img {
+  animation: thouneProductHammerFloat1097 4.6s ease-in-out infinite !important;
+  transform-origin: 50% 55%;
+  will-change: transform;
+}
+#product-grid .product-card:nth-child(3n + 1) .product-image img { animation-delay: -1.5s !important; }
+#product-grid .product-card:nth-child(3n + 2) .product-image img { animation-delay: -3s !important; }
+#product-grid .product-card:hover .product-image img,
+#product-grid .product-card:focus-within .product-image img {
+  animation: thouneProductHammerFloat1097 4.6s ease-in-out infinite !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  #product-grid .product-card .product-image img { animation: none !important; will-change: auto !important; }
+}
