@@ -7983,3 +7983,70 @@ body:has(#thoune-welcome:not(.welcome-exit)) {
   #product-grid .product-card:hover, .product-grid .product-card:hover { transform: none !important; }
   #product-grid .product-card .product-image img, .product-grid .product-card .product-image img { transition: none !important; }
 }
+
+
+/* =========================================================
+   V1104 — mais respiro no grid + marretas com movimento próprio
+   ========================================================= */
+#product-grid, .product-grid {
+  column-gap: clamp(22px, 2vw, 34px) !important;
+  row-gap: clamp(26px, 2.4vw, 38px) !important;
+}
+#product-grid .product-card:hover, .product-grid .product-card:hover {
+  /* Evita que os cards se encostem quando o mouse passa por cima. */
+  transform: translateY(-5px) !important;
+}
+#product-grid .product-card .product-image,
+.product-grid .product-card .product-image {
+  min-height: 220px !important;
+  max-height: 350px !important;
+  aspect-ratio: 1 / .96 !important;
+}
+#product-grid .product-card .product-image img,
+.product-grid .product-card .product-image img {
+  padding: 5px !important;
+  transform-origin: 50% 55%;
+  animation: thouneHammerFloat1104 3.4s ease-in-out infinite;
+  will-change: transform;
+}
+#product-grid .product-card:nth-child(3n+2) .product-image img,
+.product-grid .product-card:nth-child(3n+2) .product-image img {
+  animation-delay: -.9s;
+}
+#product-grid .product-card:nth-child(3n) .product-image img,
+.product-grid .product-card:nth-child(3n) .product-image img {
+  animation-delay: -1.8s;
+}
+#product-grid .product-card:hover .product-image img,
+.product-grid .product-card:hover .product-image img {
+  animation-play-state: paused;
+  transform: scale(1.09) rotate(-2deg) !important;
+  filter: drop-shadow(0 10px 15px rgba(49,193,211,.22));
+}
+@keyframes thouneHammerFloat1104 {
+  0%, 100% { transform: translateY(0) rotate(-1deg) scale(1.015); }
+  50% { transform: translateY(-7px) rotate(1.2deg) scale(1.045); }
+}
+@media (max-width: 767px) {
+  #product-grid, .product-grid {
+    column-gap: 14px !important;
+    row-gap: 22px !important;
+  }
+  #product-grid .product-card .product-image,
+  .product-grid .product-card .product-image {
+    min-height: 155px !important;
+    max-height: 230px !important;
+    aspect-ratio: 1 / .92 !important;
+  }
+  #product-grid .product-card .product-image img,
+  .product-grid .product-card .product-image img {
+    padding: 3px !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #product-grid .product-card .product-image img,
+  .product-grid .product-card .product-image img {
+    animation: none !important;
+    will-change: auto;
+  }
+}
