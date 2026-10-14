@@ -682,9 +682,9 @@ function renderGuestDeliveryPanel(order) {
         <button type="button" class="secondary-button full" id="copy-delivery-user" style="margin-top:10px;">📋 Copiar usuário de entrega</button>
         <div style="margin-top:10px;"><strong>📦 Pedido:</strong> #${escapeHtml(orderShort)}</div>
       </div>
-      <div class="manual-delivery-notice" style="text-align:left;border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin:16px 0;">
-        <strong>🚚 Entrega manual</strong>
-        <p style="margin:8px 0 0;">Aguarde o atendimento. Seus dados de TikTok e Roblox já estão vinculados ao pedido.</p>
+      <div class="manual-delivery-notice join-open-notice" style="text-align:left;border:1px solid #28b8ed;background:rgba(22,151,219,.12);border-radius:14px;padding:14px;margin:12px 0 16px;">
+        <strong>🟢 Join aberto</strong>
+        <p style="margin:8px 0 0;">Entre no Roblox, procure pelo usuário de entrega informado acima e entre no mesmo servidor (server).</p>
       </div>
       <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
     </div>`;
