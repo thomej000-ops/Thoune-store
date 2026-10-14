@@ -8669,3 +8669,106 @@ body:has(.cart-drawer[aria-hidden="false"]) {
   min-height: 42px !important;
   width: 100% !important;
 }
+
+
+/* v1116 — correção definitiva de geometria e bloqueio do carrinho flutuante */
+#cart-drawer.cart-drawer {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 22px 14px !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  z-index: 2147483000 !important;
+  isolation: isolate !important;
+}
+#cart-drawer.cart-drawer:not(.open):not(.active):not([aria-hidden="false"]) {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+#cart-drawer.cart-drawer.open,
+#cart-drawer.cart-drawer.active,
+#cart-drawer.cart-drawer[aria-hidden="false"] {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+#cart-drawer.cart-drawer > .drawer-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0 !important;
+  background: rgba(0, 8, 18, .78) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  backdrop-filter: blur(5px) !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+}
+#cart-drawer.cart-drawer > .drawer-panel {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important; left: auto !important; right: auto !important; bottom: auto !important;
+  width: min(520px, calc(100vw - 36px)) !important;
+  max-width: 520px !important;
+  height: min(740px, calc(100dvh - 56px)) !important;
+  max-height: calc(100dvh - 56px) !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 18px !important;
+  box-sizing: border-box !important;
+  border: 1px solid rgba(103,183,197,.24) !important;
+  border-radius: 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  transform: none !important;
+  transition: opacity .18s ease, scale .18s ease !important;
+  background: linear-gradient(180deg, #0b2a35, #071a22) !important;
+  box-shadow: 0 28px 80px rgba(0,0,0,.65) !important;
+  z-index: 1 !important;
+  pointer-events: auto !important;
+}
+#cart-drawer.cart-drawer > .drawer-panel > .drawer-header,
+#cart-drawer.cart-drawer > .drawer-panel > .drawer-footer {
+  flex: 0 0 auto !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+#cart-drawer.cart-drawer .cart-items {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  pointer-events: auto !important;
+}
+#cart-drawer.cart-drawer .drawer-panel button,
+#cart-drawer.cart-drawer .drawer-panel input {
+  pointer-events: auto !important;
+  flex-shrink: 0 !important;
+}
+html:has(#cart-drawer.cart-drawer.open),
+html:has(#cart-drawer.cart-drawer.active),
+html:has(#cart-drawer.cart-drawer[aria-hidden="false"]),
+body:has(#cart-drawer.cart-drawer.open),
+body:has(#cart-drawer.cart-drawer.active),
+body:has(#cart-drawer.cart-drawer[aria-hidden="false"]) {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+@media (max-width: 600px) {
+  #cart-drawer.cart-drawer > .drawer-panel {
+    width: calc(100vw - 28px) !important;
+    height: min(740px, calc(100dvh - 44px)) !important;
+    max-height: calc(100dvh - 44px) !important;
+    padding: 16px !important;
+    border-radius: 22px !important;
+  }
+}

@@ -1,0 +1,1 @@
+v1116: reforço do carrinho flutuante usando seletores com ID #cart-drawer e filhos diretos, cache CSS 1116. Testar visualmente em celular antes de considerar resolvido. Nenhuma alteração no Supabase, Pix ou status de pedidos.
