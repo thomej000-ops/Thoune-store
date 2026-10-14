@@ -369,6 +369,9 @@ async function openCheckout() {
   const cart = loadCart();
   if (!cart.length) return toast("Adicione pelo menos uma marreta ao carrinho.");
   if (!storeSettings.online) return toast("O atendimento está offline no momento.");
+  // Transição sem sobreposição: fecha o carrinho antes de abrir os dados.
+  // Mantém o carrinho intacto; se o checkout falhar, o cliente pode voltar e tentar novamente.
+  closeCart();
   renderCheckout();
   openPanel($("#checkout-section"));
 }

@@ -1,0 +1,7 @@
+Thoune Store v1118 — correção de transição e painel de dados
+
+- Ao iniciar a finalização, fecha o carrinho antes de abrir o painel de dados.
+- O carrinho não é limpo nem alterado nessa transição.
+- Painel de dados mais compacto, centralizado, com bordas azuis discretas e rolagem interna.
+- Não foram alterados o processamento Pix, as tabelas ou os pedidos no Supabase.
+- Testar em celular: carrinho > Realizar compra > voltar ao carrinho > finalizar pedido.
