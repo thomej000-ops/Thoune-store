@@ -8363,3 +8363,147 @@ button, input, select, textarea { max-width:100%; }
   margin-top: 4px !important;
   min-height: 38px !important;
 }
+
+
+/* v1114 — corrigir camada do carrinho, rolagem e alinhamento dos cards */
+.cart-drawer {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 12000 !important;
+  display: block !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  isolation: isolate !important;
+}
+.cart-drawer.active,
+.cart-drawer.open,
+.cart-drawer[aria-hidden="false"] {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+.cart-drawer .drawer-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  background: rgba(0, 8, 16, .76) !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+}
+.cart-drawer .drawer-panel {
+  position: absolute !important;
+  z-index: 1 !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: min(100%, 560px) !important;
+  max-width: 100vw !important;
+  height: 100% !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  padding-bottom: env(safe-area-inset-bottom) !important;
+  transform: translateX(102%);
+  transition: transform .24s ease !important;
+  background: #00131d !important;
+}
+.cart-drawer.active .drawer-panel,
+.cart-drawer.open .drawer-panel,
+.cart-drawer[aria-hidden="false"] .drawer-panel {
+  transform: translateX(0);
+}
+.cart-drawer .drawer-header,
+.cart-drawer .drawer-footer {
+  flex: 0 0 auto !important;
+  position: relative !important;
+  z-index: 2 !important;
+  background: #00131d !important;
+}
+.cart-drawer .cart-items {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding-bottom: 12px !important;
+}
+.cart-drawer .drawer-footer {
+  padding-top: 12px !important;
+  padding-bottom: max(14px, env(safe-area-inset-bottom)) !important;
+}
+.cart-drawer .drawer-footer button {
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  min-height: 48px !important;
+  position: relative !important;
+  z-index: 3 !important;
+  pointer-events: auto !important;
+}
+body.cart-open,
+body.drawer-open {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  touch-action: none !important;
+}
+@media (max-width: 600px) {
+  .cart-drawer .drawer-panel {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    border-radius: 0 !important;
+  }
+  .cart-drawer .drawer-header {
+    padding-top: max(20px, env(safe-area-inset-top)) !important;
+  }
+}
+
+/* Cards: preço e desconto agrupados, botões alinhados na mesma linha-base. */
+#product-grid .product-card {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+#product-grid .product-card .product-info {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 9px !important;
+  padding: 10px 10px 12px !important;
+}
+#product-grid .product-card .product-name {
+  min-height: 2.5em !important;
+  margin: 0 !important;
+  line-height: 1.25 !important;
+}
+#product-grid .product-card .product-bottom {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 6px !important;
+  margin-top: 0 !important;
+  min-height: 0 !important;
+}
+#product-grid .product-card .price,
+#product-grid .product-card .product-price {
+  margin: 0 !important;
+  line-height: 1.2 !important;
+}
+#product-grid .product-card .discount,
+#product-grid .product-card .discount-badge,
+#product-grid .product-card .price-discount,
+#product-grid .product-card .old-price {
+  margin: 0 !important;
+}
+#product-grid .product-card .add-button,
+#product-grid .product-card button {
+  margin-top: auto !important;
+  min-height: 42px !important;
+  width: 100% !important;
+}
