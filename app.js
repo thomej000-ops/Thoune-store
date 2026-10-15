@@ -377,8 +377,6 @@ async function openCheckout() {
 }
 
 const GUEST_QUEUE_ACTIVE_STATUSES = [
-  "awaiting_payment",
-  "awaiting_verification",
   "payment_confirmed",
   "awaiting_delivery"
 ];
