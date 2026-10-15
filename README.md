@@ -44,3 +44,6 @@ IMPORTANTE:
 Execute supabase_v1041_no_login_queue.sql no SQL Editor do Supabase antes de publicar a versão.
 
 v1122: correção da fila de entrega. A posição agora considera somente pedidos com pagamento confirmado (`payment_confirmed`) ou aguardando entrega (`awaiting_delivery`). Pedidos aguardando Pix ou aguardando verificação não ocupam a fila de entrega. Execute `supabase_v1122_queue_fix.sql` no Supabase antes de publicar.
+
+
+v1124: fila de entrega corrigida para contar somente payment_confirmed/awaiting_delivery; pedidos atuais em awaiting_payment/awaiting_verification recebem a posição relativa sem contar pedidos abandonados. Rolagem interna do catálogo agora exige ponteiro de desktop (hover/fine), evitando barra interna em celular. Execute supabase_v1124_queue_fix.sql no Supabase antes de testar.

@@ -379,7 +379,7 @@ async function openCheckout() {
 const GUEST_QUEUE_ACTIVE_STATUSES = [
   "payment_confirmed",
   "awaiting_delivery"
-];
+]; // somente pedidos que já estão na fila de entrega
 
 function setQueuePreviewMessage(message, type = "") {
   const el = $("#checkout-queue-preview");

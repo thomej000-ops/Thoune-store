@@ -8978,7 +8978,7 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
 /* THOUNE v1120 — rolagem interna do catálogo no desktop.
    No computador, somente o painel das marretas rola; no mobile,
    o catálogo continua acompanhando a rolagem normal da página. */
-@media (min-width: 761px) {
+@media (min-width: 761px) and (hover: hover) and (pointer: fine) {
   #product-grid {
     height: min(72vh, 760px) !important;
     max-height: min(72vh, 760px) !important;
@@ -9019,7 +9019,7 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
 /* THOUNE v1121 — cards completos dentro do painel com rolagem desktop.
    Impede que a altura fixa do painel comprima o conteúdo dos cards
    (nome, preço e botão) deixando somente a imagem visível. */
-@media (min-width: 761px) {
+@media (min-width: 761px) and (hover: hover) and (pointer: fine) {
   #product-grid {
     align-content: start !important;
     grid-auto-rows: max-content !important;
