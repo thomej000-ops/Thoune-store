@@ -818,44 +818,64 @@ function ensureGuestReviewModal() {
     <div class="modal-card review-modal-card guest-review-modal-card">
       <div class="modal-header">
         <div>
-          <p class="eyebrow">THOUNE STORE</p>
-          <h2>⭐ Avalie sua compra</h2>
+          <p class="eyebrow">THOUNE STORE ♡</p>
+          <h2>Um carinho em forma de avaliação</h2>
         </div>
-        <button type="button" class="close-button" id="guest-review-close" aria-label="Fechar avaliação">×</button>
+        <button type="button" class="close-button" id="guest-review-close" aria-label="Fechar convite de avaliação">×</button>
       </div>
       <div class="checkout-content guest-review-content">
         <div class="guest-review-hero">
-          <div class="guest-review-hero-icon">🎉</div>
+          <img class="guest-review-snoopy" src="snoopy-welcome.jpg?v=1119" alt="Snoopy feliz em um clima azul e oceânico" loading="lazy">
           <p class="eyebrow">ENTREGA CONCLUÍDA</p>
-          <h3>Pedido entregue!</h3>
-          <p>Obrigado por confiar no nosso trabalho. Esperamos que você volte em breve!</p>
+          <h3>Gostou da sua experiência? <span aria-hidden="true">🤍</span></h3>
+          <p>Sua opinião é muito importante para nós. Cada pedido ajuda esse pequeno negócio a crescer e realizar sonhos. Obrigado por fazer parte dessa história! 🤍</p>
           <small id="guest-review-delivered-at"></small>
         </div>
         <div id="guest-review-author-box" class="guest-review-author-box"></div>
         <form id="guest-review-form" class="guest-review-form">
-          <label><span class="field-label-icon">⭐ Sua nota</span>
-            <select id="guest-review-rating" required>
-              <option value="">Escolha de 1 a 5 estrelas</option>
-              <option value="5">★★★★★ — 5</option>
-              <option value="4">★★★★☆ — 4</option>
-              <option value="3">★★★☆☆ — 3</option>
-              <option value="2">★★☆☆☆ — 2</option>
-              <option value="1">★☆☆☆☆ — 1</option>
-            </select>
-          </label>
-          <label><span class="field-label-icon">💬 Sua experiência</span>
-            <textarea id="guest-review-text" rows="5" minlength="3" maxlength="1000" placeholder="Conte como foi sua experiência..." required></textarea>
+          <fieldset class="guest-review-stars-field">
+            <legend class="field-label-icon">Como você avalia sua experiência?</legend>
+            <input type="hidden" id="guest-review-rating" value="">
+            <div class="guest-review-stars" role="group" aria-label="Escolha de 1 a 5 estrelas">
+              ${[1,2,3,4,5].map(value => `<button type="button" class="guest-review-star" data-rating="${value}" aria-label="${value} ${value === 1 ? 'estrela' : 'estrelas'}" aria-pressed="false">★</button>`).join("")}
+            </div>
+            <p class="guest-review-star-hint" id="guest-review-star-hint">Toque nas estrelinhas para escolher sua nota 🤍</p>
+          </fieldset>
+          <label><span class="field-label-icon">♡ Conte sua experiência</span>
+            <textarea id="guest-review-text" rows="4" minlength="3" maxlength="1000" placeholder="Conte pra gente o que achou. Sua opinião é muito valiosa! 🤍" required></textarea>
+            <small class="guest-review-required-note">Para enviar, escolha as estrelas e escreva um comentário. Se preferir, você pode fechar este painel.</small>
           </label>
           <p class="checkout-message" id="guest-review-message" aria-live="polite"></p>
-          <button type="submit" class="primary-button full">Enviar avaliação</button>
+          <button type="submit" class="primary-button full">Enviar avaliação 🤍</button>
         </form>
+        <p class="guest-review-thanks">Muito obrigado por apoiar nosso sonho. Você faz toda a diferença! <span>♡</span><br><em>Com carinho, Thoune Store 🌊</em></p>
       </div>
     </div>`;
   document.body.appendChild(modal);
-  $("#guest-review-close")?.addEventListener("click", () => closePanel(modal));
-  $("#guest-review-backdrop")?.addEventListener("click", () => closePanel(modal));
+  const dismissReview = () => {
+    const form = $("#guest-review-form");
+    const orderId = form?.dataset.orderId;
+    if (orderId) localStorage.setItem(`thoune-review-dismissed:${orderId}`, "1");
+    closePanel(modal);
+  };
+  $("#guest-review-close")?.addEventListener("click", dismissReview);
+  $("#guest-review-backdrop")?.addEventListener("click", dismissReview);
+  $$("#guest-review-modal .guest-review-star").forEach(star => star.addEventListener("click", () => setGuestReviewRating(Number(star.dataset.rating))));
   $("#guest-review-form")?.addEventListener("submit", submitGuestReview);
   return modal;
+}
+
+function setGuestReviewRating(rating) {
+  const value = Math.max(0, Math.min(5, Number(rating) || 0));
+  const input = $("#guest-review-rating");
+  const hint = $("#guest-review-star-hint");
+  if (input) input.value = value ? String(value) : "";
+  $$("#guest-review-modal .guest-review-star").forEach(star => {
+    const active = Number(star.dataset.rating) <= value;
+    star.classList.toggle("is-filled", active);
+    star.setAttribute("aria-pressed", String(Number(star.dataset.rating) === value));
+  });
+  if (hint) hint.textContent = value ? `${value} de 5 estrelas — obrigado por nos contar! 🤍` : "Toque nas estrelinhas para escolher sua nota 🤍";
 }
 
 function renderGuestDeliveredPanel(order, autoOpen = false) {
@@ -870,8 +890,14 @@ function renderGuestDeliveredPanel(order, autoOpen = false) {
   if (form) {
     form.dataset.orderId = String(order.id);
     form.dataset.tiktokUsername = order.tiktok_username || "";
+    const ratingInput = $("#guest-review-rating");
+    const textInput = $("#guest-review-text");
+    if (ratingInput) ratingInput.value = "";
+    if (textInput) textInput.value = "";
+    setGuestReviewRating(0);
   }
-  if (autoOpen) openPanel(modal);
+  const dismissed = localStorage.getItem(`thoune-review-dismissed:${order.id}`) === "1";
+  if (autoOpen && !dismissed) openPanel(modal);
 }
 
 async function openGuestReviewPanel(order) {
@@ -880,6 +906,7 @@ async function openGuestReviewPanel(order) {
     toast("Você já avaliou este pedido.");
     return;
   }
+  localStorage.removeItem(`thoune-review-dismissed:${order.id}`);
   renderGuestDeliveredPanel(order, true);
 }
 
@@ -893,8 +920,8 @@ async function submitGuestReview(event) {
   const message = $("#guest-review-message");
 
   if (!orderId || !tiktokUsername) return setMessage(message, "Não encontramos os dados deste pedido.", "error");
-  if (!rating || rating < 1 || rating > 5) return setMessage(message, "Escolha uma nota de 1 a 5.", "error");
-  if (textValue.length < 3) return setMessage(message, "Escreva pelo menos 3 caracteres.", "error");
+  if (!rating || rating < 1 || rating > 5) return setMessage(message, "Toque nas estrelinhas para escolher uma nota de 1 a 5.", "error");
+  if (textValue.length < 3) return setMessage(message, "Escreva um comentário com pelo menos 3 caracteres.", "error");
 
   const button = form.querySelector('button[type="submit"]');
   if (button) { button.disabled = true; button.textContent = "Enviando..."; }

@@ -1,0 +1,23 @@
+THOUNE STORE — v1119
+
+1) ESTOQUE INFINITO (Supabase)
+- Antes de publicar o site, execute supabase_v1119_estoque_infinito.sql no SQL Editor do Supabase.
+- A migração remove os bloqueios de quantidade/estoque nas duas assinaturas antigas de create_order e na função atual create_guest_order.
+- A aprovação manual confirm_payment deixa de descontar estoque, mas mantém a validação de administrador, a confirmação do pagamento e o avanço do pedido para awaiting_delivery.
+- O SQL verifica as estruturas esperadas e aborta a transação se não encontrar os trechos exatos.
+- Depois da execução, a consulta final deve mostrar false nas colunas de bloqueio de estoque e desconto de estoque.
+
+2) AVALIAÇÕES
+- Convite atualizado para tema azul/oceano, agradecimento com coração branco e ilustração Snoopy já presente no pacote.
+- Nota selecionada tocando nas estrelas; comentário continua obrigatório (mínimo de 3 caracteres), conforme combinado.
+- Fechar pelo X ou tocar no fundo registra que o convite foi dispensado para aquele pedido neste navegador, evitando que abra de novo automaticamente.
+- O cliente ainda pode abrir a avaliação manualmente pelo fluxo de entrega, se o botão existente estiver disponível.
+- O envio continua usando submit_guest_review e a moderação já existente.
+
+3) PUBLICAÇÃO E TESTE
+- Faça uma cópia de segurança do projeto antes de substituir os arquivos publicados.
+- Execute o SQL no Supabase antes de testar a compra.
+- Publique todos os arquivos do ZIP mantendo a estrutura de pastas.
+- Teste um pedido de marreta com estoque menor que a quantidade; ele deve avançar para Pix.
+- No ADM, confirme o pagamento de teste e verifique que o pedido avança para a fila de entrega sem erro de estoque.
+- Teste o painel de avaliação: estrelas, comentário obrigatório, envio e fechamento pelo X. Reabrir a página não deve abrir o convite automaticamente depois da dispensa.

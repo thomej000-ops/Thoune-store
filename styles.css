@@ -8924,3 +8924,52 @@ body:has(#cart-drawer.cart-drawer[aria-hidden="false"]) {
   #checkout-section .checkout-modal-card { max-height: calc(100dvh - 18px) !important; }
   #checkout-section .checkout-content { gap: 8px !important; padding-block: 10px !important; }
 }
+
+
+/* v1119 — avaliação Snoopy + oceano, estrelas interativas e convite dispensável */
+.guest-review-modal-card{
+  border:1px solid rgba(39,111,255,.72) !important;
+  background:radial-gradient(ellipse at 80% 8%,rgba(24,98,219,.19),transparent 42%),linear-gradient(180deg,#06142d 0%,#031024 100%) !important;
+  box-shadow:0 0 0 1px rgba(45,116,255,.12),0 24px 80px rgba(0,0,0,.55),0 0 38px rgba(24,99,255,.13) !important;
+}
+.guest-review-modal-card .modal-header{background:linear-gradient(135deg,rgba(11,45,105,.75),rgba(4,20,47,.35));border-color:rgba(53,125,255,.2)}
+.guest-review-modal-card .modal-header .eyebrow{color:#82baff}
+.guest-review-modal-card .modal-header h2{color:#f4f8ff;line-height:1.25}
+.guest-review-hero{padding:0 4px 18px}
+.guest-review-snoopy{display:block;width:min(190px,65%);height:142px;object-fit:contain;margin:0 auto 10px;border-radius:20px;filter:drop-shadow(0 8px 22px rgba(24,110,255,.19));}
+.guest-review-hero .eyebrow{color:#75b8ff;letter-spacing:.13em;font-size:11px}
+.guest-review-hero h3{font-size:clamp(22px,4vw,28px);color:#f5f8ff;line-height:1.25}
+.guest-review-hero p:not(.eyebrow){color:#c5d9ff;max-width:470px}
+.guest-review-author-box{border-color:rgba(69,133,255,.2);background:rgba(12,39,82,.4);color:#eff5ff}
+.guest-review-author-box small{color:#a4c2f5}
+.guest-review-form{gap:16px}
+.guest-review-form .field-label-icon{color:#e3edff}
+.guest-review-stars-field{margin:0;padding:0;border:0;min-width:0;text-align:center}
+.guest-review-stars-field legend{float:none;width:100%;margin-bottom:8px;font-weight:800;font-size:15px}
+.guest-review-stars{display:flex;justify-content:center;align-items:center;gap:clamp(5px,2.2vw,14px);padding:3px 0}
+.guest-review-star{appearance:none;border:0;background:transparent;color:rgba(108,157,225,.35);font-size:clamp(38px,8vw,54px);line-height:1;padding:2px 0;cursor:pointer;text-shadow:0 0 0 transparent;transition:color .18s ease,transform .18s ease,text-shadow .18s ease}
+.guest-review-star:hover,.guest-review-star:focus-visible{color:#8ecbff;transform:translateY(-2px) scale(1.08);outline:none}
+.guest-review-star.is-filled{color:#56baff;text-shadow:0 0 9px rgba(45,154,255,.72),0 0 22px rgba(34,114,255,.48)}
+.guest-review-star-hint{margin:5px 0 0;color:#a9c8fa;font-size:13px;min-height:20px}
+.guest-review-form textarea{background:rgba(3,16,39,.84) !important;border-color:rgba(61,126,255,.68) !important;color:#f1f6ff !important;min-height:112px}
+.guest-review-form textarea::placeholder{color:#8eaddf}
+.guest-review-required-note{display:block;color:#91aedb;font-size:12px;font-weight:500;line-height:1.45;margin-top:-2px}
+.guest-review-form button[type="submit"]{background:linear-gradient(100deg,#1262f4,#087ff5) !important;box-shadow:0 8px 24px rgba(10,91,240,.25);border-radius:999px !important;min-height:50px}
+.guest-review-thanks{text-align:center;color:#c8dcff;line-height:1.55;font-size:13px;margin:20px 4px 0}
+.guest-review-thanks span{color:#fff;font-size:20px}
+.guest-review-thanks em{display:inline-block;margin-top:7px;color:#9bc4ff;font-style:normal;font-family:Georgia,serif;letter-spacing:.04em}
+body.theme-light .guest-review-modal-card{background:radial-gradient(ellipse at 80% 8%,rgba(89,157,255,.14),transparent 42%),linear-gradient(180deg,#f7fbff,#e8f2ff) !important;color:#17345f}
+body.theme-light .guest-review-modal-card .modal-header h2,body.theme-light .guest-review-hero h3{color:#17345f}
+body.theme-light .guest-review-hero p:not(.eyebrow),body.theme-light .guest-review-thanks{color:#385b8a}
+body.theme-light .guest-review-stars-field legend{color:#17345f}
+body.theme-light .guest-review-star{color:rgba(42,95,161,.28)}
+body.theme-light .guest-review-star.is-filled{color:#167cf3;text-shadow:0 0 10px rgba(22,124,243,.3)}
+body.theme-light .guest-review-star-hint,body.theme-light .guest-review-required-note{color:#5276a9}
+body.theme-light .guest-review-form textarea{background:#fff !important;color:#17345f !important;border-color:#9abcf0 !important}
+body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
+@media(max-width:600px){
+  .guest-review-snoopy{width:min(160px,58%);height:112px}
+  .guest-review-stars{gap:8px}
+  .guest-review-star{font-size:clamp(36px,10vw,46px)}
+  .guest-review-thanks{margin-top:15px}
+}
