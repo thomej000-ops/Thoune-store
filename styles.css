@@ -9014,3 +9014,20 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
     scrollbar-gutter: auto !important;
   }
 }
+
+
+/* THOUNE v1121 — cards completos dentro do painel com rolagem desktop.
+   Impede que a altura fixa do painel comprima o conteúdo dos cards
+   (nome, preço e botão) deixando somente a imagem visível. */
+@media (min-width: 761px) {
+  #product-grid {
+    align-content: start !important;
+    grid-auto-rows: max-content !important;
+    content-visibility: visible !important;
+  }
+
+  #product-grid .product-card {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+}
