@@ -9084,57 +9084,19 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
 }
 
 
-/* v1128 — ícones visuais fornecidos pelo usuário */
-.ui-icon-card,
-.ui-icon-lock,
-.ui-icon-bag{
-  background-repeat:no-repeat !important;
-  background-position:center !important;
-  background-size:contain !important;
-  color:transparent !important;
-  font-size:0 !important;
+/* THOUNE v1129 — foto da aba de avaliação */
+.guest-review-snoopy{
+  display:block;
+  width:min(220px,68%);
+  aspect-ratio:1 / 1;
+  height:auto;
+  object-fit:cover;
+  margin:0 auto 14px;
+  border-radius:24px;
+  border:2px solid rgba(103,215,228,.34);
+  box-shadow:0 12px 30px rgba(0,0,0,.28),0 0 0 5px rgba(67,198,216,.06);
+  filter:none;
 }
-.ui-icon-card{
-  background-image:url('pix-icon.png') !important;
-}
-.ui-icon-lock{
-  background-image:url('lock-icon.png') !important;
-}
-.ui-icon-bag{
-  background-image:url('delivery-icon.png') !important;
-}
-.ui-icon-card::before,.ui-icon-card::after,
-.ui-icon-lock::before,.ui-icon-lock::after,
-.ui-icon-bag::before,.ui-icon-bag::after{
-  content:none !important;
-  display:none !important;
-}
-.pix-inline-icon{
-  width:1.25em !important;
-  height:1.25em !important;
-  object-fit:contain !important;
-  display:inline-block !important;
-  vertical-align:-0.22em !important;
-  margin-right:.28em !important;
-}
-.pix-panel-icon{
-  display:grid !important;
-  place-items:center !important;
-  margin:0 0 10px !important;
-}
-.pix-panel-icon img{
-  width:58px !important;
-  height:58px !important;
-  object-fit:contain !important;
-  filter:drop-shadow(0 8px 18px rgba(63,205,216,.18)) !important;
-}
-.admin-visual-icon{
-  display:grid !important;
-  place-items:center !important;
-  margin:4px 0 10px !important;
-}
-.admin-visual-icon img{
-  width:52px !important;
-  height:52px !important;
-  object-fit:contain !important;
+@media (max-width:600px){
+  .guest-review-snoopy{width:min(190px,70%);}
 }

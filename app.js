@@ -484,7 +484,7 @@ function renderGuestPixPanel(orderId, total, queuePosition = null) {
   const orderShort = String(orderId).slice(0, 8).toUpperCase();
   content.innerHTML = `
     <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
-      <div class="pix-panel-icon"><img src="pix-icon.png" alt="Pix"></div>
+      <div style="font-size:42px;margin-bottom:10px;">💳</div>
       <p class="eyebrow">PAGAMENTO VIA PIX</p>
       <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
       <div class="manual-delivery-notice" role="alert" style="text-align:left;border:1px solid rgba(255,170,65,.55);background:rgba(255,145,35,.12);border-radius:14px;padding:14px;margin:14px 0;">
@@ -611,7 +611,7 @@ function renderGuestPaymentRejectedPanel(orderId, reason = "O pagamento não foi
       <h2 style="margin:8px 0;">Precisamos do Pix para fazer a entrega</h2>
       <p>${escapeHtml(reason)}</p>
       <div class="manual-delivery-notice" style="text-align:left;border:1px solid rgba(240,140,80,.35);background:rgba(240,140,80,.08);border-radius:14px;padding:14px;margin:16px 0;">
-        <strong><img src="pix-icon.png" class="pix-inline-icon" alt="" aria-hidden="true"> Faça o pagamento e envie o comprovante</strong>
+        <strong>💳 Faça o pagamento e envie o comprovante</strong>
         <p style="margin:8px 0 0;">Se você já pagou, envie uma foto do comprovante abaixo para a loja conferir.</p>
       </div>
       <div class="proof-upload-box">
@@ -823,7 +823,7 @@ function ensureGuestReviewModal() {
       </div>
       <div class="checkout-content guest-review-content">
         <div class="guest-review-hero">
-          <img class="guest-review-snoopy" src="snoopy-welcome.jpg?v=1119" alt="Snoopy feliz em um clima azul e oceânico" loading="lazy">
+          <img class="guest-review-snoopy" src="snoopy-avaliacao.jpg?v=1129" alt="Foto do Snoopy entre flores rosas" loading="lazy">
           <p class="eyebrow">ENTREGA CONCLUÍDA</p>
           <h3>Gostou da sua experiência? <span aria-hidden="true">🤍</span></h3>
           <p>Sua opinião é muito importante para nós. Cada pedido ajuda esse pequeno negócio a crescer e realizar sonhos. Obrigado por fazer parte dessa história! 🤍</p>
