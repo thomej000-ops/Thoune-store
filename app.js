@@ -484,7 +484,7 @@ function renderGuestPixPanel(orderId, total, queuePosition = null) {
   const orderShort = String(orderId).slice(0, 8).toUpperCase();
   content.innerHTML = `
     <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
-      <div style="font-size:42px;margin-bottom:10px;">💳</div>
+      <div class="pix-panel-icon"><img src="pix-icon.png" alt="Pix"></div>
       <p class="eyebrow">PAGAMENTO VIA PIX</p>
       <h2 style="margin:8px 0;">Pedido #${escapeHtml(orderShort)}</h2>
       <div class="manual-delivery-notice" role="alert" style="text-align:left;border:1px solid rgba(255,170,65,.55);background:rgba(255,145,35,.12);border-radius:14px;padding:14px;margin:14px 0;">
@@ -611,7 +611,7 @@ function renderGuestPaymentRejectedPanel(orderId, reason = "O pagamento não foi
       <h2 style="margin:8px 0;">Precisamos do Pix para fazer a entrega</h2>
       <p>${escapeHtml(reason)}</p>
       <div class="manual-delivery-notice" style="text-align:left;border:1px solid rgba(240,140,80,.35);background:rgba(240,140,80,.08);border-radius:14px;padding:14px;margin:16px 0;">
-        <strong>💳 Faça o pagamento e envie o comprovante</strong>
+        <strong><img src="pix-icon.png" class="pix-inline-icon" alt="" aria-hidden="true"> Faça o pagamento e envie o comprovante</strong>
         <p style="margin:8px 0 0;">Se você já pagou, envie uma foto do comprovante abaixo para a loja conferir.</p>
       </div>
       <div class="proof-upload-box">

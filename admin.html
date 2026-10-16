@@ -542,9 +542,7 @@
 
     <div class="access-message">
 
-      <div style="font-size:48px">
-        🔒
-      </div>
+      <div class="admin-visual-icon"><img src="lock-icon.png" alt="" aria-hidden="true"></div>
 
       <p class="eyebrow">
         ACESSO RESTRITO
@@ -632,7 +630,7 @@
 
 
         <button class="admin-option" id="payments-option">
-          <strong>💳 Pagamentos</strong>
+          <strong><img src="pix-icon.png" class="pix-inline-icon" alt="" aria-hidden="true"> Pagamentos</strong>
           <p>
             Conferir pagamentos e confirmar pedidos.
           </p>
@@ -2947,9 +2945,7 @@ async function loadPayments(){
     list.innerHTML =
       `<div class="empty-products">
 
-        <div style="font-size:40px">
-          💳
-        </div>
+        <div class="admin-visual-icon"><img src="pix-icon.png" alt="Pix" aria-hidden="true"></div>
 
         <p>
           Nenhum pagamento aguardando confirmação.
@@ -3006,7 +3002,7 @@ async function loadPayments(){
       document.createElement("h3");
 
     title.textContent =
-      `💳 Pedido #${order.id.slice(0,8)}`;
+      `Pedido #${order.id.slice(0,8)}`;
 
 
     const date =
