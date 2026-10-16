@@ -7165,7 +7165,29 @@ body.theme-light .guest-review-form textarea{background:#fff !important;color:#1
 }
 #product-grid::-webkit-scrollbar{width:7px}
 #product-grid::-webkit-scrollbar-thumb{background:rgba(73,194,220,.48);border-radius:10px}
-@media(max-width:760px){#product-grid{max-height:72vh !important;padding:8px !important;gap:10px !important}}
+@media(max-width:760px){
+  #product-grid{
+    height:min(68dvh, 680px) !important;
+    max-height:min(68dvh, 680px) !important;
+    min-height:360px !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior:contain !important;
+    touch-action:pan-y !important;
+    align-content:start !important;
+    scrollbar-width:thin !important;
+    padding:8px !important;
+    gap:10px !important;
+  }
+}
+@media(max-width:420px){
+  #product-grid{
+    height:min(66dvh, 560px) !important;
+    max-height:min(66dvh, 560px) !important;
+    min-height:330px !important;
+  }
+}
 
 
 /* v1079 — brilho branco percorre horizontalmente o contorno visual do banner, sem deslocamento vertical */
@@ -8976,9 +8998,10 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
 
 
 /* THOUNE v1120 — rolagem interna do catálogo no desktop.
-   No computador, somente o painel das marretas rola; no mobile,
+   No computador, somente o painel das marretas rola; em telas de celular/tablet,
+   inclusive quando o navegador estiver em “versão para computador”,
    o catálogo continua acompanhando a rolagem normal da página. */
-@media (min-width: 761px) and (hover: hover) and (pointer: fine) {
+@media (min-width: 901px) and (hover: hover) and (pointer: fine) {
   #product-grid {
     height: min(72vh, 760px) !important;
     max-height: min(72vh, 760px) !important;
@@ -9004,7 +9027,7 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   #product-grid {
     height: auto !important;
     max-height: none !important;
@@ -9019,7 +9042,7 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
 /* THOUNE v1121 — cards completos dentro do painel com rolagem desktop.
    Impede que a altura fixa do painel comprima o conteúdo dos cards
    (nome, preço e botão) deixando somente a imagem visível. */
-@media (min-width: 761px) and (hover: hover) and (pointer: fine) {
+@media (min-width: 901px) and (hover: hover) and (pointer: fine) {
   #product-grid {
     align-content: start !important;
     grid-auto-rows: max-content !important;

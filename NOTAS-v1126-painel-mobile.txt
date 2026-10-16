@@ -1,0 +1,7 @@
+THOUNE STORE v1126 — PAINEL DE MARRETAS NO CELULAR
+
+- Mantém o painel com rolagem própria também em telas mobile.
+- O painel usa altura definida em viewport para garantir overflow real.
+- Mantém rolagem por toque com -webkit-overflow-scrolling.
+- Mantém overscroll-behavior para evitar que o gesto escape para a página ao chegar nas bordas.
+- Não altera Pix, carrinho, checkout, fila, estoque, avaliações ou dados dos produtos.
