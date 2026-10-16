@@ -9028,13 +9028,41 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
 }
 
 @media (max-width: 900px) {
+  /* No celular/tablet, o catálogo também é um painel independente.
+     A página continua rolando normalmente fora dele, enquanto os produtos
+     rolam por toque dentro deste painel. */
   #product-grid {
+    height: min(68vh, 620px) !important;
+    max-height: min(68vh, 620px) !important;
+    min-height: 360px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+    scrollbar-gutter: stable !important;
+    align-content: start !important;
+    grid-auto-rows: max-content !important;
+    content-visibility: visible !important;
+  }
+
+  #product-grid::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  #product-grid::-webkit-scrollbar-track {
+    background: rgba(8, 28, 36, .16);
+    border-radius: 10px;
+  }
+
+  #product-grid::-webkit-scrollbar-thumb {
+    background: rgba(73, 194, 220, .58);
+    border-radius: 10px;
+  }
+
+  #product-grid .product-card {
     height: auto !important;
-    max-height: none !important;
     min-height: 0 !important;
-    overflow: visible !important;
-    overscroll-behavior: auto !important;
-    scrollbar-gutter: auto !important;
   }
 }
 

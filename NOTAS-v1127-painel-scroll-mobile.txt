@@ -1,0 +1,5 @@
+THOUNE v1127 — painel de catálogo com rolagem própria também no celular.
+
+O #product-grid agora possui altura limitada e overflow-y:auto em telas de até 900px,
+com suporte a toque, overscroll-behavior: contain e -webkit-overflow-scrolling: touch.
+A rolagem própria do desktop foi preservada.
