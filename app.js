@@ -611,17 +611,14 @@ function renderGuestPaymentRejectedPanel(orderId, reason = "O pagamento não foi
       <h2 style="margin:8px 0;">Precisamos do Pix para fazer a entrega</h2>
       <p>${escapeHtml(reason)}</p>
       <div class="manual-delivery-notice" style="text-align:left;border:1px solid rgba(240,140,80,.35);background:rgba(240,140,80,.08);border-radius:14px;padding:14px;margin:16px 0;">
-        <strong>💳 Faça o pagamento e envie o comprovante</strong>
-        <p style="margin:8px 0 0;">Se você já pagou, envie uma foto do comprovante abaixo para a loja conferir.</p>
+        <strong>💳 Faça o pagamento via Pix</strong>
+        <p style="margin:8px 0 0;">Confira o valor e use a chave ou o QR Code abaixo para realizar o pagamento.</p>
       </div>
-      <div class="proof-upload-box">
-        <input type="file" id="guest-proof-file" accept="image/png,image/jpeg,image/webp" class="proof-file-input">
-        <button type="button" class="primary-button full" id="guest-proof-send">Enviar comprovante</button>
-        <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
-      </div>
+      <div class="pix-visual"><img src="pix-qr.png" alt="QR Code para pagamento via Pix" class="pix-qr" width="260" height="260"></div>
+      <div class="pix-key-box"><span class="pix-key-label">Chave Pix</span><div class="pix-key-row"><strong class="pix-key-value">${escapeHtml(storeSettings.pix_key || "Pix indisponível")}</strong><button type="button" class="secondary-button" id="copy-pix-key-rejected">▤ Copiar</button></div></div>
       <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
     </div>`;
-  $("#guest-proof-send")?.addEventListener("click", () => uploadGuestPaymentProof(orderId));
+  $("#copy-pix-key-rejected")?.addEventListener("click", copyPixKey);
   $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
 }
 

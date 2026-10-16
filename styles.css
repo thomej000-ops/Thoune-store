@@ -8283,9 +8283,7 @@ button, input, select, textarea { max-width:100%; }
 
 /* Respeita preferência de movimento reduzido sem desativar a animação normal das marretas. */
 @media (prefers-reduced-motion:reduce) {
-  .opening-effect *, .thoune-welcome *,
-  #product-grid .product-card .product-image img,
-  .product-grid .product-card .product-image img {
+  .opening-effect *, .thoune-welcome * {
     animation:none !important;
     transition:none !important;
   }
@@ -9083,6 +9081,34 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
   }
 }
 
+
+/* THOUNE v1130 — emojis dos benefícios novamente visíveis */
+.benefit-icon{
+  font-size:32px !important;
+  line-height:1 !important;
+  font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif !important;
+  display:grid !important;
+  place-items:center !important;
+  color:inherit !important;
+  -webkit-text-fill-color:initial !important;
+}
+
+/* A animação das marretas deve aparecer normalmente em qualquer dispositivo.
+   A preferência de movimento reduzido não desliga as imagens do catálogo. */
+#product-grid .product-card .product-image img,
+.product-grid .product-card .product-image img{
+  animation:thouneHammerFloat1130 4.2s ease-in-out infinite !important;
+  transform-origin:center center !important;
+  will-change:transform !important;
+}
+#product-grid .product-card:nth-child(3n + 1) .product-image img{animation-delay:-1.4s !important;}
+#product-grid .product-card:nth-child(3n + 2) .product-image img{animation-delay:-2.8s !important;}
+@keyframes thouneHammerFloat1130{
+  0%,100%{transform:translate3d(0,0,0) rotate(0deg);}
+  25%{transform:translate3d(0,-3px,0) rotate(.45deg);}
+  50%{transform:translate3d(0,-8px,0) rotate(0deg);}
+  75%{transform:translate3d(0,-3px,0) rotate(-.45deg);}
+}
 
 /* THOUNE v1129 — foto da aba de avaliação */
 .guest-review-snoopy{
