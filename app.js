@@ -23,7 +23,6 @@ let catalogVisibleLimit = 10;
 let catalogScrollBound = false;
 const GUEST_VOTER_KEY = "thoune-review-voter-v1043";
 let queuePreviewTimer = null;
-let checkoutTikTokProfile = { username: "", displayName: "", profileUrl: "", avatarUrl: "" };
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -425,71 +424,6 @@ function stopQueuePreviewPolling() {
 }
 
 
-function normalizeTikTokUsername(value) {
-  return String(value || "")
-    .trim()
-    .replace(/^https?:\/\/(www\.)?tiktok\.com\/@?/i, "")
-    .replace(/^@+/, "")
-    .replace(/[?#/].*$/, "")
-    .trim();
-}
-
-async function verifyCheckoutTikTok() {
-  const input = $("#checkout-tiktok");
-  const box = $("#checkout-tiktok-profile");
-  const button = $("#checkout-tiktok-check");
-  const username = normalizeTikTokUsername(input?.value);
-  if (!username) {
-    if (box) { box.innerHTML = `<div class="tiktok-check-message error">Digite seu @ do TikTok para verificar.</div>`; box.classList.remove("hidden"); }
-    return;
-  }
-
-  if (button) { button.disabled = true; button.textContent = "Verificando..."; }
-  if (box) { box.innerHTML = `<div class="tiktok-check-message">Consultando o perfil no TikTok...</div>`; box.classList.remove("hidden"); }
-
-  try {
-    // O oEmbed é um endpoint oficial do TikTok para perfis públicos.
-    // Ele confirma se o perfil existe e retorna o nome público, sem exigir login.
-    const profileUrl = `https://www.tiktok.com/@${encodeURIComponent(username)}`;
-    const endpoint = `https://www.tiktok.com/oembed?url=${encodeURIComponent(profileUrl)}`;
-    const response = await fetch(endpoint, { headers: { "Accept": "application/json" } });
-    if (!response.ok) throw new Error("Perfil não encontrado");
-    const data = await response.json();
-    const displayName = normalizeText(data?.author_name) || `@${username}`;
-    const canonicalUrl = data?.author_url || profileUrl;
-    checkoutTikTokProfile = {
-      username,
-      displayName,
-      profileUrl: canonicalUrl,
-      avatarUrl: ""
-    };
-    if (input) input.value = `@${username}`;
-    if (box) {
-      box.innerHTML = `
-        <div class="tiktok-profile-card">
-          <span class="tiktok-profile-avatar"><img src="tiktok-logo.png" alt="TikTok"></span>
-          <div class="tiktok-profile-info">
-            <strong>${escapeHtml(displayName)}</strong>
-            <span>@${escapeHtml(username)}</span>
-            <small>Perfil encontrado no TikTok ✓</small>
-          </div>
-          <a href="${escapeHtml(canonicalUrl)}" target="_blank" rel="noopener noreferrer" class="tiktok-profile-open">Abrir</a>
-        </div>
-        <div class="tiktok-confirm-note">Confira o @ acima. Esse TikTok será usado para contato sobre o pedido.</div>`;
-      box.classList.remove("hidden");
-    }
-  } catch (error) {
-    console.warn("TikTok profile lookup:", error);
-    checkoutTikTokProfile = { username: "", displayName: "", profileUrl: "", avatarUrl: "" };
-    if (box) {
-      box.innerHTML = `<div class="tiktok-check-message warning">Não conseguimos consultar o perfil agora. Você ainda pode continuar: confira se o @ está correto, pois o TikTok é nosso único canal de atendimento.</div>`;
-      box.classList.remove("hidden");
-    }
-  } finally {
-    if (button) { button.disabled = false; button.textContent = "Verificar"; }
-  }
-}
-
 async function createGuestOrder() {
   if (!storeSettings.online) return setMessage($("#checkout-message"), "A loja está offline no momento.", "error");
   const cart = loadCart();
@@ -531,17 +465,6 @@ async function createGuestOrder() {
   const orderId = typeof data === "string" ? data : data?.order_id || data?.id;
   const total = Number(data?.total);
   if (!orderId) return setMessage($("#checkout-message"), "Não foi possível identificar o pedido. Tente novamente.", "error");
-
-  if (checkoutTikTokProfile.username && checkoutTikTokProfile.username.toLowerCase() === normalizeTikTokUsername(tiktokUsername).toLowerCase()) {
-    const profileSave = await supabaseClient.rpc("update_guest_tiktok_profile", {
-      p_order_id: orderId,
-      p_tiktok_username: checkoutTikTokProfile.username,
-      p_tiktok_display_name: checkoutTikTokProfile.displayName,
-      p_tiktok_profile_url: checkoutTikTokProfile.profileUrl,
-      p_tiktok_avatar: checkoutTikTokProfile.avatarUrl || null
-    });
-    if (profileSave.error) console.warn("update_guest_tiktok_profile:", profileSave.error);
-  }
 
   let queuePosition = null;
   try {
@@ -636,12 +559,16 @@ async function cancelGuestOrder(orderId, { silent = false } = {}) {
   const button = $("#guest-cancel-order") || $("#guest-cancel-rejected-order");
   if (button) { button.disabled = true; button.textContent = "Cancelando pedido..."; }
 
+  // Fechamos a interface assim que o pedido for aceito pelo RPC.
+  // Isso evita que o painel fique preso em “Cancelando pedido...” em celulares
+  // mesmo quando o Supabase já atualizou o pedido.
   let result;
   try {
     result = await supabaseClient.rpc("cancel_guest_order", { p_order_id: orderId });
   } catch (rpcError) {
     result = { data: null, error: rpcError };
   }
+
   const data = result?.data;
   const error = result?.error;
   if (error || data?.success === false) {
@@ -663,13 +590,18 @@ async function cancelGuestOrder(orderId, { silent = false } = {}) {
 
   localStorage.removeItem("thoune-pending-guest-order");
   stopGuestOrderStatusPolling();
-  closePanel($("#checkout-section"));
-  // Garante que o bloqueio visual do overlay seja removido mesmo se o clique ocorreu
-  // enquanto o painel estava sendo atualizado pelo polling.
-  $("#checkout-section")?.classList.remove("open");
-  $("#checkout-section")?.classList.add("hidden");
-  syncOverlayLock();
   guestOrderCancelInProgress = false;
+
+  // Fechamento forçado do painel para não depender de CSS/polling.
+  const checkout = $("#checkout-section");
+  if (checkout) {
+    checkout.classList.remove("open");
+    checkout.classList.add("hidden");
+    checkout.setAttribute("aria-hidden", "true");
+    checkout.style.display = "none";
+    window.setTimeout(() => { checkout.style.display = ""; }, 0);
+  }
+  syncOverlayLock();
   if (!silent) toast("Pedido cancelado. Você já pode fazer uma nova compra.");
   return true;
 }
@@ -1143,8 +1075,6 @@ function setupEvents() {
   $("#checkout-back")?.addEventListener("click", () => { stopQueuePreviewPolling(); handleGuestPixExit({ openCartAfter: true }); });
   $("#copy-pix-key-button")?.addEventListener("click", copyPixKey);
   $("#confirm-order-button")?.addEventListener("click", createGuestOrder);
-  $("#checkout-tiktok-check")?.addEventListener("click", verifyCheckoutTikTok);
-  $("#checkout-tiktok")?.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); verifyCheckoutTikTok(); } });
   $("#close-product-modal")?.addEventListener("click", () => closePanel($("#product-modal")));
   $$('[data-close-product-modal]').forEach(b => b.addEventListener("click", () => closePanel($("#product-modal"))));
   $("#open-favorites-panel")?.addEventListener("click", () => { renderFavoritesPanel(); openPanel($("#favorites-panel")); });
