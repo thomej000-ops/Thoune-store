@@ -556,9 +556,35 @@ async function handleGuestPixExit({ openCartAfter = false } = {}) {
   if (openCartAfter) openCart();
 }
 
+function getCancelledGuestOrderIds() {
+  try {
+    return new Set(JSON.parse(sessionStorage.getItem("thoune-cancelled-guest-orders") || "[]"));
+  } catch (_) {
+    return new Set();
+  }
+}
+
+function markGuestOrderCancelledLocally(orderId) {
+  const ids = getCancelledGuestOrderIds();
+  ids.add(String(orderId));
+  sessionStorage.setItem("thoune-cancelled-guest-orders", JSON.stringify([...ids]));
+}
+
+function wasGuestOrderCancelledLocally(orderId) {
+  return getCancelledGuestOrderIds().has(String(orderId));
+}
+
+function isCurrentGuestOrder(orderId) {
+  return String(localStorage.getItem("thoune-pending-guest-order") || "") === String(orderId) && !wasGuestOrderCancelledLocally(orderId);
+}
+
 async function cancelGuestOrder(orderId, { silent = false } = {}) {
   if (!orderId) return false;
   if (!silent && !window.confirm("Deseja cancelar este pedido? Ele sairá da fila e você poderá fazer uma nova compra. Se você já pagou o Pix, não cancele: envie o comprovante e solicite a verificação.")) return false;
+
+  // Marca como cancelado localmente antes de qualquer resposta assíncrona.
+  // Isso impede que uma consulta antiga do polling reabra o painel depois do cancelamento.
+  markGuestOrderCancelledLocally(orderId);
 
   // Cancela a sessão local IMEDIATAMENTE. Assim o pedido antigo nunca
   // reaparece quando o cliente iniciar uma nova compra, mesmo enquanto
@@ -794,8 +820,10 @@ function stopGuestOrderStatusPolling() {
 }
 
 async function pollGuestOrderStatus(orderId) {
-  if (guestOrderCancelInProgress) return;
+  if (guestOrderCancelInProgress || !isCurrentGuestOrder(orderId)) return;
   const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
+  // A resposta pode chegar depois que o cliente já cancelou. Nunca reabra o painel nesse caso.
+  if (guestOrderCancelInProgress || !isCurrentGuestOrder(orderId)) return;
   if (error) { console.error("get_guest_order_status:", error); return; }
   if (!data?.found) { localStorage.removeItem("thoune-pending-guest-order"); stopGuestOrderStatusPolling(); return; }
   const status = String(data.status || "");
@@ -830,8 +858,12 @@ function startGuestOrderStatusPolling(orderId) {
 
 async function restoreGuestOrderStatus() {
   const orderId = localStorage.getItem("thoune-pending-guest-order");
-  if (!orderId) return;
+  if (!orderId || wasGuestOrderCancelledLocally(orderId)) {
+    if (orderId && wasGuestOrderCancelledLocally(orderId)) localStorage.removeItem("thoune-pending-guest-order");
+    return;
+  }
   const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
+  if (!isCurrentGuestOrder(orderId)) return;
   if (error || !data?.found) return;
   const status = String(data.status || "");
   if (status === "awaiting_payment") {
