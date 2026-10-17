@@ -557,45 +557,21 @@ async function handleGuestPixExit({ openCartAfter = false } = {}) {
 }
 
 async function cancelGuestOrder(orderId, { silent = false } = {}) {
+  if (!orderId) return false;
   if (!silent && !window.confirm("Deseja cancelar este pedido? Ele sairá da fila e você poderá fazer uma nova compra. Se você já pagou o Pix, não cancele: envie o comprovante e solicite a verificação.")) return false;
 
+  // Cancela a sessão local IMEDIATAMENTE. Assim o pedido antigo nunca
+  // reaparece quando o cliente iniciar uma nova compra, mesmo enquanto
+  // o Supabase termina a operação em segundo plano.
+  const currentPending = localStorage.getItem("thoune-pending-guest-order");
+  if (currentPending === String(orderId)) {
+    localStorage.removeItem("thoune-pending-guest-order");
+  }
+  stopGuestOrderStatusPolling();
   guestOrderCancelInProgress = true;
-  stopGuestOrderStatusPolling();
 
-  const button = $("#guest-cancel-order") || $("#guest-cancel-rejected-order");
-  if (button) { button.disabled = true; button.textContent = "Cancelando pedido..."; }
-
-  let result;
-  try {
-    result = await supabaseClient.rpc("cancel_guest_order", { p_order_id: orderId });
-  } catch (rpcError) {
-    result = { data: null, error: rpcError };
-  }
-  const data = result?.data;
-  const error = result?.error;
-  if (error || data?.success === false) {
-    console.error("cancel_guest_order:", error || data);
-    guestOrderCancelInProgress = false;
-    if (button) {
-      button.disabled = false;
-      button.textContent = button.id === "guest-cancel-rejected-order"
-        ? "❌ Não vou pagar — cancelar pedido"
-        : "Não fiz o Pix e desejo cancelar este pedido";
-    }
-    if (!silent) {
-      const detail = data?.message || error?.message || "Não foi possível cancelar o pedido. Tente novamente.";
-      setMessage($("#guest-order-message") || $("#guest-proof-message"), detail, "error");
-      toast(detail, "error");
-    }
-    return false;
-  }
-
-  localStorage.removeItem("thoune-pending-guest-order");
-  stopGuestOrderStatusPolling();
-  guestOrderCancelInProgress = false;
-
-  // Fecha o checkout de todas as formas, inclusive se o painel foi
-  // re-renderizado enquanto a chamada RPC estava acontecendo.
+  // Fecha o painel imediatamente. Não deixa o cliente preso em
+  // "Cancelando pedido..." nem bloqueia uma nova compra.
   const checkoutPanel = $("#checkout-section");
   if (checkoutPanel) {
     checkoutPanel.classList.remove("open");
@@ -605,6 +581,38 @@ async function cancelGuestOrder(orderId, { silent = false } = {}) {
   document.body.classList.remove("overlay-lock");
   closeAllPanels();
   document.body.classList.remove("overlay-lock");
+
+  // A confirmação no banco acontece em segundo plano. Tentamos duas vezes
+  // para evitar que uma falha momentânea deixe o pedido pendurado.
+  let lastError = null;
+  let success = false;
+  for (let attempt = 0; attempt < 2 && !success; attempt++) {
+    try {
+      const result = await supabaseClient.rpc("cancel_guest_order", { p_order_id: orderId });
+      const data = result?.data;
+      const error = result?.error;
+      if (!error && data?.success !== false) {
+        success = true;
+        break;
+      }
+      lastError = error || new Error(data?.message || "Não foi possível cancelar o pedido.");
+    } catch (rpcError) {
+      lastError = rpcError;
+    }
+    if (!success && attempt === 0) await new Promise(resolve => setTimeout(resolve, 500));
+  }
+
+  guestOrderCancelInProgress = false;
+
+  if (!success) {
+    console.error("cancel_guest_order:", lastError);
+    // Mantém o pedido fora da sessão local para que ele não bloqueie uma
+    // nova compra. A rotina de restauração também tentará cancelar pedidos
+    // antigos que ainda estiverem aguardando pagamento.
+    if (!silent) toast("O pedido foi retirado desta tela. Não será reutilizado em uma nova compra.", "error");
+    return false;
+  }
+
   if (!silent) toast("Pedido cancelado. Você já pode fazer uma nova compra.");
   return true;
 }
@@ -827,7 +835,9 @@ async function restoreGuestOrderStatus() {
   if (error || !data?.found) return;
   const status = String(data.status || "");
   if (status === "awaiting_payment") {
-    // Se a página foi reaberta com um checkout Pix pendente, tratamos como abandono.
+    // Pedido antigo pendente: limpa a sessão antes de cancelar no banco,
+    // para nunca reabrir o painel de pagamento em uma nova compra.
+    localStorage.removeItem("thoune-pending-guest-order");
     await cancelGuestOrder(orderId, { silent: true });
     return;
   }
