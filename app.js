@@ -483,6 +483,8 @@ async function createGuestOrder() {
   renderCart([]);
   stopQueuePreviewPolling();
 
+  guestOrderSessionToken += 1;
+  guestOrderCancelInProgress = false;
   localStorage.setItem("thoune-pending-guest-order", orderId);
   renderGuestPixPanel(orderId, Number.isFinite(total) ? total : 0, queuePosition);
   toast(`Pedido #${String(orderId).slice(0,8).toUpperCase()} criado. Agora faça o Pix.`);
@@ -585,6 +587,7 @@ async function cancelGuestOrder(orderId, { silent = false } = {}) {
   // Marca como cancelado localmente antes de qualquer resposta assíncrona.
   // Isso impede que uma consulta antiga do polling reabra o painel depois do cancelamento.
   markGuestOrderCancelledLocally(orderId);
+  const cancelToken = ++guestOrderSessionToken;
 
   // Cancela a sessão local IMEDIATAMENTE. Assim o pedido antigo nunca
   // reaparece quando o cliente iniciar uma nova compra, mesmo enquanto
@@ -607,6 +610,15 @@ async function cancelGuestOrder(orderId, { silent = false } = {}) {
   document.body.classList.remove("overlay-lock");
   closeAllPanels();
   document.body.classList.remove("overlay-lock");
+  // Garantia extra: o checkout é desmontado visualmente antes de qualquer RPC.
+  // Assim o cliente pode voltar ao catálogo/carrinho sem precisar atualizar a página.
+  if (checkoutPanel) {
+    checkoutPanel.classList.remove("open");
+    checkoutPanel.classList.add("hidden");
+    checkoutPanel.setAttribute("aria-hidden", "true");
+    const checkoutContent = checkoutPanel.querySelector(".checkout-content");
+    if (checkoutContent) checkoutContent.innerHTML = "";
+  }
 
   // A confirmação no banco acontece em segundo plano. Tentamos duas vezes
   // para evitar que uma falha momentânea deixe o pedido pendurado.
@@ -628,7 +640,7 @@ async function cancelGuestOrder(orderId, { silent = false } = {}) {
     if (!success && attempt === 0) await new Promise(resolve => setTimeout(resolve, 500));
   }
 
-  guestOrderCancelInProgress = false;
+  if (cancelToken === guestOrderSessionToken) guestOrderCancelInProgress = false;
 
   if (!success) {
     console.error("cancel_guest_order:", lastError);
@@ -811,6 +823,7 @@ function renderGuestDeliveryPanel(order) {
 
 let guestOrderStatusTimer = null;
 let guestOrderCancelInProgress = false;
+let guestOrderSessionToken = 0;
 
 function stopGuestOrderStatusPolling() {
   if (guestOrderStatusTimer) {
@@ -820,10 +833,11 @@ function stopGuestOrderStatusPolling() {
 }
 
 async function pollGuestOrderStatus(orderId) {
+  const requestToken = guestOrderSessionToken;
   if (guestOrderCancelInProgress || !isCurrentGuestOrder(orderId)) return;
   const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
-  // A resposta pode chegar depois que o cliente já cancelou. Nunca reabra o painel nesse caso.
-  if (guestOrderCancelInProgress || !isCurrentGuestOrder(orderId)) return;
+  // Uma resposta antiga nunca pode reabrir o checkout depois de cancelar ou iniciar outro pedido.
+  if (requestToken !== guestOrderSessionToken || guestOrderCancelInProgress || !isCurrentGuestOrder(orderId)) return;
   if (error) { console.error("get_guest_order_status:", error); return; }
   if (!data?.found) { localStorage.removeItem("thoune-pending-guest-order"); stopGuestOrderStatusPolling(); return; }
   const status = String(data.status || "");
@@ -857,13 +871,14 @@ function startGuestOrderStatusPolling(orderId) {
 }
 
 async function restoreGuestOrderStatus() {
+  const restoreToken = guestOrderSessionToken;
   const orderId = localStorage.getItem("thoune-pending-guest-order");
   if (!orderId || wasGuestOrderCancelledLocally(orderId)) {
     if (orderId && wasGuestOrderCancelledLocally(orderId)) localStorage.removeItem("thoune-pending-guest-order");
     return;
   }
   const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
-  if (!isCurrentGuestOrder(orderId)) return;
+  if (restoreToken !== guestOrderSessionToken || !isCurrentGuestOrder(orderId)) return;
   if (error || !data?.found) return;
   const status = String(data.status || "");
   if (status === "awaiting_payment") {
