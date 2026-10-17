@@ -1,0 +1,8 @@
+Thoune Store v1136
+
+- Voltou ao checkout anterior ao TikTok: o cliente informa o @ normalmente, sem botão/consulta "Verificar".
+- Mantido o envio de comprovante Pix, incluindo HEIC/HEIF.
+- Corrigido cancelamento do pedido: a função não grava mais payments.status = 'cancelled', evitando o erro payments_status_check.
+- Cancelamento permitido em awaiting_payment e payment_rejected, desde que nenhum comprovante tenha sido enviado.
+- Depois de cancelar, o painel fecha e o pedido é removido da fila.
+- Nenhuma mudança no restante do catálogo, estoque infinito, fila, avaliações ou checkout.
