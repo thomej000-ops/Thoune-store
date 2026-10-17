@@ -611,13 +611,12 @@ async function cancelGuestOrder(orderId, { silent = false } = {}) {
   closeAllPanels();
   document.body.classList.remove("overlay-lock");
   // Garantia extra: o checkout é desmontado visualmente antes de qualquer RPC.
-  // Assim o cliente pode voltar ao catálogo/carrinho sem precisar atualizar a página.
+  // Importante: NÃO removemos o HTML original de .checkout-content aqui.
+  // O mesmo painel precisa poder ser aberto novamente sem recarregar a página.
   if (checkoutPanel) {
     checkoutPanel.classList.remove("open");
     checkoutPanel.classList.add("hidden");
     checkoutPanel.setAttribute("aria-hidden", "true");
-    const checkoutContent = checkoutPanel.querySelector(".checkout-content");
-    if (checkoutContent) checkoutContent.innerHTML = "";
   }
 
   // A confirmação no banco acontece em segundo plano. Tentamos duas vezes
