@@ -719,9 +719,9 @@ function renderGuestPaymentRejectedPanel(orderId, reason = "O pagamento não foi
         <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
       </div>
       <button type="button" class="primary-button full" id="guest-payment-done" disabled style="margin-top:8px;opacity:.55;">Já fiz o Pix — verificar pagamento</button>
-      <div class="manual-delivery-notice" role="note" style="text-align:left;border:1px solid rgba(95,205,219,.25);background:rgba(6,26,34,.55);border-radius:14px;padding:14px;margin:16px 0 0;">
-        <strong>💡 Não quer continuar?</strong>
-        <p style="margin:8px 0 0;">Se você ainda não fez o Pix e não enviou comprovante, pode cancelar este pedido e voltar para a loja. Depois você poderá fazer uma nova compra normalmente.</p>
+      <div class="manual-delivery-notice" role="note" style="text-align:left;border:1px solid rgba(255,190,70,.55);background:rgba(255,170,40,.10);border-radius:14px;padding:14px;margin:16px 0 0;box-shadow:0 0 12px rgba(255,170,40,.10);">
+        <strong>⚠️ Atenção antes de cancelar</strong>
+        <p style="margin:8px 0 0;">Se cancelar este pedido e quiser realizar uma nova compra, atualize o site primeiro. Sem atualizar, o painel de pagamento deste pedido poderá aparecer novamente.</p>
       </div>
       <button type="button" class="secondary-button full" id="guest-cancel-rejected-order" style="margin-top:10px;border-color:#d9534f;color:#d9534f;">❌ Não vou pagar — cancelar pedido</button>
       <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
