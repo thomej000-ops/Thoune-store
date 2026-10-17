@@ -1,0 +1,10 @@
+Thoune Store v1134
+
+CORREÇÕES:
+- O painel de pagamento recusado agora também mostra o envio de comprovante Pix.
+- Depois de enviar o comprovante, o botão "Já fiz o Pix — verificar pagamento" é liberado.
+- O comprovante enviado após uma rejeição devolve o pedido para awaiting_verification pelo SQL já existente.
+- O cancelamento foi reforçado para interromper o polling antes da RPC e fechar o painel definitivamente após o cancelamento.
+- Mantidos Pix, fila, estoque infinito, checkout, TikTok, avaliações e demais funções da v1133.
+
+SQL adicional: nenhum. O SQL v1131/v1132 já usado continua compatível.

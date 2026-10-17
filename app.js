@@ -595,6 +595,12 @@ function renderGuestPixPanel(orderId, total, queuePosition = null) {
       <p class="checkout-message" id="guest-order-message" aria-live="polite"></p>
     </div>`;
   $("#copy-pix-key-success")?.addEventListener("click", copyPixKey);
+  bindGuestProofControls(orderId);
+  $("#guest-cancel-order")?.addEventListener("click", () => cancelGuestOrder(orderId));
+  $("#guest-finish")?.addEventListener("click", () => handleGuestPixExit());
+}
+
+function bindGuestProofControls(orderId) {
   $("#guest-proof-file")?.addEventListener("change", () => {
     const file = $("#guest-proof-file")?.files?.[0];
     const preview = $("#guest-proof-preview");
@@ -606,8 +612,6 @@ function renderGuestPixPanel(orderId, total, queuePosition = null) {
   });
   $("#guest-proof-send")?.addEventListener("click", () => uploadGuestPaymentProof(orderId));
   $("#guest-payment-done")?.addEventListener("click", () => requestGuestPaymentVerification(orderId));
-  $("#guest-cancel-order")?.addEventListener("click", () => cancelGuestOrder(orderId));
-  $("#guest-finish")?.addEventListener("click", () => handleGuestPixExit());
 }
 
 async function handleGuestPixExit({ openCartAfter = false } = {}) {
@@ -625,18 +629,31 @@ async function handleGuestPixExit({ openCartAfter = false } = {}) {
 
 async function cancelGuestOrder(orderId, { silent = false } = {}) {
   if (!silent && !window.confirm("Deseja cancelar este pedido? Ele sairá da fila e você poderá fazer uma nova compra. Se você já pagou o Pix, não cancele: envie o comprovante e solicite a verificação.")) return false;
-  const button = $("#guest-cancel-order");
+
+  guestOrderCancelInProgress = true;
+  stopGuestOrderStatusPolling();
+
+  const button = $("#guest-cancel-order") || $("#guest-cancel-rejected-order");
   if (button) { button.disabled = true; button.textContent = "Cancelando pedido..."; }
+
   const { data, error } = await supabaseClient.rpc("cancel_guest_order", { p_order_id: orderId });
   if (error || data?.success === false) {
     console.error("cancel_guest_order:", error || data);
-    if (button) { button.disabled = false; button.textContent = "Não fiz o Pix e desejo cancelar este pedido"; }
+    guestOrderCancelInProgress = false;
+    if (button) { button.disabled = false; button.textContent = button.id === "guest-cancel-rejected-order" ? "❌ Não vou pagar — cancelar pedido" : "Não fiz o Pix e desejo cancelar este pedido"; }
     if (!silent) setMessage($("#guest-order-message") || $("#guest-proof-message"), data?.message || error?.message || "Não foi possível cancelar o pedido. Tente novamente.", "error");
     return false;
   }
+
   localStorage.removeItem("thoune-pending-guest-order");
   stopGuestOrderStatusPolling();
   closePanel($("#checkout-section"));
+  // Garante que o bloqueio visual do overlay seja removido mesmo se o clique ocorreu
+  // enquanto o painel estava sendo atualizado pelo polling.
+  $("#checkout-section")?.classList.remove("open");
+  $("#checkout-section")?.classList.add("hidden");
+  syncOverlayLock();
+  guestOrderCancelInProgress = false;
   if (!silent) toast("Pedido cancelado. Você já pode fazer uma nova compra.");
   return true;
 }
@@ -697,6 +714,15 @@ function renderGuestPaymentRejectedPanel(orderId, reason = "O pagamento não foi
       </div>
       <div class="pix-visual"><img src="pix-qr.png" alt="QR Code para pagamento via Pix" class="pix-qr" width="260" height="260"></div>
       <div class="pix-key-box"><span class="pix-key-label">Chave Pix</span><div class="pix-key-row"><strong class="pix-key-value">${escapeHtml(storeSettings.pix_key || "Pix indisponível")}</strong><button type="button" class="secondary-button" id="copy-pix-key-rejected">▤ Copiar</button></div></div>
+      <div class="proof-upload-box" style="text-align:left;margin:16px 0;">
+        <strong>📷 Já fez o Pix? Envie o comprovante</strong>
+        <p>Se você já realizou o pagamento, escolha a imagem do comprovante na galeria e envie aqui. Depois toque em “Já fiz o Pix — verificar pagamento”.</p>
+        <input type="file" id="guest-proof-file" accept="image/*" class="proof-file-input">
+        <div id="guest-proof-preview" style="margin-top:10px;"></div>
+        <button type="button" class="secondary-button full" id="guest-proof-send" style="margin-top:10px;">Enviar comprovante</button>
+        <p class="checkout-message" id="guest-proof-message" aria-live="polite"></p>
+      </div>
+      <button type="button" class="primary-button full" id="guest-payment-done" disabled style="margin-top:8px;opacity:.55;">Já fiz o Pix — verificar pagamento</button>
       <div class="manual-delivery-notice" role="note" style="text-align:left;border:1px solid rgba(95,205,219,.25);background:rgba(6,26,34,.55);border-radius:14px;padding:14px;margin:16px 0 0;">
         <strong>💡 Não quer continuar?</strong>
         <p style="margin:8px 0 0;">Se você ainda não fez o Pix e não enviou comprovante, pode cancelar este pedido e voltar para a loja. Depois você poderá fazer uma nova compra normalmente.</p>
@@ -705,6 +731,7 @@ function renderGuestPaymentRejectedPanel(orderId, reason = "O pagamento não foi
       <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
     </div>`;
   $("#copy-pix-key-rejected")?.addEventListener("click", copyPixKey);
+  bindGuestProofControls(orderId);
   $("#guest-cancel-rejected-order")?.addEventListener("click", () => cancelGuestOrder(orderId));
   $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
 }
@@ -798,6 +825,7 @@ function renderGuestDeliveryPanel(order) {
 }
 
 let guestOrderStatusTimer = null;
+let guestOrderCancelInProgress = false;
 
 function stopGuestOrderStatusPolling() {
   if (guestOrderStatusTimer) {
@@ -807,6 +835,7 @@ function stopGuestOrderStatusPolling() {
 }
 
 async function pollGuestOrderStatus(orderId) {
+  if (guestOrderCancelInProgress) return;
   const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
   if (error) { console.error("get_guest_order_status:", error); return; }
   if (!data?.found) { localStorage.removeItem("thoune-pending-guest-order"); stopGuestOrderStatusPolling(); return; }
