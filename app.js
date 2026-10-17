@@ -358,9 +358,6 @@ function renderCheckout() {
   if ($("#checkout-total")) $("#checkout-total").textContent = money(total);
   if ($("#checkout-pix-key")) $("#checkout-pix-key").textContent = storeSettings.pix_key || "Pix indisponível";
   if ($("#checkout-tiktok")) $("#checkout-tiktok").value = "";
-  checkoutTikTokProfile = { username: "", displayName: "", profileUrl: "", avatarUrl: "" };
-  const tiktokProfileBox = $("#checkout-tiktok-profile");
-  if (tiktokProfileBox) { tiktokProfileBox.innerHTML = ""; tiktokProfileBox.classList.add("hidden"); }
   if ($("#checkout-roblox")) $("#checkout-roblox").value = "";
   if ($("#checkout-pix-name")) $("#checkout-pix-name").value = "";
   setMessage($("#checkout-message"), "");
@@ -423,6 +420,15 @@ function stopQueuePreviewPolling() {
   }
 }
 
+
+function normalizeTikTokUsername(value) {
+  return String(value || "")
+    .trim()
+    .replace(/^https?:\/\/(www\.)?tiktok\.com\/@?/i, "")
+    .replace(/^@+/, "")
+    .replace(/[?#/].*$/, "")
+    .trim();
+}
 
 async function createGuestOrder() {
   if (!storeSettings.online) return setMessage($("#checkout-message"), "A loja está offline no momento.", "error");
@@ -559,16 +565,12 @@ async function cancelGuestOrder(orderId, { silent = false } = {}) {
   const button = $("#guest-cancel-order") || $("#guest-cancel-rejected-order");
   if (button) { button.disabled = true; button.textContent = "Cancelando pedido..."; }
 
-  // Fechamos a interface assim que o pedido for aceito pelo RPC.
-  // Isso evita que o painel fique preso em “Cancelando pedido...” em celulares
-  // mesmo quando o Supabase já atualizou o pedido.
   let result;
   try {
     result = await supabaseClient.rpc("cancel_guest_order", { p_order_id: orderId });
   } catch (rpcError) {
     result = { data: null, error: rpcError };
   }
-
   const data = result?.data;
   const error = result?.error;
   if (error || data?.success === false) {
@@ -592,16 +594,17 @@ async function cancelGuestOrder(orderId, { silent = false } = {}) {
   stopGuestOrderStatusPolling();
   guestOrderCancelInProgress = false;
 
-  // Fechamento forçado do painel para não depender de CSS/polling.
-  const checkout = $("#checkout-section");
-  if (checkout) {
-    checkout.classList.remove("open");
-    checkout.classList.add("hidden");
-    checkout.setAttribute("aria-hidden", "true");
-    checkout.style.display = "none";
-    window.setTimeout(() => { checkout.style.display = ""; }, 0);
+  // Fecha o checkout de todas as formas, inclusive se o painel foi
+  // re-renderizado enquanto a chamada RPC estava acontecendo.
+  const checkoutPanel = $("#checkout-section");
+  if (checkoutPanel) {
+    checkoutPanel.classList.remove("open");
+    checkoutPanel.classList.add("hidden");
+    checkoutPanel.setAttribute("aria-hidden", "true");
   }
-  syncOverlayLock();
+  document.body.classList.remove("overlay-lock");
+  closeAllPanels();
+  document.body.classList.remove("overlay-lock");
   if (!silent) toast("Pedido cancelado. Você já pode fazer uma nova compra.");
   return true;
 }
