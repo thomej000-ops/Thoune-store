@@ -1099,12 +1099,18 @@
 
             <span class="field-label-icon"><span class="tiktok-mini-logo" aria-hidden="true"><img src="tiktok-logo.png" alt=""></span> Usuário do TikTok</span>
 
-            <input
-              id="checkout-tiktok"
-              type="text"
-              placeholder="@seuusuario"
-              autocomplete="off"
-            >
+            <div class="tiktok-check-row">
+              <input
+                id="checkout-tiktok"
+                type="text"
+                placeholder="@seuusuario"
+                autocomplete="off"
+                maxlength="40"
+              >
+              <button type="button" class="secondary-button tiktok-check-button" id="checkout-tiktok-check">Verificar</button>
+            </div>
+            <div id="checkout-tiktok-profile" class="tiktok-profile-check hidden" aria-live="polite"></div>
+            <small class="checkout-tiktok-note">📱 Nosso único canal de atendimento é o TikTok. Informe corretamente seu @ para conseguirmos falar com você se houver qualquer problema com o pedido.</small>
 
           </label>
 
