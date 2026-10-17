@@ -616,9 +616,15 @@ function renderGuestPaymentRejectedPanel(orderId, reason = "O pagamento não foi
       </div>
       <div class="pix-visual"><img src="pix-qr.png" alt="QR Code para pagamento via Pix" class="pix-qr" width="260" height="260"></div>
       <div class="pix-key-box"><span class="pix-key-label">Chave Pix</span><div class="pix-key-row"><strong class="pix-key-value">${escapeHtml(storeSettings.pix_key || "Pix indisponível")}</strong><button type="button" class="secondary-button" id="copy-pix-key-rejected">▤ Copiar</button></div></div>
+      <div class="manual-delivery-notice" role="note" style="text-align:left;border:1px solid rgba(95,205,219,.25);background:rgba(6,26,34,.55);border-radius:14px;padding:14px;margin:16px 0 0;">
+        <strong>💡 Não quer continuar?</strong>
+        <p style="margin:8px 0 0;">Se você ainda não fez o Pix e não enviou comprovante, pode cancelar este pedido e voltar para a loja. Depois você poderá fazer uma nova compra normalmente.</p>
+      </div>
+      <button type="button" class="secondary-button full" id="guest-cancel-rejected-order" style="margin-top:10px;border-color:#d9534f;color:#d9534f;">❌ Não vou pagar — cancelar pedido</button>
       <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
     </div>`;
   $("#copy-pix-key-rejected")?.addEventListener("click", copyPixKey);
+  $("#guest-cancel-rejected-order")?.addEventListener("click", () => cancelGuestOrder(orderId));
   $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
 }
 

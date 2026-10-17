@@ -1,0 +1,9 @@
+Thoune Store v1132 — cancelamento do Pix pendente
+
+- Mantém QR Code, chave Pix e envio de comprovante.
+- A tela de pagamento mantém o botão de cancelar.
+- A tela "Pagamento não recebido" também permite cancelar se nenhum comprovante foi enviado.
+- O cancelamento tira o pedido da fila e marca o pagamento como cancelado.
+- Pedidos cancelados deixam de aparecer na lista principal de pedidos do admin.
+- Se já existe comprovante enviado, o cancelamento é bloqueado para não apagar um pagamento que pode ter sido feito.
+- SQL: supabase_v1132_cancel_pix_order.sql
