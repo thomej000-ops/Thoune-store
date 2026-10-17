@@ -636,12 +636,28 @@ async function cancelGuestOrder(orderId, { silent = false } = {}) {
   const button = $("#guest-cancel-order") || $("#guest-cancel-rejected-order");
   if (button) { button.disabled = true; button.textContent = "Cancelando pedido..."; }
 
-  const { data, error } = await supabaseClient.rpc("cancel_guest_order", { p_order_id: orderId });
+  let result;
+  try {
+    result = await supabaseClient.rpc("cancel_guest_order", { p_order_id: orderId });
+  } catch (rpcError) {
+    result = { data: null, error: rpcError };
+  }
+  const data = result?.data;
+  const error = result?.error;
   if (error || data?.success === false) {
     console.error("cancel_guest_order:", error || data);
     guestOrderCancelInProgress = false;
-    if (button) { button.disabled = false; button.textContent = button.id === "guest-cancel-rejected-order" ? "❌ Não vou pagar — cancelar pedido" : "Não fiz o Pix e desejo cancelar este pedido"; }
-    if (!silent) setMessage($("#guest-order-message") || $("#guest-proof-message"), data?.message || error?.message || "Não foi possível cancelar o pedido. Tente novamente.", "error");
+    if (button) {
+      button.disabled = false;
+      button.textContent = button.id === "guest-cancel-rejected-order"
+        ? "❌ Não vou pagar — cancelar pedido"
+        : "Não fiz o Pix e desejo cancelar este pedido";
+    }
+    if (!silent) {
+      const detail = data?.message || error?.message || "Não foi possível cancelar o pedido. Tente novamente.";
+      setMessage($("#guest-order-message") || $("#guest-proof-message"), detail, "error");
+      toast(detail, "error");
+    }
     return false;
   }
 
