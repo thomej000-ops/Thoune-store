@@ -1,0 +1,14 @@
+THOUNE STORE v1133 — TikTok no checkout
+
+- Adiciona botão "Verificar" ao lado do @ do TikTok.
+- Consulta o perfil público usando o oEmbed oficial do TikTok.
+- Mostra nome público, @ e link para abrir o perfil.
+- A verificação NÃO bloqueia o checkout se o TikTok estiver indisponível.
+- O TikTok continua sendo apenas o canal de atendimento/contato.
+- Salva nome público e URL do perfil no pedido quando a consulta for bem-sucedida.
+- Avaliações aprovadas passam a exibir o nome público quando disponível e um link para o TikTok.
+- Não faz scraping da página do TikTok nem exige login/autorização do cliente.
+- A foto real do perfil não é inventada nem obtida por serviço de terceiros. A coluna tiktok_avatar fica pronta para uma futura integração oficial com Login Kit/Display API, caso desejado.
+
+SQL necessário:
+supabase_v1133_tiktok_profile.sql

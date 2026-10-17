@@ -9126,3 +9126,57 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
 @media (max-width:600px){
   .guest-review-snoopy{width:min(190px,70%);}
 }
+
+/* THOUNE v1133 — conferência simples do TikTok no checkout */
+.tiktok-check-row{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  gap:8px !important;
+  align-items:center !important;
+}
+.tiktok-check-button{
+  min-height:44px !important;
+  white-space:nowrap !important;
+  padding:0 15px !important;
+}
+.checkout-tiktok-note{
+  display:block !important;
+  margin-top:6px !important;
+  color:#88aeb7 !important;
+  font-size:11px !important;
+  line-height:1.45 !important;
+}
+.tiktok-profile-check{margin-top:8px !important;}
+.tiktok-profile-card{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  padding:10px !important;
+  border:1px solid rgba(82,202,216,.24) !important;
+  border-radius:14px !important;
+  background:rgba(45,180,198,.06) !important;
+}
+.tiktok-profile-avatar{
+  width:42px !important;
+  height:42px !important;
+  flex:0 0 42px !important;
+  display:grid !important;
+  place-items:center !important;
+  overflow:hidden !important;
+  border-radius:50% !important;
+  background:#07151a !important;
+}
+.tiktok-profile-avatar img{width:27px !important;height:27px !important;object-fit:contain !important;}
+.tiktok-profile-info{min-width:0 !important;display:grid !important;gap:1px !important;}
+.tiktok-profile-info strong{font-size:13px !important;color:#e7fbff !important;overflow:hidden !important;text-overflow:ellipsis !important;white-space:nowrap !important;}
+.tiktok-profile-info span{font-size:11px !important;color:#9ddce5 !important;}
+.tiktok-profile-info small{font-size:10px !important;color:#72c9d5 !important;}
+.tiktok-profile-open{margin-left:auto !important;font-size:11px !important;font-weight:800 !important;color:#7fe3ed !important;text-decoration:none !important;}
+.tiktok-confirm-note,.tiktok-check-message{margin-top:6px !important;font-size:10px !important;line-height:1.4 !important;color:#8fb0b7 !important;}
+.tiktok-check-message.warning{color:#e6c88b !important;}
+.tiktok-check-message.error{color:#ff9b9b !important;}
+.review-tiktok-link{color:#73d6e2 !important;text-decoration:none !important;font-weight:800 !important;margin-left:3px !important;}
+@media (max-width:520px){
+  .tiktok-check-row{grid-template-columns:1fr !important;}
+  .tiktok-check-button{width:100% !important;}
+}

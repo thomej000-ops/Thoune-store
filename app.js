@@ -23,6 +23,7 @@ let catalogVisibleLimit = 10;
 let catalogScrollBound = false;
 const GUEST_VOTER_KEY = "thoune-review-voter-v1043";
 let queuePreviewTimer = null;
+let checkoutTikTokProfile = { username: "", displayName: "", profileUrl: "", avatarUrl: "" };
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -358,6 +359,9 @@ function renderCheckout() {
   if ($("#checkout-total")) $("#checkout-total").textContent = money(total);
   if ($("#checkout-pix-key")) $("#checkout-pix-key").textContent = storeSettings.pix_key || "Pix indisponível";
   if ($("#checkout-tiktok")) $("#checkout-tiktok").value = "";
+  checkoutTikTokProfile = { username: "", displayName: "", profileUrl: "", avatarUrl: "" };
+  const tiktokProfileBox = $("#checkout-tiktok-profile");
+  if (tiktokProfileBox) { tiktokProfileBox.innerHTML = ""; tiktokProfileBox.classList.add("hidden"); }
   if ($("#checkout-roblox")) $("#checkout-roblox").value = "";
   if ($("#checkout-pix-name")) $("#checkout-pix-name").value = "";
   setMessage($("#checkout-message"), "");
@@ -420,6 +424,72 @@ function stopQueuePreviewPolling() {
   }
 }
 
+
+function normalizeTikTokUsername(value) {
+  return String(value || "")
+    .trim()
+    .replace(/^https?:\/\/(www\.)?tiktok\.com\/@?/i, "")
+    .replace(/^@+/, "")
+    .replace(/[?#/].*$/, "")
+    .trim();
+}
+
+async function verifyCheckoutTikTok() {
+  const input = $("#checkout-tiktok");
+  const box = $("#checkout-tiktok-profile");
+  const button = $("#checkout-tiktok-check");
+  const username = normalizeTikTokUsername(input?.value);
+  if (!username) {
+    if (box) { box.innerHTML = `<div class="tiktok-check-message error">Digite seu @ do TikTok para verificar.</div>`; box.classList.remove("hidden"); }
+    return;
+  }
+
+  if (button) { button.disabled = true; button.textContent = "Verificando..."; }
+  if (box) { box.innerHTML = `<div class="tiktok-check-message">Consultando o perfil no TikTok...</div>`; box.classList.remove("hidden"); }
+
+  try {
+    // O oEmbed é um endpoint oficial do TikTok para perfis públicos.
+    // Ele confirma se o perfil existe e retorna o nome público, sem exigir login.
+    const profileUrl = `https://www.tiktok.com/@${encodeURIComponent(username)}`;
+    const endpoint = `https://www.tiktok.com/oembed?url=${encodeURIComponent(profileUrl)}`;
+    const response = await fetch(endpoint, { headers: { "Accept": "application/json" } });
+    if (!response.ok) throw new Error("Perfil não encontrado");
+    const data = await response.json();
+    const displayName = normalizeText(data?.author_name) || `@${username}`;
+    const canonicalUrl = data?.author_url || profileUrl;
+    checkoutTikTokProfile = {
+      username,
+      displayName,
+      profileUrl: canonicalUrl,
+      avatarUrl: ""
+    };
+    if (input) input.value = `@${username}`;
+    if (box) {
+      box.innerHTML = `
+        <div class="tiktok-profile-card">
+          <span class="tiktok-profile-avatar"><img src="tiktok-logo.png" alt="TikTok"></span>
+          <div class="tiktok-profile-info">
+            <strong>${escapeHtml(displayName)}</strong>
+            <span>@${escapeHtml(username)}</span>
+            <small>Perfil encontrado no TikTok ✓</small>
+          </div>
+          <a href="${escapeHtml(canonicalUrl)}" target="_blank" rel="noopener noreferrer" class="tiktok-profile-open">Abrir</a>
+        </div>
+        <div class="tiktok-confirm-note">Confira o @ acima. Esse TikTok será usado para contato sobre o pedido.</div>`;
+      box.classList.remove("hidden");
+    }
+  } catch (error) {
+    console.warn("TikTok profile lookup:", error);
+    checkoutTikTokProfile = { username: "", displayName: "", profileUrl: "", avatarUrl: "" };
+    if (box) {
+      box.innerHTML = `<div class="tiktok-check-message warning">Não conseguimos consultar o perfil agora. Você ainda pode continuar: confira se o @ está correto, pois o TikTok é nosso único canal de atendimento.</div>`;
+      box.classList.remove("hidden");
+    }
+  } finally {
+    if (button) { button.disabled = false; button.textContent = "Verificar"; }
+  }
+}
+
 async function createGuestOrder() {
   if (!storeSettings.online) return setMessage($("#checkout-message"), "A loja está offline no momento.", "error");
   const cart = loadCart();
@@ -461,6 +531,17 @@ async function createGuestOrder() {
   const orderId = typeof data === "string" ? data : data?.order_id || data?.id;
   const total = Number(data?.total);
   if (!orderId) return setMessage($("#checkout-message"), "Não foi possível identificar o pedido. Tente novamente.", "error");
+
+  if (checkoutTikTokProfile.username && checkoutTikTokProfile.username.toLowerCase() === normalizeTikTokUsername(tiktokUsername).toLowerCase()) {
+    const profileSave = await supabaseClient.rpc("update_guest_tiktok_profile", {
+      p_order_id: orderId,
+      p_tiktok_username: checkoutTikTokProfile.username,
+      p_tiktok_display_name: checkoutTikTokProfile.displayName,
+      p_tiktok_profile_url: checkoutTikTokProfile.profileUrl,
+      p_tiktok_avatar: checkoutTikTokProfile.avatarUrl || null
+    });
+    if (profileSave.error) console.warn("update_guest_tiktok_profile:", profileSave.error);
+  }
 
   let queuePosition = null;
   try {
@@ -955,7 +1036,7 @@ async function loadPublicReviews() {
   if (!container) return;
   const { data, error } = await supabaseClient
     .from("reviews")
-    .select("id, rating, text, created_at, tiktok_username, tiktok_avatar")
+    .select("id, rating, text, created_at, tiktok_username, tiktok_display_name, tiktok_profile_url, tiktok_avatar")
     .eq("status", "approved")
     .order("created_at", { ascending: false })
     .limit(24);
@@ -965,8 +1046,11 @@ async function loadPublicReviews() {
   container.innerHTML = data.map(review => {
     const rating = Math.min(5, Math.max(1, Number(review.rating)||0));
     const username = review.tiktok_username ? `@${String(review.tiktok_username).replace(/^@/, "")}` : "Cliente Thoune Store";
+    const displayName = review.tiktok_display_name ? String(review.tiktok_display_name) : username;
     const avatar = review.tiktok_avatar ? `<img src="${escapeHtml(review.tiktok_avatar)}" alt="" loading="lazy">` : `<span class="review-avatar-fallback"><span class="ui-icon ui-icon-user" aria-hidden="true"></span></span>`;
-    return `<article class="review-card"><div class="review-card-top"><div class="review-author"><span class="review-avatar">${avatar}</span><div><strong>${escapeHtml(username)}</strong><small>${formatDate(review.created_at)}</small></div></div><div class="review-rating" aria-label="${rating} de 5 estrelas">${"★".repeat(rating)}${"☆".repeat(5-rating)}</div></div><p class="review-text">${escapeHtml(review.text || "Sem comentário.")}</p></article>`;
+    const profileLink = review.tiktok_profile_url || (review.tiktok_username ? `https://www.tiktok.com/@${encodeURIComponent(String(review.tiktok_username).replace(/^@/, ""))}` : "");
+    const profileAction = profileLink ? `<a href="${escapeHtml(profileLink)}" target="_blank" rel="noopener noreferrer" class="review-tiktok-link">TikTok ↗</a>` : "";
+    return `<article class="review-card"><div class="review-card-top"><div class="review-author"><span class="review-avatar">${avatar}</span><div><strong>${escapeHtml(displayName)}</strong><small>${escapeHtml(username)} · ${formatDate(review.created_at)} ${profileAction}</small></div></div><div class="review-rating" aria-label="${rating} de 5 estrelas">${"★".repeat(rating)}${"☆".repeat(5-rating)}</div></div><p class="review-text">${escapeHtml(review.text || "Sem comentário.")}</p></article>`;
   }).join("");
   setupReviewCarousel();
 }
@@ -1014,6 +1098,8 @@ function setupEvents() {
   $("#checkout-back")?.addEventListener("click", () => { stopQueuePreviewPolling(); handleGuestPixExit({ openCartAfter: true }); });
   $("#copy-pix-key-button")?.addEventListener("click", copyPixKey);
   $("#confirm-order-button")?.addEventListener("click", createGuestOrder);
+  $("#checkout-tiktok-check")?.addEventListener("click", verifyCheckoutTikTok);
+  $("#checkout-tiktok")?.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); verifyCheckoutTikTok(); } });
   $("#close-product-modal")?.addEventListener("click", () => closePanel($("#product-modal")));
   $$('[data-close-product-modal]').forEach(b => b.addEventListener("click", () => closePanel($("#product-modal"))));
   $("#open-favorites-panel")?.addEventListener("click", () => { renderFavoritesPanel(); openPanel($("#favorites-panel")); });
