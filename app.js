@@ -1194,11 +1194,11 @@ initialize().catch(error => console.error("Erro durante a inicialização da Tho
 /* THOUNE v1152 — troca os emojis por silhuetas SVG com asas animadas. */
 (function initThouneAnimatedBats() {
   const batSvg = '<svg class="thoune-bat" viewBox="0 0 100 64" aria-hidden="true" focusable="false">' +
-    '<path class="bat-wing bat-wing-left" d="M50 30 C39 17 25 5 2 8 C9 18 15 20 19 31 C10 27 6 30 3 36 C15 34 21 42 27 48 C32 41 39 43 50 53 Z"/>' +
-    '<path class="bat-wing bat-wing-right" d="M50 30 C61 17 75 5 98 8 C91 18 85 20 81 31 C90 27 94 30 97 36 C85 34 79 42 73 48 C68 41 61 43 50 53 Z"/>' +
-    '<path class="bat-body" d="M43 26 Q50 19 57 26 L61 42 L55 39 L50 48 L45 39 L39 42 Z"/>' +
-    '<circle class="bat-body" cx="50" cy="24" r="7"/>' +
-    '<path class="bat-body" d="M44 20 L42 12 L49 18 M56 20 L58 12 L51 18 Z"/>' +
+    '<path class="bat-wing bat-wing-left" fill="#000000" d="M50 30 C39 17 25 5 2 8 C9 18 15 20 19 31 C10 27 6 30 3 36 C15 34 21 42 27 48 C32 41 39 43 50 53 Z"/>' +
+    '<path class="bat-wing bat-wing-right" fill="#000000" d="M50 30 C61 17 75 5 98 8 C91 18 85 20 81 31 C90 27 94 30 97 36 C85 34 79 42 73 48 C68 41 61 43 50 53 Z"/>' +
+    '<path class="bat-body" fill="#000000" d="M43 26 Q50 19 57 26 L61 42 L55 39 L50 48 L45 39 L39 42 Z"/>' +
+    '<circle class="bat-body" fill="#000000" cx="50" cy="24" r="7"/>' +
+    '<path class="bat-body" fill="#000000" d="M44 20 L42 12 L49 18 M56 20 L58 12 L51 18 Z"/>' +
     '</svg>';
   function replaceBats(scope) {
     if (!scope || !scope.querySelectorAll) return;

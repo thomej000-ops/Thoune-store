@@ -9348,3 +9348,23 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
     width: 34px !important;
   }
 }
+
+
+/* v1154: força morcegos em preto sólido, mesmo com estilos herdados */
+.thoune-bat,
+.thoune-bat *,
+svg.thoune-bat,
+.thoune-bat .bat-wing,
+.thoune-bat .bat-body {
+  color: #000000 !important;
+  fill: #000000 !important;
+  stroke: #000000 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+}
+.thoune-bat { background: transparent !important; }
+.thoune-bat .bat-wing-left,
+.thoune-bat .bat-wing-right {
+  animation-duration: .34s !important;
+}
