@@ -2311,10 +2311,7 @@ saveProductButton.addEventListener(
       productCategory.value;
 
     const price =
-      Number(productPrice.value);
-
-    const stock =
-      Number(productStock.value);
+      Number(String(productPrice.value).trim().replace(",", "."));
 
     const discountPercent =
       Number(productDiscountPercent.value || 0);
@@ -2345,6 +2342,7 @@ saveProductButton.addEventListener(
 
 
     if(
+      productPrice.value.trim() === "" ||
       !Number.isFinite(price) ||
       price < 0
     ){
@@ -2422,44 +2420,48 @@ if(
 
       let result;
 
-
       if(editingProductId){
-
-        result =
-          await supabaseClient
-            .from("products")
-            .update(productData)
-            .eq(
-              "id",
-              editingProductId
-            );
-
+        result = await supabaseClient
+          .from("products")
+          .update(productData)
+          .eq("id", editingProductId)
+          .select("id")
+          .maybeSingle();
       }else{
-
-        result =
-          await supabaseClient
-            .from("products")
-            .insert(
-              productData
-            );
-
+        result = await supabaseClient
+          .from("products")
+          .insert(productData)
+          .select("id")
+          .single();
       }
 
-
       if(result.error){
-
         productFormMessage.textContent =
-          "Erro: " +
-          result.error.message;
-
+          "Não foi possível salvar: " + result.error.message;
+        productFormMessage.classList.add("error-message");
         return;
       }
 
+      if(!result.data?.id){
+        productFormMessage.textContent =
+          "Nenhum produto foi alterado. Confira sua permissão de administrador no Supabase.";
+        productFormMessage.classList.add("error-message");
+        return;
+      }
 
+      productFormMessage.classList.remove("error-message");
+      productFormMessage.textContent =
+        editing ? "Alterações salvas com sucesso." : "Marreta cadastrada com sucesso.";
+      await loadProducts();
+      window.alert(editing ? "Alterações do produto salvas com sucesso." : "Marreta cadastrada com sucesso.");
       closeProductForm();
 
-      await loadProducts();
-
+    }catch(error){
+      console.error("Erro inesperado ao salvar produto:", error);
+      productFormMessage.textContent =
+        "Falha inesperada ao salvar. Confira a conexão e tente novamente. " +
+        (error?.message || "");
+      productFormMessage.classList.add("error-message");
     }finally{
 
       saveProductButton.disabled =
