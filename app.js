@@ -1065,34 +1065,21 @@ async function submitGuestReview(event) {
 }
 
 
-// Contagem pública real: somente avaliações aprovadas, as mesmas elegíveis para aparecer na seção.
-async function loadPublicReviewCount() {
-  const number = $("#public-review-count-number");
-  if (!number) return;
-  const { count, error } = await supabaseClient
-    .from("reviews")
-    .select("id", { count: "exact", head: true })
-    .eq("status", "approved");
-  if (error) {
-    console.error("Erro ao contar avaliações aprovadas:", error);
-    if (number.textContent === "—") number.textContent = "—";
-    return;
-  }
-  number.textContent = String(count ?? 0);
-}
-
 // Avaliações públicas: somente aprovadas, mais recentes primeiro.
 async function loadPublicReviews() {
   const container = $("#reviews-grid");
   const empty = $("#reviews-empty");
   if (!container) return;
-  const { data, error } = await supabaseClient
+  const { data, count, error } = await supabaseClient
     .from("reviews")
-    .select("id, rating, text, created_at, tiktok_username, tiktok_display_name, tiktok_profile_url, tiktok_avatar")
+    .select("id, rating, text, created_at, tiktok_username, tiktok_display_name, tiktok_profile_url, tiktok_avatar", { count: "exact" })
     .eq("status", "approved")
     .order("created_at", { ascending: false })
     .limit(24);
   if (error) { console.error("Erro ao carregar avaliações:", error); return; }
+  // O contador usa a mesma consulta e os mesmos filtros das avaliações exibidas.
+  const reviewCountNumber = $("#public-review-count-number");
+  if (reviewCountNumber) reviewCountNumber.textContent = String(count ?? data?.length ?? 0);
   if (!data?.length) { container.innerHTML = ""; setHidden(empty, false); return; }
   setHidden(empty, true);
   container.innerHTML = data.map(review => {
@@ -1198,8 +1185,7 @@ async function initialize() {
   restoreGuestOrderStatus();
   renderFavoritesPanel();
   await loadPublicReviews();
-  await loadPublicReviewCount();
-  window.setInterval(loadPublicReviewCount, 30000);
+  window.setInterval(loadPublicReviews, 30000);
 }
 
 initialize().catch(error => console.error("Erro durante a inicialização da Thoune Store:", error));
