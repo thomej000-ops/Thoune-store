@@ -5508,13 +5508,18 @@ body.theme-light .theme-icon-img::after{content:'';position:absolute;width:10px;
 .favorite-remove{width:38px !important;height:38px !important;min-width:38px !important;background:rgba(9,42,51,.9) !important;}
 .favorite-remove .ui-icon-heart{font-size:21px !important;}
 
-/* Carrinho / imagens: integrar fundos escuros das imagens ao cartão sem alterar o restante do layout. */
-.cart-item-image{background:transparent !important;border-color:transparent !important;overflow:hidden !important;}
+/* v1148 — carrinho: preservar as cores originais das imagens das marretas. */
+.cart-item-image{
+  background:transparent !important;
+  border-color:transparent !important;
+  overflow:hidden !important;
+}
 .cart-item-image img{
   object-fit:contain !important;
   background:transparent !important;
-  mix-blend-mode:screen !important;
-  filter:drop-shadow(0 5px 8px rgba(0,0,0,.24)) !important;
+  mix-blend-mode:normal !important;
+  filter:none !important;
+  opacity:1 !important;
 }
 
 /* Checkout mais respirado */
