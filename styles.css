@@ -9266,3 +9266,19 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
 }
 #thoune-welcome #welcome-skip span,
 .thoune-welcome #welcome-skip span { color: #ffe0b8 !important; }
+
+
+/* THOUNE v1152 — morcego preto sem fundo, exclusivo da tela de abertura */
+#thoune-welcome { position: relative !important; overflow: hidden !important; }
+#thoune-welcome .welcome-bat-art {
+  position: absolute; z-index: 1; pointer-events: none; user-select: none;
+  width: clamp(100px, 19vw, 245px); height: auto; object-fit: contain;
+  top: clamp(18px, 5vh, 58px); right: clamp(12px, 5vw, 70px);
+  opacity: .88; filter: drop-shadow(0 8px 12px rgba(0,0,0,.28));
+  animation: welcomeBatFloat 5.2s ease-in-out infinite;
+}
+@keyframes welcomeBatFloat { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-10px) rotate(3deg); } }
+@media(max-width:600px) {
+  #thoune-welcome .welcome-bat-art { width: clamp(72px, 22vw, 112px); top: 14px; right: 12px; opacity: .82; }
+}
+@media(prefers-reduced-motion:reduce) { #thoune-welcome .welcome-bat-art { animation:none !important; } }

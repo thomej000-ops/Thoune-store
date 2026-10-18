@@ -1,0 +1,9 @@
+THOUNE STORE v1152 — MORCEGO PRETO TRANSPARENTE NA ABERTURA
+
+- Baseado na versão v1151 que mantém a abertura Halloween aprovada.
+- Imagem do morcego recortada para remover o fundo branco e salva em PNG com transparência.
+- Morcego preto decorativo com animação suave, apenas na tela de abertura.
+- Emojis 🦇 continuam presentes na animação existente.
+- Catálogo, carrinho e restante do site não foram intencionalmente alterados.
+
+Para publicar: extraia o ZIP e envie os arquivos mantendo a pasta/estrutura conforme o ZIP ao repositório usado pelo GitHub Pages.
