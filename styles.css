@@ -9266,3 +9266,44 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
 }
 #thoune-welcome #welcome-skip span,
 .thoune-welcome #welcome-skip span { color: #ffe0b8 !important; }
+
+
+/* THOUNE v1152 — morcegos em silhueta com batimento de asas */
+.welcome-bubbles .thoune-bat,
+.opening-bat .thoune-bat {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  color: #000;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.55));
+}
+.thoune-bat .bat-wing {
+  fill: #000;
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+.thoune-bat .bat-wing-left {
+  transform-origin: 50px 30px;
+  animation: thouneBatWingLeft .34s ease-in-out infinite alternate;
+}
+.thoune-bat .bat-wing-right {
+  transform-origin: 50px 30px;
+  animation: thouneBatWingRight .34s ease-in-out infinite alternate;
+}
+.thoune-bat .bat-body { fill: #000; }
+@keyframes thouneBatWingLeft {
+  from { transform: rotate(-16deg) scaleY(.72); }
+  to   { transform: rotate(13deg) scaleY(1); }
+}
+@keyframes thouneBatWingRight {
+  from { transform: rotate(16deg) scaleY(.72); }
+  to   { transform: rotate(-13deg) scaleY(1); }
+}
+.welcome-bubbles span { color: transparent !important; }
+.opening-bat { color: transparent !important; text-shadow: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .thoune-bat .bat-wing-left, .thoune-bat .bat-wing-right {
+    animation: none !important;
+  }
+}
