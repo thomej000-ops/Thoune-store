@@ -5241,13 +5241,13 @@ body.theme-light .theme-icon-img::after{content:'';position:absolute;width:10px;
 /* Individual discount in admin. */
 .admin-discount-badge{display:inline-flex;padding:4px 7px;border-radius:999px;background:#e5faf2;color:#157a5a;font-weight:900;font-size:11px;}
 
-/* Opening effect: Halloween bats + warm orange glow, only once per tab. */
-.opening-effect{position:fixed;inset:0;z-index:99999;pointer-events:none;overflow:hidden;background:radial-gradient(circle at 50% 46%,rgba(255,111,24,.10),transparent 38%),rgba(16,5,8,.24);animation:openingFade 1.75s ease forwards;}
-.opening-bat{position:absolute;display:block;font-size:clamp(22px,5vw,var(--size,42px));line-height:1;color:#ff8a24;text-shadow:0 0 12px rgba(255,105,15,.75),0 0 25px rgba(255,105,15,.35);animation:bubbleRise 1.65s ease-out forwards;}
+/* Opening effect: subtle bubbles + glow, only once per tab. */
+.opening-effect{position:fixed;inset:0;z-index:99999;pointer-events:none;overflow:hidden;background:radial-gradient(circle at 50% 46%,rgba(77,218,232,.10),transparent 38%),rgba(3,18,24,.36);animation:openingFade 1.75s ease forwards;}
+.opening-bubble{position:absolute;display:block;width:var(--size,42px);height:var(--size,42px);border-radius:50%;border:1px solid rgba(126,231,241,.35);background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.22),rgba(88,220,233,.08) 42%,transparent 70%);box-shadow:0 0 26px rgba(82,216,231,.16);animation:bubbleRise 1.65s ease-out forwards;}
 .b1{--size:30px;left:9%;bottom:-40px}.b2{--size:54px;left:22%;bottom:-60px;animation-delay:.08s}.b3{--size:22px;left:36%;bottom:-30px;animation-delay:.16s}.b4{--size:72px;left:51%;bottom:-80px;animation-delay:.04s}.b5{--size:35px;left:66%;bottom:-45px;animation-delay:.18s}.b6{--size:24px;left:78%;bottom:-35px;animation-delay:.12s}.b7{--size:48px;left:88%;bottom:-55px;animation-delay:.22s}.b8{--size:18px;left:44%;bottom:-25px;animation-delay:.3s}.b9{--size:28px;left:14%;bottom:-30px;animation-delay:.25s}.b10{--size:40px;left:59%;bottom:-45px;animation-delay:.32s}
 @keyframes bubbleRise{0%{opacity:0;transform:translate3d(0,0,0) scale(.55)}20%{opacity:1}100%{opacity:0;transform:translate3d(0,-78vh,0) scale(1.12)}}
 @keyframes openingFade{0%{opacity:1}72%{opacity:1}100%{opacity:0}}
-@media(prefers-reduced-motion:reduce){.opening-effect,.opening-bat,.product-image img{animation:none !important}.opening-effect{display:none !important}}
+@media(prefers-reduced-motion:reduce){.opening-effect,.opening-bubble,.product-image img{animation:none !important}.opening-effect{display:none !important}}
 
 
 /* =========================================================
@@ -7244,14 +7244,14 @@ body.theme-banner-glow .hero-content{z-index:2}
 #welcome-skip{border:1px solid rgba(116,190,255,.4);border-radius:999px;background:rgba(5,43,72,.88);color:#e8ffff;padding:11px 18px;font:700 12px inherit;cursor:pointer}
 #welcome-skip span{color:#8bcfff;margin-left:8px}
 .welcome-bubbles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.welcome-bubbles span{position:absolute;bottom:-70px;left:8%;font-size:24px;line-height:1;color:#ff8a24;filter:drop-shadow(0 0 8px rgba(255,104,13,.62));animation:welcomeBubble 5.8s linear infinite}
-.welcome-bubbles span:nth-child(2n){left:19%;width:7px;height:7px;animation-delay:-2s;animation-duration:4.6s}
-.welcome-bubbles span:nth-child(3n){left:31%;width:18px;height:18px;animation-delay:-3.7s;animation-duration:6.5s}
-.welcome-bubbles span:nth-child(4n){left:45%;width:9px;height:9px;animation-delay:-1.1s}
-.welcome-bubbles span:nth-child(5n){left:57%;width:15px;height:15px;animation-delay:-4.2s;animation-duration:7s}
-.welcome-bubbles span:nth-child(6n){left:69%;width:6px;height:6px;animation-delay:-2.8s}
-.welcome-bubbles span:nth-child(7n){left:81%;width:13px;height:13px;animation-delay:-.7s;animation-duration:5s}
-.welcome-bubbles span:nth-child(8n){left:92%;width:8px;height:8px;animation-delay:-3s}
+.welcome-bubbles i{position:absolute;bottom:-70px;left:8%;width:12px;height:12px;border:1px solid rgba(135,208,255,.62);border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(235,249,255,.78),rgba(57,145,225,.16) 65%);box-shadow:0 0 18px rgba(59,163,255,.22);animation:welcomeBubble 5.8s linear infinite}
+.welcome-bubbles i:nth-child(2n){left:19%;width:7px;height:7px;animation-delay:-2s;animation-duration:4.6s}
+.welcome-bubbles i:nth-child(3n){left:31%;width:18px;height:18px;animation-delay:-3.7s;animation-duration:6.5s}
+.welcome-bubbles i:nth-child(4n){left:45%;width:9px;height:9px;animation-delay:-1.1s}
+.welcome-bubbles i:nth-child(5n){left:57%;width:15px;height:15px;animation-delay:-4.2s;animation-duration:7s}
+.welcome-bubbles i:nth-child(6n){left:69%;width:6px;height:6px;animation-delay:-2.8s}
+.welcome-bubbles i:nth-child(7n){left:81%;width:13px;height:13px;animation-delay:-.7s;animation-duration:5s}
+.welcome-bubbles i:nth-child(8n){left:92%;width:8px;height:8px;animation-delay:-3s}
 .thoune-welcome.welcome-exit{opacity:0;visibility:hidden;pointer-events:none}
 @keyframes welcomeBubble{0%{transform:translate3d(0,0,0) scale(.65);opacity:0}12%{opacity:.75}85%{opacity:.45}100%{transform:translate3d(22px,-115vh,0) scale(1.2);opacity:0}}
 @keyframes welcomeRise{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -7293,8 +7293,8 @@ body.theme-banner-glow .hero-content{z-index:2}
  .welcome-subtitle{font-size:13px}
 }
 @media(prefers-reduced-motion:reduce){
- .welcome-bubbles span,.thoune-welcome::before,.thoune-welcome::after,.welcome-content,.welcome-loader span{animation:none !important}
- .welcome-bubbles span{opacity:.25}
+ .welcome-bubbles i,.thoune-welcome::before,.thoune-welcome::after,.welcome-content,.welcome-loader span{animation:none !important}
+ .welcome-bubbles i{opacity:.25}
 }
 
 
@@ -7380,7 +7380,7 @@ body:has(.thoune-welcome:not(.welcome-exit)){
   .welcome-content{max-height:calc(100dvh - 32px);overflow-y:auto}
 }
 @media(prefers-reduced-motion:reduce){
-  .welcome-bubbles span,.thoune-welcome::before,.thoune-welcome::after,.welcome-content,.welcome-loader span,.welcome-snoopy{animation:none !important}
+  .welcome-bubbles i,.thoune-welcome::before,.thoune-welcome::after,.welcome-content,.welcome-loader span,.welcome-snoopy{animation:none !important}
   #product-grid .product-image img{animation:none !important;will-change:auto !important}
 }
 
@@ -9215,70 +9215,4 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
 .welcome-loader span{background:linear-gradient(90deg,#f45b13,#ffc06a) !important;box-shadow:0 0 14px rgba(255,120,24,.8) !important;}
 #welcome-skip{border-color:rgba(255,155,66,.65) !important;background:linear-gradient(135deg,#8f300d,#e96813) !important;color:#fff8ef !important;box-shadow:0 8px 24px rgba(255,86,12,.22) !important;}
 #welcome-skip span{color:#ffe0b8 !important;}
-.welcome-bubbles span{color:#ff8a24 !important;}
-
-
-/* THOUNE v1151 — corrigir o fundo real da abertura de Halloween e morcegos pretos */
-#thoune-welcome.thoune-welcome,
-.thoune-welcome {
-  background-color: #100b19 !important;
-  background-image: linear-gradient(180deg, rgba(8, 5, 15, .20), rgba(8, 5, 15, .34)), url('./thoune-halloween-welcome.png') !important;
-  background-position: center center !important;
-  background-size: cover !important;
-  background-repeat: no-repeat !important;
-}
-#thoune-welcome .welcome-bubbles span,
-.thoune-welcome .welcome-bubbles span {
-  color: #050509 !important;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .72)) !important;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, .85) !important;
-}
-#thoune-welcome .welcome-content,
-.thoune-welcome .welcome-content {
-  background: linear-gradient(145deg, rgba(22, 12, 19, .70), rgba(31, 14, 21, .58)) !important;
-  border-color: rgba(255, 138, 36, .28) !important;
-  box-shadow: 0 18px 55px rgba(0, 0, 0, .34), 0 0 32px rgba(255, 100, 20, .10) !important;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-}
-#thoune-welcome .welcome-logo-mark,
-.thoune-welcome .welcome-logo-mark {
-  border-color: rgba(255, 138, 36, .62) !important;
-  box-shadow: 0 0 32px rgba(255, 104, 13, .30) !important;
-}
-#thoune-welcome .welcome-kicker,
-.thoune-welcome .welcome-kicker { color: #ffb36b !important; }
-#thoune-welcome .welcome-content h1 span,
-.thoune-welcome .welcome-content h1 span { color: #ff8a24 !important; }
-#thoune-welcome .welcome-subtitle,
-.thoune-welcome .welcome-subtitle { color: #ffe0c2 !important; }
-#thoune-welcome .welcome-loader span,
-.thoune-welcome .welcome-loader span {
-  background: linear-gradient(90deg, #f45b13, #ffc06a) !important;
-  box-shadow: 0 0 14px rgba(255, 120, 24, .75) !important;
-}
-#thoune-welcome #welcome-skip,
-.thoune-welcome #welcome-skip {
-  background: linear-gradient(135deg, #8f300d, #e96813) !important;
-  border-color: rgba(255, 174, 92, .68) !important;
-  color: #fff8ef !important;
-  box-shadow: 0 8px 26px rgba(255, 86, 12, .25) !important;
-}
-#thoune-welcome #welcome-skip span,
-.thoune-welcome #welcome-skip span { color: #ffe0b8 !important; }
-
-
-/* THOUNE v1152 — morcego preto sem fundo, exclusivo da tela de abertura */
-#thoune-welcome { position: relative !important; overflow: hidden !important; }
-#thoune-welcome .welcome-bat-art {
-  position: absolute; z-index: 1; pointer-events: none; user-select: none;
-  width: clamp(100px, 19vw, 245px); height: auto; object-fit: contain;
-  top: clamp(18px, 5vh, 58px); right: clamp(12px, 5vw, 70px);
-  opacity: .88; filter: drop-shadow(0 8px 12px rgba(0,0,0,.28));
-  animation: welcomeBatFloat 5.2s ease-in-out infinite;
-}
-@keyframes welcomeBatFloat { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-10px) rotate(3deg); } }
-@media(max-width:600px) {
-  #thoune-welcome .welcome-bat-art { width: clamp(72px, 22vw, 112px); top: 14px; right: 12px; opacity: .82; }
-}
-@media(prefers-reduced-motion:reduce) { #thoune-welcome .welcome-bat-art { animation:none !important; } }
+.welcome-bubbles i{border-color:rgba(255,151,70,.62) !important;}

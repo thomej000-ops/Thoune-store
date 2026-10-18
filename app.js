@@ -95,7 +95,7 @@ function playOpeningEffect() {
   sessionStorage.setItem("thoune-opening-effect-v1043", "1");
   const layer = document.createElement("div");
   layer.className = "opening-effect";
-  layer.innerHTML = Array.from({ length: 10 }, (_, i) => `<span class="opening-bat b${i + 1}" aria-hidden="true">🦇</span>`).join("");
+  layer.innerHTML = Array.from({ length: 10 }, (_, i) => `<span class="opening-bubble b${i + 1}"></span>`).join("");
   document.body.appendChild(layer);
   window.setTimeout(() => layer.remove(), 1800);
 }
