@@ -9307,3 +9307,44 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
     animation: none !important;
   }
 }
+
+
+/* THOUNE v1153 — corrigir cor e escala dos morcegos animados */
+.thoune-welcome .welcome-bubbles span {
+  color: #000 !important;
+  font-size: 34px !important;
+  width: clamp(30px, 4.2vw, 44px) !important;
+  height: auto !important;
+  aspect-ratio: 100 / 64;
+  line-height: 0 !important;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.45)) !important;
+  text-shadow: none !important;
+}
+.thoune-welcome .welcome-bubbles span .thoune-bat {
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  color: #000 !important;
+}
+.opening-effect .opening-bat {
+  color: #000 !important;
+  font-size: 34px !important;
+  width: clamp(30px, 4.2vw, 44px) !important;
+  height: auto !important;
+  aspect-ratio: 100 / 64;
+  line-height: 0 !important;
+  text-shadow: none !important;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.45)) !important;
+}
+.opening-effect .opening-bat .thoune-bat {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+}
+@media (max-width: 600px) {
+  .thoune-welcome .welcome-bubbles span,
+  .opening-effect .opening-bat {
+    width: 34px !important;
+  }
+}
