@@ -1,0 +1,7 @@
+THOUNE STORE v1151 — CORREÇÃO DA ABERTURA HALLOWEEN
+
+- Corrigido o fundo da tela inicial para usar a imagem Halloween enviada pelo usuário (thoune-halloween-welcome.png), em vez da imagem azul antiga.
+- Reduzido o escurecimento sobre a imagem para que a arte de Halloween fique visível.
+- Morcegos flutuantes em preto, sem brilho laranja.
+- Mantida a paleta laranja/âmbar nos elementos da abertura.
+- Alterações restritas à tela de abertura; catálogo e carrinho não foram intencionalmente alterados.
