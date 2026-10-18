@@ -7215,7 +7215,7 @@ body.theme-banner-glow .hero-content{z-index:2}
 .thoune-welcome{
   position:fixed;inset:0;z-index:10000;display:grid;place-items:center;overflow:hidden;
   padding:24px;
-  background:linear-gradient(180deg,rgba(2,24,48,.68),rgba(2,35,61,.78)),url('./snoopy-welcome.jpg') center 48%/cover no-repeat,#031a2d;
+  background:linear-gradient(180deg,rgba(13,5,18,.36),rgba(19,7,18,.62)),url('./thoune-halloween-welcome.png') center 48%/cover no-repeat,#160b18;
   color:#eef9ff;opacity:1;visibility:visible;transition:opacity .6s ease,visibility .6s ease;
 }
 .thoune-welcome::marker{content:none}
@@ -9190,3 +9190,29 @@ body.theme-light .guest-review-form textarea::placeholder{color:#7896c0}
   .tiktok-check-row{grid-template-columns:1fr !important;}
   .tiktok-check-button{width:100% !important;}
 }
+
+
+/* THOUNE v1149 — tema Halloween somente na tela de abertura */
+.thoune-welcome::before,.thoune-welcome::after{
+  border-color:rgba(255,137,35,.36) !important;
+  box-shadow:0 0 70px rgba(255,94,0,.22),inset 0 0 60px rgba(255,116,20,.12) !important;
+}
+.welcome-content{
+  border-color:rgba(255,145,50,.38) !important;
+  background:linear-gradient(145deg,rgba(24,9,19,.78),rgba(48,16,18,.70)) !important;
+  box-shadow:0 22px 70px rgba(0,0,0,.48),0 0 34px rgba(255,104,13,.12) !important;
+}
+.welcome-logo-mark{
+  border-color:rgba(255,153,57,.92) !important;
+  background:linear-gradient(145deg,rgba(119,48,15,.65),rgba(25,8,18,.94)) !important;
+  box-shadow:0 0 10px rgba(255,146,43,.72),0 0 28px rgba(255,94,0,.38),inset 0 0 12px rgba(255,183,92,.18) !important;
+}
+.welcome-logo-mark img{filter:drop-shadow(0 8px 20px rgba(255,104,13,.38)) !important;}
+.welcome-kicker{color:#ffb36b !important;}
+.welcome-content h1 span{color:#ff8a24 !important;}
+.welcome-subtitle{color:#ffe0c2 !important;}
+.welcome-loader{background:rgba(255,178,113,.20) !important;}
+.welcome-loader span{background:linear-gradient(90deg,#f45b13,#ffc06a) !important;box-shadow:0 0 14px rgba(255,120,24,.8) !important;}
+#welcome-skip{border-color:rgba(255,155,66,.65) !important;background:linear-gradient(135deg,#8f300d,#e96813) !important;color:#fff8ef !important;box-shadow:0 8px 24px rgba(255,86,12,.22) !important;}
+#welcome-skip span{color:#ffe0b8 !important;}
+.welcome-bubbles i{border-color:rgba(255,151,70,.62) !important;}

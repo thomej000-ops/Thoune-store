@@ -1,0 +1,6 @@
+THOUNE STORE v1149
+
+- Tela de abertura com a imagem Halloween enviada pelo proprietário como fundo e imagem flutuante.
+- Cores laranja/âmbar aplicadas somente à tela de abertura.
+- O restante do site mantém a identidade visual normal.
+- Mantidas as alterações da versão v1148.
