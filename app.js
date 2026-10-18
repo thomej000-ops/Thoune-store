@@ -1065,6 +1065,22 @@ async function submitGuestReview(event) {
 }
 
 
+// Contagem pública real: somente avaliações aprovadas, as mesmas elegíveis para aparecer na seção.
+async function loadPublicReviewCount() {
+  const number = $("#public-review-count-number");
+  if (!number) return;
+  const { count, error } = await supabaseClient
+    .from("reviews")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "approved");
+  if (error) {
+    console.error("Erro ao contar avaliações aprovadas:", error);
+    if (number.textContent === "—") number.textContent = "—";
+    return;
+  }
+  number.textContent = String(count ?? 0);
+}
+
 // Avaliações públicas: somente aprovadas, mais recentes primeiro.
 async function loadPublicReviews() {
   const container = $("#reviews-grid");
@@ -1182,6 +1198,8 @@ async function initialize() {
   restoreGuestOrderStatus();
   renderFavoritesPanel();
   await loadPublicReviews();
+  await loadPublicReviewCount();
+  window.setInterval(loadPublicReviewCount, 30000);
 }
 
 initialize().catch(error => console.error("Erro durante a inicialização da Thoune Store:", error));

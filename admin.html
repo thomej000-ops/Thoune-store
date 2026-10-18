@@ -939,6 +939,11 @@
       </div>
 
 
+      <div id="delivered-orders-count-card" role="status" aria-live="polite" style="display:flex;align-items:center;gap:14px;margin:18px 0;padding:16px 18px;border:1px solid rgba(112,190,201,.28);border-radius:16px;background:linear-gradient(135deg,rgba(12,43,54,.82),rgba(5,22,32,.9));">
+        <span aria-hidden="true" style="font-size:30px">📦</span>
+        <div><small style="display:block;opacity:.8">TOTAL DE ENTREGAS CONCLUÍDAS</small><strong id="delivered-orders-count-number" style="display:block;font-size:1.7rem;line-height:1.25">—</strong><small style="opacity:.75">Pedidos marcados como entregues</small></div>
+      </div>
+
       <div
         class="products-list"
         id="products-list"
@@ -1445,6 +1450,12 @@ const supabaseClient =
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
+
+// Atualiza o total de entregas periodicamente enquanto o painel estiver aberto.
+window.setInterval(() => {
+  const productsSection = document.querySelector("#products-section");
+  if (productsSection && !productsSection.classList.contains("hidden")) loadDeliveredOrdersCount();
+}, 30000);
 
 
 /* =========================================================
@@ -2033,6 +2044,22 @@ cancelProductButton.addEventListener(
 );
 
 
+async function loadDeliveredOrdersCount(){
+  const number = document.querySelector("#delivered-orders-count-number");
+  if (!number) return;
+  // A consulta depende das permissões existentes do administrador no Supabase.
+  const { count, error } = await supabaseClient
+    .from("orders")
+    .select("id", { count: "exact", head: true })
+    .eq("status", "delivered");
+  if (error) {
+    console.error("Erro ao contar pedidos entregues:", error);
+    if (number.textContent === "—") number.textContent = "Indisponível";
+    return;
+  }
+  number.textContent = String(count ?? 0);
+}
+
 async function loadProducts(){
 
   productsList.innerHTML =
@@ -2079,6 +2106,7 @@ async function loadProducts(){
 
   productsCount.textContent =
     `${products.length} produto(s) cadastrado(s).`;
+  await loadDeliveredOrdersCount();
 
 
   if(!products.length){
