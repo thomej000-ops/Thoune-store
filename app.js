@@ -1060,8 +1060,9 @@ async function submitGuestReview(event) {
   localStorage.removeItem("thoune-pending-guest-order");
   setMessage(message, "Avaliação enviada para análise. Obrigado! 💙", "success");
   if (button) { button.disabled = true; button.textContent = "Avaliação enviada ✓"; }
-  // O cliente decide quando fechar o painel usando o X. A avaliação já foi enviada para moderação.
-  
+  // Fecha o painel automaticamente após o envio confirmado; a confirmação fica visível via toast.
+  toast("Avaliação enviada para análise. Obrigado! 💙");
+  closePanel($("#guest-review-modal"));
 }
 
 

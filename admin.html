@@ -2571,7 +2571,7 @@ refreshProductsButton.addEventListener(
    PEDIDOS
 ========================================================= */
 
-async function loadOrders(){
+async function loadOrders(focusOrderId = null){
   await loadDeliveredOrdersCount();
 
   const list =
@@ -2650,6 +2650,7 @@ async function loadOrders(){
 
     card.className =
       "order-card";
+    card.id = `order-card-${order.id}`;
 
 
     const title =
@@ -2843,18 +2844,38 @@ async function loadOrders(){
 
   }
 
+  // Depois de uma ação, leva o administrador diretamente ao pedido atualizado.
+  if (focusOrderId) {
+    const focusedCard = document.getElementById(`order-card-${focusOrderId}`);
+    if (focusedCard) {
+      focusedCard.style.outline = "2px solid #62c8d5";
+      focusedCard.style.outlineOffset = "3px";
+      focusedCard.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
 }
 
 
 async function markDelivered(orderId){
   if(!confirm("Marcar este pedido como entregue?")) return;
-  const {data: deliveredOrder}=await supabaseClient.from("orders").select("customer_id").eq("id",orderId).maybeSingle();
-  const {error}=await supabaseClient.from("orders").update({status:"delivered",delivered_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq("id",orderId).eq("status","awaiting_delivery");
+  const {data: deliveredOrder, error}=await supabaseClient
+    .from("orders")
+    .update({status:"delivered",delivered_at:new Date().toISOString(),updated_at:new Date().toISOString()})
+    .eq("id",orderId)
+    .in("status", ["awaiting_delivery", "payment_confirmed"])
+    .select("customer_id, status")
+    .maybeSingle();
   if(error){alert("Não foi possível atualizar o pedido:\n"+error.message);return;}
-  if(deliveredOrder?.customer_id){
-    await supabaseClient.from("notifications").insert({customer_id:deliveredOrder.customer_id,title:"Pedido entregue 🎉",message:"Parabéns! Obrigado pela compra. Esperamos ver você novamente na Thoune Store. Sua avaliação está disponível no painel do pedido.",type:"order_delivered"});
+  if(!deliveredOrder){
+    alert("Este pedido não está mais aguardando entrega. Atualize a lista para conferir o status atual.");
+    await loadOrders(orderId);
+    return;
   }
-  await loadOrders();
+  if(deliveredOrder.customer_id){
+    const {error: notificationError}=await supabaseClient.from("notifications").insert({customer_id:deliveredOrder.customer_id,title:"Pedido entregue 🎉",message:"Parabéns! Obrigado pela compra. Esperamos ver você novamente na Thoune Store. Sua avaliação está disponível no painel do pedido.",type:"order_delivered"});
+    if(notificationError) console.error("Não foi possível notificar o cliente sobre a entrega:", notificationError);
+  }
+  await loadOrders(orderId);
 }
 
 
@@ -3234,11 +3255,13 @@ async function loadPayments(){
 
 
         alert(
-          "Pagamento confirmado com sucesso! ✅"
+          "Pagamento confirmado com sucesso! ✅\n\nAbrindo os dados de entrega do pedido..."
         );
 
-
-        await loadPayments();
+        // O pedido sai da fila de pagamentos e passa para a fila de entrega.
+        // Abrimos a seção de pedidos automaticamente e destacamos o pedido confirmado.
+        showSection("orders");
+        await loadOrders(order.id);
 
       };
 

@@ -1,0 +1,9 @@
+CORREÇÃO — ATUALIZAÇÃO AUTOMÁTICA DE ABAS (Thoune Store)
+
+1. Ao confirmar o pagamento no painel administrativo, o painel abre automaticamente a seção Pedidos, recarrega a lista e leva o administrador até o pedido confirmado, destacando-o.
+2. Ao marcar como entregue, a lista é atualizada e o pedido atualizado fica em foco. A atualização também aceita os status awaiting_delivery e payment_confirmed, e mostra aviso se o pedido já tiver mudado de status.
+3. Após enviar uma avaliação com sucesso, o modal de avaliação do cliente fecha automaticamente e mostra uma notificação de sucesso.
+
+Arquivos alterados: admin.html e app.js. Nenhuma alteração no banco de dados ou no SQL foi necessária para essas correções.
+
+Antes de publicar: testar em ambiente real com um pedido de teste, confirmar pagamento, verificar a seção Pedidos e marcar como entregue; depois testar o envio de avaliação.
