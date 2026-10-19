@@ -1,0 +1,11 @@
+Thoune Store — v1152: imagens das marretas nos pedidos do painel administrativo
+
+Alteração:
+- Cada item do pedido agora exibe a imagem do produto ao lado do nome e da quantidade/preço.
+- As imagens são associadas pelo product_id ao campo image da tabela products.
+- Se o produto não tiver imagem ou a imagem falhar ao carregar, aparece um ícone de martelo e o nome/preço continuam visíveis.
+- Mantém os fluxos anteriores de pagamento/comprovante e avaliação automática.
+
+Publicação:
+- Substituir o arquivo admin.html da pasta v1139 no repositório.
+- Não precisa executar SQL para esta alteração.

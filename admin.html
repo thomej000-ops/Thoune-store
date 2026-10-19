@@ -379,12 +379,58 @@
     }
 
     .order-item {
-      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
       border-bottom: 1px solid #e1eef0;
+      min-width: 0;
     }
 
     .order-item:last-child {
       border-bottom: 0;
+    }
+
+    .order-item-thumb {
+      width: 64px;
+      height: 64px;
+      flex: 0 0 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid rgba(123,219,229,.22);
+      background: rgba(5,22,30,.7);
+      color: #88aab2;
+      font-size: 25px;
+    }
+
+    .order-item-thumb img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .order-item-details {
+      flex: 1;
+      min-width: 0;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .order-item-name {
+      display: block;
+      color: #eaf8fa;
+      font-weight: 700;
+    }
+
+    .order-item-price {
+      display: block;
+      margin-top: 3px;
+      color: #88aab2;
+      font-size: 13px;
     }
 
     .order-actions {
@@ -2630,6 +2676,19 @@ async function loadOrders(focusOrderId = null){
 
   list.innerHTML = "";
 
+  // Carrega as imagens do catálogo para associá-las aos itens de cada pedido.
+  // O pedido continua mostrando nome e preço mesmo se uma imagem não existir.
+  const { data: productImages, error: productImagesError } = await supabaseClient
+    .from("products")
+    .select("id, image");
+
+  if(productImagesError){
+    console.warn("Não foi possível carregar as imagens dos produtos:", productImagesError);
+  }
+
+  const productImageById = new Map(
+    (productImages || []).map(product => [String(product.id), product.image || ""])
+  );
 
   for(const order of orders){
 
@@ -2745,18 +2804,43 @@ async function loadOrders(focusOrderId = null){
 
     (items || []).forEach(item => {
 
-      const row =
-        document.createElement("div");
+      const row = document.createElement("div");
+      row.className = "order-item";
 
-      row.className =
-        "order-item";
+      const thumb = document.createElement("div");
+      thumb.className = "order-item-thumb";
+      thumb.textContent = "🔨";
 
-      row.textContent =
-        `${item.product_name} × ${item.quantity} — ${money(
-          Number(item.product_price) *
-          Number(item.quantity)
-        )}`;
+      const imageUrl = productImageById.get(String(item.product_id || ""));
+      if(imageUrl){
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.alt = item.product_name || "Imagem da marreta";
+        image.loading = "lazy";
+        image.referrerPolicy = "no-referrer";
+        image.addEventListener("error", () => {
+          image.remove();
+          thumb.textContent = "🔨";
+        }, { once: true });
+        thumb.textContent = "";
+        thumb.appendChild(image);
+      }
 
+      const details = document.createElement("div");
+      details.className = "order-item-details";
+
+      const name = document.createElement("span");
+      name.className = "order-item-name";
+      name.textContent = item.product_name || "Produto sem nome";
+
+      const price = document.createElement("span");
+      price.className = "order-item-price";
+      price.textContent = `${item.quantity} × ${money(Number(item.product_price))} = ${money(
+        Number(item.product_price) * Number(item.quantity)
+      )}`;
+
+      details.append(name, price);
+      row.append(thumb, details);
       itemsBox.appendChild(row);
 
     });
