@@ -533,13 +533,41 @@ function renderGuestPixPanel(orderId, total, queuePosition = null) {
 
 function bindGuestProofControls(orderId) {
   $("#guest-proof-file")?.addEventListener("change", () => {
-    const file = $("#guest-proof-file")?.files?.[0];
+    const input = $("#guest-proof-file");
+    const file = input?.files?.[0];
     const preview = $("#guest-proof-preview");
     if (!preview) return;
-    if (!file) { preview.innerHTML = ""; return; }
-    if (!file.type.startsWith("image/")) { preview.textContent = "Escolha um arquivo de imagem."; $("#guest-proof-file").value = ""; return; }
-    const url = URL.createObjectURL(file);
-    preview.innerHTML = `<img src="${url}" alt="Prévia do comprovante" style="display:block;max-width:100%;max-height:240px;margin:auto;border-radius:12px;object-fit:contain;"><p style="text-align:center;">${escapeHtml(file.name)} (${(file.size / 1024 / 1024).toFixed(2)} MB)</p>`;
+    preview.innerHTML = "";
+    if (!file) return;
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    const imageByExtension = ["jpg", "jpeg", "png", "webp", "gif", "heic", "heif"].includes(ext);
+    if (!(file.type.startsWith("image/") || (!file.type && imageByExtension))) {
+      preview.textContent = "Escolha uma imagem JPG, PNG, WEBP, GIF ou HEIC/HEIF.";
+      if (input) input.value = "";
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      preview.textContent = "A imagem precisa ter no máximo 10 MB.";
+      if (input) input.value = "";
+      return;
+    }
+    // HEIC/HEIF pode não ser exibido pelo navegador, mas ainda pode ser enviado.
+    if (file.type !== "image/heic" && file.type !== "image/heif" && !["heic", "heif"].includes(ext)) {
+      const url = URL.createObjectURL(file);
+      const image = document.createElement("img");
+      image.src = url;
+      image.alt = "Prévia do comprovante";
+      image.style.cssText = "display:block;max-width:100%;max-height:240px;margin:auto;border-radius:12px;object-fit:contain;";
+      preview.appendChild(image);
+    } else {
+      const note = document.createElement("p");
+      note.textContent = "Imagem selecionada. A prévia deste formato pode não ser exibida, mas você pode enviá-la.";
+      preview.appendChild(note);
+    }
+    const label = document.createElement("p");
+    label.style.textAlign = "center";
+    label.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+    preview.appendChild(label);
   });
   $("#guest-proof-send")?.addEventListener("click", () => uploadGuestPaymentProof(orderId));
   $("#guest-payment-done")?.addEventListener("click", () => requestGuestPaymentVerification(orderId));
@@ -699,7 +727,7 @@ function renderGuestPaymentRejectedPanel(orderId, reason = "O pagamento não foi
   const content = $("#checkout-section .checkout-content");
   if (!content) return;
   content.innerHTML = `
-    <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
+    <div class="checkout-success-card guest-status-panel" data-order-id="${escapeHtml(orderId)}" style="padding:24px;text-align:center;">
       <div style="font-size:42px;margin-bottom:10px;">⚠️</div>
       <p class="eyebrow">PAGAMENTO NÃO RECEBIDO</p>
       <h2 style="margin:8px 0;">Precisamos do Pix para fazer a entrega</h2>
@@ -738,38 +766,74 @@ async function uploadGuestPaymentProof(orderId) {
   const button = $("#guest-proof-send");
   const file = input?.files?.[0];
   if (!file) return setMessage(message, "Escolha uma imagem primeiro.", "error");
-  if (!file.type.startsWith("image/")) return setMessage(message, "Escolha um arquivo de imagem.", "error");
+
+  const ext = (file.name.split(".").pop() || "").toLowerCase();
+  const mimeByExt = {
+    jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp",
+    gif: "image/gif", heic: "image/heic", heif: "image/heif"
+  };
+  const allowedExt = Object.keys(mimeByExt);
+  if (!(file.type.startsWith("image/") || (!file.type && allowedExt.includes(ext)))) {
+    return setMessage(message, "Formato não aceito. Use JPG, PNG, WEBP, GIF ou HEIC/HEIF.", "error");
+  }
+  if (!allowedExt.includes(ext)) {
+    return setMessage(message, "Formato não aceito. Salve a imagem como JPG ou PNG e tente novamente.", "error");
+  }
   if (file.size > 10 * 1024 * 1024) return setMessage(message, "A imagem precisa ter no máximo 10 MB.", "error");
+
   if (button) { button.disabled = true; button.textContent = "Enviando..."; }
-  const extByType = { "image/jpeg":"jpg", "image/png":"png", "image/webp":"webp", "image/gif":"gif", "image/heic":"heic", "image/heif":"heif" };
-  const ext = extByType[file.type] || (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0,8) || "jpg";
-  const path = `${orderId}/${Date.now()}-${crypto.randomUUID?.() || Math.random().toString(36).slice(2)}.${ext}`;
-  const { error: uploadError } = await supabaseClient.storage.from("payment-proofs").upload(path, file, { contentType: file.type, upsert: false });
-  if (uploadError) {
-    console.error("payment-proofs upload:", uploadError);
-    if (button) { button.disabled = false; button.textContent = "Enviar comprovante"; }
-    return setMessage(message, `Falha no envio: ${uploadError.message}`, "error");
+  const contentType = file.type.startsWith("image/") ? file.type : mimeByExt[ext];
+  const path = `${orderId}/${Date.now()}-${(globalThis.crypto?.randomUUID?.() || Math.random().toString(36).slice(2))}.${ext}`;
+  try {
+    const { error: uploadError } = await supabaseClient.storage.from("payment-proofs").upload(path, file, {
+      contentType,
+      upsert: false,
+      cacheControl: "3600"
+    });
+    if (uploadError) {
+      console.error("payment-proofs upload:", uploadError);
+      const detail = uploadError.message || "erro não identificado";
+      const hint = /bucket|not found/i.test(detail)
+        ? " O armazenamento payment-proofs precisa existir no Supabase."
+        : /row-level security|policy|permission|unauthorized|forbidden/i.test(detail)
+          ? " A política de Storage do Supabase pode estar bloqueando o envio."
+          : " Confira a conexão e tente novamente.";
+      return setMessage(message, `Não foi possível enviar a imagem: ${detail}.${hint}`, "error");
+    }
+
+    const { error: saveError } = await supabaseClient.rpc("submit_guest_payment_proof", {
+      p_order_id: orderId,
+      p_proof_path: path
+    });
+    if (saveError) {
+      console.error("submit_guest_payment_proof:", saveError);
+      await supabaseClient.storage.from("payment-proofs").remove([path]);
+      const detail = saveError.message || "não foi possível vincular o arquivo ao pedido";
+      return setMessage(message, `A imagem chegou ao armazenamento, mas não foi vinculada ao pedido: ${detail}`, "error");
+    }
+
+    if (button) { button.disabled = true; button.textContent = "Comprovante enviado ✓"; }
+    if (input) input.disabled = true;
+    const done = $("#guest-payment-done");
+    if (done) { done.disabled = false; done.style.opacity = "1"; done.textContent = "Já fiz o Pix — verificar pagamento"; }
+    const cancel = $("#guest-cancel-order") || $("#guest-cancel-rejected-order");
+    if (cancel) {
+      cancel.disabled = true;
+      cancel.textContent = "Cancelamento indisponível após envio do comprovante";
+      cancel.style.opacity = ".55";
+      cancel.style.cursor = "not-allowed";
+      cancel.title = "Depois de enviar o comprovante, solicite a verificação do pagamento.";
+    }
+    setMessage(message, "Comprovante enviado e imagem salva. Agora toque em “Já fiz o Pix — verificar pagamento”. O cancelamento foi bloqueado nesta etapa.", "success");
+  } catch (error) {
+    console.error("Erro inesperado ao enviar comprovante:", error);
+    setMessage(message, `O envio foi interrompido: ${error?.message || "falha de conexão"}. Confira a internet e tente novamente.`, "error");
+  } finally {
+    if (button && button.textContent === "Enviando...") {
+      button.disabled = false;
+      button.textContent = "Enviar comprovante";
+    }
   }
-  const { error: saveError } = await supabaseClient.rpc("submit_guest_payment_proof", { p_order_id: orderId, p_proof_path: path });
-  if (saveError) {
-    console.error("submit_guest_payment_proof:", saveError);
-    await supabaseClient.storage.from("payment-proofs").remove([path]);
-    if (button) { button.disabled = false; button.textContent = "Enviar comprovante"; }
-    return setMessage(message, `Arquivo enviado, mas não foi vinculado: ${saveError.message}`, "error");
-  }
-  if (button) { button.disabled = true; button.textContent = "Comprovante enviado ✓"; }
-  if (input) input.disabled = true;
-  const done = $("#guest-payment-done");
-  if (done) { done.disabled = false; done.style.opacity = "1"; done.textContent = "Já fiz o Pix — verificar pagamento"; }
-  const cancel = $("#guest-cancel-order");
-  if (cancel) {
-    cancel.disabled = true;
-    cancel.textContent = "Cancelamento indisponível após envio do comprovante";
-    cancel.style.opacity = ".55";
-    cancel.style.cursor = "not-allowed";
-    cancel.title = "Depois de enviar o comprovante, solicite a verificação do pagamento.";
-  }
-  setMessage(message, "Comprovante enviado e imagem salva. Agora toque em “Já fiz o Pix — verificar pagamento”. O cancelamento foi bloqueado nesta etapa.", "success");
 }
 
 function renderGuestDeliveryPanel(order) {
@@ -875,7 +939,13 @@ async function pollGuestOrderStatus(orderId) {
     return;
   }
   if (status === "payment_rejected") {
-    renderGuestPaymentRejectedPanel(orderId, data.rejection_reason || "O Pix ainda não foi localizado pela loja.");
+    // Não recrie o painel a cada consulta: isso apaga o arquivo selecionado no celular.
+    const rejectedPanel = $("#checkout-section .guest-status-panel");
+    const sameRejectedOrder = rejectedPanel?.dataset.orderId === String(orderId)
+      && Boolean($("#guest-proof-file"));
+    if (!sameRejectedOrder) {
+      renderGuestPaymentRejectedPanel(orderId, data.rejection_reason || "O Pix ainda não foi localizado pela loja.");
+    }
     return;
   }
   if (status === "delivered") {
