@@ -797,24 +797,53 @@ function renderGuestDeliveryPanel(order) {
       <button type="button" class="secondary-button full" id="guest-finish" style="margin-top:8px;">Fechar</button>
     </div>`;
   $("#copy-delivery-user")?.addEventListener("click", async () => {
+    let copied = false;
+
+    // Tente primeiro a Clipboard API. Se ela existir, mas o navegador bloquear
+    // a escrita (permissão/ambiente), ainda tentamos o método compatível.
     try {
-      if (navigator.clipboard && window.isSecureContext) {
+      if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(deliveryUser);
-      } else {
-        const helper=document.createElement("textarea");
-        helper.value=deliveryUser;
-        helper.setAttribute("readonly","");
-        helper.style.position="fixed";
-        helper.style.opacity="0";
-        document.body.appendChild(helper);
-        helper.select();
-        document.execCommand("copy");
-        helper.remove();
+        copied = true;
       }
+    } catch (error) {
+      console.warn("Clipboard API indisponível; tentando método alternativo.", error);
+    }
+
+    if (!copied) {
+      let helper;
+      try {
+        helper = document.createElement("textarea");
+        helper.value = deliveryUser;
+        helper.setAttribute("readonly", "");
+        helper.setAttribute("aria-hidden", "true");
+        helper.style.position = "fixed";
+        helper.style.top = "0";
+        helper.style.left = "0";
+        helper.style.width = "1px";
+        helper.style.height = "1px";
+        helper.style.padding = "0";
+        helper.style.border = "0";
+        helper.style.opacity = "0.01";
+        helper.style.fontSize = "16px";
+        document.body.appendChild(helper);
+        helper.focus({ preventScroll: true });
+        helper.select();
+        helper.setSelectionRange(0, helper.value.length);
+        copied = document.execCommand("copy");
+      } catch (error) {
+        console.warn("Cópia alternativa indisponível.", error);
+      } finally {
+        helper?.remove();
+      }
+    }
+
+    if (copied) {
       toast("Usuário de entrega copiado.");
-    } catch(error) {
-      console.error(error);
-      toast("Não foi possível copiar automaticamente.", "error");
+    } else {
+      // Último recurso para navegadores que bloqueiam a cópia automática.
+      window.prompt("Copie o usuário de entrega:", deliveryUser);
+      toast("Se a janela abriu, copie o usuário manualmente.", "error");
     }
   });
   $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
