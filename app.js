@@ -837,14 +837,13 @@ async function uploadGuestPaymentProof(orderId) {
 }
 
 function renderGuestDeliveryPanel(order) {
-  stopGuestOrderStatusPolling();
   localStorage.setItem("thoune-pending-guest-order", String(order.id));
   const content = $("#checkout-section .checkout-content");
   if (!content) return;
   const orderShort = String(order.id).slice(0, 8).toUpperCase();
   const deliveryUser = storeSettings.delivery_bot_username || "Usuário de entrega não configurado";
   content.innerHTML = `
-    <div class="checkout-success-card guest-status-panel" style="padding:24px;text-align:center;">
+    <div class="checkout-success-card guest-status-panel" data-order-id="${escapeHtml(order.id)}" style="padding:24px;text-align:center;">
       <div style="font-size:42px;margin-bottom:10px;">🚚</div>
       <p class="eyebrow">DADOS DE ENTREGA</p>
       <h2 style="margin:8px 0;">Pagamento confirmado ✓</h2>
@@ -910,7 +909,13 @@ function renderGuestDeliveryPanel(order) {
       toast("Se a janela abriu, copie o usuário manualmente.", "error");
     }
   });
-  $("#guest-finish")?.addEventListener("click", () => closePanel($("#checkout-section")));
+  $("#guest-finish")?.addEventListener("click", async () => {
+    closePanel($("#checkout-section"));
+    await openGuestReviewPanel(order);
+  });
+  // Continue checking the order while the delivery panel is open, so an admin
+  // marking it as delivered opens the review automatically without a refresh.
+  if (!guestOrderStatusTimer) startGuestOrderStatusPolling(order.id);
 }
 
 let guestOrderStatusTimer = null;
@@ -934,8 +939,13 @@ async function pollGuestOrderStatus(orderId) {
   if (!data?.found) { localStorage.removeItem("thoune-pending-guest-order"); stopGuestOrderStatusPolling(); return; }
   const status = String(data.status || "");
   if (status === "payment_confirmed" || status === "awaiting_delivery") {
-    renderGuestDeliveryPanel({ id: orderId, status });
-    toast("Pagamento confirmado! A entrega será iniciada pela loja.");
+    const currentDeliveryPanel = $("#checkout-section .guest-status-panel");
+    const sameDeliveryOrder = currentDeliveryPanel?.dataset.orderId === String(orderId)
+      && Boolean($("#copy-delivery-user"));
+    if (!sameDeliveryOrder) {
+      renderGuestDeliveryPanel({ ...data, id: orderId, status });
+      toast("Pagamento confirmado! A entrega será iniciada pela loja.");
+    }
     return;
   }
   if (status === "payment_rejected") {
@@ -949,7 +959,8 @@ async function pollGuestOrderStatus(orderId) {
     return;
   }
   if (status === "delivered") {
-    renderGuestDeliveredPanel(data);
+    stopGuestOrderStatusPolling();
+    renderGuestDeliveredPanel(data, true);
     return;
   }
   const queue = Number(data.queue_position);
@@ -963,7 +974,6 @@ function startGuestOrderStatusPolling(orderId) {
   stopGuestOrderStatusPolling();
   pollGuestOrderStatus(orderId);
   guestOrderStatusTimer = window.setInterval(() => {
-    if (!$("#checkout-section")?.classList.contains("open")) return;
     pollGuestOrderStatus(orderId);
   }, 5000);
 }
