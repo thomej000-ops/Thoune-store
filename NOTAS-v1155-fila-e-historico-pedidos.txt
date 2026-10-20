@@ -1,0 +1,13 @@
+Thoune Store — v1155: fila de pedidos e histórico
+
+Alterações em admin.html:
+- Pedidos ativos e Histórico de entregues como abas internas na seção Pedidos.
+- Pedidos marcados como delivered saem da lista ativa e ficam no histórico, sem apagar registros do banco.
+- Histórico possui busca própria por código, cliente, usuário ou marreta.
+- A fila ativa prioriza pedidos com pagamento confirmado/prontos para entrega; dentro de cada etapa, os mais antigos aparecem primeiro.
+- Pedidos aguardando verificação aparecem depois dos prontos para entrega; pedidos aguardando pagamento ficam depois deles.
+- Histórico mostra as entregas mais recentes primeiro.
+- Não exige SQL; não altera o banco nem apaga pedidos.
+
+Publicação: substituir somente v1139/admin.html no repositório e publicar.
+Verificações locais: sintaxe dos scripts inline e integridade do ZIP. Ainda é necessário testar no painel publicado com Supabase real.

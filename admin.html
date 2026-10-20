@@ -1057,18 +1057,31 @@
       ></div>
 
 
-      <div class="admin-search-wrap">
-        <label for="orders-search">🔎 Buscar pedido por código, cliente, usuário ou marreta</label>
-        <input id="orders-search" class="admin-search-input" type="search" autocomplete="off" placeholder="Código do pedido, TikTok, Roblox, nome da marreta...">
+      <div class="admin-subtabs" role="tablist" aria-label="Visualização de pedidos" style="display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px">
+        <button type="button" class="small-button orders-view-tab" id="active-orders-tab" role="tab" aria-selected="true">📦 Pedidos ativos</button>
+        <button type="button" class="small-button orders-view-tab" id="order-history-tab" role="tab" aria-selected="false">🗂️ Histórico de entregues</button>
       </div>
 
-      <div
-        id="orders-list"
-        class="products-list"
-      >
-        <p>
-          Carregando pedidos...
-        </p>
+      <div id="active-orders-view">
+        <p style="color:#49636b;margin:8px 0 12px">Os pedidos com pagamento confirmado aparecem primeiro; dentro de cada etapa, os mais antigos vêm antes.</p>
+        <div class="admin-search-wrap">
+          <label for="orders-search">🔎 Buscar pedido ativo por código, cliente, usuário ou marreta</label>
+          <input id="orders-search" class="admin-search-input" type="search" autocomplete="off" placeholder="Código do pedido, TikTok, Roblox, nome da marreta...">
+        </div>
+        <div id="orders-list" class="products-list">
+          <p>Carregando pedidos...</p>
+        </div>
+      </div>
+
+      <div id="order-history-view" class="hidden">
+        <p style="color:#49636b;margin:8px 0 12px">Os pedidos marcados como entregues ficam guardados aqui e deixam a lista principal mais organizada.</p>
+        <div class="admin-search-wrap">
+          <label for="order-history-search">🔎 Buscar no histórico por código, cliente, usuário ou marreta</label>
+          <input id="order-history-search" class="admin-search-input" type="search" autocomplete="off" placeholder="Código do pedido, TikTok, Roblox, nome da marreta...">
+        </div>
+        <div id="order-history-list" class="products-list">
+          <p>Carregando histórico...</p>
+        </div>
       </div>
 
     </div>
@@ -1998,6 +2011,7 @@ function setupAdminSearch(inputSelector, listSelector, itemSelector, emptyMessag
 
 setupAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhuma marreta corresponde à sua busca.");
 setupAdminSearch("#orders-search", "#orders-list", ".order-card", "Nenhum pedido corresponde à sua busca.");
+setupAdminSearch("#order-history-search", "#order-history-list", ".order-card", "Nenhum pedido no histórico corresponde à sua busca.");
 setupAdminSearch("#payments-search", "#payments-list", ".payment-card", "Nenhum pagamento corresponde à sua busca.");
 
 let editingProductId = null;
@@ -2671,6 +2685,21 @@ refreshProductsButton.addEventListener(
    PEDIDOS
 ========================================================= */
 
+function setOrdersView(view) {
+  const history = view === "history";
+  document.querySelector("#active-orders-view")?.classList.toggle("hidden", history);
+  document.querySelector("#order-history-view")?.classList.toggle("hidden", !history);
+  const activeTab = document.querySelector("#active-orders-tab");
+  const historyTab = document.querySelector("#order-history-tab");
+  if (activeTab) activeTab.setAttribute("aria-selected", String(!history));
+  if (historyTab) historyTab.setAttribute("aria-selected", String(history));
+  if (activeTab) activeTab.style.opacity = history ? ".72" : "1";
+  if (historyTab) historyTab.style.opacity = history ? "1" : ".72";
+}
+
+document.querySelector("#active-orders-tab")?.addEventListener("click", () => setOrdersView("active"));
+document.querySelector("#order-history-tab")?.addEventListener("click", () => setOrdersView("history"));
+
 async function loadOrders(focusOrderId = null){
   await loadDeliveredOrdersCount();
 
@@ -2691,7 +2720,7 @@ async function loadOrders(focusOrderId = null){
   message.textContent = "";
 
 
-  const {
+  let {
     data: orders,
     error
   } =
@@ -2701,7 +2730,7 @@ async function loadOrders(focusOrderId = null){
       .neq("status", "cancelled")
       .order(
         "created_at",
-        {ascending:false}
+        {ascending:true}
       );
 
 
@@ -2716,19 +2745,29 @@ async function loadOrders(focusOrderId = null){
   }
 
 
-  if(!orders?.length){
-
-    list.innerHTML =
-      `<div class="empty-products">
-        <div style="font-size:40px">📦</div>
-        <p>Nenhum pedido encontrado.</p>
-      </div>`;
-
-    return;
-  }
-
-
+  const historyList = document.querySelector("#order-history-list");
+  if (!historyList) return;
+  historyList.innerHTML = "";
   list.innerHTML = "";
+
+  // A fila de trabalho prioriza pedidos pagos/prontos para entrega e ordena
+  // cada etapa do mais antigo para o mais recente.
+  const stageRank = order => {
+    if (["awaiting_delivery", "payment_confirmed"].includes(order.status)) return 0;
+    if (order.status === "awaiting_verification") return 1;
+    if (order.status === "awaiting_payment") return 2;
+    return 3;
+  };
+  orders = (orders || []).slice().sort((a, b) => {
+    if (a.status === "delivered" && b.status === "delivered") {
+      return new Date(b.delivered_at || b.created_at || 0).getTime() - new Date(a.delivered_at || a.created_at || 0).getTime();
+    }
+    if (a.status === "delivered") return 1;
+    if (b.status === "delivered") return -1;
+    const stageDifference = stageRank(a) - stageRank(b);
+    if (stageDifference) return stageDifference;
+    return new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
+  });
 
   // Carrega as imagens do catálogo para associá-las aos itens de cada pedido.
   // O pedido continua mostrando nome e preço mesmo se uma imagem não existir.
@@ -2978,11 +3017,19 @@ async function loadOrders(focusOrderId = null){
     );
 
 
-    list.appendChild(card);
+    (order.status === "delivered" ? historyList : list).appendChild(card);
 
   }
 
+  if (!list.querySelector(".order-card")) {
+    list.innerHTML = `<div class="empty-products"><div style="font-size:40px">📦</div><p>Nenhum pedido aguardando atendimento.</p></div>`;
+  }
+  if (!historyList.querySelector(".order-card")) {
+    historyList.innerHTML = `<div class="empty-products"><div style="font-size:40px">🗂️</div><p>Nenhuma entrega no histórico ainda.</p></div>`;
+  }
+
   applyAdminSearch("#orders-search", "#orders-list", ".order-card", "Nenhum pedido corresponde à sua busca.");
+  applyAdminSearch("#order-history-search", "#order-history-list", ".order-card", "Nenhum pedido no histórico corresponde à sua busca.");
 
   // Depois de uma ação, leva o administrador diretamente ao pedido atualizado.
   if (focusOrderId) {
