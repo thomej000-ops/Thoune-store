@@ -501,6 +501,12 @@
         justify-content: flex-start;
       }
     }
+
+    .admin-search-wrap { margin: 16px 0 20px; max-width: 620px; }
+    .admin-search-wrap label { display:block; margin-bottom:7px; color:#244854; font-size:.9rem; font-weight:750; }
+    .admin-search-input { display:block; width:100%; box-sizing:border-box; min-height:48px; padding:12px 15px; border:1px solid #c7dfe4; border-radius:13px; background:#fff; color:#123642; font:inherit; outline:none; transition:border-color .18s,box-shadow .18s; }
+    .admin-search-input:focus { border-color:#287b8c; box-shadow:0 0 0 3px rgba(40,123,140,.13); }
+    .admin-search-empty { padding:14px 16px; border:1px dashed #b8d4db; border-radius:12px; color:#45636b; background:#f7fbfc; }
   </style>
 
 <style id="thoune-admin-v1008">
@@ -985,6 +991,11 @@
       </div>
 
 
+      <div class="admin-search-wrap">
+        <label for="products-search">🔎 Buscar marreta por nome, raridade ou preço</label>
+        <input id="products-search" class="admin-search-input" type="search" autocomplete="off" placeholder="Ex.: Party Balloons, Lendária, 3,00...">
+      </div>
+
       <div
         class="products-list"
         id="products-list"
@@ -1046,6 +1057,11 @@
       ></div>
 
 
+      <div class="admin-search-wrap">
+        <label for="orders-search">🔎 Buscar pedido por código, cliente, usuário ou marreta</label>
+        <input id="orders-search" class="admin-search-input" type="search" autocomplete="off" placeholder="Código do pedido, TikTok, Roblox, nome da marreta...">
+      </div>
+
       <div
         id="orders-list"
         class="products-list"
@@ -1099,6 +1115,12 @@
 
       </div>
 
+
+      <div class="admin-search-wrap">
+        <label for="payments-search">🔎 Buscar pagamento por cliente ou pedido</label>
+        <input id="payments-search" class="admin-search-input" type="search" autocomplete="off" placeholder="TikTok, Roblox, nome no Pix ou código do pedido...">
+        <small style="display:block;margin-top:7px;color:#59757d">Use a busca para localizar rapidamente um cliente fiel e analisar o pagamento dele primeiro.</small>
+      </div>
 
       <div
         id="payments-list"
@@ -1946,6 +1968,37 @@ const refreshProductsButton =
 const productFormMessage =
   document.querySelector("#product-form-message");
 
+// Busca local nas listas já carregadas, sem consultar o banco a cada tecla.
+function applyAdminSearch(inputSelector, listSelector, itemSelector, emptyMessage) {
+  const input = document.querySelector(inputSelector);
+  const list = document.querySelector(listSelector);
+  if (!input || !list) return;
+  const query = input.value.trim().toLocaleLowerCase("pt-BR");
+  const items = Array.from(list.querySelectorAll(itemSelector));
+  let visibleCount = 0;
+  items.forEach(item => {
+    const text = (item.innerText || item.textContent || "").toLocaleLowerCase("pt-BR");
+    const matches = !query || text.includes(query);
+    item.style.display = matches ? "" : "none";
+    if (matches) visibleCount++;
+  });
+  let empty = list.querySelector(":scope > .admin-search-empty");
+  if (query && items.length && visibleCount === 0) {
+    if (!empty) { empty = document.createElement("p"); empty.className = "admin-search-empty"; list.appendChild(empty); }
+    empty.textContent = emptyMessage;
+  } else if (empty) empty.remove();
+}
+
+function setupAdminSearch(inputSelector, listSelector, itemSelector, emptyMessage) {
+  const input = document.querySelector(inputSelector);
+  if (!input || input.dataset.searchReady === "true") return;
+  input.dataset.searchReady = "true";
+  input.addEventListener("input", () => applyAdminSearch(inputSelector, listSelector, itemSelector, emptyMessage));
+}
+
+setupAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhuma marreta corresponde à sua busca.");
+setupAdminSearch("#orders-search", "#orders-list", ".order-card", "Nenhum pedido corresponde à sua busca.");
+setupAdminSearch("#payments-search", "#payments-list", ".payment-card", "Nenhum pagamento corresponde à sua busca.");
 
 let editingProductId = null;
 
@@ -2343,6 +2396,7 @@ async function loadProducts(){
 
   });
 
+  applyAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhuma marreta corresponde à sua busca.");
 }
 
 
@@ -2928,6 +2982,8 @@ async function loadOrders(focusOrderId = null){
 
   }
 
+  applyAdminSearch("#orders-search", "#orders-list", ".order-card", "Nenhum pedido corresponde à sua busca.");
+
   // Depois de uma ação, leva o administrador diretamente ao pedido atualizado.
   if (focusOrderId) {
     const focusedCard = document.getElementById(`order-card-${focusOrderId}`);
@@ -3386,6 +3442,7 @@ async function loadPayments(){
 
   }
 
+  applyAdminSearch("#payments-search", "#payments-list", ".payment-card", "Nenhum pagamento corresponde à sua busca.");
 }
 
 
