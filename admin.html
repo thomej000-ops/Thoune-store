@@ -512,7 +512,15 @@
 <style id="thoune-admin-v1008">
 .admin-page{background:linear-gradient(180deg,#061820,#071f29 55%,#05151c)!important;color:#eaf8fa!important;}
 .admin-page .admin-card,.admin-page .product-form,.admin-page .settings-box,.admin-page .review-card,.admin-page .order-card,.admin-page .payment-card,.admin-page .admin-option{background:linear-gradient(180deg,#0a2d39,#061b23)!important;color:#eaf8fa!important;border-color:rgba(95,205,219,.16)!important;box-shadow:0 18px 50px rgba(0,0,0,.28)!important;}
-.admin-page .form-field label,.admin-page .section-header h2,.admin-page .admin-header h1,.admin-page .admin-header p,.admin-page .admin-option strong,.admin-page .product-form h3,.admin-page .settings-box h3{color:#eaf8fa!important;}
+
+    .rarity-choice{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:10px;width:100%;visibility:visible;opacity:1}
+    .rarity-choice-btn{appearance:none;-webkit-appearance:none;min-width:0;width:100%;min-height:64px;padding:8px 4px;border:2px solid #287789;border-radius:13px;background:#061b23;color:#eaf8fa;font-size:23px;font-weight:900;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;visibility:visible;opacity:1;position:relative;z-index:1}
+    .rarity-choice-btn span{display:block;font-size:clamp(9px,2.5vw,11px);font-weight:700;white-space:normal;text-align:center;line-height:1.15}
+    .rarity-choice-btn.is-selected{background:#17677a;border-color:#70d7e5;box-shadow:0 0 0 2px rgba(112,215,229,.25);color:#fff}
+    @media(max-width:420px){.rarity-choice{gap:5px}.rarity-choice-btn{min-height:58px;padding:6px 2px}}
+    .rarity-choice-btn:focus-visible{outline:2px solid #70d7e5;outline-offset:2px}
+
+    .admin-page .form-field label,.admin-page .section-header h2,.admin-page .admin-header h1,.admin-page .admin-header p,.admin-page .admin-option strong,.admin-page .product-form h3,.admin-page .settings-box h3{color:#eaf8fa!important;}
 .admin-page .form-field input,.admin-page .form-field select,.admin-page .form-field textarea{background:#061a22!important;color:#eaf8fa!important;border-color:rgba(95,205,219,.18)!important;}
 .admin-page .admin-option p{color:#88aab2!important;}
 .admin-page .admin-status{background:rgba(72,223,138,.10)!important;color:#76e3a0!important;border:1px solid rgba(72,223,138,.16)!important;}
@@ -804,35 +812,15 @@
 
 
           <div class="form-field">
-
-            <label for="product-category">
-              Raridade
-            </label>
-
-            <select id="product-category">
-
-              <option value="Lendária">
-                Lendária
-              </option>
-
-              <option value="Épica">
-                Épica
-              </option>
-
-              <option value="Rara">
-                Rara
-              </option>
-
-              <option value="Comum">
-                Comum
-              </option>
-
-              <option value="Exclusiva">
-                Exclusiva
-              </option>
-
-            </select>
-
+            <label>Raridade</label>
+            <input id="product-category" type="hidden" value="Comum">
+            <div class="rarity-choice" id="rarity-choice" role="group" aria-label="Escolher raridade">
+              <button type="button" class="rarity-choice-btn" data-rarity="Lendária" aria-pressed="false">L <span>Lendária</span></button>
+              <button type="button" class="rarity-choice-btn" data-rarity="Épica" aria-pressed="false">E <span>Épica</span></button>
+              <button type="button" class="rarity-choice-btn" data-rarity="Rara" aria-pressed="false">R <span>Rara</span></button>
+              <button type="button" class="rarity-choice-btn is-selected" data-rarity="Comum" aria-pressed="true">C <span>Comum</span></button>
+              <button type="button" class="rarity-choice-btn" data-rarity="Exclusiva" aria-pressed="false">X <span>Exclusiva</span></button>
+            </div>
           </div>
 
 
@@ -885,14 +873,17 @@
 <div class="form-field">
 
             <label for="product-order">
-              Ordem no catálogo
+              Ordem no catálogo (automática)
             </label>
+            <small>Deixe vazio para colocar no final automaticamente. Para colocar uma marreta no topo, informe 1; as posições menores aparecem primeiro.</small>
 
             <input
               id="product-order"
               type="number"
-              min="0"
+              min="1"
               step="1"
+              placeholder="Automática (final do catálogo)"
+              inputmode="numeric"
             >
 
           </div>
@@ -1889,6 +1880,17 @@ const productName =
 const productCategory =
   document.querySelector("#product-category");
 
+const rarityChoiceButtons = [...document.querySelectorAll(".rarity-choice-btn")];
+function setProductRarity(value) {
+  productCategory.value = value || "Comum";
+  rarityChoiceButtons.forEach(button => {
+    const selected = button.dataset.rarity === productCategory.value;
+    button.classList.toggle("is-selected", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+}
+rarityChoiceButtons.forEach(button => button.addEventListener("click", () => setProductRarity(button.dataset.rarity)));
+
 const productPrice =
   document.querySelector("#product-price");
 
@@ -1901,6 +1903,7 @@ const productDiscountActive =
 
 const productOrder =
   document.querySelector("#product-order");
+productOrder.addEventListener("input", () => { productOrder.dataset.autoOrder = "false"; });
 
 const productImage =
   document.querySelector("#product-image");
@@ -2035,8 +2038,7 @@ function openProductForm(product=null){
     productName.value =
       product.name || "";
 
-    productCategory.value =
-      product.category || "Comum";
+    setProductRarity(product.category || "Comum");
 
     productPrice.value =
       product.price ?? "";
@@ -2048,7 +2050,8 @@ function openProductForm(product=null){
       product.discount_active === true;
 
     productOrder.value =
-      product.sort_order ?? 0;
+      product.sort_order ?? 1;
+    productOrder.dataset.autoOrder = "false";
 
     productImage.value =
       product.image || "";
@@ -2078,15 +2081,16 @@ function openProductForm(product=null){
 
     productName.value = "";
 
-    productCategory.value =
-      "Comum";
+    setProductRarity("Comum");
 
     productPrice.value = "";
 
     productDiscountPercent.value = 0;
     productDiscountActive.checked = false;
 
-    productOrder.value = 0;
+    productOrder.value = "";
+    productOrder.placeholder = "Automático (próxima posição)";
+    productOrder.dataset.autoOrder = "true";
 
     productImage.value = "";
     selectedProductImageData = "";
@@ -2122,8 +2126,7 @@ function closeProductForm(){
 
   productName.value = "";
 
-  productCategory.value =
-    "Comum";
+  setProductRarity("Comum");
 
   productPrice.value = "";
 
@@ -2433,8 +2436,8 @@ saveProductButton.addEventListener(
     const discountActive =
       productDiscountActive.checked;
 
-    const sortOrder =
-      Number(productOrder.value);
+    const requestedOrderText = productOrder.value.trim();
+    const requestedOrder = requestedOrderText === "" ? null : Number(requestedOrderText);
 
     const image =
       productImage.value.trim();
@@ -2479,14 +2482,8 @@ if(
     }
 
 
-    if(
-      !Number.isInteger(sortOrder) ||
-      sortOrder < 0
-    ){
-
-      productFormMessage.textContent =
-        "Informe uma ordem válida.";
-
+    if(requestedOrder !== null && (!Number.isInteger(requestedOrder) || requestedOrder < 1)){
+      productFormMessage.textContent = "Informe uma posição a partir de 1 ou deixe vazio para adicionar ao final.";
       return;
     }
 
@@ -2505,7 +2502,32 @@ if(
 
     try{
 
-      const productData = {
+      let sortOrder = requestedOrder;
+    if (sortOrder === null) {
+      if (editingProductId) {
+        const { data: currentProduct, error: currentError } = await supabase
+          .from("products").select("sort_order").eq("id", editingProductId).maybeSingle();
+        if (currentError) throw currentError;
+        sortOrder = Number(currentProduct?.sort_order ?? 1);
+      } else {
+        const { data: lastRows, error: lastError } = await supabase
+          .from("products").select("sort_order").order("sort_order", { ascending: false }).limit(1);
+        if (lastError) throw lastError;
+        sortOrder = Math.max(0, Number(lastRows?.[0]?.sort_order ?? 0)) + 1;
+      }
+    } else {
+      const { data: rowsToShift, error: shiftReadError } = await supabase
+        .from("products").select("id,sort_order").gte("sort_order", sortOrder).order("sort_order", { ascending: false });
+      if (shiftReadError) throw shiftReadError;
+      for (const row of (rowsToShift || [])) {
+        if (editingProductId && String(row.id) === String(editingProductId)) continue;
+        const { error: shiftError } = await supabase.from("products")
+          .update({ sort_order: Number(row.sort_order || 0) + 1 }).eq("id", row.id);
+        if (shiftError) throw shiftError;
+      }
+    }
+
+    const productData = {
 
         name,
 
@@ -2640,40 +2662,23 @@ async function toggleProduct(product){
 
 async function deleteProduct(product){
 
-  if(
-    !confirm(
-      `Tem certeza que deseja excluir "${product.name}"?\n\nEssa ação não pode ser desfeita.`
-    )
-  ) return;
+  if (!confirm(
+    `Deseja retirar "${product.name}" do catálogo?\n\nO produto será desativado para preservar o histórico de pedidos antigos. Ele deixará de aparecer na loja, mas continuará registrado nos pedidos já realizados.`
+  )) return;
 
+  const { error } = await supabaseClient
+    .from("products")
+    .update({ active: false })
+    .eq("id", product.id);
 
-  const {
-    error
-  } =
-    await supabaseClient
-      .from("products")
-      .delete()
-      .eq(
-        "id",
-        product.id
-      );
-
-
-  if(error){
-
-    alert(
-      "Não foi possível excluir:\n" +
-      error.message
-    );
-
+  if (error) {
+    alert("Não foi possível retirar o produto do catálogo:\n" + error.message);
     return;
   }
 
-
+  alert(`"${product.name}" foi retirado do catálogo. O histórico de pedidos foi preservado.`);
   await loadProducts();
-
 }
-
 
 refreshProductsButton.addEventListener(
   "click",

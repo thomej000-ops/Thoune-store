@@ -211,7 +211,12 @@ function getFilteredProducts() {
   }
   if (currentSort === "low") result.sort((a,b) => getProductPrice(a) - getProductPrice(b));
   else if (currentSort === "high") result.sort((a,b) => getProductPrice(b) - getProductPrice(a));
-  else result.sort((a,b) => Number(a.sort_order || 0) - Number(b.sort_order || 0));
+  else result.sort((a,b) => {
+    const aExclusive = String(a.category || "").toLowerCase() === "exclusiva" ? 0 : 1;
+    const bExclusive = String(b.category || "").toLowerCase() === "exclusiva" ? 0 : 1;
+    if (aExclusive !== bExclusive) return aExclusive - bExclusive;
+    return Number(a.sort_order || 0) - Number(b.sort_order || 0);
+  });
   return result;
 }
 
