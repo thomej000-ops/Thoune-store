@@ -1511,6 +1511,38 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* Raridade: controlador independente do módulo principal, para garantir seleção visual e valor do formulário. */
+(function () {
+  const group = document.getElementById("rarity-choice");
+  const categoryInput = document.getElementById("product-category");
+  if (!group || !categoryInput) return;
+  const buttons = Array.from(group.querySelectorAll(".rarity-choice-btn[data-rarity]"));
+  function selectRarity(value) {
+    const valid = buttons.some((button) => button.dataset.rarity === value);
+    const selectedValue = valid ? value : "Comum";
+    categoryInput.value = selectedValue;
+    buttons.forEach((button) => {
+      const selected = button.dataset.rarity === selectedValue;
+      button.classList.toggle("is-selected", selected);
+      button.setAttribute("aria-pressed", selected ? "true" : "false");
+      button.style.setProperty("background-color", selected ? "#17677a" : "#061b23", "important");
+      button.style.setProperty("border-color", selected ? "#70d7e5" : "#287789", "important");
+      button.style.setProperty("box-shadow", selected ? "0 0 0 2px rgba(112,215,229,.35)" : "none", "important");
+      button.style.setProperty("color", "#ffffff", "important");
+    });
+  }
+  group.addEventListener("click", function (event) {
+    const button = event.target instanceof Element ? event.target.closest("button.rarity-choice-btn[data-rarity]") : null;
+    if (!button || !group.contains(button)) return;
+    event.preventDefault();
+    selectRarity(button.dataset.rarity);
+  }, true);
+  categoryInput.addEventListener("change", () => selectRarity(categoryInput.value));
+  selectRarity(categoryInput.value || "Comum");
+  window.__thouneSelectRarity = selectRarity;
+})();
+</script>
 
 
 <script type="module">
