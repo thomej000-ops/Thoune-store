@@ -1274,9 +1274,11 @@ function setupEvents() {
     currentEventFilter = button.dataset.eventFilter || "";
     $$(".event-filter-option").forEach(b => b.classList.toggle("active", b === button));
     const trigger = $("#sort-trigger");
-    if (trigger && currentEventFilter) trigger.textContent = button.querySelector("strong")?.textContent || "Evento";
+    if (trigger && currentEventFilter) trigger.textContent = button.getAttribute("title") || "Evento";
     else if (trigger) trigger.textContent = currentSort === "low" ? "Menor preço" : currentSort === "high" ? "Maior preço" : "Mais populares";
     $("#sort-options")?.setAttribute("hidden", "");
+    trigger?.setAttribute("aria-expanded", "false");
+    $("#sort-control")?.classList.remove("is-open");
     renderCatalog();
   }));
   setupSortControl();

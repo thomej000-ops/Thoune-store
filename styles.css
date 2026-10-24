@@ -9380,3 +9380,14 @@ svg.thoune-bat,
 #product-grid .rarity-comum{color:#72d69a!important;background:rgba(75,205,125,.12)!important;border-color:rgba(75,205,125,.32)!important}
 #sort-control .sort-option img{width:30px;height:30px;object-fit:contain;flex:0 0 30px;background:rgba(0,0,0,.15);padding:3px;border-radius:8px}
 #sort-control .event-sort-divider{padding:10px 12px 5px;font-size:10px;letter-spacing:.14em;font-weight:900;color:#7da9b2;border-top:1px solid rgba(125,169,178,.18);margin-top:5px}
+
+/* v1161: aviso de segurança e filtro discreto por símbolo de evento */
+.checkout-safety-note{display:block;margin-top:8px;padding:10px 12px;border:1px solid rgba(112,215,229,.28);border-radius:10px;background:rgba(23,103,122,.16);color:#d7edf0;font-size:12px;line-height:1.45}
+#sort-control .event-filter-option>span:first-child{background:transparent!important;border:0!important}
+#sort-control .event-filter-option img{width:30px;height:30px;object-fit:contain}
+#sort-control .event-filter-option .event-filter-name{display:none!important}
+#sort-control .event-filter-option>span:last-child{display:none!important}
+#sort-control .event-filter-option{justify-content:center!important;min-height:48px!important;width:56px!important;display:inline-flex!important;padding:8px!important}
+#sort-control .event-filter-option>span:first-child{width:34px!important;height:34px!important;flex:0 0 34px!important}
+#sort-control .event-filter-option img{width:30px;height:30px;object-fit:contain}
+#sort-control .event-filter-option[title="Todos os eventos"]{width:auto!important;min-width:56px!important}

@@ -1,0 +1,9 @@
+Thoune Store v1161 — eventos, descontos por evento e exclusão lógica
+
+1. Faça backup do projeto e do banco antes de publicar.
+2. Execute supabase_v1161_eventos_exclusao_descontos.sql no Supabase SQL Editor.
+3. Publique os arquivos da pasta v1139 mantendo a pasta events/ e seus PNGs.
+4. O filtro de eventos aparece dentro do menu “Ordenar por...”; a raridade continua como classificação principal.
+5. Ao excluir um produto pelo painel, deleted_at é preenchido e o registro deixa de aparecer na lista de desativados, mantendo o histórico de pedidos.
+6. A atribuição de entregador não foi automatizada para contornar fiscalização/moderação do jogo. Use atribuição transparente e siga as regras da plataforma.
+7. Teste com um produto de teste antes de ativar descontos globais em produção.

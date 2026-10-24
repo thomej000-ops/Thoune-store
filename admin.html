@@ -2291,6 +2291,7 @@ async function loadProducts(){
       .from("products")
       .select("*");
   if (!showInactive) productsQuery = productsQuery.eq("active", true);
+  else productsQuery = productsQuery.is("deleted_at", null);
   const { data, error } = await productsQuery
       .order("sort_order", {ascending:true})
       .order("name", {ascending:true});
@@ -2766,7 +2767,7 @@ async function deleteProduct(product){
 
   const { error } = await supabaseClient
     .from("products")
-    .update({ active: false })
+    .update({ active: false, deleted_at: new Date().toISOString() })
     .eq("id", product.id);
 
   if (error) {
@@ -2774,7 +2775,7 @@ async function deleteProduct(product){
     return;
   }
 
-  alert(`"${product.name}" foi retirado do catálogo. O histórico de pedidos foi preservado. Se precisar, marque “Mostrar também marretas desativadas” para reativá-lo.`);
+  alert(`"${product.name}" foi removido da lista de produtos. O histórico de pedidos foi preservado; o produto não aparecerá em “Mostrar também marretas desativadas”.`);
   await loadProducts();
 }
 
