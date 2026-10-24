@@ -58,11 +58,11 @@ export function renderProducts(products = []) {
         <div class="product-image">
           ${image}
           ${hasDiscount ? `<span class="discount-badge">-${discountPercent}%</span>` : ""}
-          
+          ${product.event_name ? `<span class="event-card-badge" title="Evento: ${escape(product.event_name)}"><img src="events/${escape(product.event_name)}.png" alt="Evento ${escape(product.event_name)}"></span>` : ""}
         </div>
 
         <div class="product-info">
-          <span class="rarity">${escape(product.category || "Item")}</span>
+          <span class="rarity rarity-${escape(String(product.category || "item").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase())}">${escape(product.category || "Item")}</span>
           <h3 class="product-name">${escape(product.name || "Produto")}</h3>
           ${product.description ? `<p>${escape(product.description)}</p>` : ""}
 

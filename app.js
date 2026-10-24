@@ -12,8 +12,10 @@ let storeSettings = {
   delivery_bot_url: "",
   join_open: false,
   discount_percent: 0,
-  discount_active: false
+  discount_active: false,
+  discount_event: ""
 };
+let currentEventFilter = "";
 let currentCategory = "Todas";
 let currentSearch = "";
 let currentSort = "popular";
@@ -116,7 +118,7 @@ function openTerms() {
 async function loadStoreSettings() {
   const { data, error } = await supabaseClient
     .from("public_store_settings")
-    .select("id, online, pix_key, delivery_bot_username, delivery_bot_url, join_open, discount_percent, discount_active, updated_at")
+    .select("id, online, pix_key, delivery_bot_username, delivery_bot_url, join_open, discount_percent, discount_active, discount_event, updated_at")
     .maybeSingle();
 
   if (error) {
@@ -134,7 +136,8 @@ async function loadStoreSettings() {
       delivery_bot_url: data.delivery_bot_url || "",
       join_open: Boolean(data.join_open),
       discount_percent: Number(data.discount_percent) || 0,
-      discount_active: Boolean(data.discount_active)
+      discount_active: Boolean(data.discount_active),
+      discount_event: data.discount_event || ""
     };
   }
   updateStoreStatus();
@@ -164,7 +167,7 @@ function updateStoreStatus() {
 function getDiscountPercent(product) {
   const individual = Number(product?.discount_percent) || 0;
   if (product?.discount_active && individual > 0) return Math.min(100, individual);
-  if (storeSettings.discount_active) return Math.min(100, Number(storeSettings.discount_percent) || 0);
+  if (storeSettings.discount_active && (!storeSettings.discount_event || storeSettings.discount_event === (product?.event_name || ""))) return Math.min(100, Number(storeSettings.discount_percent) || 0);
   return 0;
 }
 
@@ -205,6 +208,7 @@ function getFilteredProducts() {
   if (currentCategory !== "Todas") {
     result = result.filter(p => String(p.category || "").toLowerCase() === currentCategory.toLowerCase());
   }
+  if (currentEventFilter) result = result.filter(p => String(p.event_name || "") === currentEventFilter);
   if (currentSearch) {
     const q = currentSearch.toLowerCase();
     result = result.filter(p => String(p.name || "").toLowerCase().includes(q) || String(p.category || "").toLowerCase().includes(q));
@@ -272,6 +276,8 @@ function animateCatalogCards() {
 }
 
 function resetCatalogFilters() {
+  currentEventFilter = "";
+  document.querySelectorAll(".event-filter-option").forEach(b => b.classList.toggle("active", b.dataset.eventFilter === ""));
   currentCategory = "Todas";
   currentSearch = "";
   currentSort = "popular";
@@ -1264,6 +1270,15 @@ function setupEvents() {
   $("#sort-select")?.addEventListener("change", e => { currentSort=e.target.value; renderCatalog(); });
   $("#clear-search-button")?.addEventListener("click", resetCatalogFilters);
   $$(".category").forEach(button => button.addEventListener("click", () => { currentCategory=button.dataset.category||"Todas"; $$(".category").forEach(b=>b.classList.toggle("active", b===button)); renderCatalog(); }));
+  $$("[data-event-filter]").forEach(button => button.addEventListener("click", () => {
+    currentEventFilter = button.dataset.eventFilter || "";
+    $$(".event-filter-option").forEach(b => b.classList.toggle("active", b === button));
+    const trigger = $("#sort-trigger");
+    if (trigger && currentEventFilter) trigger.textContent = button.querySelector("strong")?.textContent || "Evento";
+    else if (trigger) trigger.textContent = currentSort === "low" ? "Menor preço" : currentSort === "high" ? "Maior preço" : "Mais populares";
+    $("#sort-options")?.setAttribute("hidden", "");
+    renderCatalog();
+  }));
   setupSortControl();
 
   document.addEventListener("click", async event => {

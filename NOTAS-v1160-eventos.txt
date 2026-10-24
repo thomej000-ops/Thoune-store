@@ -1,0 +1,7 @@
+Thoune Store v1160 — Eventos no catálogo
+
+1. Execute supabase_v1160_eventos_catalogo.sql no SQL Editor do Supabase antes de publicar os arquivos.
+2. Publique os arquivos da pasta v1139 preservando a estrutura relativa, incluindo a pasta events/.
+3. No admin, cada produto pode receber um evento; no catálogo, os filtros de eventos ficam dentro de “Ordenar por...”.
+4. O desconto global por evento ganhou o campo de configuração no painel. NÃO ative descontos reais por evento até atualizar e testar as RPCs de criação de pedido no Supabase: elas podem continuar aplicando o desconto global antigo a todos os produtos. A interface sozinha não é suficiente para garantir o valor cobrado.
+5. A remoção real continua separada da desativação para preservar referências de pedidos antigos.

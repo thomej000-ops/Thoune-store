@@ -9368,3 +9368,15 @@ svg.thoune-bat,
 .thoune-bat .bat-wing-right {
   animation-duration: .34s !important;
 }
+
+
+/* Thoune Store: eventos e cores de raridade */
+#product-grid .product-image{position:relative}
+#product-grid .event-card-badge{position:absolute;right:10px;top:10px;z-index:3;width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:rgba(4,25,33,.88);border:1px solid rgba(255,255,255,.2);padding:4px}
+#product-grid .event-card-badge img{width:100%;height:100%;object-fit:contain}
+#product-grid .rarity-lendaria{color:#f5c84b!important;background:rgba(245,200,75,.12)!important;border-color:rgba(245,200,75,.32)!important}
+#product-grid .rarity-epica{color:#c6a0ff!important;background:rgba(160,95,255,.13)!important;border-color:rgba(180,130,255,.34)!important}
+#product-grid .rarity-rara{color:#69baff!important;background:rgba(65,155,255,.12)!important;border-color:rgba(95,175,255,.34)!important}
+#product-grid .rarity-comum{color:#72d69a!important;background:rgba(75,205,125,.12)!important;border-color:rgba(75,205,125,.32)!important}
+#sort-control .sort-option img{width:30px;height:30px;object-fit:contain;flex:0 0 30px;background:rgba(0,0,0,.15);padding:3px;border-radius:8px}
+#sort-control .event-sort-divider{padding:10px 12px 5px;font-size:10px;letter-spacing:.14em;font-weight:900;color:#7da9b2;border-top:1px solid rgba(125,169,178,.18);margin-top:5px}
