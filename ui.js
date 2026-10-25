@@ -7,24 +7,6 @@ const escape = (value) => String(value ?? "")
   .replaceAll('"', "&quot;")
   .replaceAll("'", "&#039;");
 
-// Resolve event icons consistently, whether the database stores a slug or a display name.
-const eventIconFile = (value) => {
-  const key = String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
-  const aliases = {
-    anniversary: "anniversary", aniversario: "anniversary",
-    autumn: "autumn", outono: "autumn",
-    christmas: "christmas", natal: "christmas",
-    clover: "clover",
-    easter: "easter", pascoa: "easter",
-    halloween: "halloween",
-    lunar: "lunar",
-    spring: "spring", primavera: "spring",
-    summer: "summer", verao: "summer",
-    valentines: "valentines", namorados: "valentines", "dia dos namorados": "valentines"
-  };
-  return aliases[key] || "";
-};
-
 export function toast(message, type = "info") {
   const region = document.querySelector("#toast-region");
   if (!region) return;
@@ -76,11 +58,11 @@ export function renderProducts(products = []) {
         <div class="product-image">
           ${image}
           ${hasDiscount ? `<span class="discount-badge">-${discountPercent}%</span>` : ""}
-          ${eventIconFile(product.event_name) ? `<span class="event-card-badge" title="Evento: ${escape(product.event_name)}"><img src="./${eventIconFile(product.event_name)}.png" alt="Evento ${escape(product.event_name)}" loading="lazy"></span>` : ""}
+          ${product.event_name ? `<span class="event-card-badge" title="Evento: ${escape(product.event_name)}"><img src="${escape(product.event_name)}.png" alt="Evento ${escape(product.event_name)}"></span>` : ""}
         </div>
 
         <div class="product-info">
-          <span class="rarity rarity-${escape(String(product.category || "item").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase())}">${String(product.category || "Item").toLowerCase() === "exclusiva" ? `<img class="rarity-exclusive-icon" src="./exclusive.png" alt="" loading="lazy">` : ""}${escape(product.category || "Item")}</span>
+          <span class="rarity rarity-${escape(String(product.category || "item").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase())}">${escape(product.category || "Item")}</span>
           <h3 class="product-name">${escape(product.name || "Produto")}</h3>
           ${product.description ? `<p>${escape(product.description)}</p>` : ""}
 

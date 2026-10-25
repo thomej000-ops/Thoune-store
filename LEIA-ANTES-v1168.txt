@@ -1,0 +1,7 @@
+THOUNE STORE v1168 — ICONE EXCLUSIVA COMO EVENTO
+
+Esta versao preserva os arquivos da v1167 que corrigiu os caminhos dos eventos e adiciona exclusive.png na raiz.
+O painel administrativo inclui um botao de evento no mesmo padrao visual dos demais: "Uniques / Exclusivas".
+Para mostrar o icone no card de uma marreta, defina o campo event_name do produto como "exclusive" (nao altera produtos automaticamente nem executa SQL).
+
+Publique os arquivos do ZIP na raiz da branch main. Mantenha os demais PNGs de evento existentes.
