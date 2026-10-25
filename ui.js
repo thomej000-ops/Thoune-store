@@ -81,7 +81,7 @@ export function renderProducts(products = []) {
         </div>
 
         <div class="product-info">
-          <span class="rarity rarity-${escape(String(product.category || "item").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase())}">${String(product.category || "Item").toLowerCase() === "exclusiva" ? `<img class="rarity-exclusive-icon" src="./exclusive.png" alt="" loading="lazy">` : ""}${escape(product.category || "Item")}</span>
+          <span class="rarity rarity-${escape(String(product.category || "item").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase())}">${escape(product.category || "Item")}</span>
           <h3 class="product-name">${escape(product.name || "Produto")}</h3>
           ${product.description ? `<p>${escape(product.description)}</p>` : ""}
 
