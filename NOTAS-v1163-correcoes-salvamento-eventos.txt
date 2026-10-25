@@ -1,0 +1,11 @@
+Thoune Store v1163 — correções
+
+- Corrigido o controlador visual das raridades para não sobrescrever os estilos Chroma/Atualização.
+- Removida a sequência de atualizações individuais para deslocar a ordem de todos os produtos, que atrasava o salvamento. A posição solicitada passa a ser aplicada somente ao produto editado; itens na mesma posição são ordenados pelo nome na lista.
+- Removido o alert bloqueante após salvar; a mensagem do formulário continua indicando sucesso.
+- Símbolos de eventos nos cards agora aparecem sem fundo, borda ou painel quadrado.
+- Os PNGs da pasta events/ permanecem incluídos. Publique a pasta junto de index.html e admin.html.
+
+Importante: se o banco tiver uma CHECK constraint que limite products.category às raridades antigas, a opção Atualização será rejeitada pelo Supabase. Não foi possível confirmar as constraints do banco remoto. Use a consulta indicada no chat antes de alterar constraints.
+
+Usuários de entrega: esta versão não implementa rotação de contas para contornar moderação do jogo. É possível implementar atribuição transparente de entregador e registro de qual usuário realizou cada entrega, após definir campos e permissões de auditoria.

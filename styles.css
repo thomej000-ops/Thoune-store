@@ -9405,6 +9405,11 @@ svg.thoune-bat,
   animation:thoune-chroma-border 4s linear infinite!important;
   text-shadow:0 0 10px rgba(255,255,255,.16);
 }
-#product-grid .rarity-atualizacao{color:#ffad55!important;background:rgba(242,140,40,.13)!important;border-color:rgba(255,161,71,.4)!important}
+#product-grid .rarity-atualizacao{color:#ff9ed2!important;background:rgba(240,107,181,.13)!important;border-color:rgba(240,107,181,.42)!important}
 @keyframes thoune-chroma-border{to{filter:hue-rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){#product-grid .rarity-exclusiva{animation:none!important}#rarity-choice .rarity-choice-btn[data-rarity="Exclusiva"] span{animation:none!important}}
+
+
+/* v1163: símbolo de evento sem quadrado de fundo no card */
+#product-grid .event-card-badge{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important;width:36px!important;height:36px!important}
+#product-grid .event-card-badge img{display:block;width:100%!important;height:100%!important;object-fit:contain!important;background:transparent!important}
