@@ -20,7 +20,8 @@ const eventIconFile = (value) => {
     lunar: "lunar",
     spring: "spring", primavera: "spring",
     summer: "summer", verao: "summer",
-    valentines: "valentines", namorados: "valentines", "dia dos namorados": "valentines"
+    valentines: "valentines", namorados: "valentines", "dia dos namorados": "valentines",
+    uniques: "exclusive", unique: "exclusive", exclusive: "exclusive", exclusiva: "exclusive", exclusivas: "exclusive"
   };
   return aliases[key] || "";
 };
