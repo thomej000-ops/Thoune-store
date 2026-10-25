@@ -9413,3 +9413,41 @@ svg.thoune-bat,
 /* v1163: símbolo de evento sem quadrado de fundo no card */
 #product-grid .event-card-badge{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important;width:36px!important;height:36px!important}
 #product-grid .event-card-badge img{display:block;width:100%!important;height:100%!important;object-fit:contain!important;background:transparent!important}
+
+
+/* v1165: filtros de eventos em grade compacta, com ícones transparentes */
+#sort-control .event-filter-grid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:7px!important;
+  width:100%!important;
+}
+#sort-control .event-filter-grid .event-filter-option{
+  width:100%!important;min-width:0!important;min-height:48px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:6px!important;margin:0!important;box-sizing:border-box!important;
+}
+#sort-control .event-filter-grid .event-filter-option>span:first-child{
+  width:34px!important;height:34px!important;flex:0 0 34px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+}
+#sort-control .event-filter-grid .event-filter-option img{
+  width:30px!important;height:30px!important;object-fit:contain!important;
+  background:transparent!important;padding:0!important;border:0!important;border-radius:0!important;
+}
+#sort-control .event-sort-divider{flex:0 0 100%}
+@media(max-width:380px){#sort-control .event-filter-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+
+/* v1165: raridades conforme a identidade visual solicitada */
+#product-grid .rarity-exclusiva{
+  color:#fff!important;background:#171717!important;border:1px solid #555!important;
+  animation:none!important;text-shadow:none!important;
+  background-image:none!important;box-shadow:none!important;
+}
+#product-grid .rarity-atualizacao{
+  color:#fff!important;background:linear-gradient(110deg,#ff3d7f,#ffb52e,#fff34d,#39e879,#32d9ff,#8c52ff,#ff3d7f)!important;
+  background-size:300% 100%!important;border:1px solid rgba(255,255,255,.5)!important;
+  animation:thoune-atualizacao-chroma 4s linear infinite!important;
+}
+@keyframes thoune-atualizacao-chroma{to{background-position:300% 0}}
+@media(prefers-reduced-motion:reduce){#product-grid .rarity-atualizacao{animation:none!important;background-position:50% 0!important}}

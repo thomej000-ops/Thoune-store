@@ -1,0 +1,25 @@
+Thoune Store v1165 — eventos e raridades
+
+Alterações incluídas:
+- Mantida a estrutura original da versão v1164 dentro de v1139/.
+- Filtros de eventos agrupados em grade de ícones lado a lado (cinco colunas em telas usuais; quatro em telas muito estreitas).
+- PNGs de eventos convertidos para RGBA quando necessário, preservando transparência existente.
+- Cores das raridades atualizadas nos cards e nos botões do painel:
+  Lendária amarelo, Épica roxo, Rara azul, Comum verde, Exclusiva preta sem Chroma e Atualização com Chroma.
+- Estado selecionado dos botões de raridade destacado para todas as opções.
+- CSS dos ícones reforçado para remover fundos, bordas e sombras de elementos da interface.
+
+Verificações:
+- node --check passou em app.js, ui.js, cart.js e nos scripts inline de index.html/admin.html.
+- Estrutura do ZIP verificada.
+
+Não verificado:
+- Não foi feito teste de navegador conectado ao Supabase real.
+- Nenhuma alteração foi aplicada ao Supabase.
+- A configuração de três usuários de entrega e a atribuição persistente por pedido ainda exigem uma migração de banco e ajustes no fluxo de pagamentos; não foi simulada como se estivesse pronta.
+- O aviso ao cliente deve orientar uma troca legítima e conferida, não disfarçar uma venda para evitar moderação do Roblox.
+
+Publicação:
+- Extrair o conteúdo da pasta v1139/ para a raiz publicada do repositório, preservando a pasta events/.
+- Não enviar a pasta v1139 como subpasta dentro da raiz do site se os arquivos atuais são publicados diretamente na raiz.
+- Antes de publicar, comparar com a branch main e fazer commit dos arquivos alterados, sem excluir dados do Supabase.
