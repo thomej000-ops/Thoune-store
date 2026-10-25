@@ -1,0 +1,10 @@
+Thoune Store v1162 — Atualização e Exclusiva Chroma
+
+- Adicionada a categoria Atualização, com botão identificado pela letra A no formulário de produtos do painel administrativo.
+- Adicionados filtros Exclusiva e Atualização na loja.
+- Exclusiva mantém o nome de raridade e recebe tratamento visual Chroma animado nos cards.
+- Atualização recebe tratamento visual laranja.
+- Não foi necessária nova coluna SQL: o projeto já salva a classificação no campo products.category.
+
+Publicação: publicar os arquivos atualizados mantendo a estrutura existente, incluindo a pasta events.
+Testes: verificar cadastro/edição de um produto de teste em cada categoria e conferir filtros na loja.

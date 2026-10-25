@@ -9391,3 +9391,20 @@ svg.thoune-bat,
 #sort-control .event-filter-option>span:first-child{width:34px!important;height:34px!important;flex:0 0 34px!important}
 #sort-control .event-filter-option img{width:30px;height:30px;object-fit:contain}
 #sort-control .event-filter-option[title="Todos os eventos"]{width:auto!important;min-width:56px!important}
+
+
+/* v1162: raridade Exclusiva com efeito Chroma e categoria Atualização */
+#product-grid .rarity-exclusiva{
+  color:#fff!important;
+  background:linear-gradient(110deg,rgba(255,75,75,.17),rgba(255,184,77,.17),rgba(255,245,90,.17),rgba(72,255,139,.17),rgba(70,220,255,.17),rgba(145,95,255,.17),rgba(255,75,190,.17))!important;
+  background-size:300% 100%!important;
+  border:1px solid transparent!important;
+  background-image:linear-gradient(#082c3a,#082c3a),linear-gradient(110deg,#ff4b4b,#ffb84d,#fff55a,#48ff8b,#46dcff,#915fff,#ff4bbe)!important;
+  background-origin:border-box!important;
+  background-clip:padding-box,border-box!important;
+  animation:thoune-chroma-border 4s linear infinite!important;
+  text-shadow:0 0 10px rgba(255,255,255,.16);
+}
+#product-grid .rarity-atualizacao{color:#ffad55!important;background:rgba(242,140,40,.13)!important;border-color:rgba(255,161,71,.4)!important}
+@keyframes thoune-chroma-border{to{filter:hue-rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){#product-grid .rarity-exclusiva{animation:none!important}#rarity-choice .rarity-choice-btn[data-rarity="Exclusiva"] span{animation:none!important}}
