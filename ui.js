@@ -7,6 +7,24 @@ const escape = (value) => String(value ?? "")
   .replaceAll('"', "&quot;")
   .replaceAll("'", "&#039;");
 
+// Resolve event icons consistently, whether the database stores a slug or a display name.
+const eventIconFile = (value) => {
+  const key = String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+  const aliases = {
+    anniversary: "anniversary", aniversario: "anniversary",
+    autumn: "autumn", outono: "autumn",
+    christmas: "christmas", natal: "christmas",
+    clover: "clover",
+    easter: "easter", pascoa: "easter",
+    halloween: "halloween",
+    lunar: "lunar",
+    spring: "spring", primavera: "spring",
+    summer: "summer", verao: "summer",
+    valentines: "valentines", namorados: "valentines", "dia dos namorados": "valentines"
+  };
+  return aliases[key] || "";
+};
+
 export function toast(message, type = "info") {
   const region = document.querySelector("#toast-region");
   if (!region) return;
@@ -58,7 +76,7 @@ export function renderProducts(products = []) {
         <div class="product-image">
           ${image}
           ${hasDiscount ? `<span class="discount-badge">-${discountPercent}%</span>` : ""}
-          ${product.event_name ? `<span class="event-card-badge" title="Evento: ${escape(product.event_name)}"><img src="events/${escape(product.event_name)}.png" alt="Evento ${escape(product.event_name)}"></span>` : ""}
+          ${eventIconFile(product.event_name) ? `<span class="event-card-badge" title="Evento: ${escape(product.event_name)}"><img src="./${eventIconFile(product.event_name)}.png" alt="Evento ${escape(product.event_name)}" loading="lazy"></span>` : ""}
         </div>
 
         <div class="product-info">
