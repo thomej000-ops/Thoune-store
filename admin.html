@@ -841,7 +841,7 @@
 
 
           <div class="form-field">
-            <label>Raridade</label>
+            <label id="product-category-label">Categoria / raridade</label>
             <input id="product-category" type="hidden" value="Comum">
             <div class="rarity-choice" id="rarity-choice" role="group" aria-label="Escolher categoria">
               <button type="button" class="rarity-choice-btn" data-rarity="Lendária" aria-pressed="false">L <span>Lendária</span></button>
@@ -1997,6 +1997,11 @@ const FTF_CATEGORIES = ["Lendária", "Épica", "Rara", "Comum", "Exclusiva", "At
 const MM2_CATEGORIES = ["Godly", "Ancient", "Chroma", "Vintage", "Unique", "Legendary", "Rare", "Uncommon", "Common", "Seasonal"];
 function configureProductGame(game, selectedCategory) {
   const isMM2 = game === "mm2";
+  const categoryLabel = document.querySelector("#product-category-label");
+  if (categoryLabel) categoryLabel.textContent = isMM2 ? "Categoria MM2" : "Raridade Flee the Facility";
+  const eventField = document.querySelector("#product-event")?.closest(".form-field");
+  if (eventField) eventField.hidden = isMM2;
+  if (isMM2) window.__thouneSelectEvent?.("");
   const choices = isMM2 ? MM2_CATEGORIES : FTF_CATEGORIES;
   const group = document.querySelector("#rarity-choice");
   if (group) {

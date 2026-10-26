@@ -1,0 +1,13 @@
+THOUNE STORE v1165 CORRIGIDA — FTF + MM2
+
+IMPORTANTE: este ZIP já contém os arquivos diretamente na raiz do site.
+Para publicar no GitHub Pages, extraia o ZIP e envie o CONTEÚDO desta pasta para a raiz do repositório, no mesmo nível de index.html e admin.html. Não envie a pasta v1139 como uma subpasta.
+
+Mantenha a pasta events inteira. Ela contém os 10 ícones usados pelo catálogo e pelo painel.
+Mantenha também app.js, ui.js, cart.js, config.js, styles.css, pix-qr.png, roblox-logo.png, snoopy-banner.jpg e os demais arquivos de imagem.
+
+ANTES de publicar, execute supabase_v1165_add_mm2.sql no SQL Editor do Supabase. Não execute novamente se já foi aplicado com sucesso.
+
+No painel, o campo Jogo permite selecionar Flee the Facility ou Murder Mystery 2. As categorias são ajustadas conforme o jogo; a seleção de evento só aparece para FTF.
+
+Teste depois de publicar: (1) abrir a loja; (2) trocar entre FTF e MM2; (3) verificar os ícones de evento; (4) no painel, selecionar MM2 e conferir as categorias; (5) cadastrar um produto de teste e conferir o catálogo. Não cadastre todo o estoque antes desse teste.
