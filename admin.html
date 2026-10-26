@@ -525,6 +525,7 @@
     .event-choice-btn.is-selected{background:#17677a;border-color:#70d7e5;box-shadow:0 0 0 2px rgba(112,215,229,.22)}
     @media(max-width:420px){.event-choice{grid-template-columns:repeat(3,minmax(0,1fr))}}
     .rarity-choice{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:10px;width:100%;visibility:visible;opacity:1}
+    .rarity-choice-icon{display:block;width:34px;height:34px;object-fit:contain;margin:0 auto 3px}
     .rarity-choice-btn{appearance:none;-webkit-appearance:none;min-width:0;width:100%;min-height:64px;padding:8px 4px;border:2px solid #287789;border-radius:13px;background:#061b23;color:#eaf8fa;font-size:23px;font-weight:900;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;visibility:visible;opacity:1;position:relative;z-index:1}
     .rarity-choice-btn span{display:block;font-size:clamp(9px,2.5vw,11px);font-weight:700;white-space:normal;text-align:center;line-height:1.15}
     .rarity-choice-btn.is-selected{background:#17677a;border-color:#70d7e5;box-shadow:0 0 0 2px rgba(112,215,229,.25);color:#fff}
@@ -588,6 +589,32 @@
 #rarity-choice .rarity-choice-btn[data-rarity="Exclusiva"] span{background:linear-gradient(90deg,#ff6969,#ffbd59,#fff16b,#5dff9d,#63e7ff,#a58bff,#ff7bd4);background-size:250% 100%;background-clip:text;-webkit-background-clip:text;color:transparent!important;animation:thoune-chroma-text 3s linear infinite}
 @keyframes thoune-chroma-text{to{background-position:250% 0}}
 @media(max-width:520px){.rarity-choice{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+</style>
+
+<style id="thoune-v1165-rarity-colors">
+#rarity-choice .rarity-choice-btn{transition:filter .15s,transform .15s,box-shadow .15s!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Lendária"]{background:#3b3217!important;border-color:#f2c94c!important;color:#f2c94c!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Épica"]{background:#2b1c40!important;border-color:#9b59d0!important;color:#c99af2!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Rara"]{background:#142e43!important;border-color:#3498db!important;color:#75c5ff!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Comum"]{background:#153626!important;border-color:#27ae60!important;color:#72d69a!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Exclusiva"]{background:#171717!important;border:2px solid #666!important;color:#fff!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Exclusiva"] span{background:none!important;color:#fff!important;animation:none!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Atualização"]{background:linear-gradient(110deg,#ff3d7f,#ffb52e,#fff34d,#39e879,#32d9ff,#8c52ff,#ff3d7f)!important;background-size:300% 100%!important;border-color:#fff!important;color:#fff!important;animation:thoune-admin-chroma 4s linear infinite!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Atualização"] span{background:none!important;color:#fff!important;animation:none!important}
+#rarity-choice .rarity-choice-btn.is-selected{filter:brightness(1.22)!important;box-shadow:0 0 0 3px rgba(255,255,255,.32),0 0 18px rgba(112,215,229,.22)!important;transform:translateY(-1px)!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Exclusiva"].is-selected{background:#303030!important;border-color:#fff!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Atualização"].is-selected{border-color:#fff!important;box-shadow:0 0 0 3px rgba(255,255,255,.45),0 0 18px rgba(255,255,255,.25)!important}
+@keyframes thoune-admin-chroma{0%{background-position:0% 50%;filter:hue-rotate(0deg)}50%{background-position:150% 50%;filter:hue-rotate(90deg)}100%{background-position:300% 50%;filter:hue-rotate(360deg)}}
+#product-grid .event-card-badge,#product-grid .event-card-badge img{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important}
+#product-event-choice .event-choice-btn img{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important;object-fit:contain!important}
+</style>
+
+<style id="thoune-v1166-event-icons-chroma-fix">
+#product-grid .event-card-badge,#product-grid .event-card-badge img{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important;object-fit:contain!important}
+#product-event-choice .event-choice-btn img{display:block;width:30px!important;height:30px!important;object-fit:contain!important;background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Atualização"]{background:linear-gradient(110deg,#ff1744,#ff9100,#fff500,#00e676,#00d5ff,#7c4dff,#ff00c8,#ff1744)!important;background-size:400% 100%!important;animation:thoune-admin-chroma 2.4s linear infinite!important;color:#fff!important}
+#rarity-choice .rarity-choice-btn[data-rarity="Atualização"] span{color:#fff!important;background:none!important;animation:none!important}
+@media(prefers-reduced-motion:reduce){#rarity-choice .rarity-choice-btn[data-rarity="Atualização"]{animation:none!important}}
 </style>
 </head>
 
@@ -817,15 +844,6 @@
         <div class="form-grid">
 
           <div class="form-field full">
-            <label for="product-game">Jogo</label>
-            <select id="product-game" class="admin-input">
-              <option value="ftf">Flee the Facility</option>
-              <option value="mm2">Murder Mystery 2 (MM2)</option>
-            </select>
-            <small>Os produtos ficam separados no catálogo público, mas usam o mesmo carrinho e checkout.</small>
-          </div>
-
-          <div class="form-field full">
 
             <label for="product-name">
               Nome da marreta
@@ -841,9 +859,9 @@
 
 
           <div class="form-field">
-            <label id="product-category-label">Categoria / raridade</label>
+            <label>Raridade</label>
             <input id="product-category" type="hidden" value="Comum">
-            <div class="rarity-choice" id="rarity-choice" role="group" aria-label="Escolher categoria">
+            <div class="rarity-choice" id="rarity-choice" role="group" aria-label="Escolher raridade">
               <button type="button" class="rarity-choice-btn" data-rarity="Lendária" aria-pressed="false">L <span>Lendária</span></button>
               <button type="button" class="rarity-choice-btn" data-rarity="Épica" aria-pressed="false">E <span>Épica</span></button>
               <button type="button" class="rarity-choice-btn" data-rarity="Rara" aria-pressed="false">R <span>Rara</span></button>
@@ -857,16 +875,17 @@
             <label>Evento (opcional)</label>
             <input id="product-event" type="hidden" value="">
             <div class="event-choice" id="product-event-choice" role="group" aria-label="Escolher evento">
-              <button type="button" class="event-choice-btn" data-event="anniversary"><img src="events/anniversary.png" alt=""><span>Aniversário</span></button>
-              <button type="button" class="event-choice-btn" data-event="autumn"><img src="events/autumn.png" alt=""><span>Outono</span></button>
-              <button type="button" class="event-choice-btn" data-event="christmas"><img src="events/christmas.png" alt=""><span>Natal</span></button>
-              <button type="button" class="event-choice-btn" data-event="clover"><img src="events/clover.png" alt=""><span>Clover</span></button>
-              <button type="button" class="event-choice-btn" data-event="easter"><img src="events/easter.png" alt=""><span>Páscoa</span></button>
-              <button type="button" class="event-choice-btn" data-event="halloween"><img src="events/halloween.png" alt=""><span>Halloween</span></button>
-              <button type="button" class="event-choice-btn" data-event="lunar"><img src="events/lunar.png" alt=""><span>Lunar</span></button>
-              <button type="button" class="event-choice-btn" data-event="spring"><img src="events/spring.png" alt=""><span>Primavera</span></button>
-              <button type="button" class="event-choice-btn" data-event="summer"><img src="events/summer.png" alt=""><span>Verão</span></button>
-              <button type="button" class="event-choice-btn" data-event="valentines"><img src="events/valentines.png" alt=""><span>Namorados</span></button>
+              <button type="button" class="event-choice-btn" data-event="anniversary"><img src="anniversary.png" alt=""><span>Aniversário</span></button>
+              <button type="button" class="event-choice-btn" data-event="autumn"><img src="autumn.png" alt=""><span>Outono</span></button>
+              <button type="button" class="event-choice-btn" data-event="christmas"><img src="christmas.png" alt=""><span>Natal</span></button>
+              <button type="button" class="event-choice-btn" data-event="clover"><img src="clover.png" alt=""><span>Clover</span></button>
+              <button type="button" class="event-choice-btn" data-event="easter"><img src="easter.png" alt=""><span>Páscoa</span></button>
+              <button type="button" class="event-choice-btn" data-event="halloween"><img src="halloween.png" alt=""><span>Halloween</span></button>
+              <button type="button" class="event-choice-btn" data-event="lunar"><img src="lunar.png" alt=""><span>Lunar</span></button>
+              <button type="button" class="event-choice-btn" data-event="spring"><img src="spring.png" alt=""><span>Primavera</span></button>
+              <button type="button" class="event-choice-btn" data-event="summer"><img src="summer.png" alt=""><span>Verão</span></button>
+              <button type="button" class="event-choice-btn" data-event="valentines"><img src="valentines.png" alt=""><span>Namorados</span></button>
+              <button type="button" class="event-choice-btn" data-event="uniques"><img src="exclusive.png" alt=""><span>Uniques</span></button>
             </div>
             <small>Selecione um evento ou clique novamente para remover a seleção.</small>
           </div>
@@ -1572,12 +1591,12 @@
   const group = document.getElementById("rarity-choice");
   const categoryInput = document.getElementById("product-category");
   if (!group || !categoryInput) return;
+  const buttons = Array.from(group.querySelectorAll(".rarity-choice-btn[data-rarity]"));
   function selectRarity(value) {
-    const buttons = Array.from(group.querySelectorAll(".rarity-choice-btn[data-rarity]"));
     const valid = buttons.some((button) => button.dataset.rarity === value);
     const selectedValue = valid ? value : "Comum";
     categoryInput.value = selectedValue;
-    group.querySelectorAll(".rarity-choice-btn[data-rarity]").forEach((button) => {
+    buttons.forEach((button) => {
       const selected = button.dataset.rarity === selectedValue;
       button.classList.toggle("is-selected", selected);
       button.setAttribute("aria-pressed", selected ? "true" : "false");
@@ -1992,33 +2011,13 @@ const productName =
 
 const productCategory =
   document.querySelector("#product-category");
-const productGame = document.querySelector("#product-game");
-const FTF_CATEGORIES = ["Lendária", "Épica", "Rara", "Comum", "Exclusiva", "Atualização"];
-const MM2_CATEGORIES = ["Godly", "Ancient", "Chroma", "Vintage", "Unique", "Legendary", "Rare", "Uncommon", "Common", "Seasonal"];
-function configureProductGame(game, selectedCategory) {
-  const isMM2 = game === "mm2";
-  const categoryLabel = document.querySelector("#product-category-label");
-  if (categoryLabel) categoryLabel.textContent = isMM2 ? "Categoria MM2" : "Raridade Flee the Facility";
-  const eventField = document.querySelector("#product-event")?.closest(".form-field");
-  if (eventField) eventField.hidden = isMM2;
-  if (isMM2) window.__thouneSelectEvent?.("");
-  const choices = isMM2 ? MM2_CATEGORIES : FTF_CATEGORIES;
-  const group = document.querySelector("#rarity-choice");
-  if (group) {
-    group.innerHTML = choices.map((category, i) => `<button type="button" class="rarity-choice-btn${category === selectedCategory ? " is-selected" : ""}" data-rarity="${category}" aria-pressed="${category === selectedCategory ? "true" : "false"}">${isMM2 ? "M" : ["L","E","R","C","X","A"][i] || "•"} <span>${category}</span></button>`).join("");
-  }
-  const category = choices.includes(selectedCategory) ? selectedCategory : (isMM2 ? "Godly" : "Comum");
-  productCategory.value = category;
-  window.__thouneSelectRarity?.(category);
-}
 
-productGame?.addEventListener("change", () => configureProductGame(productGame.value, ""));
+const rarityChoiceButtons = [...document.querySelectorAll(".rarity-choice-btn")];
 function setProductRarity(value) {
-  const allowed = productGame?.value === "mm2" ? MM2_CATEGORIES : FTF_CATEGORIES;
-  const fallback = productGame?.value === "mm2" ? "Godly" : "Comum";
-  const normalized = allowed.includes(String(value || "").trim()) ? String(value).trim() : fallback;
+  const allowed = ["Lendária", "Épica", "Rara", "Comum", "Exclusiva", "Atualização"];
+  const normalized = allowed.includes(String(value || "").trim()) ? String(value).trim() : "Comum";
   productCategory.value = normalized;
-  document.querySelectorAll(".rarity-choice-btn").forEach(button => {
+  rarityChoiceButtons.forEach(button => {
     const selected = button.dataset.rarity === normalized;
     button.classList.toggle("is-selected", selected);
     button.setAttribute("aria-pressed", selected ? "true" : "false");
@@ -2187,8 +2186,6 @@ function openProductForm(product=null){
     productName.value =
       product.name || "";
 
-    if (productGame) productGame.value = product.game === "mm2" ? "mm2" : "ftf";
-    configureProductGame(productGame?.value || "ftf", product.category || "Comum");
     setProductRarity(product.category || "Comum");
     window.__thouneSelectEvent?.(product.event_name || "");
 
@@ -2232,8 +2229,7 @@ function openProductForm(product=null){
       "Adicionar marreta";
 
     productName.value = "";
-    if (productGame) productGame.value = "ftf";
-    configureProductGame("ftf", "Comum");
+
     setProductRarity("Comum");
     window.__thouneSelectEvent?.("");
 
@@ -2676,8 +2672,7 @@ if(
         price,
 
         category,
-        game: productGame?.value === "mm2" ? "mm2" : "ftf",
-        event_name: productGame?.value === "mm2" ? null : (document.getElementById("product-event")?.value || null),
+        event_name: document.getElementById("product-event")?.value || null,
 
         image:
           image || null,
