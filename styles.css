@@ -9415,39 +9415,9 @@ svg.thoune-bat,
 #product-grid .event-card-badge img{display:block;width:100%!important;height:100%!important;object-fit:contain!important;background:transparent!important}
 
 
-/* v1165: filtros de eventos em grade compacta, com ícones transparentes */
-#sort-control .event-filter-grid{
-  display:grid!important;
-  grid-template-columns:repeat(5,minmax(0,1fr))!important;
-  gap:7px!important;
-  width:100%!important;
-}
-#sort-control .event-filter-grid .event-filter-option{
-  width:100%!important;min-width:0!important;min-height:48px!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  padding:6px!important;margin:0!important;box-sizing:border-box!important;
-}
-#sort-control .event-filter-grid .event-filter-option>span:first-child{
-  width:34px!important;height:34px!important;flex:0 0 34px!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-}
-#sort-control .event-filter-grid .event-filter-option img{
-  width:30px!important;height:30px!important;object-fit:contain!important;
-  background:transparent!important;padding:0!important;border:0!important;border-radius:0!important;
-}
-#sort-control .event-sort-divider{flex:0 0 100%}
-@media(max-width:380px){#sort-control .event-filter-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
-
-/* v1165: raridades conforme a identidade visual solicitada */
-#product-grid .rarity-exclusiva{
-  color:#fff!important;background:#171717!important;border:1px solid #555!important;
-  animation:none!important;text-shadow:none!important;
-  background-image:none!important;box-shadow:none!important;
-}
-#product-grid .rarity-atualizacao{
-  color:#fff!important;background:linear-gradient(110deg,#ff3d7f,#ffb52e,#fff34d,#39e879,#32d9ff,#8c52ff,#ff3d7f)!important;
-  background-size:300% 100%!important;border:1px solid rgba(255,255,255,.5)!important;
-  animation:thoune-atualizacao-chroma 2.4s linear infinite!important;
-}
-@keyframes thoune-atualizacao-chroma{0%{background-position:0% 50%;filter:hue-rotate(0deg)}50%{background-position:150% 50%;filter:hue-rotate(90deg)}100%{background-position:300% 50%;filter:hue-rotate(360deg)}}
-@media(prefers-reduced-motion:reduce){#product-grid .rarity-atualizacao{animation:none!important;background-position:50% 0!important}}
+/* Thoune Store: separação visual dos jogos, sem duplicar checkout/carrinho. */
+.thoune-game-switch{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px;align-items:center}
+.thoune-game-tab{appearance:none;border:1px solid rgba(112,215,229,.35);border-radius:999px;padding:11px 20px;background:rgba(8,44,58,.72);color:var(--white,#fff);font:inherit;font-weight:750;cursor:pointer;transition:background .18s,border-color .18s,transform .18s}
+.thoune-game-tab:hover{transform:translateY(-1px);border-color:#70d7e5}
+.thoune-game-tab.active{background:linear-gradient(135deg,#17677a,#0d4051);border-color:#70d7e5;box-shadow:0 0 0 2px rgba(112,215,229,.12)}
+#mm2-category-row .category{white-space:nowrap}

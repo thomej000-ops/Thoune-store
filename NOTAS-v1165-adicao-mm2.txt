@@ -1,0 +1,12 @@
+Thoune Store v1165 — Flee the Facility + Murder Mystery 2
+
+O que mudou:
+- Adicionado seletor de jogo no catálogo público: Flee the Facility / Murder Mystery 2.
+- Os filtros e as categorias ficam separados por jogo.
+- O painel de administração permite escolher o jogo e as categorias correspondentes ao cadastrar/editar produtos.
+- O campo game é salvo em public.products; produtos antigos são classificados como ftf pelo padrão da migração.
+- Carrinho, pedidos, checkout, pagamentos e tabelas de pedidos não foram reescritos.
+
+IMPORTANTE: antes de publicar os arquivos, execute supabase_v1165_add_mm2.sql no Supabase SQL Editor. Não apague nem recrie produtos. Produtos MM2 devem ser cadastrados no painel e receber game=mm2. Eventos permanecem disponíveis apenas para FTF no formulário.
+
+Categorias MM2 disponibilizadas: Godly, Ancient, Chroma, Vintage, Unique, Legendary, Rare, Uncommon, Common e Seasonal.

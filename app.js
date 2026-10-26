@@ -17,6 +17,7 @@ let storeSettings = {
 };
 let currentEventFilter = "";
 let currentCategory = "Todas";
+let currentGame = "ftf";
 let currentSearch = "";
 let currentSort = "popular";
 let currentReviewSort = "recent";
@@ -204,7 +205,7 @@ async function loadProducts() {
 }
 
 function getFilteredProducts() {
-  let result = [...products];
+  let result = products.filter(p => String(p.game || "ftf").toLowerCase() === currentGame);
   if (currentCategory !== "Todas") {
     result = result.filter(p => String(p.category || "").toLowerCase() === currentCategory.toLowerCase());
   }
@@ -226,7 +227,7 @@ function getFilteredProducts() {
 
 function renderCatalog() {
   const filtered = getFilteredProducts();
-  if ($("#catalog-count")) $("#catalog-count").textContent = `${filtered.length} ${filtered.length === 1 ? "item" : "itens"}`;
+  if ($("#catalog-count")) $("#catalog-count").textContent = `${filtered.length} ${filtered.length === 1 ? "item" : "itens"} · ${currentGame === "mm2" ? "MM2" : "Flee the Facility"}`;
   catalogDisplayProducts = filtered.map(product => ({
     ...product,
     price: getProductPrice(product),
@@ -285,7 +286,7 @@ function resetCatalogFilters() {
   if ($("#sort-select")) $("#sort-select").value = "popular";
   if ($("#sort-trigger")) $("#sort-trigger").textContent = "Mais populares";
   $("#sort-options")?.querySelectorAll("[data-sort-value]").forEach(item => item.classList.toggle("active", item.dataset.sortValue === "popular"));
-  $$(".category").forEach(b => b.classList.toggle("active", b.dataset.category === "Todas"));
+  document.querySelectorAll(`#${currentGame === "mm2" ? "mm2-category-row" : "category-row"} .category`).forEach(b => b.classList.toggle("active", b.dataset.category === "Todas"));
   renderCatalog();
 }
 
@@ -1269,7 +1270,27 @@ function setupEvents() {
   $("#search-input")?.addEventListener("input", e => { currentSearch=normalizeText(e.target.value); renderCatalog(); });
   $("#sort-select")?.addEventListener("change", e => { currentSort=e.target.value; renderCatalog(); });
   $("#clear-search-button")?.addEventListener("click", resetCatalogFilters);
-  $$(".category").forEach(button => button.addEventListener("click", () => { currentCategory=button.dataset.category||"Todas"; $$(".category").forEach(b=>b.classList.toggle("active", b===button)); renderCatalog(); }));
+  $$(".category").forEach(button => button.addEventListener("click", () => {
+    if (!button.closest("#category-row, #mm2-category-row")) return;
+    currentCategory=button.dataset.category||"Todas";
+    button.closest(".category-row").querySelectorAll(".category").forEach(b=>b.classList.toggle("active", b===button));
+    renderCatalog();
+  }));
+  $$(".thoune-game-tab").forEach(button => button.addEventListener("click", () => {
+    currentGame = button.dataset.game === "mm2" ? "mm2" : "ftf";
+    currentCategory = "Todas";
+    currentEventFilter = "";
+    document.querySelectorAll(".thoune-game-tab").forEach(b => {
+      const active = b === button;
+      b.classList.toggle("active", active);
+      b.setAttribute("aria-pressed", String(active));
+    });
+    setHidden($("#category-row"), currentGame !== "ftf");
+    setHidden($("#mm2-category-row"), currentGame !== "mm2");
+    const eventMenu = $("#event-filter-menu");
+    if (eventMenu) eventMenu.classList.toggle("hidden", currentGame !== "ftf");
+    renderCatalog();
+  }));
   $$("[data-event-filter]").forEach(button => button.addEventListener("click", () => {
     currentEventFilter = button.dataset.eventFilter || "";
     $$(".event-filter-option").forEach(b => b.classList.toggle("active", b === button));
