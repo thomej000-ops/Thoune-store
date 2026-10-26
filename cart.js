@@ -1,5 +1,6 @@
 
-const KEY = "thoune-cart-v2";
+const STORE_GAME = document.body?.dataset?.game === "mm2" ? "mm2" : "ftf";
+const KEY = STORE_GAME === "mm2" ? "thoune-cart-mm2-v1" : "thoune-cart-v2";
 
 
 /* =========================================================

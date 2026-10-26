@@ -591,7 +591,7 @@
 @media(max-width:520px){.rarity-choice{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 </style>
 
-<style id="thoune-v1165-rarity-colors">
+<style id="thoune-v1172-rarity-colors">
 #rarity-choice .rarity-choice-btn{transition:filter .15s,transform .15s,box-shadow .15s!important}
 #rarity-choice .rarity-choice-btn[data-rarity="Lendária"]{background:#3b3217!important;border-color:#f2c94c!important;color:#f2c94c!important}
 #rarity-choice .rarity-choice-btn[data-rarity="Épica"]{background:#2b1c40!important;border-color:#9b59d0!important;color:#c99af2!important}
@@ -616,6 +616,7 @@
 #rarity-choice .rarity-choice-btn[data-rarity="Atualização"] span{color:#fff!important;background:none!important;animation:none!important}
 @media(prefers-reduced-motion:reduce){#rarity-choice .rarity-choice-btn[data-rarity="Atualização"]{animation:none!important}}
 </style>
+<style>[data-ftf-only][hidden]{display:none!important}.product-game-badge{display:inline-block;font-size:.72em;padding:2px 6px;border-radius:999px;background:#17677a;color:#fff;margin-left:5px}</style>
 </head>
 
 <body class="admin-page">
@@ -844,6 +845,15 @@
         <div class="form-grid">
 
           <div class="form-field full">
+            <label for="product-game">Loja / jogo</label>
+            <select id="product-game" class="admin-select">
+              <option value="ftf">Flee the Facility</option>
+              <option value="mm2">Murder Mystery 2</option>
+            </select>
+            <small>Escolha em qual loja este produto será exibido.</small>
+          </div>
+
+          <div class="form-field full">
 
             <label for="product-name">
               Nome da marreta
@@ -1049,7 +1059,11 @@
 
 
       <div class="admin-search-wrap">
-        <label for="products-search">🔎 Buscar marreta por nome, raridade ou preço</label>
+        <label for="products-game-filter">Gerenciar catálogo</label>
+        <select id="products-game-filter" class="admin-select">
+          <option value="all">Todos os jogos</option><option value="ftf">Flee the Facility</option><option value="mm2">Murder Mystery 2</option>
+        </select>
+        <label for="products-search">🔎 Buscar produto por nome, categoria ou preço</label>
         <input id="products-search" class="admin-search-input" type="search" autocomplete="off" placeholder="Ex.: Party Balloons, Lendária, 3,00...">
         <label style="display:flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer">
           <input id="show-inactive-products" type="checkbox" style="width:auto;min-height:auto">
@@ -1242,10 +1256,10 @@
       </div>
 
 
-      <div class="settings-box">
+      <div class="settings-box" id="legacy-service-status-box" style="display:none!important">
 
         <h3>
-          Status atual
+          Status global antigo
         </h3>
 
 
@@ -1273,6 +1287,14 @@
 
         </div>
 
+      </div>
+
+      <div class="settings-box" id="dual-store-status-box" style="margin-top:16px">
+        <h3>Abertura independente das lojas</h3>
+        <p class="setting-description">Fechar uma loja não fecha a outra. A loja MM2 começa fechada até você abri-la.</p>
+        <div class="settings-status"><div><strong id="ftf-storefront-status">FTF: carregando...</strong><p class="setting-description">Flee the Facility</p></div><button class="primary-button" id="toggle-ftf-storefront">Alterar FTF</button></div>
+        <div class="settings-status" style="margin-top:12px"><div><strong id="mm2-storefront-status">MM2: carregando...</strong><p class="setting-description">Murder Mystery 2</p></div><button class="primary-button" id="toggle-mm2-storefront">Alterar MM2</button></div>
+        <p id="dual-store-status-message" class="message" aria-live="polite"></p>
       </div>
 
     </div>
@@ -1591,10 +1613,20 @@
   const group = document.getElementById("rarity-choice");
   const categoryInput = document.getElementById("product-category");
   if (!group || !categoryInput) return;
-  const buttons = Array.from(group.querySelectorAll(".rarity-choice-btn[data-rarity]"));
+  let buttons = Array.from(group.querySelectorAll(".rarity-choice-btn[data-rarity]"));
+  const ftfCategories = ["Lendária", "Épica", "Rara", "Comum", "Exclusiva", "Atualização"];
+  const mm2Categories = ["Godly", "Ancient", "Chroma", "Vintage", "Unique", "Legendary", "Rare", "Uncommon", "Common", "Seasonal"];
+  function rebuildCategories(game) {
+    const values = game === "mm2" ? mm2Categories : ftfCategories;
+    group.innerHTML = values.map((value, i) => `<button type="button" class="rarity-choice-btn" data-rarity="${value}" aria-pressed="false">${i + 1} <span>${value}</span></button>`).join("");
+    buttons = Array.from(group.querySelectorAll(".rarity-choice-btn[data-rarity]"));
+    selectRarity(values.includes(categoryInput.value) ? categoryInput.value : values[0]);
+  }
   function selectRarity(value) {
-    const valid = buttons.some((button) => button.dataset.rarity === value);
-    const selectedValue = valid ? value : "Comum";
+    const game = document.getElementById("product-game")?.value || "ftf";
+    const values = game === "mm2" ? mm2Categories : ftfCategories;
+    const valid = values.includes(value);
+    const selectedValue = valid ? value : (game === "mm2" ? "Godly" : "Comum");
     categoryInput.value = selectedValue;
     buttons.forEach((button) => {
       const selected = button.dataset.rarity === selectedValue;
@@ -1615,6 +1647,12 @@
   categoryInput.addEventListener("change", () => selectRarity(categoryInput.value));
   selectRarity(categoryInput.value || "Comum");
   window.__thouneSelectRarity = selectRarity;
+  window.__thouneRebuildCategories = rebuildCategories;
+  document.getElementById("product-game")?.addEventListener("change", event => {
+    rebuildCategories(event.target.value);
+    const eventField = document.getElementById("product-event-choice")?.closest(".form-field");
+    if (eventField) eventField.hidden = event.target.value === "mm2";
+  });
 })();
 /* Eventos: seleção independente e persistente no formulário do produto. */
 (function () {
@@ -1741,6 +1779,7 @@ async function checkAdminAccess(){
     loadingScreen.classList.add("hidden");
     accessDenied.classList.add("hidden");
     adminPanel.classList.remove("hidden");
+    void loadDualStorefrontStatus();
     return true;
   };
   const withTimeout = (promise, ms = 8000, label = "verificação") => Promise.race([
@@ -2159,8 +2198,9 @@ function setupAdminSearch(inputSelector, listSelector, itemSelector, emptyMessag
   input.addEventListener("input", () => applyAdminSearch(inputSelector, listSelector, itemSelector, emptyMessage));
 }
 
-setupAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhuma marreta corresponde à sua busca.");
+setupAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhum produto corresponde à sua busca.");
 document.querySelector("#show-inactive-products")?.addEventListener("change", loadProducts);
+document.querySelector("#products-game-filter")?.addEventListener("change", loadProducts);
 setupAdminSearch("#orders-search", "#orders-list", ".order-card", "Nenhum pedido corresponde à sua busca.");
 setupAdminSearch("#order-history-search", "#order-history-list", ".order-card", "Nenhum pedido no histórico corresponde à sua busca.");
 setupAdminSearch("#payments-search", "#payments-list", ".payment-card", "Nenhum pagamento corresponde à sua busca.");
@@ -2186,8 +2226,13 @@ function openProductForm(product=null){
     productName.value =
       product.name || "";
 
-    setProductRarity(product.category || "Comum");
+    const gameSelect = document.getElementById("product-game");
+    if (gameSelect) gameSelect.value = product.game || "ftf";
+    window.__thouneRebuildCategories?.(product.game || "ftf");
+    setProductRarity(product.category || ((product.game === "mm2") ? "Godly" : "Comum"));
     window.__thouneSelectEvent?.(product.event_name || "");
+    const eventField = document.getElementById("product-event-choice")?.closest(".form-field");
+    if (eventField) eventField.hidden = product.game === "mm2";
 
     productPrice.value =
       product.price ?? "";
@@ -2359,12 +2404,12 @@ async function loadProducts(){
   }
 
 
-  const products =
-    data || [];
-
+  let products = data || [];
+  const gameFilter = document.querySelector("#products-game-filter")?.value || "all";
+  if (gameFilter !== "all") products = products.filter(product => (product.game || "ftf") === gameFilter);
 
   productsCount.textContent =
-    `${products.length} produto(s) cadastrado(s).`;
+    `${products.length} produto(s) neste filtro.`;
 
 
   if(!products.length){
@@ -2420,7 +2465,7 @@ async function loadProducts(){
       document.createElement("strong");
 
     name.textContent =
-      product.name || "Sem nome";
+      `${product.name || "Sem nome"} · ${(product.game || "ftf") === "mm2" ? "MM2" : "FTF"}`;
 
 
     const meta =
@@ -2672,7 +2717,8 @@ if(
         price,
 
         category,
-        event_name: document.getElementById("product-event")?.value || null,
+        game: document.getElementById("product-game")?.value || "ftf",
+        event_name: (document.getElementById("product-game")?.value || "ftf") === "ftf" ? (document.getElementById("product-event")?.value || null) : null,
 
         image:
           image || null,
@@ -3686,6 +3732,42 @@ async function loadServiceStatus(){
 
 }
 
+
+
+async function loadDualStorefrontStatus() {
+  const message = document.querySelector("#dual-store-status-message");
+  const { data, error } = await supabaseClient.from("storefront_settings").select("game, online");
+  if (error) {
+    if (message) { message.textContent = "Execute primeiro o SQL v1172 para ativar as configurações independentes."; message.classList.add("error-message"); }
+    return;
+  }
+  const rows = data || [];
+  for (const game of ["ftf", "mm2"]) {
+    const row = rows.find(item => item.game === game);
+    const online = row?.online === true;
+    const label = document.querySelector(game === "ftf" ? "#ftf-storefront-status" : "#mm2-storefront-status");
+    const button = document.querySelector(game === "ftf" ? "#toggle-ftf-storefront" : "#toggle-mm2-storefront");
+    if (label) label.textContent = `${game === "ftf" ? "Flee the Facility" : "Murder Mystery 2"}: ${online ? "ABERTA" : "FECHADA"}`;
+    if (button) button.textContent = online ? "Fechar esta loja" : "Abrir esta loja";
+  }
+}
+async function toggleDualStorefront(game) {
+  const message = document.querySelector("#dual-store-status-message");
+  const labelSelector = game === "ftf" ? "#ftf-storefront-status" : "#mm2-storefront-status";
+  const label = document.querySelector(labelSelector);
+  const currentlyOnline = Boolean(label && label.textContent.includes("ABERTA"));
+  if (message) { message.textContent = "Salvando configuração..."; message.classList.remove("error-message"); }
+  const { error } = await supabaseClient.from("storefront_settings").update({ online: !currentlyOnline, updated_at: new Date().toISOString() }).eq("game", game);
+  if (error) {
+    if (message) { message.textContent = "Não foi possível alterar: " + error.message; message.classList.add("error-message"); }
+    return;
+  }
+  if (message) message.textContent = "Configuração salva.";
+  await loadDualStorefrontStatus();
+}
+document.querySelector("#toggle-ftf-storefront")?.addEventListener("click", () => toggleDualStorefront("ftf"));
+document.querySelector("#toggle-mm2-storefront")?.addEventListener("click", () => toggleDualStorefront("mm2"));
+window.addEventListener("load", () => { void loadDualStorefrontStatus(); });
 
 function updateServiceUI(){
 

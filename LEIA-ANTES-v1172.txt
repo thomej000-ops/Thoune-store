@@ -1,0 +1,15 @@
+THOUNE STORE v1172 — DUAS LOJAS / UM PAINEL
+
+Arquivos principais:
+- index.html: página de escolha das lojas (única parte compartilhada para clientes).
+- ftf.html: catálogo Flee the Facility.
+- mm2.html: catálogo Murder Mystery 2.
+- admin.html: painel único com escolha do jogo ao cadastrar/editar e filtro de catálogo.
+
+IMPORTANTE: execute supabase_v1172_dual_store.sql no SQL Editor antes de publicar os arquivos. A migração adiciona products.game e storefront_settings, preserva dados existentes, define produtos atuais como FTF e deixa MM2 fechada por padrão.
+
+Publique TODO o conteúdo do ZIP na raiz da branch main, mantendo os PNGs de eventos e imagens na mesma pasta dos HTMLs. Não coloque os arquivos dentro de uma subpasta.
+
+O carrinho é separado por jogo no navegador. Os pedidos continuam usando a RPC existente, com validação de loja aberta no servidor. O desconto atual continua usando as configurações globais antigas; a separação completa dos descontos e conteúdos editáveis por jogo deve ser testada antes de uso comercial.
+
+Não foi possível testar contra o projeto Supabase real nesta execução. Depois da migração, teste: cadastro de produto FTF, cadastro de produto MM2, cada catálogo, carrinho, pedido teste e fechamento independente das lojas.

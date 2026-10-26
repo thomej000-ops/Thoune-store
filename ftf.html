@@ -1,0 +1,1482 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta
+    name="description"
+    content="Thoune Store — marretas para Flee the Facility."
+  >
+
+  <meta name="theme-color" content="#082c3a">
+  <meta name="thoune-version" content="v1172-dual-store">
+
+  <title>Thoune Store — Flee the Facility</title>
+
+  <!-- =====================================================
+       FONTES
+  ====================================================== -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- =====================================================
+       CSS
+  ====================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="./styles.css?v=1143"
+  >
+
+  <style id="thoune-checkout-polish-v1143">
+    /* Itens do pedido: mais respiro e acabamento neon, sem deixar nome/preço colados nas bordas. */
+    .checkout-items-list {
+      display: grid !important;
+      gap: 10px !important;
+      padding: 6px 2px 8px !important;
+    }
+    .checkout-items-list .checkout-item {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 16px !important;
+      min-height: 58px !important;
+      padding: 12px 16px !important;
+      margin: 0 !important;
+      border: 1px solid rgba(70, 221, 255, .38) !important;
+      border-radius: 14px !important;
+      background: linear-gradient(135deg, rgba(12, 36, 47, .94), rgba(8, 25, 35, .92)) !important;
+      box-shadow: 0 0 0 1px rgba(112, 84, 255, .10), 0 0 18px rgba(49, 208, 255, .10) !important;
+      box-sizing: border-box !important;
+    }
+    .checkout-items-list .checkout-item > span {
+      min-width: 0 !important;
+      flex: 1 1 auto !important;
+      padding-right: 8px !important;
+      line-height: 1.35 !important;
+      overflow-wrap: anywhere !important;
+    }
+    .checkout-items-list .checkout-item > strong {
+      flex: 0 0 auto !important;
+      padding-left: 8px !important;
+      white-space: nowrap !important;
+      font-size: 1rem !important;
+      text-align: right !important;
+    }
+    .checkout-items-list .checkout-discount {
+      display: inline-block !important;
+      margin-left: 8px !important;
+      padding: 3px 7px !important;
+      border-radius: 999px !important;
+      border: 1px solid rgba(108, 255, 183, .34) !important;
+      background: rgba(45, 210, 140, .10) !important;
+    }
+    @media (max-width: 520px) {
+      .checkout-items-list .checkout-item {
+        gap: 10px !important;
+        padding: 11px 13px !important;
+      }
+      .checkout-items-list .checkout-item > strong {
+        font-size: .95rem !important;
+      }
+    }
+  </style>
+
+
+    
+
+</head>
+
+<body data-game="ftf">
+
+  <!-- Abertura de boas-vindas Thoune Store -->
+  <div id="thoune-welcome" class="thoune-welcome" role="status" aria-label="Bem-vindo à Thoune Store">
+    <div class="welcome-bubbles" aria-hidden="true">
+      <span>🦇</span><span>🦇</span><span>🦇</span><span>🦇</span><span>🦇</span><span>🦇</span><span>🦇</span><span>🦇</span><span>🦇</span><span>🦇</span><span>🦇</span><span>🦇</span>
+    </div>
+    <div class="welcome-content">
+      <div class="welcome-mark welcome-logo-mark"><img src="thoune-halloween-welcome.png" alt="Snoopy com fantasia de Halloween diante da lua cheia"></div>
+      <p class="welcome-kicker">FLEE THE FACILITY</p>
+      <h1>Thoune <span>Store</span></h1>
+      <p class="welcome-subtitle" id="welcome-subtitle" aria-live="polite">Sua coleção se completa aqui.</p>
+      <div class="welcome-loader"><span></span></div>
+      <button id="welcome-skip" type="button">Entrar na loja <span aria-hidden="true">→</span></button>
+    </div>
+  </div>
+
+
+  <!-- =====================================================
+       EFEITO DE ABERTURA
+  ====================================================== -->
+
+  <div id="opening-effect" aria-hidden="true"></div>
+
+  <!-- =====================================================
+       REGIÃO DE TOASTS
+  ====================================================== -->
+
+  <div
+    id="toast-region"
+    class="toast-region"
+    aria-live="polite"
+    aria-atomic="true"
+  ></div>
+
+
+  <!-- =====================================================
+       BACKDROP GLOBAL DOS PAINÉIS
+  ====================================================== -->
+
+  <div
+    class="panel-backdrop hidden"
+    id="global-panel-backdrop"
+    aria-hidden="true"
+  ></div>
+
+  
+
+
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+
+  <header
+    class="site-header"
+    id="top"
+  >
+
+    <a
+      class="brand"
+      href="#inicio"
+      aria-label="Thoune Store - início"
+    >
+
+      <span class="brand-mark">
+        <img
+          src="snoopy-banner.jpg"
+          alt="Snoopy da identidade da Thoune Store"
+        >
+      </span>
+
+      <span class="brand-text">
+        <strong>Thoune Store</strong>
+        <small>Flee the Facility</small>
+      </span>
+
+    </a>
+
+
+    <!-- NAVEGAÇÃO DESKTOP -->
+
+    <nav
+      class="desktop-nav"
+      aria-label="Navegação principal"
+    >
+
+      <a href="#catalogo">
+        Itens
+      </a>
+
+      <a href="#como-comprar">
+        Como comprar
+      </a>
+
+      <a href="#faq">
+        FAQ
+      </a>
+
+    </nav>
+
+
+    <!-- AÇÕES DO HEADER -->
+
+    <div class="header-actions">
+
+      <!-- Carrinho -->
+
+      <button
+        type="button"
+        class="icon-button cart-button"
+        id="open-cart"
+        aria-label="Abrir carrinho"
+      >
+
+        <span class="ui-icon ui-icon-cart" aria-hidden="true"></span>
+        <span class="cart-emoji" aria-hidden="true">🛒</span>
+
+        <span
+          class="cart-count"
+          id="cart-count"
+          hidden
+          aria-hidden="true"
+        >
+          0
+        </span>
+
+      </button>
+
+
+      <!-- Menu mobile -->
+
+      <button
+        type="button"
+        class="menu-button"
+        id="menu-toggle"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+      >
+        <span class="ui-icon ui-icon-menu" aria-hidden="true"></span>
+      </button>
+
+    </div>
+
+
+    <!-- MENU MOBILE -->
+
+    <nav
+      class="mobile-nav"
+      id="mobile-nav"
+      aria-label="Menu mobile"
+    >
+
+      <a href="#catalogo">
+        Itens
+      </a>
+
+      <a href="#como-comprar">
+        Como comprar
+      </a>
+
+      <a href="#faq">
+        FAQ
+      </a>
+
+    </nav>
+
+  </header>
+
+
+  <!-- =====================================================
+       CONTEÚDO PRINCIPAL
+  ====================================================== -->
+
+  <main id="main-content">
+
+    <!-- ===================================================
+         HERO
+    ==================================================== -->
+
+    <section
+      class="hero"
+      id="inicio"
+    >
+
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+
+        <div
+          class="online-pill"
+          id="service-status"
+          aria-live="polite"
+        >
+
+          <span></span>
+
+          <strong>
+            Atendimento online
+          </strong>
+
+        </div>
+
+
+        <p class="eyebrow">
+          THOUNE STORE · FLEE THE FACILITY
+        </p>
+
+
+        <h1>
+          Encontre a marreta
+          <br>
+          <em>que combina com você.</em>
+        </h1>
+
+
+        <p class="hero-subtitle">
+          Marretas para Flee the Facility organizadas por raridades e prontas para você escolher.
+        </p>
+
+
+        <div class="hero-actions">
+
+          <a
+            class="hero-link"
+            href="#catalogo"
+          >
+            Explorar marretas
+            <span>↓</span>
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         BENEFÍCIOS
+    ==================================================== -->
+
+    <section
+      class="benefits section"
+      aria-label="Benefícios da Thoune Store"
+    >
+
+      <article>
+
+        <span class="benefit-icon" aria-hidden="true">🔒</span>
+
+        <div>
+          <strong>
+            Compra segura
+          </strong>
+
+          <p>
+            Checkout simples, pagamento via Pix e entrega manual.
+          </p>
+        </div>
+
+      </article>
+
+
+      <article>
+
+        <span class="benefit-icon" aria-hidden="true">🧾</span>
+
+        <div>
+          <strong>
+            Compra rápida
+          </strong>
+
+          <p>
+            Você escolhe seus produtos, informa os dados da entrega e realiza o pagamento via Pix.
+          </p>
+        </div>
+
+      </article>
+
+
+      <article>
+
+        <span class="benefit-icon" aria-hidden="true">🛍️</span>
+
+        <div>
+          <strong>
+            Entrega manual
+          </strong>
+
+          <p>
+            Eu mesmo realizo as entregas, por ordem dos pedidos.
+          </p>
+        </div>
+
+      </article>
+
+
+      <article>
+
+        <span class="benefit-icon" aria-hidden="true">🎧</span>
+
+        <div>
+          <strong>
+            Atendimento especial
+          </strong>
+
+          <p>
+            Suporte direto pelo TikTok da loja.
+          </p>
+        </div>
+
+      </article>
+
+
+      <article>
+
+        <span class="benefit-icon" aria-hidden="true">💳</span>
+
+        <div>
+          <strong>
+            Pix
+          </strong>
+
+          <p>
+            Pagamento rápido e prático.
+          </p>
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <!-- ===================================================
+         CATÁLOGO
+    ==================================================== -->
+
+    <section
+      class="catalog-section section"
+      id="catalogo"
+    >
+
+      <div class="section-heading">
+
+        <div>
+
+          <p class="eyebrow">
+            CATÁLOGO
+          </p>
+
+          <h2>
+            Marretas disponíveis
+          </h2>
+
+          <p>
+            Encontre sua próxima marreta sem complicação.
+          </p>
+
+        </div>
+
+
+        <div
+          class="catalog-count"
+          id="catalog-count"
+        >
+          0 itens
+        </div>
+
+      </div>
+
+
+      <!-- FERRAMENTAS -->
+
+      <div class="catalog-tools">
+
+        <label class="search-box">
+
+          <span aria-hidden="true">
+            <span class="ui-icon ui-icon-search" aria-hidden="true"></span>
+          </span>
+
+          <input
+            id="search-input"
+            type="search"
+            placeholder="Pesquisar marreta pelo nome"
+            autocomplete="off"
+            aria-label="Pesquisar marreta"
+          >
+
+        </label>
+
+
+        <div class="sort-box" id="sort-control">
+          <span class="sort-icon" aria-hidden="true">📦</span>
+          <div class="sort-main">
+            <span class="sort-eyebrow">ORDENAR POR</span>
+            <button type="button" id="sort-trigger" class="sort-trigger" aria-expanded="false" aria-controls="sort-options">Mais populares</button>
+          </div>
+          <span class="sort-arrow" aria-hidden="true">⌄</span>
+          <select id="sort-select" class="sort-native-select" aria-label="Ordenar produtos" tabindex="-1" aria-hidden="true">
+            <option value="popular">Mais populares</option>
+            <option value="low">Menor preço</option>
+            <option value="high">Maior preço</option>
+          </select>
+          <div id="sort-options" class="sort-options" hidden>
+            <button type="button" data-sort-value="popular" class="sort-option active"><span>✦</span><span><strong>Mais populares</strong><small>Em destaque na loja</small></span></button>
+            <button type="button" data-sort-value="low" class="sort-option"><span>↓</span><span><strong>Menor preço</strong><small>Do menor para o maior</small></span></button>
+            <button type="button" data-sort-value="high" class="sort-option"><span>↑</span><span><strong>Maior preço</strong><small>Do maior para o menor</small></span></button>
+            <div class="event-sort-divider">FILTRAR POR EVENTO</div>
+            <div class="event-filter-grid">
+            <button type="button" data-event-filter="" class="sort-option event-filter-option active" title="Todos os eventos" aria-label="Todos os eventos"><span>✦</span><span><strong>Todos os eventos</strong><small>Remover filtro de evento</small></span></button>
+            <button type="button" data-event-filter="anniversary" class="sort-option event-filter-option" title="Aniversário" aria-label="Filtrar por Aniversário"><span><img src="anniversary.png" alt=""></span><span><strong class="event-filter-name">Aniversário</strong><small>Mostrar apenas Aniversário</small></span></button>
+            <button type="button" data-event-filter="autumn" class="sort-option event-filter-option" title="Outono" aria-label="Filtrar por Outono"><span><img src="autumn.png" alt=""></span><span><strong class="event-filter-name">Outono</strong><small>Mostrar apenas Outono</small></span></button>
+            <button type="button" data-event-filter="christmas" class="sort-option event-filter-option" title="Natal" aria-label="Filtrar por Natal"><span><img src="christmas.png" alt=""></span><span><strong class="event-filter-name">Natal</strong><small>Mostrar apenas Natal</small></span></button>
+            <button type="button" data-event-filter="clover" class="sort-option event-filter-option" title="Clover" aria-label="Filtrar por Clover"><span><img src="clover.png" alt=""></span><span><strong class="event-filter-name">Clover</strong><small>Mostrar apenas Clover</small></span></button>
+            <button type="button" data-event-filter="easter" class="sort-option event-filter-option" title="Páscoa" aria-label="Filtrar por Páscoa"><span><img src="easter.png" alt=""></span><span><strong class="event-filter-name">Páscoa</strong><small>Mostrar apenas Páscoa</small></span></button>
+            <button type="button" data-event-filter="halloween" class="sort-option event-filter-option" title="Halloween" aria-label="Filtrar por Halloween"><span><img src="halloween.png" alt=""></span><span><strong class="event-filter-name">Halloween</strong><small>Mostrar apenas Halloween</small></span></button>
+            <button type="button" data-event-filter="lunar" class="sort-option event-filter-option" title="Lunar" aria-label="Filtrar por Lunar"><span><img src="lunar.png" alt=""></span><span><strong class="event-filter-name">Lunar</strong><small>Mostrar apenas Lunar</small></span></button>
+            <button type="button" data-event-filter="spring" class="sort-option event-filter-option" title="Primavera" aria-label="Filtrar por Primavera"><span><img src="spring.png" alt=""></span><span><strong class="event-filter-name">Primavera</strong><small>Mostrar apenas Primavera</small></span></button>
+            <button type="button" data-event-filter="summer" class="sort-option event-filter-option" title="Verão" aria-label="Filtrar por Verão"><span><img src="summer.png" alt=""></span><span><strong class="event-filter-name">Verão</strong><small>Mostrar apenas Verão</small></span></button>
+            <button type="button" data-event-filter="valentines" class="sort-option event-filter-option" title="Dia dos Namorados" aria-label="Filtrar por Dia dos Namorados"><span><img src="valentines.png" alt=""></span><span><strong class="event-filter-name">Dia dos Namorados</strong><small>Mostrar apenas Dia dos Namorados</small></span></button>
+          </div>
+          </div>
+        </div>
+
+
+        
+
+      </div>
+
+
+      <!-- CATEGORIAS -->
+
+      <div
+        class="category-row"
+        id="category-row"
+        aria-label="Categorias"
+      >
+
+        <button
+          type="button"
+          class="category active"
+          data-category="Todas"
+        >
+          Todas
+        </button>
+
+        <button
+          type="button"
+          class="category"
+          data-category="Lendária"
+        >
+          Lendária
+        </button>
+
+        <button
+          type="button"
+          class="category"
+          data-category="Épica"
+        >
+          Épica
+        </button>
+
+        <button
+          type="button"
+          class="category"
+          data-category="Rara"
+        >
+          Rara
+        </button>
+
+        <button
+          type="button"
+          class="category"
+          data-category="Comum"
+        >
+          Comum
+        </button>
+
+        <button
+          type="button"
+          class="category"
+          data-category="Exclusiva"
+        >
+          Exclusiva
+        </button>
+
+        <button
+          type="button"
+          class="category"
+          data-category="Atualização"
+        >
+          Atualização
+        </button>
+
+      </div>
+
+
+      <!-- PRODUTOS -->
+
+      <div
+        class="product-grid"
+        id="product-grid"
+        aria-live="polite"
+      ></div>
+
+
+      <!-- ESTADO VAZIO -->
+
+      <div
+        class="empty-state hidden"
+        id="empty-state"
+      >
+
+        <span>
+          <span class="clear-filter-symbol" aria-hidden="true">↻</span>
+        </span>
+
+        <h3>
+          Nenhuma marreta encontrada
+        </h3>
+
+        <p>
+          Tente outro nome, categoria ou limpe os filtros para ver todo o catálogo.
+        </p>
+
+        <button
+          type="button"
+          class="secondary-button"
+          id="clear-search-button"
+        >
+          Limpar filtros
+        </button>
+
+      </div>
+
+
+      <!-- CARREGAMENTO -->
+
+      <div
+        class="catalog-loading"
+        id="catalog-loading"
+        aria-live="polite"
+      >
+
+        <div class="loading-spinner"></div>
+
+        <p>
+          Carregando marretas...
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         COMO COMPRAR
+    ==================================================== -->
+
+    <section
+      class="how-section section"
+      id="como-comprar"
+    >
+
+      <div class="section-heading centered">
+        <p class="eyebrow">COMO FUNCIONA</p>
+        <h2>Como comprar sem complicação?</h2>
+        <p>Você escolhe os produtos, informa os dados necessários para a entrega e realiza o pagamento via Pix.</p>
+      </div>
+
+      <div class="steps">
+        <article><b>01</b><span><span class="ui-icon ui-icon-bag" aria-hidden="true"></span></span><h3>Escolha</h3><p>Encontre suas marretas e adicione ao carrinho.</p></article>
+        <article><b>02</b><span><span class="ui-icon ui-icon-receipt" aria-hidden="true"></span></span><h3>Confira</h3><p>Revise as quantidades e veja o total do pedido.</p></article>
+        <article><b>03</b><span><span class="ui-icon ui-icon-user" aria-hidden="true"></span></span><h3>Informe os usuários</h3><p>Digite seu usuário do TikTok, seu usuário do Roblox e o nome do remetente do Pix.</p></article>
+        <article><b>04</b><span><span class="ui-icon ui-icon-card" aria-hidden="true"></span></span><h3>Pague via Pix</h3><p>Crie o pedido, confira o valor e faça o pagamento pelo Pix.</p></article>
+        <article><b>05</b><span><span class="ui-icon ui-icon-box" aria-hidden="true"></span></span><h3>Aguarde a entrega</h3><p>As entregas são manuais e seguem a ordem dos pedidos.</p></article>
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         AVALIAÇÕES
+    ==================================================== -->
+
+    <section
+      class="reviews-section section"
+      id="avaliacoes"
+    >
+
+      <div class="section-heading">
+
+        <div>
+
+          <p class="eyebrow">
+            COMUNIDADE
+          </p>
+
+          <h2>
+            Quem compra, conta.
+          </h2>
+
+          <p>
+            Veja experiências compartilhadas por clientes da Thoune Store.
+          </p>
+
+        </div>
+
+      </div>
+      <div id="public-review-count" class="live-count-card" role="status" aria-live="polite" style="display:inline-flex;align-items:center;gap:12px;margin:14px 0 18px;padding:12px 16px;border:1px solid rgba(112,190,201,.28);border-radius:14px;background:rgba(12,43,54,.55);">
+        <span aria-hidden="true" style="font-size:24px">⭐</span>
+        <span><strong id="public-review-count-number" style="display:block;font-size:1.35rem;line-height:1.2">—</strong><small style="opacity:.8">avaliações aprovadas</small></span>
+      </div>
+      <p class="reviews-carousel-note">Avaliações aprovadas, começando pelas mais recentes.</p>
+
+      <div
+        class="reviews-grid"
+        id="reviews-grid"
+      ></div>
+
+
+      <div
+        class="review-placeholder"
+        id="reviews-empty"
+      >
+
+        <span class="review-placeholder-icon">
+          <span class="ui-icon ui-icon-spark" aria-hidden="true"></span>
+        </span>
+
+        <p>
+          As avaliações aprovadas pelos administradores aparecerão aqui.
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         SUPORTE
+    ==================================================== -->
+
+    <section
+      class="support-section section"
+      id="suporte"
+    >
+
+      <div class="support-card">
+
+        <div>
+
+          <p class="eyebrow">
+            SUPORTE
+          </p>
+
+          <h2>
+            Precisa de ajuda?
+          </h2>
+
+          <p>
+            Não encontrou o que procura? Fale com nosso suporte pelo TikTok da Thoune Store.
+          </p>
+
+        </div>
+
+
+        <a
+          class="primary-button"
+          href="https://www.tiktok.com/@thounestoreofc"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Falar no TikTok ↗
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         FAQ
+    ==================================================== -->
+
+    <section
+      class="faq-section section"
+      id="faq"
+    >
+
+      <div class="section-heading centered">
+
+        <p class="eyebrow">
+          DÚVIDAS
+        </p>
+
+        <h2>
+          Perguntas frequentes
+        </h2>
+
+      </div>
+
+
+      <div class="faq-list">
+
+        <details>
+
+          <summary>
+            Como faço um pedido?
+          </summary>
+
+          <p>
+            Escolha as marretas, ajuste as quantidades no carrinho e use “Realizar compra” quando a loja estiver online.
+          </p>
+
+        </details>
+
+
+        <details>
+
+          <summary>
+            Como funciona o pagamento?
+          </summary>
+
+          <p>
+            O pagamento é feito via Pix. Durante o checkout, confira o valor e a chave/QR Code apresentados. Depois de pagar, salve o comprovante e envie a imagem no próprio site. O pedido só poderá ser encaminhado para verificação depois que o comprovante for enviado com sucesso.
+          </p>
+
+        </details>
+<details>
+          <summary>Posso alterar a quantidade depois de adicionar ao carrinho?</summary>
+          <p>Sim. O carrinho permite aumentar ou diminuir a quantidade enquanto o pedido ainda não foi enviado.</p>
+        </details>
+<details>
+          <summary>Preciso informar meu usuário do Roblox?</summary>
+          <p>Sim. Ele é usado para identificar para qual usuário a entrega deve ser realizada.</p>
+        </details>
+
+        <details>
+          <summary>Posso cancelar um pedido?</summary>
+          <p>Antes de enviar o comprovante, se você ainda não fez o Pix, pode usar o botão de cancelamento na tela de pagamento. Depois que o comprovante for enviado, o botão de cancelamento fica bloqueado e você deve tocar em “Já fiz o Pix — verificar pagamento”. Se sair da tela antes de concluir o pagamento, o pedido poderá ser cancelado e será necessário iniciar uma nova compra ao retornar.</p>
+        </details>
+
+        <details>
+          <summary>O comprovante do Pix é obrigatório?</summary>
+          <p>Sim. Depois de realizar o Pix, salve ou baixe o comprovante e envie a imagem no site. Sem o envio bem-sucedido, a loja não consegue solicitar a verificação do pagamento nem dar andamento à entrega. Após o envio, o botão de cancelamento fica bloqueado.</p>
+        </details>
+
+        <details>
+          <summary>A loja faz reembolso?</summary>
+          <p>Confira os dados e o valor antes de pagar. A loja não oferece reembolso por simples desistência após o pagamento. Se uma falha técnica ou um erro da loja impedir a entrega, o caso será analisado para solução ou reembolso, conforme a legislação aplicável. Esta política não elimina direitos garantidos por lei. Em caso de problema, entre em contato pelo suporte antes de fazer outro pagamento.</p>
+        </details>
+
+        <details>
+          <summary>Como funciona a entrega?</summary>
+          <p>A entrega é manual, feita pelo responsável da Thoune Store, e segue a ordem dos pedidos após a confirmação do pagamento e a verificação do comprovante. Não é um bot automático; pode haver tempo de espera.</p>
+        </details>
+
+        <details>
+          <summary>O que acontece se eu sair do site durante o pagamento?</summary>
+          <p>Se você sair antes de enviar o comprovante e solicitar a verificação, o pedido poderá ser cancelado. Ao voltar, confira o status e, se necessário, inicie uma nova compra. Se você já pagou, não faça outro Pix: entre em contato com o suporte e guarde o comprovante.</p>
+        </details>
+
+        <details>
+          <summary>Como funciona uma avaliação?</summary>
+          <p>Depois de uma compra entregue, o cliente pode enviar uma avaliação do pedido. As avaliações passam por análise antes de serem exibidas na loja.</p>
+        </details>
+
+        <details>
+          <summary>Como entro em contato com a loja?</summary>
+          <p>Use o botão de suporte e fale com a Thoune Store pelo TikTok oficial indicado no site.</p>
+        </details>
+
+
+
+        <details>
+
+          <summary>
+            Como funciona a entrega?
+          </summary>
+
+          <p>
+            Depois que o pagamento for confirmado, o pedido passa para a etapa de entrega e o site apresenta as instruções disponíveis.
+          </p>
+
+        </details>
+
+      </div>
+
+    </section>
+
+  </main>
+<!-- =====================================================
+       PAINEL — DETALHES DO PRODUTO
+  ====================================================== -->
+
+  <div
+    class="modal-shell hidden"
+    id="product-modal"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Detalhes da marreta"
+  >
+
+    <div
+      class="modal-backdrop"
+      data-close-product-modal
+    ></div>
+
+
+    <div class="modal-card product-modal-card">
+
+      <button
+        type="button"
+        class="modal-close"
+        id="close-product-modal"
+        aria-label="Fechar detalhes"
+      >
+        ×
+      </button>
+
+
+      <div
+        class="product-modal-content"
+        id="product-modal-content"
+      ></div>
+
+    </div>
+
+  </div>
+
+  
+
+
+  <!-- =====================================================
+       CARRINHO
+  ====================================================== -->
+
+  <aside
+    class="cart-drawer"
+    id="cart-drawer"
+    aria-label="Carrinho"
+    aria-hidden="true"
+  >
+
+    <div
+      class="drawer-backdrop"
+      id="close-cart"
+    ></div>
+
+
+    <div class="drawer-panel">
+
+      <div class="drawer-header">
+
+        <div>
+
+          <p class="eyebrow">
+            SEU PEDIDO
+          </p>
+
+          <h2>
+            Carrinho
+          </h2>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="close-button"
+          id="close-cart-button"
+          aria-label="Fechar carrinho"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div
+        class="cart-items"
+        id="cart-items"
+      ></div>
+
+
+      <div
+        class="cart-empty"
+        id="cart-empty"
+      >
+
+        <span>
+          <span class="ui-icon ui-icon-cart" aria-hidden="true"></span>
+        </span>
+
+        <p>
+          Seu carrinho está vazio.
+        </p>
+
+        <small>
+          Escolha uma marreta para começar.
+        </small>
+
+      </div>
+
+
+      <div class="drawer-footer">
+
+        <div class="total-line">
+
+          <span>
+            Total
+          </span>
+
+          <strong id="cart-total">
+            R$ 0,00
+          </strong>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="primary-button full"
+          id="checkout-button"
+        >
+          Realizar compra
+        </button>
+
+
+        <button
+          type="button"
+          class="secondary-button full"
+          id="copy-order-button"
+        >
+          <span class="ui-icon ui-icon-clipboard" aria-hidden="true"></span> Copiar pedido
+        </button>
+
+
+        <button
+          type="button"
+          class="secondary-button full hidden"
+          id="clear-cart-button"
+        >
+          Limpar carrinho
+        </button>
+
+
+        <small class="checkout-note">
+          O pagamento é realizado via Pix quando o atendimento estiver online.
+        </small>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+
+  <!-- =====================================================
+       CHECKOUT — PAINEL
+  ====================================================== -->
+
+  <div
+    class="modal-shell hidden"
+    id="checkout-section"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Finalizar pedido"
+  >
+
+    <div
+      class="modal-backdrop"
+      id="checkout-backdrop"
+    ></div>
+
+
+    <div class="modal-card checkout-modal-card">
+
+      <div class="modal-header">
+
+        <div>
+
+          <p class="eyebrow">
+            FINALIZAR PEDIDO
+          </p>
+
+          <h2>
+            Confira sua compra
+          </h2>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="close-button"
+          id="close-checkout"
+          aria-label="Fechar checkout"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="checkout-content">
+
+        <div class="manual-delivery-notice" role="note" style="border:1px solid #7950d8;background:rgba(121,80,216,.12);border-radius:14px;padding:14px;margin-bottom:16px;">
+          <strong>🚚 Entrega manual — Thoune Store</strong>
+          <p style="margin:8px 0 0;">Não usamos bot automático. Eu mesmo realizo as entregas, seguindo a ordem dos pedidos. Antes de continuar, confira seus dados e veja a posição estimada da fila.</p>
+        </div>
+
+        <!-- ==============================================
+             RESUMO DOS ITENS
+        =============================================== -->
+
+        <div class="checkout-items">
+
+          <div class="checkout-block-heading">
+
+            <span>
+              <span class="ui-icon ui-icon-box" aria-hidden="true"></span>
+            </span>
+
+            <div>
+
+              <h3>
+                Itens do pedido
+              </h3>
+
+              <p>
+                Confira os produtos antes de confirmar.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="checkout-items"
+            class="checkout-items-list"
+          ></div>
+
+        </div>
+
+
+        <!-- ==============================================
+             TOTAL
+        =============================================== -->
+
+        <div class="checkout-total">
+
+          <span>
+            Total do pedido
+          </span>
+
+          <strong id="checkout-total">
+            R$ 0,00
+          </strong>
+
+        </div>
+
+
+        <!-- ==============================================
+             DADOS DA ENTREGA
+        =============================================== -->
+
+        <div class="checkout-data">
+
+          <div class="checkout-block-heading">
+
+            <span>
+              <span class="ui-icon ui-icon-user" aria-hidden="true"></span>
+            </span>
+
+            <div>
+
+              <h3>Dados para o pedido</h3>
+
+              <details class="checkout-help">
+                <summary>ⓘ Por que esses dados?</summary>
+                <p>Informe seu TikTok e seu Roblox para o pedido. O nome do remetente do Pix será usado somente para conferir o pagamento.</p>
+              </details>
+
+            </div>
+
+          </div>
+
+
+          <label>
+
+            <span class="field-label-icon"><span class="tiktok-mini-logo" aria-hidden="true"><img src="tiktok-logo.png" alt=""></span> Usuário do TikTok</span>
+            <input
+              id="checkout-tiktok"
+              type="text"
+              placeholder="@seuusuario"
+              autocomplete="off"
+              maxlength="40"
+            >
+            <small class="checkout-tiktok-note">📱 Nosso único canal de atendimento é o TikTok. Informe corretamente seu @ para conseguirmos falar com você se houver qualquer problema com o pedido.</small>
+
+          </label>
+
+
+          <label>
+
+            <span class="field-label-icon"><span class="roblox-mini-logo" aria-hidden="true"><img src="roblox-logo.png" alt=""></span> Usuário do Roblox</span>
+
+            <input
+              id="checkout-roblox"
+              type="text"
+              placeholder="Seu usuário do Roblox"
+              autocomplete="off"
+            >
+            <small class="checkout-safety-note">🔒 Para a segurança de todos, siga as regras do jogo e confirme os detalhes da troca antes de concluir. Não há garantia de que qualquer item de troca evite penalidades.</small>
+
+          </label>
+
+
+          <label>
+
+            <span>
+              💳 Nome do remetente do Pix
+            </span>
+
+            <input
+              id="checkout-pix-name"
+              type="text"
+              placeholder="Nome que aparecerá no Pix"
+              autocomplete="name"
+              maxlength="120"
+            >
+
+          </label>
+
+
+          <details class="checkout-field-help">
+            <summary>ⓘ Por que preciso informar meu nome do Pix?</summary>
+            <p>Informe o nome que aparecerá para a loja no comprovante/recebimento do Pix. Usaremos esse dado somente para conferir o pagamento e relacioná-lo ao seu pedido.</p>
+          </details>
+
+
+          <details class="checkout-field-help">
+            <summary>ⓘ Sobre o usuário do Roblox</summary>
+            <p>Ele é usado somente para realizar a entrega deste pedido.</p>
+          </details>
+
+          <div id="checkout-queue-preview" class="checkout-queue-preview" role="status" aria-live="polite">Consultando a fila...</div>
+
+        </div>
+
+
+        <!-- ==============================================
+             AÇÕES
+        =============================================== -->
+
+        <div class="checkout-actions">
+
+          <button
+            type="button"
+            class="secondary-button"
+            id="checkout-back"
+          >
+            ← Voltar ao carrinho
+          </button>
+
+
+          <button
+            type="button"
+            class="primary-button"
+            id="confirm-order-button"
+          >
+            Continuar para pagamento Pix
+          </button>
+
+        </div>
+
+
+        <p
+          class="checkout-message"
+          id="checkout-message"
+          aria-live="polite"
+        ></p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+
+  <!-- =====================================================
+       RODAPÉ
+  ====================================================== -->
+
+  <footer class="site-footer">
+
+    <div class="footer-brand">
+
+      <strong>
+        Thoune Store
+      </strong>
+
+      <p>
+        Mais que uma loja, uma comunidade.
+      </p>
+
+    </div>
+
+
+    <div class="footer-links">
+
+      <a href="#catalogo">
+        Catálogo
+      </a>
+
+      <a href="#como-comprar">
+        Como comprar
+      </a>
+
+      <a href="#faq">
+        FAQ
+      </a>
+
+      <a href="#suporte">
+        Suporte
+      </a>
+
+      <button type="button" class="footer-action" id="open-terms-button" data-open-terms>
+        Termos
+      </button>
+
+    </div>
+
+
+    <a
+      href="https://www.tiktok.com/@thounestoreofc"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      @thounestoreofc ↗
+    </a>
+
+
+    <small>
+      © 2026 Thoune Store · Todos os direitos reservados.
+    </small>
+
+  </footer>
+
+
+  <!-- =====================================================
+       TERMOS — PAINEL FLUTUANTE
+  ====================================================== -->
+
+  <div
+    class="modal-shell hidden"
+    id="terms-modal"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Termos da loja"
+  >
+    <div class="modal-backdrop" id="terms-backdrop"></div>
+
+    <div class="modal-card terms-card">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">THOUNE STORE</p>
+          <h2>Termos da loja</h2>
+        </div>
+
+        <button type="button" class="close-button" id="close-terms" aria-label="Fechar termos">×</button>
+      </div>
+
+      <div class="terms-content">
+        <section>
+          <h3>Pedidos</h3>
+          <p>O pedido é criado com os dados informados no checkout e fica aguardando a confirmação do pagamento.</p>
+        </section>
+        <section>
+          <h3>Pagamento</h3>
+          <p>Os pagamentos são realizados via Pix. Confira o valor e os dados apresentados no checkout antes de pagar.</p>
+        </section>
+        <section>
+          <h3>Entrega</h3>
+          <p>A entrega das marretas ocorre após a confirmação do pagamento e segue as instruções apresentadas pela loja.</p>
+        </section>
+<section><h3>Dados informados</h3><p>Informe corretamente seu usuário do TikTok, seu usuário do Roblox e o nome do remetente do Pix.</p></section>
+        <section><h3>Entrega digital</h3><p>As marretas são itens digitais. Após a confirmação do pagamento, a loja utiliza os dados informados para realizar a entrega.</p></section>
+        <section><h3>Disponibilidade da loja</h3><p>Quando o atendimento estiver offline, novas compras podem ficar temporariamente indisponíveis até a loja voltar a operar.</p></section>
+        <section><h3>Preços e descontos</h3><p>O valor final mostrado no checkout é calculado com base no produto e nas configurações de desconto vigentes no momento do pedido.</p></section>
+        <section><h3>Avaliações</h3><p>As avaliações publicadas pela loja ficam disponíveis para consulta na página.</p></section>
+        <section><h3>Contato</h3><p>Em caso de dúvida, correção de dados ou problema com um pedido, utilize o canal de atendimento informado no site.</p></section>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =====================================================
+       SCRIPTS
+  ====================================================== -->
+
+
+
+  <script>
+  (() => {
+    const screen = document.getElementById('thoune-welcome');
+    if (!screen) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let closed = false;
+    const close = () => {
+      if (closed) return;
+      closed = true;
+      screen.classList.add('welcome-exit');
+      window.setTimeout(() => screen.remove(), 650);
+      try { sessionStorage.setItem('thoune-welcome-v1090', '1'); } catch (_) {}
+    };
+    let seen = false;
+    try { seen = sessionStorage.getItem('thoune-welcome-v1090') === '1'; } catch (_) {}
+    if (seen) { screen.remove(); return; }
+    const skip = document.getElementById('welcome-skip');
+    if (skip) skip.addEventListener('click', close);
+    const subtitle = document.getElementById('welcome-subtitle');
+    const phrases = [
+      'Sua coleção se completa aqui.',
+      'Encontre a marreta que combina com você.',
+      'Sua próxima raridade pode estar aqui.',
+      'Seu estilo. Sua coleção. Sua Thoune Store.',
+      'Cada marreta conta uma história.'
+    ];
+    if (subtitle) {
+      let phraseIndex = 0;
+      window.setInterval(() => {
+        if (closed || !subtitle.isConnected) return;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        subtitle.classList.add('welcome-subtitle-changing');
+        window.setTimeout(() => {
+          if (!subtitle.isConnected) return;
+          subtitle.textContent = phrases[phraseIndex];
+          subtitle.classList.remove('welcome-subtitle-changing');
+        }, 220);
+      }, 7000);
+    }
+    /* A abertura fica visível até o cliente tocar em “Entrar na loja”. */
+  })();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script
+    type="module"
+    src="./app.js?v=1172"
+  ></script>
+
+  <script>
+  (() => {
+    const subtitle = document.getElementById('welcome-subtitle');
+    if (!subtitle) return;
+    const messages = [
+      'Sua coleção se completa aqui.',
+      'Encontre a marreta que combina com você.',
+      'Sua próxima raridade pode estar aqui.',
+      'Seu inventário dos sonhos começa aqui.',
+      'Sua nova loja favorita.'
+    ];
+    let index = 0;
+    window.setInterval(() => {
+      index = (index + 1) % messages.length;
+      subtitle.classList.add('welcome-subtitle-changing');
+      window.setTimeout(() => {
+        subtitle.textContent = messages[index];
+        subtitle.classList.remove('welcome-subtitle-changing');
+      }, 240);
+    }, 7000);
+  })();
+  </script>
+
+</body>
+        </html>

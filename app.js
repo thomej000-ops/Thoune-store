@@ -4,6 +4,8 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+const STORE_GAME = document.body?.dataset?.game === "mm2" ? "mm2" : "ftf";
+const STORE_LABEL = STORE_GAME === "mm2" ? "Murder Mystery 2" : "Flee the Facility";
 let products = [];
 let storeSettings = {
   online: false,
@@ -115,11 +117,33 @@ function openTerms() {
   if (card) card.scrollTop = 0;
 }
 
+
+function applyStorefrontCopy() {
+  if (STORE_GAME !== "mm2") return;
+  document.querySelectorAll("[data-ftf-only]").forEach(el => el.hidden = true);
+  const search = document.querySelector("#search-input");
+  if (search) search.placeholder = "Pesquisar item pelo nome";
+  const heading = document.querySelector("#catalog-title");
+  if (heading) heading.textContent = "Catálogo de Murder Mystery 2";
+  const count = document.querySelector("#catalog-count");
+  if (count && count.textContent.includes("marreta")) count.textContent = count.textContent.replace(/marretas?/gi, "itens");
+}
+applyStorefrontCopy();
+
 async function loadStoreSettings() {
-  const { data, error } = await supabaseClient
-    .from("public_store_settings")
-    .select("id, online, pix_key, delivery_bot_username, delivery_bot_url, join_open, discount_percent, discount_active, discount_event, updated_at")
+  let { data, error } = await supabaseClient
+    .from("storefront_settings")
+    .select("game, online, pix_key, delivery_bot_username, delivery_bot_url, join_open, discount_percent, discount_active, discount_event")
+    .eq("game", STORE_GAME)
     .maybeSingle();
+  if (error || !data) {
+    const fallback = await supabaseClient
+      .from("public_store_settings")
+      .select("id, online, pix_key, delivery_bot_username, delivery_bot_url, join_open, discount_percent, discount_active, discount_event, updated_at")
+      .maybeSingle();
+    data = fallback.data;
+    error = fallback.error;
+  }
 
   if (error) {
     console.error("Erro ao carregar configurações da loja:", error);
@@ -145,7 +169,7 @@ async function loadStoreSettings() {
 
 function updateStoreStatus() {
   const online = Boolean(storeSettings.online);
-  const text = online ? "Atendimento online" : "Atendimento offline";
+  const text = `Atendimento ${STORE_LABEL} ${online ? "online" : "offline"}`;
   const serviceStatus = $("#service-status");
   if (serviceStatus) {
     const dot = serviceStatus.querySelector("span");
@@ -189,6 +213,7 @@ async function loadProducts() {
     .from("products")
     .select("*")
     .eq("active", true)
+    .eq("game", STORE_GAME)
     .order("sort_order", { ascending: true })
     .order("name", { ascending: true });
   setHidden($("#catalog-loading"), true);
@@ -442,7 +467,7 @@ function normalizeTikTokUsername(value) {
 }
 
 async function createGuestOrder() {
-  if (!storeSettings.online) return setMessage($("#checkout-message"), "A loja está offline no momento.", "error");
+  if (!storeSettings.online) return setMessage($("#checkout-message"), `A loja de ${STORE_LABEL} está offline no momento.`, "error");
   const cart = loadCart();
   if (!cart.length) return setMessage($("#checkout-message"), "Seu carrinho está vazio.", "error");
 
