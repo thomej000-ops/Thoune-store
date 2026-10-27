@@ -616,14 +616,7 @@
 #rarity-choice .rarity-choice-btn[data-rarity="Atualização"] span{color:#fff!important;background:none!important;animation:none!important}
 @media(prefers-reduced-motion:reduce){#rarity-choice .rarity-choice-btn[data-rarity="Atualização"]{animation:none!important}}
 </style>
-<style>
-.admin-store-switch{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0;padding:14px 16px;border:1px solid #dcecef;border-radius:16px;background:#f8fcfd}
-.admin-store-switch strong{font-size:13px}
-.admin-store-switch button{border:1px solid #cfe1e5;border-radius:999px;padding:9px 14px;background:#fff;cursor:pointer;font-weight:800}
-.admin-store-switch button.active{background:#17677a;color:#fff;border-color:#17677a}
-.mm2-rarity{display:none}
-.admin-store-badge{display:inline-flex;margin-left:8px;padding:3px 8px;border-radius:999px;background:#e9f6fa;color:#17677a;font-size:10px;font-weight:900}
-</style></head>
+</head>
 
 <body class="admin-page">
 
@@ -727,13 +720,7 @@
       </div>
 
 
-      <div class="admin-store-switch" id="admin-store-switch">
-  <strong>Loja em edição:</strong>
-  <button type="button" data-admin-store="ftf" class="active">🔨 Flee the Facility</button>
-  <button type="button" data-admin-store="mm2">🔪 Murder Mystery 2</button>
-  <span id="admin-store-badge" class="admin-store-badge">Flee the Facility</span>
-</div>
-<div class="admin-grid">
+      <div class="admin-grid">
 
         <button class="admin-option" id="products-option">
           <strong>📦 Produtos</strong>
@@ -828,7 +815,7 @@
           </h2>
 
           <p>
-            Gerencie os produtos da loja selecionada.
+            Gerencie as marretas disponíveis na loja.
           </p>
 
         </div>
@@ -838,7 +825,7 @@
           class="primary-button"
           id="new-product-button"
         >
-          ➕ Novo produto
+          ➕ Nova marreta
         </button>
 
       </div>
@@ -850,7 +837,7 @@
       >
 
         <h3 id="form-title">
-          Adicionar produto
+          Adicionar marreta
         </h3>
 
 
@@ -873,25 +860,18 @@
 
           <div class="form-field">
             <label>Raridade</label>
-            <input id="product-category" type="hidden" value="Comum"><input id="product-store-type" type="hidden" value="ftf">
+            <input id="product-category" type="hidden" value="Comum">
             <div class="rarity-choice" id="rarity-choice" role="group" aria-label="Escolher raridade">
               <button type="button" class="rarity-choice-btn" data-rarity="Lendária" aria-pressed="false">L <span>Lendária</span></button>
               <button type="button" class="rarity-choice-btn" data-rarity="Épica" aria-pressed="false">E <span>Épica</span></button>
               <button type="button" class="rarity-choice-btn" data-rarity="Rara" aria-pressed="false">R <span>Rara</span></button>
               <button type="button" class="rarity-choice-btn is-selected" data-rarity="Comum" aria-pressed="true">C <span>Comum</span></button>
               <button type="button" class="rarity-choice-btn" data-rarity="Exclusiva" aria-pressed="false">X <span>Exclusiva</span></button>
-              <button type="button" class="rarity-choice-btn" data-rarity="Atualização" aria-pressed="false">A <span>Atualização</span></button><button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Incomum" aria-pressed="false">I <span>Incomum</span></button>
-              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Raro" aria-pressed="false">R <span>Raro</span></button>
-              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Lendário" aria-pressed="false">L <span>Lendário</span></button>
-              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Godly" aria-pressed="false">G <span>Godly</span></button>
-              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Ancient" aria-pressed="false">A <span>Ancient</span></button>
-              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Unique" aria-pressed="false">U <span>Unique</span></button>
-              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Vintage" aria-pressed="false">V <span>Vintage</span></button>
-              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Chroma" aria-pressed="false">C <span>Chroma</span></button>
+              <button type="button" class="rarity-choice-btn" data-rarity="Atualização" aria-pressed="false">A <span>Atualização</span></button>
             </div>
           </div>
 
-          <div class="form-field" id="product-event-field">
+          <div class="form-field">
             <label>Evento (opcional)</label>
             <input id="product-event" type="hidden" value="">
             <div class="event-choice" id="product-event-choice" role="group" aria-label="Escolher evento">
@@ -1021,7 +1001,7 @@
             class="primary-button"
             id="save-product-button"
           >
-            Salvar produto
+            Salvar marreta
           </button>
 
 
@@ -1502,14 +1482,6 @@
         <div class="form-field" style="margin-top:14px;">
           <label for="delivery-bot-url">Link do perfil Roblox (opcional)</label>
           <input id="delivery-bot-url" type="url" placeholder="https://www.roblox.com/users/.../profile">
-          <div class="form-field" style="margin-top:14px;">
-            <label for="delivery-bot-mm2-username">Usuário Roblox — MM2</label>
-            <input id="delivery-bot-mm2-username" type="text" placeholder="Usuário de entrega do MM2">
-          </div>
-          <div class="form-field" style="margin-top:14px;">
-            <label for="delivery-bot-mm2-url">Link do perfil — MM2</label>
-            <input id="delivery-bot-mm2-url" type="url" placeholder="https://www.roblox.com/users/.../profile">
-          </div>
         </div>
 
         <div class="checkbox-field">
@@ -1682,42 +1654,6 @@ const supabaseClient =
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
-
-
-let adminStore = localStorage.getItem("thoune-admin-store") === "mm2" ? "mm2" : "ftf";
-const ADMIN_STORE_NAMES = { ftf: "Flee the Facility", mm2: "Murder Mystery 2" };
-const FTF_RARITIES = ["Lendária","Épica","Rara","Comum","Exclusiva","Atualização"];
-const MM2_RARITIES = ["Comum","Incomum","Raro","Lendário","Godly","Ancient","Unique","Vintage","Chroma"];
-
-function updateAdminStoreUI() {
-  localStorage.setItem("thoune-admin-store", adminStore);
-  document.querySelectorAll("[data-admin-store]").forEach(btn => {
-    const active = btn.dataset.adminStore === adminStore;
-    btn.classList.toggle("active", active);
-    btn.setAttribute("aria-pressed", String(active));
-  });
-  const badge = document.querySelector("#admin-store-badge");
-  if (badge) badge.textContent = ADMIN_STORE_NAMES[adminStore];
-  const storeInput = document.querySelector("#product-store-type");
-  if (storeInput) storeInput.value = adminStore;
-  document.querySelectorAll(".mm2-rarity").forEach(el => el.style.display = adminStore === "mm2" ? "" : "none");
-  document.querySelectorAll("#rarity-choice .rarity-choice-btn:not(.mm2-rarity)").forEach(el => el.style.display = adminStore === "mm2" ? (["Comum","Rara"].includes(el.dataset.rarity) ? "none" : "none") : "");
-  const eventField = document.querySelector("#product-event-field");
-  if (eventField) eventField.style.display = adminStore === "mm2" ? "none" : "";
-  if (typeof window.__thouneSetRarity === "function") window.__thouneSetRarity(adminStore === "mm2" ? "Comum" : "Comum");
-}
-
-document.addEventListener("click", event => {
-  const button = event.target.closest("[data-admin-store]");
-  if (!button) return;
-  adminStore = button.dataset.adminStore === "mm2" ? "mm2" : "ftf";
-  updateAdminStoreUI();
-  if (document.querySelector("#products-section") && !document.querySelector("#products-section").classList.contains("hidden")) loadProducts();
-  if (document.querySelector("#delivery-section") && !document.querySelector("#delivery-section").classList.contains("hidden")) loadDeliverySettings();
-  if (document.querySelector("#promotion-section") && !document.querySelector("#promotion-section").classList.contains("hidden")) loadPromotion();
-  if (document.querySelector("#service-section") && !document.querySelector("#service-section").classList.contains("hidden")) loadServiceStatus();
-}, true);
-
 
 // Atualiza o total de entregas periodicamente enquanto o painel estiver aberto.
 window.setInterval(() => {
@@ -2078,22 +2014,20 @@ const productCategory =
 
 const rarityChoiceButtons = [...document.querySelectorAll(".rarity-choice-btn")];
 function setProductRarity(value) {
-  const allowed = adminStore === "mm2" ? MM2_RARITIES : FTF_RARITIES;
+  const allowed = ["Lendária", "Épica", "Rara", "Comum", "Exclusiva", "Atualização"];
   const normalized = allowed.includes(String(value || "").trim()) ? String(value).trim() : "Comum";
   productCategory.value = normalized;
   rarityChoiceButtons.forEach(button => {
-    const belongs = allowed.includes(button.dataset.rarity);
-    button.style.display = belongs ? "" : "none";
-    const selected = belongs && button.dataset.rarity === normalized;
+    const selected = button.dataset.rarity === normalized;
     button.classList.toggle("is-selected", selected);
     button.setAttribute("aria-pressed", selected ? "true" : "false");
+    // Preserve the custom pink and animated Chroma styles from CSS.
     button.style.removeProperty("background");
     button.style.removeProperty("background-color");
     button.style.removeProperty("border-color");
     button.style.removeProperty("box-shadow");
   });
 }
-window.__thouneSetRarity = setProductRarity;
 // Delegação em captura: mantém os botões funcionais mesmo se o formulário for reorganizado.
 document.addEventListener("click", event => {
   const button = event.target.closest(".rarity-choice-btn");
@@ -2102,7 +2036,6 @@ document.addEventListener("click", event => {
   event.stopPropagation();
   setProductRarity(button.dataset.rarity);
 }, true);
-updateAdminStoreUI();
 setProductRarity(productCategory.value || "Comum");
 
 const productPrice =
@@ -2226,7 +2159,7 @@ function setupAdminSearch(inputSelector, listSelector, itemSelector, emptyMessag
   input.addEventListener("input", () => applyAdminSearch(inputSelector, listSelector, itemSelector, emptyMessage));
 }
 
-setupAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhum produto corresponde à sua busca.");
+setupAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhuma marreta corresponde à sua busca.");
 document.querySelector("#show-inactive-products")?.addEventListener("change", loadProducts);
 setupAdminSearch("#orders-search", "#orders-list", ".order-card", "Nenhum pedido corresponde à sua busca.");
 setupAdminSearch("#order-history-search", "#order-history-list", ".order-card", "Nenhum pedido no histórico corresponde à sua busca.");
@@ -2244,13 +2177,11 @@ function openProductForm(product=null){
 
   if(product){
 
-    adminStore = product.store_type === "mm2" ? "mm2" : "ftf";
-    updateAdminStoreUI();
     editingProductId =
       product.id;
 
     formTitle.textContent =
-      "Editar produto";
+      "Editar marreta";
 
     productName.value =
       product.name || "";
@@ -2293,10 +2224,9 @@ function openProductForm(product=null){
   }else{
 
     editingProductId = null;
-    updateAdminStoreUI();
 
     formTitle.textContent =
-      "Adicionar produto";
+      "Adicionar marreta";
 
     productName.value = "";
 
@@ -2323,7 +2253,7 @@ function openProductForm(product=null){
       true;
 
     saveProductButton.textContent =
-      "Salvar produto";
+      "Salvar marreta";
 
   }
 
@@ -2363,7 +2293,7 @@ function closeProductForm(){
     true;
 
   saveProductButton.textContent =
-    "Salvar produto";
+    "Salvar marreta";
 
 }
 
@@ -2404,8 +2334,7 @@ async function loadProducts(){
   const showInactive = document.querySelector("#show-inactive-products")?.checked === true;
   let productsQuery = supabaseClient
       .from("products")
-      .select("*")
-      .eq("store_type", adminStore);
+      .select("*");
   if (!showInactive) productsQuery = productsQuery.eq("active", true);
   else productsQuery = productsQuery.is("deleted_at", null);
   const { data, error } = await productsQuery
@@ -2627,7 +2556,7 @@ async function loadProducts(){
 
   });
 
-  applyAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhum produto corresponde à sua busca.");
+  applyAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhuma marreta corresponde à sua busca.");
 }
 
 
@@ -2666,7 +2595,7 @@ saveProductButton.addEventListener(
     if(!name){
 
       productFormMessage.textContent =
-        "Informe o nome do produto.";
+        "Informe o nome da marreta.";
 
       return;
     }
@@ -2743,8 +2672,7 @@ if(
         price,
 
         category,
-        store_type: adminStore,
-        event_name: adminStore === "mm2" ? null : (document.getElementById("product-event")?.value || null),
+        event_name: document.getElementById("product-event")?.value || null,
 
         image:
           image || null,
@@ -2795,7 +2723,7 @@ if(
 
       productFormMessage.classList.remove("error-message");
       productFormMessage.textContent =
-        editing ? "Alterações salvas com sucesso." : "Produto cadastrado com sucesso.";
+        editing ? "Alterações salvas com sucesso." : "Marreta cadastrada com sucesso.";
       // Close immediately after Supabase confirms the save; refresh the list in the background.
       closeProductForm();
       void loadProducts();
@@ -2814,7 +2742,7 @@ if(
       saveProductButton.textContent =
         editing
           ? "Salvar alterações"
-          : "Salvar produto";
+          : "Salvar marreta";
 
     }
 
@@ -2996,15 +2924,6 @@ async function loadOrders(focusOrderId = null){
     (productImages || []).map(product => [String(product.id), product.image || ""])
   );
 
-  const { data: adminStoreSettings } = await supabaseClient
-    .from("store_settings")
-    .select("delivery_bot_username, mm2_delivery_bot_username");
-
-  const botByStore = {
-    ftf: adminStoreSettings?.[0]?.delivery_bot_username || "Não configurado",
-    mm2: adminStoreSettings?.[0]?.mm2_delivery_bot_username || "Não configurado"
-  };
-
   for(const order of orders){
 
     const {
@@ -3080,8 +2999,7 @@ async function loadOrders(focusOrderId = null){
 
     privateInfo.innerHTML = `
       <strong>🔒 Dados informados no checkout</strong>
-      <div style="margin-top:8px"><strong>Loja:</strong> ${escapeHtml(order.store_type === "mm2" ? "Murder Mystery 2" : "Flee the Facility")}</div>
-      <div style="margin-top:5px"><strong>Entrega:</strong> ${escapeHtml(botByStore[order.store_type === "mm2" ? "mm2" : "ftf"])}</div>
+
       <div style="margin-top:8px">
         <strong>TikTok:</strong>
         ${escapeHtml(order.tiktok_username || "Não informado")}
@@ -3741,8 +3659,11 @@ async function loadServiceStatus(){
   } =
     await supabaseClient
       .from("store_settings")
-      .select("online, mm2_online")
-      .eq("id", 1)
+      .select("online")
+      .eq(
+        "id",
+        1
+      )
       .maybeSingle();
 
 
@@ -3758,7 +3679,7 @@ async function loadServiceStatus(){
 
 
   serviceOnline =
-    adminStore === "mm2" ? Boolean(data?.mm2_online) : Boolean(data?.online);
+    Boolean(data?.online);
 
 
   updateServiceUI();
@@ -3813,7 +3734,9 @@ async function toggleService(){
       .from("store_settings")
       .update({
 
-        ...(adminStore === "mm2" ? { mm2_online: newStatus } : { online: newStatus }),
+        online:
+          newStatus,
+
         updated_at:
           new Date().toISOString()
 
@@ -3924,7 +3847,7 @@ async function loadPromotion(){
     await supabaseClient
       .from("store_settings")
       .select(
-        "discount_percent, discount_active, discount_event, mm2_discount_percent, mm2_discount_active, mm2_discount_event"
+        "discount_percent, discount_active, discount_event"
       )
       .eq(
         "id",
@@ -3946,13 +3869,12 @@ async function loadPromotion(){
   }
 
 
-  discountPercent.value = adminStore === "mm2" ? (data?.mm2_discount_percent ?? 0) : (data?.discount_percent ?? 0);
-  discountActive.checked = adminStore === "mm2" ? Boolean(data?.mm2_discount_active) : Boolean(data?.discount_active);
+  discountPercent.value =
+    data?.discount_percent ?? 0;
+
+  discountActive.checked = Boolean(data?.discount_active);
   const discountEventSelect = document.querySelector("#discount-event");
-  if (discountEventSelect) {
-    discountEventSelect.value = adminStore === "mm2" ? "" : (data?.discount_event || "");
-    discountEventSelect.disabled = adminStore === "mm2";
-  }
+  if (discountEventSelect) discountEventSelect.value = data?.discount_event || "";
 
 
   updateDiscountPreview();
@@ -4092,7 +4014,7 @@ async function loadDeliverySettings(){
     await supabaseClient
       .from("store_settings")
       .select(
-        "pix_key, delivery_bot_username, delivery_bot_url, join_open, mm2_pix_key, mm2_delivery_bot_username, mm2_delivery_bot_url, mm2_join_open"
+        "pix_key, delivery_bot_username, delivery_bot_url, join_open"
       )
       .eq(
         "id",
@@ -4114,16 +4036,17 @@ async function loadDeliverySettings(){
   }
 
 
-  pixKey.value = adminStore === "mm2" ? (data?.mm2_pix_key || "") : (data?.pix_key || "");
-  deliveryBotUsername.value = adminStore === "mm2" ? (data?.mm2_delivery_bot_username || "") : (data?.delivery_bot_username || "");
-  deliveryBotUrl.value = adminStore === "mm2" ? (data?.mm2_delivery_bot_url || "") : (data?.delivery_bot_url || "");
-  const mm2Bot = document.querySelector("#delivery-bot-mm2-username");
-  const mm2Url = document.querySelector("#delivery-bot-mm2-url");
-  const mm2Pix = document.querySelector("#pix-key-mm2");
-  if (mm2Bot) mm2Bot.value = data?.mm2_delivery_bot_username || "";
-  if (mm2Url) mm2Url.value = data?.mm2_delivery_bot_url || "";
-  if (mm2Pix) mm2Pix.value = data?.mm2_pix_key || "";
-  joinOpen.checked = adminStore === "mm2" ? data?.mm2_join_open !== false : data?.join_open !== false;
+  pixKey.value =
+    data?.pix_key || "";
+
+  deliveryBotUsername.value =
+    data?.delivery_bot_username || "";
+
+  deliveryBotUrl.value =
+    data?.delivery_bot_url || "";
+
+  joinOpen.checked =
+    data?.join_open !== false;
 
 }
 

@@ -1,6 +1,6 @@
-import { loadCart, saveCart, orderText, clearCart, money } from "./cart.js";
+import { loadCart, orderText, clearCart, money } from "./cart.js";
 import { renderProducts, renderCart, updateCartBadge, toast } from "./ui.js";
-import { SUPABASE_URL, SUPABASE_ANON_KEY, STORE_TYPE, STORE_CONFIG } from "./config.js";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -13,15 +13,7 @@ let storeSettings = {
   join_open: false,
   discount_percent: 0,
   discount_active: false,
-  discount_event: "",
-  mm2_online: false,
-  mm2_pix_key: "",
-  mm2_delivery_bot_username: "",
-  mm2_delivery_bot_url: "",
-  mm2_join_open: false,
-  mm2_discount_percent: 0,
-  mm2_discount_active: false,
-  mm2_discount_event: ""
+  discount_event: ""
 };
 let currentEventFilter = "";
 let currentCategory = "Todas";
@@ -31,8 +23,7 @@ let currentReviewSort = "recent";
 let catalogDisplayProducts = [];
 let catalogVisibleLimit = 10;
 let catalogScrollBound = false;
-const GUEST_VOTER_KEY = `thoune-review-voter-v1043-${STORE_TYPE}`;
-const PENDING_ORDER_KEY = `thoune-pending-guest-order-${STORE_TYPE}`;
+const GUEST_VOTER_KEY = "thoune-review-voter-v1043";
 let queuePreviewTimer = null;
 
 const $ = (selector) => document.querySelector(selector);
@@ -127,7 +118,7 @@ function openTerms() {
 async function loadStoreSettings() {
   const { data, error } = await supabaseClient
     .from("public_store_settings")
-    .select("id, online, pix_key, delivery_bot_username, delivery_bot_url, join_open, discount_percent, discount_active, discount_event, mm2_online, mm2_pix_key, mm2_delivery_bot_username, mm2_delivery_bot_url, mm2_join_open, mm2_discount_percent, mm2_discount_active, mm2_discount_event, updated_at")
+    .select("id, online, pix_key, delivery_bot_username, delivery_bot_url, join_open, discount_percent, discount_active, discount_event, updated_at")
     .maybeSingle();
 
   if (error) {
@@ -139,14 +130,14 @@ async function loadStoreSettings() {
 
   if (data) {
     storeSettings = {
-      online: STORE_TYPE === "mm2" ? Boolean(data.mm2_online) : Boolean(data.online),
-      pix_key: STORE_TYPE === "mm2" ? (data.mm2_pix_key || "") : (data.pix_key || ""),
-      delivery_bot_username: STORE_TYPE === "mm2" ? (data.mm2_delivery_bot_username || "") : (data.delivery_bot_username || ""),
-      delivery_bot_url: STORE_TYPE === "mm2" ? (data.mm2_delivery_bot_url || "") : (data.delivery_bot_url || ""),
-      join_open: STORE_TYPE === "mm2" ? Boolean(data.mm2_join_open) : Boolean(data.join_open),
-      discount_percent: STORE_TYPE === "mm2" ? (Number(data.mm2_discount_percent) || 0) : (Number(data.discount_percent) || 0),
-      discount_active: STORE_TYPE === "mm2" ? Boolean(data.mm2_discount_active) : Boolean(data.discount_active),
-      discount_event: STORE_TYPE === "mm2" ? (data.mm2_discount_event || "") : (data.discount_event || "")
+      online: Boolean(data.online),
+      pix_key: data.pix_key || "",
+      delivery_bot_username: data.delivery_bot_username || "",
+      delivery_bot_url: data.delivery_bot_url || "",
+      join_open: Boolean(data.join_open),
+      discount_percent: Number(data.discount_percent) || 0,
+      discount_active: Boolean(data.discount_active),
+      discount_event: data.discount_event || ""
     };
   }
   updateStoreStatus();
@@ -198,7 +189,6 @@ async function loadProducts() {
     .from("products")
     .select("*")
     .eq("active", true)
-    .eq("store_type", STORE_TYPE)
     .order("sort_order", { ascending: true })
     .order("name", { ascending: true });
   setHidden($("#catalog-loading"), true);
@@ -246,7 +236,7 @@ function renderCatalog() {
   catalogVisibleLimit = Math.min(10, catalogDisplayProducts.length);
   renderProducts(catalogDisplayProducts.slice(0, catalogVisibleLimit));
   const grid = $("#product-grid");
-  // Carrega mais 10 itens quando o cliente rola dentro do painel do catálogo.
+  // Carrega mais 10 marretas quando o cliente rola dentro do painel do catálogo.
   if (grid && !catalogScrollBound) {
     grid.addEventListener("scroll", () => {
       if (catalogVisibleLimit >= catalogDisplayProducts.length) return;
@@ -309,7 +299,7 @@ function renderFavoritesPanel() {
   if (!container) return;
   const favorites = products.filter(p => isFavorite(p.id));
   if (!favorites.length) {
-    container.innerHTML = `<div class="empty-panel"><strong>Nenhum favorito ainda.</strong><p>Toque no coração de um item para adicioná-la aos favoritos.</p></div>`;
+    container.innerHTML = `<div class="empty-panel"><strong>Nenhum favorito ainda.</strong><p>Toque no coração de uma marreta para adicioná-la aos favoritos.</p></div>`;
     return;
   }
   container.innerHTML = favorites.map(product => `
@@ -388,7 +378,7 @@ function renderCheckout() {
 
 async function openCheckout() {
   const cart = loadCart();
-  if (!cart.length) return toast("Adicione pelo menos um item ao carrinho.");
+  if (!cart.length) return toast("Adicione pelo menos uma marreta ao carrinho.");
   if (!storeSettings.online) return toast("O atendimento está offline no momento.");
   // Transição sem sobreposição: fecha o carrinho antes de abrir os dados.
   // Mantém o carrinho intacto; se o checkout falhar, o cliente pode voltar e tentar novamente.
@@ -475,8 +465,7 @@ async function createGuestOrder() {
     p_items: items,
     p_tiktok_username: tiktokUsername,
     p_delivery_username: robloxUsername,
-    p_pix_name: pixSenderName,
-    p_store_type: STORE_TYPE
+    p_pix_name: pixSenderName
   });
 
   if (button) { button.disabled = false; button.textContent = "Confirmar dados e continuar"; }
@@ -507,7 +496,7 @@ async function createGuestOrder() {
 
   guestOrderSessionToken += 1;
   guestOrderCancelInProgress = false;
-  localStorage.setItem(PENDING_ORDER_KEY, orderId);
+  localStorage.setItem("thoune-pending-guest-order", orderId);
   renderGuestPixPanel(orderId, Number.isFinite(total) ? total : 0, queuePosition);
   toast(`Pedido #${String(orderId).slice(0,8).toUpperCase()} criado. Agora faça o Pix.`);
 }
@@ -596,7 +585,7 @@ function bindGuestProofControls(orderId) {
 }
 
 async function handleGuestPixExit({ openCartAfter = false } = {}) {
-  const orderId = localStorage.getItem(PENDING_ORDER_KEY);
+  const orderId = localStorage.getItem("thoune-pending-guest-order");
   // Só o painel do Pix (antes de pedir verificação) deve ser cancelado ao sair.
   const cancelButton = $("#guest-cancel-order");
   if (orderId && cancelButton && !cancelButton.disabled) {
@@ -627,7 +616,7 @@ function wasGuestOrderCancelledLocally(orderId) {
 }
 
 function isCurrentGuestOrder(orderId) {
-  return String(localStorage.getItem(PENDING_ORDER_KEY) || "") === String(orderId) && !wasGuestOrderCancelledLocally(orderId);
+  return String(localStorage.getItem("thoune-pending-guest-order") || "") === String(orderId) && !wasGuestOrderCancelledLocally(orderId);
 }
 
 async function cancelGuestOrder(orderId, { silent = false } = {}) {
@@ -642,9 +631,9 @@ async function cancelGuestOrder(orderId, { silent = false } = {}) {
   // Cancela a sessão local IMEDIATAMENTE. Assim o pedido antigo nunca
   // reaparece quando o cliente iniciar uma nova compra, mesmo enquanto
   // o Supabase termina a operação em segundo plano.
-  const currentPending = localStorage.getItem(PENDING_ORDER_KEY);
+  const currentPending = localStorage.getItem("thoune-pending-guest-order");
   if (currentPending === String(orderId)) {
-    localStorage.removeItem(PENDING_ORDER_KEY);
+    localStorage.removeItem("thoune-pending-guest-order");
   }
   stopGuestOrderStatusPolling();
   guestOrderCancelInProgress = true;
@@ -715,7 +704,7 @@ async function requestGuestPaymentVerification(orderId) {
     return setMessage(message, data?.message || "Não foi possível avisar a loja. Confirme se o comprovante foi enviado com sucesso e tente novamente.", "error");
   }
 
-  localStorage.setItem(PENDING_ORDER_KEY, orderId);
+  localStorage.setItem("thoune-pending-guest-order", orderId);
   renderGuestWaitingPanel(orderId);
   toast("Pagamento informado à loja.");
   startGuestOrderStatusPolling(orderId);
@@ -859,7 +848,7 @@ async function uploadGuestPaymentProof(orderId) {
 }
 
 function renderGuestDeliveryPanel(order) {
-  localStorage.setItem(PENDING_ORDER_KEY, String(order.id));
+  localStorage.setItem("thoune-pending-guest-order", String(order.id));
   const content = $("#checkout-section .checkout-content");
   if (!content) return;
   const orderShort = String(order.id).slice(0, 8).toUpperCase();
@@ -958,7 +947,7 @@ async function pollGuestOrderStatus(orderId) {
   // Uma resposta antiga nunca pode reabrir o checkout depois de cancelar ou iniciar outro pedido.
   if (requestToken !== guestOrderSessionToken || guestOrderCancelInProgress || !isCurrentGuestOrder(orderId)) return;
   if (error) { console.error("get_guest_order_status:", error); return; }
-  if (!data?.found) { localStorage.removeItem(PENDING_ORDER_KEY); stopGuestOrderStatusPolling(); return; }
+  if (!data?.found) { localStorage.removeItem("thoune-pending-guest-order"); stopGuestOrderStatusPolling(); return; }
   const status = String(data.status || "");
   if (status === "payment_confirmed" || status === "awaiting_delivery") {
     const currentDeliveryPanel = $("#checkout-section .guest-status-panel");
@@ -1002,9 +991,9 @@ function startGuestOrderStatusPolling(orderId) {
 
 async function restoreGuestOrderStatus() {
   const restoreToken = guestOrderSessionToken;
-  const orderId = localStorage.getItem(PENDING_ORDER_KEY);
+  const orderId = localStorage.getItem("thoune-pending-guest-order");
   if (!orderId || wasGuestOrderCancelledLocally(orderId)) {
-    if (orderId && wasGuestOrderCancelledLocally(orderId)) localStorage.removeItem(PENDING_ORDER_KEY);
+    if (orderId && wasGuestOrderCancelledLocally(orderId)) localStorage.removeItem("thoune-pending-guest-order");
     return;
   }
   const { data, error } = await supabaseClient.rpc("get_guest_order_status", { p_order_id: orderId });
@@ -1014,12 +1003,12 @@ async function restoreGuestOrderStatus() {
   if (status === "awaiting_payment") {
     // Pedido antigo pendente: limpa a sessão antes de cancelar no banco,
     // para nunca reabrir o painel de pagamento em uma nova compra.
-    localStorage.removeItem(PENDING_ORDER_KEY);
+    localStorage.removeItem("thoune-pending-guest-order");
     await cancelGuestOrder(orderId, { silent: true });
     return;
   }
   if (["cancelled", "canceled", "payment_cancelled"].includes(status)) {
-    localStorage.removeItem(PENDING_ORDER_KEY);
+    localStorage.removeItem("thoune-pending-guest-order");
     return;
   }
   if (status === "delivered") {
@@ -1128,7 +1117,7 @@ function setGuestReviewRating(rating) {
 }
 
 function renderGuestDeliveredPanel(order, autoOpen = false) {
-  localStorage.setItem(PENDING_ORDER_KEY, String(order.id));
+  localStorage.setItem("thoune-pending-guest-order", String(order.id));
   const modal = ensureGuestReviewModal();
   const when = $("#guest-review-delivered-at");
   if (when) when.textContent = `Entrega concluída em ${order.delivered_at ? formatDate(order.delivered_at) : "data registrada"}`;
@@ -1151,7 +1140,7 @@ function renderGuestDeliveredPanel(order, autoOpen = false) {
 
 async function openGuestReviewPanel(order) {
   if (await guestHasReview(order.id)) {
-    localStorage.removeItem(PENDING_ORDER_KEY);
+    localStorage.removeItem("thoune-pending-guest-order");
     toast("Você já avaliou este pedido.");
     return;
   }
@@ -1188,7 +1177,7 @@ async function submitGuestReview(event) {
     return setMessage(message, error?.message || data?.message || "Não foi possível enviar a avaliação.", "error");
   }
 
-  localStorage.removeItem(PENDING_ORDER_KEY);
+  localStorage.removeItem("thoune-pending-guest-order");
   setMessage(message, "Avaliação enviada para análise. Obrigado! 💙", "success");
   if (button) { button.disabled = true; button.textContent = "Avaliação enviada ✓"; }
   // Fecha o painel automaticamente após o envio confirmado; a confirmação fica visível via toast.
@@ -1302,8 +1291,8 @@ function setupEvents() {
       const cart=loadCart(); const found=cart.find(i=>String(i.id)===String(product.id));
       if(found) found.qty+=1;
       else cart.push({id:product.id,name:product.name,price:getProductPrice(product),original_price:Number(product.price)||0,discount_percent:getDiscountPercent(product),image:product.image||"",qty:1});
-      saveCart(cart);
-      syncCartUI(); toast(`${STORE_CONFIG.itemSingular[0].toUpperCase()+STORE_CONFIG.itemSingular.slice(1)} adicionada ao carrinho.`);
+      localStorage.setItem("thoune-cart-v2", JSON.stringify(cart));
+      syncCartUI(); toast("Marreta adicionada ao carrinho.");
       if (add.closest("#product-modal")) closePanel($("#product-modal"));
       return;
     }
@@ -1318,57 +1307,8 @@ function setupEvents() {
 window.addEventListener("error", e => console.error("Thoune Store error:", e.error || e.message));
 window.addEventListener("unhandledrejection", e => console.error("Thoune Store promise error:", e.reason));
 
-function applyStoreCopy() {
-  const mm2 = STORE_TYPE === "mm2";
-  document.title = `Thoune Store — ${STORE_CONFIG.name}`;
-  const brandSmall = document.querySelector(".brand-text small");
-  if (brandSmall) brandSmall.textContent = STORE_CONFIG.name;
-  document.querySelectorAll("[data-store-name]").forEach(el => el.textContent = STORE_CONFIG.name);
-  const heroTitle = document.querySelector(".hero-content h1");
-  if (heroTitle) heroTitle.innerHTML = `${STORE_CONFIG.heroTitle}<br><em>${STORE_CONFIG.heroEmphasis}</em>`;
-  const heroSub = document.querySelector(".hero-subtitle");
-  if (heroSub) heroSub.textContent = STORE_CONFIG.heroSubtitle;
-  const heroLink = document.querySelector(".hero-link");
-  if (heroLink) heroLink.innerHTML = `Explorar ${STORE_CONFIG.itemPlural} <span>↓</span>`;
-  const catalogTitle = document.querySelector(".catalog-section h2");
-  if (catalogTitle) catalogTitle.textContent = STORE_CONFIG.catalogTitle;
-  const catalogSub = document.querySelector(".catalog-section .section-heading > div > p:last-child");
-  if (catalogSub) catalogSub.textContent = STORE_CONFIG.catalogSubtitle;
-  const search = document.querySelector("#search-input");
-  if (search) { search.placeholder = STORE_CONFIG.searchPlaceholder; search.setAttribute("aria-label", STORE_CONFIG.searchPlaceholder); }
-  document.querySelectorAll("[data-store-specific]").forEach(el => el.classList.toggle("hidden", !mm2 && el.dataset.storeSpecific === "mm2"));
-  const eventSort = document.querySelector(".event-sort-divider");
-  if (eventSort) eventSort.closest("#sort-options")?.classList.toggle("mm2-no-events", mm2);
-  if (mm2) {
-    document.querySelectorAll("#sort-options .event-sort-divider, #sort-options .event-filter-grid").forEach(el => el.classList.add("hidden"));
-  }
-  const howCopy = document.querySelector("#como-comprar .section-heading > p:last-child");
-  if (howCopy) howCopy.textContent = `Você escolhe os ${STORE_CONFIG.itemPlural}, informa os dados necessários para a entrega e realiza o pagamento via Pix.`;
-  document.querySelectorAll("#como-comprar .steps article").forEach((article, i) => {
-    const p = article.querySelector("p");
-    if (p && i === 1) p.textContent = `Revise as quantidades e veja o total do pedido.`;
-    if (p && i === 0) p.textContent = `Encontre seus ${STORE_CONFIG.itemPlural} e adicione ao carrinho.`;
-  });
-  document.querySelectorAll("#checkout-items, #cart-items").forEach(el => {});
-  document.querySelectorAll(".cart-subtitle").forEach(el => el.textContent = `Seu carrinho de ${STORE_CONFIG.itemPlural}.`);
-  if (mm2) {
-    const faqAnswers = [
-      ["Como faço um pedido?", `Escolha suas facas e armas de Murder Mystery 2, ajuste as quantidades no carrinho e use “Realizar compra” quando a loja estiver online.`],
-      ["Como funciona o pagamento?", `O pagamento é feito via Pix. Confira o valor e a chave apresentados no checkout e envie o comprovante pelo próprio site após pagar.`],
-      ["Preciso informar meu usuário do Roblox?", `Sim. Ele é usado para identificar em qual usuário a entrega dos itens de Murder Mystery 2 será realizada.`],
-      ["Posso cancelar um pedido?", `Antes de enviar o comprovante, se você ainda não fez o Pix, pode cancelar o pedido pela tela de pagamento. Depois do envio do comprovante, a verificação segue o fluxo da loja.`],
-      ["O comprovante do Pix é obrigatório?", `Sim. Após realizar o Pix, envie a imagem do comprovante no site para que o pagamento possa ser verificado e a entrega dos itens seja iniciada.`]
-    ];
-    const faq = document.querySelector("#faq .faq-list");
-    if (faq) {
-      faq.innerHTML = faqAnswers.map(([q,a]) => `<details><summary>${escapeHtml(q)}</summary><p>${escapeHtml(a)}</p></details>`).join("");
-    }
-  }
-}
-
 async function initialize() {
   initializeTheme();
-  applyStoreCopy();
   playOpeningEffect();
   setupEvents();
   syncCartUI();

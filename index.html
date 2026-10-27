@@ -91,19 +91,7 @@
 
     
 
-<style>
-.welcome-store-chooser{margin-top:18px}
-.welcome-store-chooser>p{margin:0 0 12px;color:rgba(255,255,255,.78);font-size:13px}
-.welcome-store-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:650px;margin:0 auto}
-.welcome-store-button{border:1px solid rgba(255,255,255,.22);border-radius:18px;padding:16px;background:rgba(6,27,38,.72);color:#fff;text-align:left;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,.18);transition:.2s}
-.welcome-store-button:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.45)}
-.welcome-store-button strong,.welcome-store-button small,.welcome-store-button span{display:block}
-.welcome-store-button strong{font-size:15px}
-.welcome-store-button small{margin:6px 0 12px;color:rgba(255,255,255,.65);font-size:11px}
-.welcome-store-button span{font-weight:800;font-size:12px}
-.welcome-store-button-mm2{background:linear-gradient(135deg,rgba(35,61,78,.88),rgba(19,34,50,.88))}
-@media(max-width:620px){.welcome-store-buttons{grid-template-columns:1fr}}
-</style></head>
+</head>
 
 <body>
 
@@ -114,17 +102,11 @@
     </div>
     <div class="welcome-content">
       <div class="welcome-mark welcome-logo-mark"><img src="thoune-halloween-welcome.png" alt="Snoopy com fantasia de Halloween diante da lua cheia"></div>
-      <p class="welcome-kicker">THOUNE STORE</p>
+      <p class="welcome-kicker">FLEE THE FACILITY</p>
       <h1>Thoune <span>Store</span></h1>
       <p class="welcome-subtitle" id="welcome-subtitle" aria-live="polite">Sua coleção se completa aqui.</p>
       <div class="welcome-loader"><span></span></div>
-      <div class="welcome-store-chooser" role="group" aria-label="Escolha a loja">
-        <p>Escolha onde você quer comprar:</p>
-        <div class="welcome-store-buttons">
-          <button id="welcome-ftf" type="button" class="welcome-store-button"><strong>Flee the Facility</strong><small>Marretas e raridades do FTF</small><span>Entrar →</span></button>
-          <button id="welcome-mm2" type="button" class="welcome-store-button welcome-store-button-mm2"><strong>Murder Mystery 2</strong><small>Facas, armas e raridades do MM2</small><span>Entrar →</span></button>
-        </div>
-      </div>
+      <button id="welcome-skip" type="button">Entrar na loja <span aria-hidden="true">→</span></button>
     </div>
   </div>
 
@@ -1427,25 +1409,42 @@
   (() => {
     const screen = document.getElementById('thoune-welcome');
     if (!screen) return;
-    const params = new URLSearchParams(window.location.search);
-    const selected = params.get('store');
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let closed = false;
     const close = () => {
+      if (closed) return;
+      closed = true;
       screen.classList.add('welcome-exit');
       window.setTimeout(() => screen.remove(), 650);
       try { sessionStorage.setItem('thoune-welcome-v1090', '1'); } catch (_) {}
     };
-    const choose = (store) => {
-      const url = new URL(window.location.href);
-      url.searchParams.set('store', store);
-      try { sessionStorage.removeItem('thoune-welcome-v1090'); } catch (_) {}
-      window.location.href = url.toString();
-    };
-    document.getElementById('welcome-ftf')?.addEventListener('click', () => choose('ftf'));
-    document.getElementById('welcome-mm2')?.addEventListener('click', () => choose('mm2'));
-    if (selected === 'ftf' || selected === 'mm2') {
-      close();
-      return;
+    let seen = false;
+    try { seen = sessionStorage.getItem('thoune-welcome-v1090') === '1'; } catch (_) {}
+    if (seen) { screen.remove(); return; }
+    const skip = document.getElementById('welcome-skip');
+    if (skip) skip.addEventListener('click', close);
+    const subtitle = document.getElementById('welcome-subtitle');
+    const phrases = [
+      'Sua coleção se completa aqui.',
+      'Encontre a marreta que combina com você.',
+      'Sua próxima raridade pode estar aqui.',
+      'Seu estilo. Sua coleção. Sua Thoune Store.',
+      'Cada marreta conta uma história.'
+    ];
+    if (subtitle) {
+      let phraseIndex = 0;
+      window.setInterval(() => {
+        if (closed || !subtitle.isConnected) return;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        subtitle.classList.add('welcome-subtitle-changing');
+        window.setTimeout(() => {
+          if (!subtitle.isConnected) return;
+          subtitle.textContent = phrases[phraseIndex];
+          subtitle.classList.remove('welcome-subtitle-changing');
+        }, 220);
+      }, 7000);
     }
+    /* A abertura fica visível até o cliente tocar em “Entrar na loja”. */
   })();
   </script>
 
