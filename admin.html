@@ -591,7 +591,7 @@
 @media(max-width:520px){.rarity-choice{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 </style>
 
-<style id="thoune-v1172-rarity-colors">
+<style id="thoune-v1165-rarity-colors">
 #rarity-choice .rarity-choice-btn{transition:filter .15s,transform .15s,box-shadow .15s!important}
 #rarity-choice .rarity-choice-btn[data-rarity="Lendária"]{background:#3b3217!important;border-color:#f2c94c!important;color:#f2c94c!important}
 #rarity-choice .rarity-choice-btn[data-rarity="Épica"]{background:#2b1c40!important;border-color:#9b59d0!important;color:#c99af2!important}
@@ -616,8 +616,14 @@
 #rarity-choice .rarity-choice-btn[data-rarity="Atualização"] span{color:#fff!important;background:none!important;animation:none!important}
 @media(prefers-reduced-motion:reduce){#rarity-choice .rarity-choice-btn[data-rarity="Atualização"]{animation:none!important}}
 </style>
-<style>[data-ftf-only][hidden]{display:none!important}.product-game-badge{display:inline-block;font-size:.72em;padding:2px 6px;border-radius:999px;background:#17677a;color:#fff;margin-left:5px}</style>
-</head>
+<style>
+.admin-store-switch{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0;padding:14px 16px;border:1px solid #dcecef;border-radius:16px;background:#f8fcfd}
+.admin-store-switch strong{font-size:13px}
+.admin-store-switch button{border:1px solid #cfe1e5;border-radius:999px;padding:9px 14px;background:#fff;cursor:pointer;font-weight:800}
+.admin-store-switch button.active{background:#17677a;color:#fff;border-color:#17677a}
+.mm2-rarity{display:none}
+.admin-store-badge{display:inline-flex;margin-left:8px;padding:3px 8px;border-radius:999px;background:#e9f6fa;color:#17677a;font-size:10px;font-weight:900}
+</style></head>
 
 <body class="admin-page">
 
@@ -721,7 +727,13 @@
       </div>
 
 
-      <div class="admin-grid">
+      <div class="admin-store-switch" id="admin-store-switch">
+  <strong>Loja em edição:</strong>
+  <button type="button" data-admin-store="ftf" class="active">🔨 Flee the Facility</button>
+  <button type="button" data-admin-store="mm2">🔪 Murder Mystery 2</button>
+  <span id="admin-store-badge" class="admin-store-badge">Flee the Facility</span>
+</div>
+<div class="admin-grid">
 
         <button class="admin-option" id="products-option">
           <strong>📦 Produtos</strong>
@@ -816,7 +828,7 @@
           </h2>
 
           <p>
-            Gerencie as marretas disponíveis na loja.
+            Gerencie os produtos da loja selecionada.
           </p>
 
         </div>
@@ -826,7 +838,7 @@
           class="primary-button"
           id="new-product-button"
         >
-          ➕ Nova marreta
+          ➕ Novo produto
         </button>
 
       </div>
@@ -838,20 +850,11 @@
       >
 
         <h3 id="form-title">
-          Adicionar marreta
+          Adicionar produto
         </h3>
 
 
         <div class="form-grid">
-
-          <div class="form-field full">
-            <label for="product-game">Loja / jogo</label>
-            <select id="product-game" class="admin-select">
-              <option value="ftf">Flee the Facility</option>
-              <option value="mm2">Murder Mystery 2</option>
-            </select>
-            <small>Escolha em qual loja este produto será exibido.</small>
-          </div>
 
           <div class="form-field full">
 
@@ -870,18 +873,25 @@
 
           <div class="form-field">
             <label>Raridade</label>
-            <input id="product-category" type="hidden" value="Comum">
+            <input id="product-category" type="hidden" value="Comum"><input id="product-store-type" type="hidden" value="ftf">
             <div class="rarity-choice" id="rarity-choice" role="group" aria-label="Escolher raridade">
               <button type="button" class="rarity-choice-btn" data-rarity="Lendária" aria-pressed="false">L <span>Lendária</span></button>
               <button type="button" class="rarity-choice-btn" data-rarity="Épica" aria-pressed="false">E <span>Épica</span></button>
               <button type="button" class="rarity-choice-btn" data-rarity="Rara" aria-pressed="false">R <span>Rara</span></button>
               <button type="button" class="rarity-choice-btn is-selected" data-rarity="Comum" aria-pressed="true">C <span>Comum</span></button>
               <button type="button" class="rarity-choice-btn" data-rarity="Exclusiva" aria-pressed="false">X <span>Exclusiva</span></button>
-              <button type="button" class="rarity-choice-btn" data-rarity="Atualização" aria-pressed="false">A <span>Atualização</span></button>
+              <button type="button" class="rarity-choice-btn" data-rarity="Atualização" aria-pressed="false">A <span>Atualização</span></button><button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Incomum" aria-pressed="false">I <span>Incomum</span></button>
+              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Raro" aria-pressed="false">R <span>Raro</span></button>
+              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Lendário" aria-pressed="false">L <span>Lendário</span></button>
+              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Godly" aria-pressed="false">G <span>Godly</span></button>
+              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Ancient" aria-pressed="false">A <span>Ancient</span></button>
+              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Unique" aria-pressed="false">U <span>Unique</span></button>
+              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Vintage" aria-pressed="false">V <span>Vintage</span></button>
+              <button type="button" class="rarity-choice-btn mm2-rarity" data-rarity="Chroma" aria-pressed="false">C <span>Chroma</span></button>
             </div>
           </div>
 
-          <div class="form-field">
+          <div class="form-field" id="product-event-field">
             <label>Evento (opcional)</label>
             <input id="product-event" type="hidden" value="">
             <div class="event-choice" id="product-event-choice" role="group" aria-label="Escolher evento">
@@ -1011,7 +1021,7 @@
             class="primary-button"
             id="save-product-button"
           >
-            Salvar marreta
+            Salvar produto
           </button>
 
 
@@ -1059,11 +1069,7 @@
 
 
       <div class="admin-search-wrap">
-        <label for="products-game-filter">Gerenciar catálogo</label>
-        <select id="products-game-filter" class="admin-select">
-          <option value="all">Todos os jogos</option><option value="ftf">Flee the Facility</option><option value="mm2">Murder Mystery 2</option>
-        </select>
-        <label for="products-search">🔎 Buscar produto por nome, categoria ou preço</label>
+        <label for="products-search">🔎 Buscar marreta por nome, raridade ou preço</label>
         <input id="products-search" class="admin-search-input" type="search" autocomplete="off" placeholder="Ex.: Party Balloons, Lendária, 3,00...">
         <label style="display:flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer">
           <input id="show-inactive-products" type="checkbox" style="width:auto;min-height:auto">
@@ -1256,10 +1262,10 @@
       </div>
 
 
-      <div class="settings-box" id="legacy-service-status-box" style="display:none!important">
+      <div class="settings-box">
 
         <h3>
-          Status global antigo
+          Status atual
         </h3>
 
 
@@ -1287,14 +1293,6 @@
 
         </div>
 
-      </div>
-
-      <div class="settings-box" id="dual-store-status-box" style="margin-top:16px">
-        <h3>Abertura independente das lojas</h3>
-        <p class="setting-description">Fechar uma loja não fecha a outra. A loja MM2 começa fechada até você abri-la.</p>
-        <div class="settings-status"><div><strong id="ftf-storefront-status">FTF: carregando...</strong><p class="setting-description">Flee the Facility</p></div><button class="primary-button" id="toggle-ftf-storefront">Alterar FTF</button></div>
-        <div class="settings-status" style="margin-top:12px"><div><strong id="mm2-storefront-status">MM2: carregando...</strong><p class="setting-description">Murder Mystery 2</p></div><button class="primary-button" id="toggle-mm2-storefront">Alterar MM2</button></div>
-        <p id="dual-store-status-message" class="message" aria-live="polite"></p>
       </div>
 
     </div>
@@ -1504,6 +1502,14 @@
         <div class="form-field" style="margin-top:14px;">
           <label for="delivery-bot-url">Link do perfil Roblox (opcional)</label>
           <input id="delivery-bot-url" type="url" placeholder="https://www.roblox.com/users/.../profile">
+          <div class="form-field" style="margin-top:14px;">
+            <label for="delivery-bot-mm2-username">Usuário Roblox — MM2</label>
+            <input id="delivery-bot-mm2-username" type="text" placeholder="Usuário de entrega do MM2">
+          </div>
+          <div class="form-field" style="margin-top:14px;">
+            <label for="delivery-bot-mm2-url">Link do perfil — MM2</label>
+            <input id="delivery-bot-mm2-url" type="url" placeholder="https://www.roblox.com/users/.../profile">
+          </div>
         </div>
 
         <div class="checkbox-field">
@@ -1613,20 +1619,10 @@
   const group = document.getElementById("rarity-choice");
   const categoryInput = document.getElementById("product-category");
   if (!group || !categoryInput) return;
-  let buttons = Array.from(group.querySelectorAll(".rarity-choice-btn[data-rarity]"));
-  const ftfCategories = ["Lendária", "Épica", "Rara", "Comum", "Exclusiva", "Atualização"];
-  const mm2Categories = ["Godly", "Ancient", "Chroma", "Vintage", "Unique", "Legendary", "Rare", "Uncommon", "Common", "Seasonal"];
-  function rebuildCategories(game) {
-    const values = game === "mm2" ? mm2Categories : ftfCategories;
-    group.innerHTML = values.map((value, i) => `<button type="button" class="rarity-choice-btn" data-rarity="${value}" aria-pressed="false">${i + 1} <span>${value}</span></button>`).join("");
-    buttons = Array.from(group.querySelectorAll(".rarity-choice-btn[data-rarity]"));
-    selectRarity(values.includes(categoryInput.value) ? categoryInput.value : values[0]);
-  }
+  const buttons = Array.from(group.querySelectorAll(".rarity-choice-btn[data-rarity]"));
   function selectRarity(value) {
-    const game = document.getElementById("product-game")?.value || "ftf";
-    const values = game === "mm2" ? mm2Categories : ftfCategories;
-    const valid = values.includes(value);
-    const selectedValue = valid ? value : (game === "mm2" ? "Godly" : "Comum");
+    const valid = buttons.some((button) => button.dataset.rarity === value);
+    const selectedValue = valid ? value : "Comum";
     categoryInput.value = selectedValue;
     buttons.forEach((button) => {
       const selected = button.dataset.rarity === selectedValue;
@@ -1647,12 +1643,6 @@
   categoryInput.addEventListener("change", () => selectRarity(categoryInput.value));
   selectRarity(categoryInput.value || "Comum");
   window.__thouneSelectRarity = selectRarity;
-  window.__thouneRebuildCategories = rebuildCategories;
-  document.getElementById("product-game")?.addEventListener("change", event => {
-    rebuildCategories(event.target.value);
-    const eventField = document.getElementById("product-event-choice")?.closest(".form-field");
-    if (eventField) eventField.hidden = event.target.value === "mm2";
-  });
 })();
 /* Eventos: seleção independente e persistente no formulário do produto. */
 (function () {
@@ -1692,6 +1682,42 @@ const supabaseClient =
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
+
+
+let adminStore = localStorage.getItem("thoune-admin-store") === "mm2" ? "mm2" : "ftf";
+const ADMIN_STORE_NAMES = { ftf: "Flee the Facility", mm2: "Murder Mystery 2" };
+const FTF_RARITIES = ["Lendária","Épica","Rara","Comum","Exclusiva","Atualização"];
+const MM2_RARITIES = ["Comum","Incomum","Raro","Lendário","Godly","Ancient","Unique","Vintage","Chroma"];
+
+function updateAdminStoreUI() {
+  localStorage.setItem("thoune-admin-store", adminStore);
+  document.querySelectorAll("[data-admin-store]").forEach(btn => {
+    const active = btn.dataset.adminStore === adminStore;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-pressed", String(active));
+  });
+  const badge = document.querySelector("#admin-store-badge");
+  if (badge) badge.textContent = ADMIN_STORE_NAMES[adminStore];
+  const storeInput = document.querySelector("#product-store-type");
+  if (storeInput) storeInput.value = adminStore;
+  document.querySelectorAll(".mm2-rarity").forEach(el => el.style.display = adminStore === "mm2" ? "" : "none");
+  document.querySelectorAll("#rarity-choice .rarity-choice-btn:not(.mm2-rarity)").forEach(el => el.style.display = adminStore === "mm2" ? (["Comum","Rara"].includes(el.dataset.rarity) ? "none" : "none") : "");
+  const eventField = document.querySelector("#product-event-field");
+  if (eventField) eventField.style.display = adminStore === "mm2" ? "none" : "";
+  if (typeof window.__thouneSetRarity === "function") window.__thouneSetRarity(adminStore === "mm2" ? "Comum" : "Comum");
+}
+
+document.addEventListener("click", event => {
+  const button = event.target.closest("[data-admin-store]");
+  if (!button) return;
+  adminStore = button.dataset.adminStore === "mm2" ? "mm2" : "ftf";
+  updateAdminStoreUI();
+  if (document.querySelector("#products-section") && !document.querySelector("#products-section").classList.contains("hidden")) loadProducts();
+  if (document.querySelector("#delivery-section") && !document.querySelector("#delivery-section").classList.contains("hidden")) loadDeliverySettings();
+  if (document.querySelector("#promotion-section") && !document.querySelector("#promotion-section").classList.contains("hidden")) loadPromotion();
+  if (document.querySelector("#service-section") && !document.querySelector("#service-section").classList.contains("hidden")) loadServiceStatus();
+}, true);
+
 
 // Atualiza o total de entregas periodicamente enquanto o painel estiver aberto.
 window.setInterval(() => {
@@ -1779,7 +1805,6 @@ async function checkAdminAccess(){
     loadingScreen.classList.add("hidden");
     accessDenied.classList.add("hidden");
     adminPanel.classList.remove("hidden");
-    void loadDualStorefrontStatus();
     return true;
   };
   const withTimeout = (promise, ms = 8000, label = "verificação") => Promise.race([
@@ -2053,20 +2078,22 @@ const productCategory =
 
 const rarityChoiceButtons = [...document.querySelectorAll(".rarity-choice-btn")];
 function setProductRarity(value) {
-  const allowed = ["Lendária", "Épica", "Rara", "Comum", "Exclusiva", "Atualização"];
+  const allowed = adminStore === "mm2" ? MM2_RARITIES : FTF_RARITIES;
   const normalized = allowed.includes(String(value || "").trim()) ? String(value).trim() : "Comum";
   productCategory.value = normalized;
   rarityChoiceButtons.forEach(button => {
-    const selected = button.dataset.rarity === normalized;
+    const belongs = allowed.includes(button.dataset.rarity);
+    button.style.display = belongs ? "" : "none";
+    const selected = belongs && button.dataset.rarity === normalized;
     button.classList.toggle("is-selected", selected);
     button.setAttribute("aria-pressed", selected ? "true" : "false");
-    // Preserve the custom pink and animated Chroma styles from CSS.
     button.style.removeProperty("background");
     button.style.removeProperty("background-color");
     button.style.removeProperty("border-color");
     button.style.removeProperty("box-shadow");
   });
 }
+window.__thouneSetRarity = setProductRarity;
 // Delegação em captura: mantém os botões funcionais mesmo se o formulário for reorganizado.
 document.addEventListener("click", event => {
   const button = event.target.closest(".rarity-choice-btn");
@@ -2075,6 +2102,7 @@ document.addEventListener("click", event => {
   event.stopPropagation();
   setProductRarity(button.dataset.rarity);
 }, true);
+updateAdminStoreUI();
 setProductRarity(productCategory.value || "Comum");
 
 const productPrice =
@@ -2200,7 +2228,6 @@ function setupAdminSearch(inputSelector, listSelector, itemSelector, emptyMessag
 
 setupAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhum produto corresponde à sua busca.");
 document.querySelector("#show-inactive-products")?.addEventListener("change", loadProducts);
-document.querySelector("#products-game-filter")?.addEventListener("change", loadProducts);
 setupAdminSearch("#orders-search", "#orders-list", ".order-card", "Nenhum pedido corresponde à sua busca.");
 setupAdminSearch("#order-history-search", "#order-history-list", ".order-card", "Nenhum pedido no histórico corresponde à sua busca.");
 setupAdminSearch("#payments-search", "#payments-list", ".payment-card", "Nenhum pagamento corresponde à sua busca.");
@@ -2217,22 +2244,19 @@ function openProductForm(product=null){
 
   if(product){
 
+    adminStore = product.store_type === "mm2" ? "mm2" : "ftf";
+    updateAdminStoreUI();
     editingProductId =
       product.id;
 
     formTitle.textContent =
-      "Editar marreta";
+      "Editar produto";
 
     productName.value =
       product.name || "";
 
-    const gameSelect = document.getElementById("product-game");
-    if (gameSelect) gameSelect.value = product.game || "ftf";
-    window.__thouneRebuildCategories?.(product.game || "ftf");
-    setProductRarity(product.category || ((product.game === "mm2") ? "Godly" : "Comum"));
+    setProductRarity(product.category || "Comum");
     window.__thouneSelectEvent?.(product.event_name || "");
-    const eventField = document.getElementById("product-event-choice")?.closest(".form-field");
-    if (eventField) eventField.hidden = product.game === "mm2";
 
     productPrice.value =
       product.price ?? "";
@@ -2269,9 +2293,10 @@ function openProductForm(product=null){
   }else{
 
     editingProductId = null;
+    updateAdminStoreUI();
 
     formTitle.textContent =
-      "Adicionar marreta";
+      "Adicionar produto";
 
     productName.value = "";
 
@@ -2298,7 +2323,7 @@ function openProductForm(product=null){
       true;
 
     saveProductButton.textContent =
-      "Salvar marreta";
+      "Salvar produto";
 
   }
 
@@ -2338,7 +2363,7 @@ function closeProductForm(){
     true;
 
   saveProductButton.textContent =
-    "Salvar marreta";
+    "Salvar produto";
 
 }
 
@@ -2379,7 +2404,8 @@ async function loadProducts(){
   const showInactive = document.querySelector("#show-inactive-products")?.checked === true;
   let productsQuery = supabaseClient
       .from("products")
-      .select("*");
+      .select("*")
+      .eq("store_type", adminStore);
   if (!showInactive) productsQuery = productsQuery.eq("active", true);
   else productsQuery = productsQuery.is("deleted_at", null);
   const { data, error } = await productsQuery
@@ -2404,12 +2430,12 @@ async function loadProducts(){
   }
 
 
-  let products = data || [];
-  const gameFilter = document.querySelector("#products-game-filter")?.value || "all";
-  if (gameFilter !== "all") products = products.filter(product => (product.game || "ftf") === gameFilter);
+  const products =
+    data || [];
+
 
   productsCount.textContent =
-    `${products.length} produto(s) neste filtro.`;
+    `${products.length} produto(s) cadastrado(s).`;
 
 
   if(!products.length){
@@ -2465,7 +2491,7 @@ async function loadProducts(){
       document.createElement("strong");
 
     name.textContent =
-      `${product.name || "Sem nome"} · ${(product.game || "ftf") === "mm2" ? "MM2" : "FTF"}`;
+      product.name || "Sem nome";
 
 
     const meta =
@@ -2601,7 +2627,7 @@ async function loadProducts(){
 
   });
 
-  applyAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhuma marreta corresponde à sua busca.");
+  applyAdminSearch("#products-search", "#products-list", ".product-admin-item", "Nenhum produto corresponde à sua busca.");
 }
 
 
@@ -2640,7 +2666,7 @@ saveProductButton.addEventListener(
     if(!name){
 
       productFormMessage.textContent =
-        "Informe o nome da marreta.";
+        "Informe o nome do produto.";
 
       return;
     }
@@ -2717,8 +2743,8 @@ if(
         price,
 
         category,
-        game: document.getElementById("product-game")?.value || "ftf",
-        event_name: (document.getElementById("product-game")?.value || "ftf") === "ftf" ? (document.getElementById("product-event")?.value || null) : null,
+        store_type: adminStore,
+        event_name: adminStore === "mm2" ? null : (document.getElementById("product-event")?.value || null),
 
         image:
           image || null,
@@ -2769,7 +2795,7 @@ if(
 
       productFormMessage.classList.remove("error-message");
       productFormMessage.textContent =
-        editing ? "Alterações salvas com sucesso." : "Marreta cadastrada com sucesso.";
+        editing ? "Alterações salvas com sucesso." : "Produto cadastrado com sucesso.";
       // Close immediately after Supabase confirms the save; refresh the list in the background.
       closeProductForm();
       void loadProducts();
@@ -2788,7 +2814,7 @@ if(
       saveProductButton.textContent =
         editing
           ? "Salvar alterações"
-          : "Salvar marreta";
+          : "Salvar produto";
 
     }
 
@@ -2970,6 +2996,15 @@ async function loadOrders(focusOrderId = null){
     (productImages || []).map(product => [String(product.id), product.image || ""])
   );
 
+  const { data: adminStoreSettings } = await supabaseClient
+    .from("store_settings")
+    .select("delivery_bot_username, mm2_delivery_bot_username");
+
+  const botByStore = {
+    ftf: adminStoreSettings?.[0]?.delivery_bot_username || "Não configurado",
+    mm2: adminStoreSettings?.[0]?.mm2_delivery_bot_username || "Não configurado"
+  };
+
   for(const order of orders){
 
     const {
@@ -3045,7 +3080,8 @@ async function loadOrders(focusOrderId = null){
 
     privateInfo.innerHTML = `
       <strong>🔒 Dados informados no checkout</strong>
-
+      <div style="margin-top:8px"><strong>Loja:</strong> ${escapeHtml(order.store_type === "mm2" ? "Murder Mystery 2" : "Flee the Facility")}</div>
+      <div style="margin-top:5px"><strong>Entrega:</strong> ${escapeHtml(botByStore[order.store_type === "mm2" ? "mm2" : "ftf"])}</div>
       <div style="margin-top:8px">
         <strong>TikTok:</strong>
         ${escapeHtml(order.tiktok_username || "Não informado")}
@@ -3705,11 +3741,8 @@ async function loadServiceStatus(){
   } =
     await supabaseClient
       .from("store_settings")
-      .select("online")
-      .eq(
-        "id",
-        1
-      )
+      .select("online, mm2_online")
+      .eq("id", 1)
       .maybeSingle();
 
 
@@ -3725,49 +3758,13 @@ async function loadServiceStatus(){
 
 
   serviceOnline =
-    Boolean(data?.online);
+    adminStore === "mm2" ? Boolean(data?.mm2_online) : Boolean(data?.online);
 
 
   updateServiceUI();
 
 }
 
-
-
-async function loadDualStorefrontStatus() {
-  const message = document.querySelector("#dual-store-status-message");
-  const { data, error } = await supabaseClient.from("storefront_settings").select("game, online");
-  if (error) {
-    if (message) { message.textContent = "Execute primeiro o SQL v1172 para ativar as configurações independentes."; message.classList.add("error-message"); }
-    return;
-  }
-  const rows = data || [];
-  for (const game of ["ftf", "mm2"]) {
-    const row = rows.find(item => item.game === game);
-    const online = row?.online === true;
-    const label = document.querySelector(game === "ftf" ? "#ftf-storefront-status" : "#mm2-storefront-status");
-    const button = document.querySelector(game === "ftf" ? "#toggle-ftf-storefront" : "#toggle-mm2-storefront");
-    if (label) label.textContent = `${game === "ftf" ? "Flee the Facility" : "Murder Mystery 2"}: ${online ? "ABERTA" : "FECHADA"}`;
-    if (button) button.textContent = online ? "Fechar esta loja" : "Abrir esta loja";
-  }
-}
-async function toggleDualStorefront(game) {
-  const message = document.querySelector("#dual-store-status-message");
-  const labelSelector = game === "ftf" ? "#ftf-storefront-status" : "#mm2-storefront-status";
-  const label = document.querySelector(labelSelector);
-  const currentlyOnline = Boolean(label && label.textContent.includes("ABERTA"));
-  if (message) { message.textContent = "Salvando configuração..."; message.classList.remove("error-message"); }
-  const { error } = await supabaseClient.from("storefront_settings").update({ online: !currentlyOnline, updated_at: new Date().toISOString() }).eq("game", game);
-  if (error) {
-    if (message) { message.textContent = "Não foi possível alterar: " + error.message; message.classList.add("error-message"); }
-    return;
-  }
-  if (message) message.textContent = "Configuração salva.";
-  await loadDualStorefrontStatus();
-}
-document.querySelector("#toggle-ftf-storefront")?.addEventListener("click", () => toggleDualStorefront("ftf"));
-document.querySelector("#toggle-mm2-storefront")?.addEventListener("click", () => toggleDualStorefront("mm2"));
-window.addEventListener("load", () => { void loadDualStorefrontStatus(); });
 
 function updateServiceUI(){
 
@@ -3816,9 +3813,7 @@ async function toggleService(){
       .from("store_settings")
       .update({
 
-        online:
-          newStatus,
-
+        ...(adminStore === "mm2" ? { mm2_online: newStatus } : { online: newStatus }),
         updated_at:
           new Date().toISOString()
 
@@ -3929,7 +3924,7 @@ async function loadPromotion(){
     await supabaseClient
       .from("store_settings")
       .select(
-        "discount_percent, discount_active, discount_event"
+        "discount_percent, discount_active, discount_event, mm2_discount_percent, mm2_discount_active, mm2_discount_event"
       )
       .eq(
         "id",
@@ -3951,12 +3946,13 @@ async function loadPromotion(){
   }
 
 
-  discountPercent.value =
-    data?.discount_percent ?? 0;
-
-  discountActive.checked = Boolean(data?.discount_active);
+  discountPercent.value = adminStore === "mm2" ? (data?.mm2_discount_percent ?? 0) : (data?.discount_percent ?? 0);
+  discountActive.checked = adminStore === "mm2" ? Boolean(data?.mm2_discount_active) : Boolean(data?.discount_active);
   const discountEventSelect = document.querySelector("#discount-event");
-  if (discountEventSelect) discountEventSelect.value = data?.discount_event || "";
+  if (discountEventSelect) {
+    discountEventSelect.value = adminStore === "mm2" ? "" : (data?.discount_event || "");
+    discountEventSelect.disabled = adminStore === "mm2";
+  }
 
 
   updateDiscountPreview();
@@ -4096,7 +4092,7 @@ async function loadDeliverySettings(){
     await supabaseClient
       .from("store_settings")
       .select(
-        "pix_key, delivery_bot_username, delivery_bot_url, join_open"
+        "pix_key, delivery_bot_username, delivery_bot_url, join_open, mm2_pix_key, mm2_delivery_bot_username, mm2_delivery_bot_url, mm2_join_open"
       )
       .eq(
         "id",
@@ -4118,17 +4114,16 @@ async function loadDeliverySettings(){
   }
 
 
-  pixKey.value =
-    data?.pix_key || "";
-
-  deliveryBotUsername.value =
-    data?.delivery_bot_username || "";
-
-  deliveryBotUrl.value =
-    data?.delivery_bot_url || "";
-
-  joinOpen.checked =
-    data?.join_open !== false;
+  pixKey.value = adminStore === "mm2" ? (data?.mm2_pix_key || "") : (data?.pix_key || "");
+  deliveryBotUsername.value = adminStore === "mm2" ? (data?.mm2_delivery_bot_username || "") : (data?.delivery_bot_username || "");
+  deliveryBotUrl.value = adminStore === "mm2" ? (data?.mm2_delivery_bot_url || "") : (data?.delivery_bot_url || "");
+  const mm2Bot = document.querySelector("#delivery-bot-mm2-username");
+  const mm2Url = document.querySelector("#delivery-bot-mm2-url");
+  const mm2Pix = document.querySelector("#pix-key-mm2");
+  if (mm2Bot) mm2Bot.value = data?.mm2_delivery_bot_username || "";
+  if (mm2Url) mm2Url.value = data?.mm2_delivery_bot_url || "";
+  if (mm2Pix) mm2Pix.value = data?.mm2_pix_key || "";
+  joinOpen.checked = adminStore === "mm2" ? data?.mm2_join_open !== false : data?.join_open !== false;
 
 }
 

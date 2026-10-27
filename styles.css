@@ -9451,3 +9451,20 @@ svg.thoune-bat,
 }
 @keyframes thoune-atualizacao-chroma{0%{background-position:0% 50%;filter:hue-rotate(0deg)}50%{background-position:150% 50%;filter:hue-rotate(90deg)}100%{background-position:300% 50%;filter:hue-rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){#product-grid .rarity-atualizacao{animation:none!important;background-position:50% 0!important}}
+
+/* v1172 — MM2 */
+#product-grid .rarity-incomum{color:#8fd3ff!important;background:rgba(70,170,255,.12)!important;border-color:rgba(95,175,255,.34)!important}
+#product-grid .rarity-raro{color:#a9d6ff!important;background:rgba(80,155,255,.12)!important;border-color:rgba(100,180,255,.34)!important}
+#product-grid .rarity-lendario{color:#c48cff!important;background:rgba(150,90,255,.13)!important;border-color:rgba(170,120,255,.34)!important}
+#product-grid .rarity-godly{color:#ff8bdf!important;background:rgba(255,75,190,.13)!important;border-color:rgba(255,110,210,.38)!important}
+#product-grid .rarity-ancient{color:#ff8b73!important;background:rgba(255,95,70,.13)!important;border-color:rgba(255,110,90,.38)!important}
+#product-grid .rarity-unique{color:#ffd36a!important;background:rgba(255,190,70,.13)!important;border-color:rgba(255,200,90,.38)!important}
+#product-grid .rarity-vintage{color:#d5b77c!important;background:rgba(180,140,75,.13)!important;border-color:rgba(205,165,95,.34)!important}
+#product-grid .rarity-chroma{
+ color:#fff!important;
+ background:linear-gradient(110deg,rgba(255,75,75,.17),rgba(255,184,77,.17),rgba(255,245,90,.17),rgba(72,255,139,.17),rgba(70,220,255,.17),rgba(145,95,255,.17),rgba(255,75,190,.17))!important;
+ background-size:300% 100%!important;border:1px solid transparent!important;
+ background-image:linear-gradient(#082c3a,#082c3a),linear-gradient(110deg,#ff4b4b,#ffb84d,#fff55a,#48ff8b,#46dcff,#915fff,#ff4bbe)!important;
+ background-origin:border-box!important;background-clip:padding-box,border-box!important;
+ animation:thoune-chroma-border 4s linear infinite!important;text-shadow:0 0 10px rgba(255,255,255,.16)
+}

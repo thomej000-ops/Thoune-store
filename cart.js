@@ -1,6 +1,7 @@
 
-const STORE_GAME = document.body?.dataset?.game === "mm2" ? "mm2" : "ftf";
-const KEY = STORE_GAME === "mm2" ? "thoune-cart-mm2-v1" : "thoune-cart-v2";
+import { STORE_TYPE } from "./config.js";
+
+const KEY = `thoune-cart-v2-${STORE_TYPE}`;
 
 
 /* =========================================================
@@ -273,7 +274,7 @@ export function orderText(
   cart = loadCart()
 ) {
   if (!Array.isArray(cart) || !cart.length) {
-    return "◫ Pedido — Thoune Store\n\nNenhum item no carrinho.";
+    return `◫ Pedido — Thoune Store · ${STORE_TYPE === "mm2" ? "Murder Mystery 2" : "Flee the Facility"}\n\nNenhum item no carrinho.`;
   }
 
 
@@ -287,7 +288,7 @@ export function orderText(
 
 
   return [
-    "◫ Pedido — Thoune Store",
+    `◫ Pedido — Thoune Store · ${STORE_TYPE === "mm2" ? "Murder Mystery 2" : "Flee the Facility"}`,
     "",
     ...lines,
     "",
